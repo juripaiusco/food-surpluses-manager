@@ -3,7 +3,7 @@
 return [
 
     'customer' => [
-        'title' => 'Anagrafica',
+        'title' => 'Anagrafica'
     ]
 
 ];

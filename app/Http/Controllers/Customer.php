@@ -48,7 +48,15 @@ class Customer extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $customer = new \App\Model\Customer();
+
+        $customer->name = $request->input('name');
+        $customer->surname = $request->input('surname');
+        $customer->address = $request->input('address');
+
+        $customer->save();
+
+        return redirect()->route('customer');
     }
 
     /**
@@ -72,7 +80,9 @@ class Customer extends Controller
     {
         $customer = \App\Model\Customer::find($id);
 
-        return view();
+        return view('customer.form', [
+            'customer' => $customer
+        ]);
     }
 
     /**
@@ -84,7 +94,15 @@ class Customer extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $customer = \App\Model\Customer::find($id);
+
+        $customer->name = $request->input('name');
+        $customer->surname = $request->input('surname');
+        $customer->address = $request->input('address');
+
+        $customer->save();
+
+        return redirect()->route('customer');
     }
 
     /**

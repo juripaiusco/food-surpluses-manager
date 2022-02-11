@@ -1,64 +1,57 @@
-@extends('layouts.app')
+@extends('layouts.card')
 
 @section('content')
 
-    <div class="container">
+    <table class="table">
 
-        <div class="card">
-            <div class="card-header">{{ __('layout.customer.title') }}</div>
-            <div class="card-body">
+        <thead>
+        <tr>
+            <th>Utente</th>
+            <th>Indirizzo</th>
+            <th>Codice</th>
+            <th></th>
+        </tr>
+        </thead>
 
-                <table class="table">
+        <tbody>
 
-                    <thead>
-                    <tr>
-                        <th>Utente</th>
-                        <th>Indirizzo</th>
-                        <th>Codice</th>
-                        <th></th>
-                    </tr>
-                    </thead>
+        @foreach($customers as $customer)
 
-                    <tbody>
+            <tr>
+                <td class="align-middle">{{ $customer->name }} {{ $customer->surname }}</td>
+                <td class="align-middle">{{ $customer->address }}</td>
+                <td class="align-middle">{{ $customer->cod }}</td>
+                <td>
 
-                        @foreach($customers as $customer)
+                    <div class="row no-gutters">
+                        <div class="col">
+                            <a href="{{ route('customer.edit', $customer->id) }}" class="btn btn-success">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                        </div>
+                        <div class="col">
+                            <a href="#" class="btn btn-danger">
+                                <i class="far fa-trash-alt"></i>
+                            </a>
+                        </div>
+                    </div>
 
-                            <tr>
-                                <td class="align-middle">{{ $customer->name }} {{ $customer->surname }}</td>
-                                <td class="align-middle">{{ $customer->address }}</td>
-                                <td class="align-middle">{{ $customer->cod }}</td>
-                                <td>
+                </td>
+            </tr>
 
-                                    <div class="row no-gutters">
-                                        <div class="col">
-                                            <a href="#" class="btn btn-success">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
-                                        </div>
-                                        <div class="col">
-                                            <a href="#" class="btn btn-danger">
-                                                <i class="far fa-trash-alt"></i>
-                                            </a>
-                                        </div>
-                                    </div>
+        @endforeach
 
-                                </td>
-                            </tr>
-
-                        @endforeach
-
-                    </tbody>
+        </tbody>
 
 
-                </table>
+    </table>
 
-            </div>
-        </div>
+@endsection
 
-        <br>
+@section('paginate')
 
-        {{ $customers->links() }}
+    <br>
 
-    </div>
+    {{ $customers->links() }}
 
 @endsection
