@@ -68,6 +68,7 @@ class Customer extends Controller
         $customer->surname = $request->input('surname');
         $customer->address = $request->input('address');
         $customer->cod = Str::random(5);
+        $customer->points = 0;
 
         $customer->save();
 

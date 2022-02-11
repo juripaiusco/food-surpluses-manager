@@ -11,5 +11,6 @@ $factory->define(Model\Customer::class, function (Faker $faker) {
         'surname' => $faker->lastName,
         'address' => $faker->address,
         'cod' => \Illuminate\Support\Str::random(5),
+        'points' => random_int(500, 1000),
     ];
 });

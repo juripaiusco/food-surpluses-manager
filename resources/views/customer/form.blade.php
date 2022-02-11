@@ -25,7 +25,7 @@
             <div class="col">
 
                 <div class="form-group">
-                    <label for="name">Cognome</label>
+                    <label for="surname">Cognome</label>
                     <input type="text"
                            class="form-control"
                            id="surname"
@@ -40,7 +40,7 @@
         </div>
 
         <div class="form-group">
-            <label for="name">Indirizzo</label>
+            <label for="address">Indirizzo</label>
             <input type="text"
                    class="form-control"
                    id="address"
@@ -52,14 +52,14 @@
         </div>
 
         <div class="row">
-            <div class="col-6">
+            <div class="col">
 
                 <div class="form-group">
-                    <label for="name">Codice</label>
+                    <label for="cod">Codice</label>
                     <input type="text"
                            class="form-control disabled"
                            id="cod"
-                           placeholder="cod"
+                           placeholder="Codice"
                            readonly disabled
                            @if(isset($customer->id))
                            value="{{ $customer->cod }}"
@@ -67,9 +67,29 @@
                 </div>
 
             </div>
+
+            <div class="col">
+
+                <div class="form-group">
+                    <label for="points">Punti</label>
+                    <input type="text"
+                           class="form-control disabled"
+                           id="points"
+                           readonly disabled
+                           @if(isset($customer->id))
+                           value="{{ $customer->points }}"
+                        @endif>
+                </div>
+
+            </div>
         </div>
 
-        <input type="submit" class="btn btn-success" value="Modifica">
+        <div class="text-right">
+
+            <a href="javascript: history.go(-1);" class="btn btn-secondary">Annulla</a>
+            <input type="submit" class="btn btn-success" value="Modifica">
+            
+        </div>
 
     </form>
 

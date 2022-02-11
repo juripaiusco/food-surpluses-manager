@@ -44,9 +44,10 @@
 
         <thead>
         <tr>
+            <th>Codice</th>
             <th>Utente</th>
             <th>Indirizzo</th>
-            <th>Codice</th>
+            <th>Punti</th>
             <th></th>
         </tr>
         </thead>
@@ -56,9 +57,10 @@
         @foreach($customers as $customer)
 
             <tr>
+                <td class="align-middle">{{ $customer->cod }}</td>
                 <td class="align-middle">{{ $customer->name }} {{ $customer->surname }}</td>
                 <td class="align-middle">{{ $customer->address }}</td>
-                <td class="align-middle">{{ $customer->cod }}</td>
+                <td class="align-middle">{{ $customer->points }}</td>
                 <td class="text-center">
 
                     <div class="row no-gutters">
