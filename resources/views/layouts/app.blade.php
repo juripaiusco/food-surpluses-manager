@@ -31,11 +31,13 @@
                 </button>
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    @include('layouts.menu-left')
+                    @auth
+                        <!-- Left Side Of Navbar -->
+                        @include('layouts.menu-left')
 
-                    <!-- Right Side Of Navbar -->
-                    @include('layouts.menu-right')
+                        <!-- Right Side Of Navbar -->
+                        @include('layouts.menu-right')
+                    @endauth
                 </div>
             </div>
         </nav>
