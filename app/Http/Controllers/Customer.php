@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class Customer extends Controller
 {
@@ -21,12 +22,25 @@ class Customer extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $customers = \App\Model\Customer::paginate(10);
+        $s = $request->input('s');
+
+        if (isset($s))
+        {
+            $customers = \App\Model\Customer::where('name', 'LIKE', $s)
+                ->orderBy('id', 'DESC')
+                ->paginate(10);
+
+        } else {
+
+            $customers = \App\Model\Customer::orderBy('id', 'DESC')
+                ->paginate(10);
+        }
 
         return view('customer.list', [
-            'customers' => $customers
+            'customers' => $customers,
+            's' => $s
         ]);
     }
 
@@ -37,7 +51,7 @@ class Customer extends Controller
      */
     public function create()
     {
-        //
+        return view('customer.form');
     }
 
     /**
@@ -53,6 +67,7 @@ class Customer extends Controller
         $customer->name = $request->input('name');
         $customer->surname = $request->input('surname');
         $customer->address = $request->input('address');
+        $customer->cod = Str::random(5);
 
         $customer->save();
 
@@ -114,7 +129,7 @@ class Customer extends Controller
     public function destroy($id)
     {
         \App\Model\Customer::destroy($id);
-        
+
         return redirect()->route('customer');
     }
 }

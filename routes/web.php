@@ -22,5 +22,6 @@ Route::get('/store', 'Store@index')->name('store');
 Route::get('/customer', 'Customer@index')->name('customer');
 Route::get('/customer/edit/{id}', 'Customer@edit')->name('customer.edit');
 Route::post('/customer/update/{id}', 'Customer@update')->name('customer.update');
+Route::get('/customer/create', 'Customer@create')->name('customer.create');
 Route::post('/customer/store', 'Customer@store')->name('customer.store');
 Route::get('/customer/destroy/{id}', 'Customer@destroy')->name('customer.destroy');

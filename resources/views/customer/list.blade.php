@@ -14,6 +14,32 @@
 
     </script>
 
+    <div class="row">
+        <div class="col-lg-8">
+            <a class="btn btn-primary" href="{{ route('customer.create') }}">Nuova anagrafica</a>
+        </div>
+        <div class="col-lg-4">
+
+            <div class="float-right">
+                <form class="form-inline my-2 my-lg-0" action="{{ route('customer') }}" method="get">
+
+                    <input class="form-control mr-sm-2"
+                           type="search"
+                           placeholder="cerca prodotto"
+                           aria-label="Search"
+                           name="s"
+                           value="{{ $s ?? '' }}" />
+
+                    <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Cerca</button>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+    <br>
+
     <table class="table">
 
         <thead>
