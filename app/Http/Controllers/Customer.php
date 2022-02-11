@@ -23,7 +23,7 @@ class Customer extends Controller
      */
     public function index()
     {
-        $customers = \App\Model\Customer::get();
+        $customers = \App\Model\Customer::paginate(10);
 
         return view('customer.list', [
             'customers' => $customers
@@ -70,7 +70,9 @@ class Customer extends Controller
      */
     public function edit($id)
     {
-        //
+        $customer = \App\Model\Customer::find($id);
+
+        return view();
     }
 
     /**
