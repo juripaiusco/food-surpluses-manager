@@ -113,6 +113,8 @@ class Customer extends Controller
      */
     public function destroy($id)
     {
-        //
+        \App\Model\Customer::destroy($id);
+        
+        return redirect()->route('customer');
     }
 }
