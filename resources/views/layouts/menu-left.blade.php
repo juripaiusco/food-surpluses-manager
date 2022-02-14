@@ -4,8 +4,8 @@
         <a class="nav-link" href="{{ route('cash') }}">{{ __('Cassa') }}</a>
     </li>
 
-    <li class="nav-item {{ Route::is('store*') ? 'active' : '' }}">
-        <a class="nav-link" href="{{ route('store') }}">{{ __('Magazzino') }}</a>
+    <li class="nav-item {{ Route::is('products*') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('products') }}">{{ __('Magazzino') }}</a>
     </li>
 
     <li class="nav-item {{ Route::is('customer*') ? 'active' : '' }}">
