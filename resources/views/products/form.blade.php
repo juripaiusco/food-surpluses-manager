@@ -57,7 +57,22 @@
         @csrf
 
         <div class="row">
-            <div class="col-6">
+            <div class="col">
+
+                <div class="form-group">
+                    <label for="cod">Codice</label>
+                    <input type="text"
+                           class="form-control disabled"
+                           id="cod"
+                           name="cod"
+                           placeholder="Codice"
+                           @if(isset($product->id))
+                           value="{{ $product->cod }}"
+                        @endif>
+                </div>
+
+            </div>
+            <div class="col">
 
                 <div class="form-group">
                     <label for="name">Tipo</label>

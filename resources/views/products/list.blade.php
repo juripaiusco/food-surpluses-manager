@@ -44,6 +44,7 @@
 
         <thead>
         <tr>
+            <th>Codice</th>
             <th>Tipo</th>
             <th>Nome</th>
             <th>Kg.</th>
@@ -57,6 +58,7 @@
         @foreach($products as $product)
 
             <tr>
+                <td class="align-middle">{{ $product->cod }}</td>
                 <td class="align-middle">{{ $product->type }}</td>
                 <td class="align-middle">{{ $product->name }}</td>
                 <td class="align-middle">{{ $product->kg }}</td>

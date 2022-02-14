@@ -70,6 +70,7 @@ class Product extends Controller
     {
         $product = new \App\Model\Product();
 
+        $product->cod = $request->input('cod');
         $product->type = $request->input('type');
         $product->name = $request->input('name');
         $product->kg = $request->input('kg');
@@ -118,6 +119,7 @@ class Product extends Controller
     {
         $product = \App\Model\Product::find($id);
 
+        $product->cod = $request->input('cod');
         $product->type = $request->input('type');
         $product->name = $request->input('name');
         $product->kg = $request->input('kg');
