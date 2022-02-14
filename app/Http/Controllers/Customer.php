@@ -29,6 +29,7 @@ class Customer extends Controller
         if (isset($s))
         {
             $customers = \App\Model\Customer::where('name', 'LIKE', $s)
+                ->orWhere('surname', 'LIKE', $s)
                 ->orderBy('id', 'DESC')
                 ->paginate(10);
 

@@ -87,7 +87,7 @@
         <div class="text-right">
 
             <a href="javascript: history.go(-1);" class="btn btn-secondary">Annulla</a>
-            <input type="submit" class="btn btn-success" value="Modifica">
+            <input type="submit" class="btn btn-success" value="@if(isset($customer->id)) Modifica @else Inserisci @endif">
 
         </div>
 
