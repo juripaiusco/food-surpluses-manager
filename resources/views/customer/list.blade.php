@@ -1,6 +1,6 @@
 @extends('layouts.card')
 
-@section('card-body')
+@section('content')
 
     <script language="JavaScript">
 

@@ -1,6 +1,6 @@
 @extends('layouts.card')
 
-@section('card-body')
+@section('content')
 
     <form action="{{ isset($customer->id) ? route('customer.update', $customer->id) : route('customer.store') }}" method="post">
 
@@ -88,7 +88,7 @@
 
             <a href="javascript: history.go(-1);" class="btn btn-secondary">Annulla</a>
             <input type="submit" class="btn btn-success" value="Modifica">
-
+            
         </div>
 
     </form>
