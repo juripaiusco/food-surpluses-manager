@@ -6,14 +6,46 @@ use Illuminate\Http\Request;
 
 class Product extends Controller
 {
+    var $type_array = array(
+        'fear',
+        'fear no',
+    );
+
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $s = $request->input('s');
+
+        if (isset($s))
+        {
+            $products = \App\Model\Product::where('name', 'LIKE', '%'.$s.'%')
+                ->orderBy('id', 'DESC')
+                ->paginate(10);
+
+        } else {
+
+            $products = \App\Model\Product::orderBy('id', 'DESC')
+                ->paginate(10);
+        }
+
+        return view('products.list', [
+            'products' => $products,
+            's' => $s
+        ]);
     }
 
     /**
@@ -23,7 +55,9 @@ class Product extends Controller
      */
     public function create()
     {
-        //
+        return view('products.form', [
+            'type_array' => $this->type_array
+        ]);
     }
 
     /**
@@ -34,7 +68,16 @@ class Product extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $product = new \App\Model\Product();
+
+        $product->type = $request->input('type');
+        $product->name = $request->input('name');
+        $product->kg = $request->input('kg');
+        $product->amount = $request->input('amount');
+
+        $product->save();
+
+        return redirect()->route('products');
     }
 
     /**
@@ -56,7 +99,12 @@ class Product extends Controller
      */
     public function edit($id)
     {
-        //
+        $product = \App\Model\Product::find($id);
+
+        return view('products.form', [
+            'product' => $product,
+            'type_array' => $this->type_array
+        ]);
     }
 
     /**
@@ -68,7 +116,16 @@ class Product extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $product = \App\Model\Product::find($id);
+
+        $product->type = $request->input('type');
+        $product->name = $request->input('name');
+        $product->kg = $request->input('kg');
+        $product->amount = $request->input('amount');
+
+        $product->save();
+
+        return redirect()->route('products');
     }
 
     /**
@@ -79,6 +136,8 @@ class Product extends Controller
      */
     public function destroy($id)
     {
-        //
+        \App\Model\Product::destroy($id);
+
+        return redirect()->route('products');
     }
 }

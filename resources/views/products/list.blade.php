@@ -16,16 +16,16 @@
 
     <div class="row">
         <div class="col-lg-8">
-            <a class="btn btn-primary" href="{{ route('customers.create') }}">Nuova anagrafica</a>
+            <a class="btn btn-primary" href="{{ route('products.create') }}">Nuovo prodotto</a>
         </div>
         <div class="col-lg-4">
 
             <div class="float-right">
-                <form class="form-inline my-2 my-lg-0" action="{{ route('customers') }}" method="get">
+                <form class="form-inline my-2 my-lg-0" action="{{ route('products') }}" method="get">
 
                     <input class="form-control mr-sm-2"
                            type="search"
-                           placeholder="cerca anagrafica"
+                           placeholder="cerca prodotto"
                            aria-label="Search"
                            name="s"
                            value="{{ $s ?? '' }}" />
@@ -44,28 +44,28 @@
 
         <thead>
         <tr>
-            <th>Codice</th>
-            <th>Utente</th>
-            <th>Indirizzo</th>
-            <th>Punti</th>
+            <th>Tipo</th>
+            <th>Nome</th>
+            <th>Kg.</th>
+            <th>Q.tà</th>
             <th width="120px"></th>
         </tr>
         </thead>
 
         <tbody>
 
-        @foreach($customers as $customer)
+        @foreach($products as $product)
 
             <tr>
-                <td class="align-middle">{{ $customer->cod }}</td>
-                <td class="align-middle">{{ $customer->name }} {{ $customer->surname }}</td>
-                <td class="align-middle">{{ $customer->address }}</td>
-                <td class="align-middle">{{ $customer->points }}</td>
+                <td class="align-middle">{{ $product->type }}</td>
+                <td class="align-middle">{{ $product->name }}</td>
+                <td class="align-middle">{{ $product->kg }}</td>
+                <td class="align-middle">{{ $product->amount }}</td>
                 <td class="text-center">
 
                     <div class="row no-gutters">
                         <div class="col">
-                            <a href="{{ route('customers.edit', $customer->id) }}"
+                            <a href="{{ route('products.edit', $product->id) }}"
                                class="btn btn-success">
                                 <i class="fas fa-edit"></i>
                             </a>
@@ -76,7 +76,7 @@
                                     class="btn btn-danger"
                                     data-toggle="modal"
                                     data-target="#deleteModal"
-                                    data-href="{{ route('customers.destroy', $customer->id) }}">
+                                    data-href="{{ route('products.destroy', $product->id) }}">
                                 <i class="far fa-trash-alt"></i>
                             </button>
 
@@ -132,6 +132,6 @@
 
     <br>
 
-    {{ $customers->links() }}
+    {{ $products->links() }}
 
 @endsection
