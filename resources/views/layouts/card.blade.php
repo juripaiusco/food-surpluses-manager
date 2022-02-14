@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('card')
+@section('content')
 
     <div class="container">
 
@@ -12,7 +12,7 @@
             </div>
             <div class="card-body">
 
-                @yield('content')
+                @yield('card-body')
 
             </div>
         </div>
