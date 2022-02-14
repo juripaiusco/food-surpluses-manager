@@ -17,7 +17,7 @@ Auth::routes();
 Route::get('/', 'HomeController@index')->name('home');
 
 Route::get('/cash', 'Cash@index')->name('cash');
-Route::get('/products', 'Products@index')->name('products');
+Route::get('/store', 'Store@index')->name('store');
 
 Route::get('/customer', 'Customer@index')->name('customer');
 Route::get('/customer/edit/{id}', 'Customer@edit')->name('customer.edit');
