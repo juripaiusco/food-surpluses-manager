@@ -44,11 +44,11 @@
 
         <thead>
         <tr>
-            <th>Codice</th>
-            <th>Tipo</th>
+            <th width="10%">Codice</th>
+            <th width="10%">Tipo</th>
             <th>Nome</th>
-            <th>Kg.</th>
-            <th>Q.tà</th>
+            <th width="10%">Kg.</th>
+            <th width="10%">Q.tà</th>
             <th width="120px"></th>
         </tr>
         </thead>
