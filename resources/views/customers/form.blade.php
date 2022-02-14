@@ -2,7 +2,7 @@
 
 @section('card-body')
 
-    <form action="{{ isset($customer->id) ? route('customer.update', $customer->id) : route('customer.store') }}" method="post">
+    <form action="{{ isset($customer->id) ? route('customers.update', $customer->id) : route('customers.store') }}" method="post">
 
         @csrf
 

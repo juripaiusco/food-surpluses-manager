@@ -2,7 +2,7 @@
 
 return [
 
-    'customer' => [
+    'customers' => [
         'title' => 'Anagrafica'
     ]
 

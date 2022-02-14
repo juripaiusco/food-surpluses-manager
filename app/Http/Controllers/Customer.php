@@ -28,8 +28,8 @@ class Customer extends Controller
 
         if (isset($s))
         {
-            $customers = \App\Model\Customer::where('name', 'LIKE', $s)
-                ->orWhere('surname', 'LIKE', $s)
+            $customers = \App\Model\Customer::where('name', 'LIKE', '%'.$s.'%')
+                ->orWhere('surname', 'LIKE', '%'.$s.'%')
                 ->orderBy('id', 'DESC')
                 ->paginate(10);
 
@@ -39,7 +39,7 @@ class Customer extends Controller
                 ->paginate(10);
         }
 
-        return view('customer.list', [
+        return view('customers.list', [
             'customers' => $customers,
             's' => $s
         ]);
@@ -52,7 +52,7 @@ class Customer extends Controller
      */
     public function create()
     {
-        return view('customer.form');
+        return view('customers.form');
     }
 
     /**
@@ -73,7 +73,7 @@ class Customer extends Controller
 
         $customer->save();
 
-        return redirect()->route('customer');
+        return redirect()->route('customers');
     }
 
     /**
@@ -97,7 +97,7 @@ class Customer extends Controller
     {
         $customer = \App\Model\Customer::find($id);
 
-        return view('customer.form', [
+        return view('customers.form', [
             'customer' => $customer
         ]);
     }
@@ -119,7 +119,7 @@ class Customer extends Controller
 
         $customer->save();
 
-        return redirect()->route('customer');
+        return redirect()->route('customers');
     }
 
     /**
@@ -132,6 +132,6 @@ class Customer extends Controller
     {
         \App\Model\Customer::destroy($id);
 
-        return redirect()->route('customer');
+        return redirect()->route('customers');
     }
 }

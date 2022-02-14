@@ -16,16 +16,16 @@
 
     <div class="row">
         <div class="col-lg-8">
-            <a class="btn btn-primary" href="{{ route('customer.create') }}">Nuova anagrafica</a>
+            <a class="btn btn-primary" href="{{ route('customers.create') }}">Nuova anagrafica</a>
         </div>
         <div class="col-lg-4">
 
             <div class="float-right">
-                <form class="form-inline my-2 my-lg-0" action="{{ route('customer') }}" method="get">
+                <form class="form-inline my-2 my-lg-0" action="{{ route('customers') }}" method="get">
 
                     <input class="form-control mr-sm-2"
                            type="search"
-                           placeholder="cerca prodotto"
+                           placeholder="cerca anagrafica"
                            aria-label="Search"
                            name="s"
                            value="{{ $s ?? '' }}" />
@@ -65,7 +65,7 @@
 
                     <div class="row no-gutters">
                         <div class="col">
-                            <a href="{{ route('customer.edit', $customer->id) }}"
+                            <a href="{{ route('customers.edit', $customer->id) }}"
                                class="btn btn-success">
                                 <i class="fas fa-edit"></i>
                             </a>
@@ -76,7 +76,7 @@
                                     class="btn btn-danger"
                                     data-toggle="modal"
                                     data-target="#deleteModal"
-                                    data-href="{{ route('customer.destroy', $customer->id) }}">
+                                    data-href="{{ route('customers.destroy', $customer->id) }}">
                                 <i class="far fa-trash-alt"></i>
                             </button>
 
