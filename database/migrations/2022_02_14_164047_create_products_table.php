@@ -18,6 +18,7 @@ class CreateProductsTable extends Migration
             $table->string('cod');
             $table->string('type');
             $table->string('name');
+            $table->integer('points');
             $table->float('kg')->nullable();
             $table->float('amount')->nullable();
             $table->timestamps();

@@ -60,21 +60,6 @@
             <div class="col">
 
                 <div class="form-group">
-                    <label for="cod">Codice</label>
-                    <input type="text"
-                           class="form-control disabled"
-                           id="cod"
-                           name="cod"
-                           placeholder="Codice"
-                           @if(isset($product->id))
-                           value="{{ $product->cod }}"
-                        @endif>
-                </div>
-
-            </div>
-            <div class="col">
-
-                <div class="form-group">
                     <label for="name">Tipo</label>
                     <select class="form-control"
                             id="type"
@@ -94,10 +79,25 @@
                 </div>
 
             </div>
+            <div class="col">
+
+                <div class="form-group">
+                    <label for="cod">Codice</label>
+                    <input type="text"
+                           class="form-control disabled"
+                           id="cod"
+                           name="cod"
+                           placeholder="Codice"
+                           @if(isset($product->id))
+                           value="{{ $product->cod }}"
+                        @endif>
+                </div>
+
+            </div>
         </div>
 
         <div class="row">
-            <div class="col-8">
+            <div class="col-6">
 
                 <div class="form-group">
                     <label for="name">Nome</label>
@@ -108,6 +108,21 @@
                            placeholder="Nome"
                            @if(isset($product->id))
                            value="{{ $product->name }}"
+                        @endif>
+                </div>
+
+            </div>
+            <div class="col">
+
+                <div class="form-group">
+                    <label for="name">Punti</label>
+                    <input type="text"
+                           class="form-control"
+                           id="points"
+                           name="points"
+                           placeholder="Punti prodotto"
+                           @if(isset($product->id))
+                           value="{{ $product->points }}"
                         @endif>
                 </div>
 
@@ -126,7 +141,7 @@
                                class="form-control text-center"
                                id="kg"
                                name="kg"
-                               placeholder="es. 0,5"
+                               placeholder="es. 0.5"
                                @if(isset($product->id))
                                value="{{ $product->kg }}"
                             @endif

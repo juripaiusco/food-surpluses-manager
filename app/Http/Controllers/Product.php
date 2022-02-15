@@ -73,7 +73,8 @@ class Product extends Controller
         $product->cod = $request->input('cod');
         $product->type = $request->input('type');
         $product->name = $request->input('name');
-        $product->kg = $request->input('kg');
+        $product->points = $request->input('points');
+        $product->kg = str_replace(',', '.', $request->input('kg'));
         $product->amount = $request->input('amount');
 
         $product->save();
@@ -122,7 +123,8 @@ class Product extends Controller
         $product->cod = $request->input('cod');
         $product->type = $request->input('type');
         $product->name = $request->input('name');
-        $product->kg = $request->input('kg');
+        $product->points = $request->input('points');
+        $product->kg = str_replace(',', '.', $request->input('kg'));
         $product->amount = $request->input('amount');
 
         $product->save();
