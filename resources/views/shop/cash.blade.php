@@ -13,25 +13,28 @@
     </style>
     <script language="JavaScript">
 
-        function customerDataSet(customerCod, callback)
+        function dataSet(ObjDataContainer, jsonData)
         {
-            var ObjCustomerData = $('#customer-data');
+            $.each(jsonData, function(k, v) {
 
-            ObjCustomerData.css('display', 'none');
+                ObjDataContainer.find('[data-id="' + k + '"]').html(v);
 
-            $.getJSON('{{ route('shop.customerSearch') }}/?customer_cod=' + customerCod, function (d) {
+            });
+        }
+
+        function dataSearch(ObjData, codSearch, urlQuery, callforward, callback)
+        {
+            if (callforward != null)
+                callforward();
+
+            $.getJSON('{{ route('shop.search') }}/?' + urlQuery + '=' + codSearch, function (d) {
 
                 if (d != null) {
 
-                    ObjCustomerData.css('display', 'block');
+                    dataSet(ObjData, d);
 
-                    $.each(d, function(k, v) {
-
-                        ObjCustomerData.find('[data-id="' + k + '"]').html(v);
-
-                    });
-
-                    callback();
+                    if (callback != null)
+                        callback();
 
                 }
 
@@ -45,11 +48,30 @@
             // Customer Search
             $(document).on('input', '#customer_cod', function () {
 
-                $('#product-container').css('display', 'none');
+                var ObjCustomerData = $('#customer-data');
+                var ObjProductContainer = $('#product-container');
 
-                customerDataSet($(this).val(), function () {
+                dataSearch(ObjCustomerData, $(this).val(), 'customer_cod', function () {
 
-                    $('#product-container').css('display', 'block');
+                    ObjCustomerData.css('display', 'none');
+                    ObjProductContainer.css('display', 'none');
+
+                }, function () {
+
+                    ObjCustomerData.css('display', 'block');
+                    ObjProductContainer.css('display', 'block');
+                    $('#product_cod').focus();
+
+                });
+
+            });
+
+            // Product Search
+            $(document).on('input', '#product_cod', function () {
+
+                dataSearch($('#product-data'), $(this).val(), 'product_cod', null, function () {
+
+                    $('#product-data').css('display', 'block');
                     $('#product_cod').focus();
 
                 });

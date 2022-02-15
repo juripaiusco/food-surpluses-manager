@@ -26,7 +26,7 @@ class Shop extends Controller
         return view('shop.cash');
     }
 
-    public function customerSearch(Request $request)
+    public function search(Request $request)
     {
         $out = '';
 
@@ -35,44 +35,16 @@ class Shop extends Controller
             $customer = \App\Model\Customer::where('cod', $request->input('customer_cod'))
                 ->first();
 
-            sleep(1);
-
             $out = json_encode($customer);
 
         }
-
-        return $out;
-    }
-
-    public function productSearch(Request $request)
-    {
-        $out = '';
 
         if ($request->input('product_cod')) {
 
             $product = \App\Model\Product::where('cod', $request->input('product_cod'))
                 ->first();
 
-            /*$out = '
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Codice</th>
-                            <th>Nome</th>
-                            <th class="">Indirizzo</th>
-                            <th class="text-right">Punti</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="align-middle">' . $product['cod'] . '</td>
-                            <td class="align-middle">' . $product['name'] . ' ' . $product['surname'] . '</td>
-                            <td class="align-middle">' . $product['address'] . '</td>
-                            <td class="align-middle text-right h1">' . $product['points'] . '</td>
-                        </tr>
-                    </tbody>
-                </table>
-            ';*/
+            $out = json_encode($product);
 
         }
 
