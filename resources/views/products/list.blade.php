@@ -60,7 +60,11 @@
 
             <tr>
                 <td class="align-middle">{{ $product->cod }}</td>
-                <td class="align-middle">{{ $product->type }}</td>
+                <td class="align-middle">
+                    @if($product->type == 'fear')
+                    {{ $product->type }}
+                    @endif
+                </td>
                 <td class="align-middle">{{ $product->name }}</td>
                 <td class="align-middle text-right">{{ $product->points }}</td>
                 <td class="align-middle text-right">{{ $product->kg }}</td>
