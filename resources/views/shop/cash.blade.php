@@ -4,12 +4,39 @@
 
     <style>
 
-        #product-container {
+        #customer-data,
+        #product-container,
+        #product-data {
             display: none;
         }
 
     </style>
     <script language="JavaScript">
+
+        function customerDataSet(customerCod, callback)
+        {
+            var ObjCustomerData = $('#customer-data');
+
+            ObjCustomerData.css('display', 'none');
+
+            $.getJSON('{{ route('shop.customerSearch') }}/?customer_cod=' + customerCod, function (d) {
+
+                if (d != null) {
+
+                    ObjCustomerData.css('display', 'block');
+
+                    $.each(d, function(k, v) {
+
+                        ObjCustomerData.find('[data-id="' + k + '"]').html(v);
+
+                    });
+
+                    callback();
+
+                }
+
+            });
+        }
 
         window.addEventListener('load', function () {
 
@@ -20,12 +47,10 @@
 
                 $('#product-container').css('display', 'none');
 
-                var Obj = $(this);
-                var ObjVal = Obj.val();
+                customerDataSet($(this).val(), function () {
 
-                $('#customer-data').load('{{ route('shop.customerSearch') }}/?customer_cod=' + ObjVal, function () {
-
-                    // $('#product-container').css('display', 'block');
+                    $('#product-container').css('display', 'block');
+                    $('#product_cod').focus();
 
                 });
 
@@ -47,7 +72,39 @@
                    placeholder="Inserisci il codice cliente">
         </div>
 
-        <div id="customer-data"></div>
+        <div id="customer-data">
+
+            <table class="table table-success">
+                <thead>
+                <tr>
+                    <th>Codice</th>
+                    <th>Nome</th>
+                    <th>Cognome</th>
+                    <th class="">Indirizzo</th>
+                    <th class="text-right">Punti</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="align-middle"
+                        data-id="cod"></td>
+                    <td class="align-middle"
+                        data-id="name"></td>
+                    <td class="align-middle"
+                        data-id="surname"></td>
+                    <td class="align-middle"
+                        data-id="address"></td>
+                    <td class="align-middle text-right h1"
+                        data-id="points"></td>
+                </tr>
+                </tbody>
+            </table>
+
+            <br>
+            <hr width="50%">
+            <br>
+
+        </div>
 
         <div id="product-container">
 
@@ -57,6 +114,43 @@
                        id="product_cod"
                        name="product_cod"
                        placeholder="Inserisci il codice prodotto">
+            </div>
+
+            <div id="product-data">
+
+                <table class="table table-success">
+                    <thead>
+                    <tr>
+                        <th>Codice</th>
+                        <th>Tipo</th>
+                        <th>Nome</th>
+                        <th class="text-right">Punti</th>
+                        <th class="text-right">Kg.</th>
+                        <th class="text-right">Q.tà</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td class="align-middle"
+                            data-id="cod"></td>
+                        <td class="align-middle"
+                            data-id="type"></td>
+                        <td class="align-middle"
+                            data-id="name"></td>
+                        <td class="align-middle text-right"
+                            data-id="points"></td>
+                        <td class="align-middle text-right"
+                            data-id="kg"></td>
+                        <td class="align-middle text-right"
+                            data-id="amount"></td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <br>
+                <hr width="50%">
+                <br>
+
             </div>
 
         </div>
