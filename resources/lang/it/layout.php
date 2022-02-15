@@ -2,12 +2,16 @@
 
 return [
 
-    'customers' => [
-        'title' => 'Anagrafica'
+    'shop' => [
+        'title' => 'Cassa'
     ],
 
     'products' => [
         'title' => 'Prodotti'
+    ],
+
+    'customers' => [
+        'title' => 'Anagrafica'
     ]
 
 ];

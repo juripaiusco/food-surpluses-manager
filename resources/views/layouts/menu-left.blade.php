@@ -1,11 +1,11 @@
 <ul class="navbar-nav mr-auto">
 
-    <li class="nav-item {{ Route::is('cash*') ? 'active' : '' }}">
-        <a class="nav-link" href="{{ route('cash') }}">{{ __('Cassa') }}</a>
+    <li class="nav-item {{ Route::is('shop*') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('shop') }}">{{ __('layout.shop.title') }}</a>
     </li>
 
     <li class="nav-item {{ Route::is('products*') ? 'active' : '' }}">
-        <a class="nav-link" href="{{ route('products') }}">{{ __('Magazzino') }}</a>
+        <a class="nav-link" href="{{ route('products') }}">{{ __('layout.products.title') }}</a>
     </li>
 
     <li class="nav-item {{ Route::is('customers*') ? 'active' : '' }}">
