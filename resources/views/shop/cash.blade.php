@@ -8,7 +8,7 @@
         #product-container,
         #product-data,
         #order-summary {
-            /*display: none;*/
+            display: none;
         }
 
     </style>
@@ -104,13 +104,13 @@
             $(document).on('input', '#product_cod', function () {
 
                 var ObjProductData = $('#product-data');
-                var ObjProductDataTBODY = ObjProductData.find('tbody').last();
-                var ObjProductDataTBODYClone = ObjProductDataTBODY.clone().css('display', 'none');
+                var ObjProductDataTR = ObjProductData.find('tbody > tr').last();
+                var ObjProductDataTRClone = ObjProductDataTR.clone().css('display', 'none');
 
-                dataSearch(ObjProductDataTBODY, $(this).val(), 'product_cod', function () {
+                dataSearch(ObjProductDataTR, $(this).val(), 'product_cod', function () {
 
-                    ObjProductDataTBODY.css('display', 'table-row-group');
-                    ObjProductDataTBODY.after(ObjProductDataTBODYClone);
+                    ObjProductDataTR.css('display', 'table-row');
+                    ObjProductDataTR.after(ObjProductDataTRClone);
 
                 }, function () {
 
@@ -125,7 +125,7 @@
 
             $(document).on('click', '.del-item', function () {
 
-                $(this).closest('tbody').remove();
+                $(this).closest('tr').remove();
 
                 summarySet();
 
@@ -164,7 +164,7 @@
 
                     <div id="product-data">
 
-                        <table class="table table-success">
+                        <table class="table table-striped table-borderless table-hover table-success">
                             <thead>
                             <tr>
                                 <th width="1%"></th>
@@ -215,7 +215,7 @@
                         Cliente <span data-id="cod"></span>
                     </div>
 
-                    <table class="table table-success">
+                    <table class="table table-borderless table-success">
                         <thead>
                         <tr>
                             {{--<th>Codice</th>--}}
