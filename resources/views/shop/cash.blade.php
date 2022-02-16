@@ -69,10 +69,19 @@
             // Product Search
             $(document).on('input', '#product_cod', function () {
 
-                dataSearch($('#product-data'), $(this).val(), 'product_cod', null, function () {
+                var ObjProductData = $('#product-data');
+                var ObjProductDataTBODY = ObjProductData.find('tbody').last();
+                var ObjProductDataTBODYClone = ObjProductDataTBODY.clone().css('display', 'none');
 
-                    $('#product-data').css('display', 'block');
-                    $('#product_cod').focus();
+                dataSearch(ObjProductDataTBODY, $(this).val(), 'product_cod', function () {
+
+                    ObjProductDataTBODY.css('display', 'table-row-group');
+                    ObjProductDataTBODY.after(ObjProductDataTBODYClone);
+
+                }, function () {
+
+                    ObjProductData.css('display', 'block');
+                    $('#product_cod').val('').focus();
 
                 });
 
@@ -146,9 +155,9 @@
                         <th>Codice</th>
                         <th>Tipo</th>
                         <th>Nome</th>
-                        <th class="text-right">Punti</th>
                         <th class="text-right">Kg.</th>
                         <th class="text-right">Q.tà</th>
+                        <th class="text-right">Punti</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -160,11 +169,11 @@
                         <td class="align-middle"
                             data-id="name"></td>
                         <td class="align-middle text-right"
-                            data-id="points"></td>
-                        <td class="align-middle text-right"
                             data-id="kg"></td>
                         <td class="align-middle text-right"
                             data-id="amount"></td>
+                        <td class="align-middle text-right h4"
+                            data-id="points"></td>
                     </tr>
                     </tbody>
                 </table>
