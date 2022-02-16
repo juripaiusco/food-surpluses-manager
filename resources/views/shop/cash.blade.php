@@ -7,7 +7,7 @@
         #customer-data,
         #product-container,
         #product-data {
-            display: none;
+            /*display: none;*/
         }
 
     </style>
@@ -87,6 +87,13 @@
 
             });
 
+            $(document).on('click', '.del-item', function () {
+
+                $(this).closest('tbody').remove();
+                $('#product_cod').val('').focus();
+
+            });
+
         });
 
     </script>
@@ -152,6 +159,7 @@
                 <table class="table table-success">
                     <thead>
                     <tr>
+                        <th width="1%"></th>
                         <th>Codice</th>
                         <th>Tipo</th>
                         <th>Nome</th>
@@ -162,6 +170,14 @@
                     </thead>
                     <tbody>
                     <tr>
+                        <td class="align-middle">
+
+                            <button type="button"
+                                    class="btn btn-danger btn-sm del-item">
+                                <i class="far fa-trash-alt"></i>
+                            </button>
+
+                        </td>
                         <td class="align-middle"
                             data-id="cod"></td>
                         <td class="align-middle"
