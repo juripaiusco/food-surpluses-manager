@@ -16,5 +16,11 @@ class UserSeeder extends Seeder
             'email' => 'juri@mr-j.it',
             'password' => Hash::make('12345')
         ]);
+
+        \Illuminate\Support\Facades\DB::table('users')->insert([
+            'name' => 'Christian',
+            'email' => 'bastasprechi.vi@gmail.com',
+            'password' => Hash::make('12345')
+        ]);
     }
 }
