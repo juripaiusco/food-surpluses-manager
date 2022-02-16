@@ -41,6 +41,31 @@
             });
         }
 
+        function summarySet()
+        {
+            var customerPoints = parseInt($('#customer-data').find('[data-id="points"]').html());
+
+            $('div').find('[data-id="customer-points"]').html(customerPoints);
+
+            // - - -
+
+            var productPointsSUM = 0;
+
+            $('#product-data').find('[data-id="points"]').each(function () {
+
+                productPointsSUM += parseInt($(this).html()) || 0;
+
+            });
+
+            $('div').find('[data-id="product-points-sum"]').html(productPointsSUM);
+
+            // - - -
+
+            var pointsResult = customerPoints - productPointsSUM;
+
+            $('div').find('[data-id="points-result"]').html(pointsResult);
+        }
+
         window.addEventListener('load', function () {
 
             $('#customer_cod').focus();
@@ -57,6 +82,8 @@
                     ObjProductContainer.css('display', 'none');
 
                 }, function () {
+
+                    summarySet();
 
                     ObjCustomerData.css('display', 'block');
                     ObjProductContainer.css('display', 'block');
@@ -80,6 +107,8 @@
 
                 }, function () {
 
+                    summarySet();
+
                     ObjProductData.css('display', 'block');
                     $('#product_cod').val('').focus();
 
@@ -90,6 +119,9 @@
             $(document).on('click', '.del-item', function () {
 
                 $(this).closest('tbody').remove();
+
+                summarySet();
+
                 $('#product_cod').val('').focus();
 
             });
@@ -199,6 +231,32 @@
                 <br>
 
             </div>
+
+        </div>
+
+        <div class="order-summary">
+
+            <table class="table table-sm col-4">
+                <tbody>
+                <tr>
+                    <td class="align-middle">Punti cliente</td>
+                    <td class="align-middle text-right"
+                        data-id="customer-points"></td>
+                </tr>
+                <tr>
+                    <td class="align-middle">Punti prodotto</td>
+                    <td class="align-middle text-right"
+                        data-id="product-points-sum"></td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td class="align-middle">Punti rimanenti</td>
+                    <td class="align-middle text-right h3"
+                        data-id="points-result"></td>
+                </tr>
+                </tfoot>
+            </table>
 
         </div>
 
