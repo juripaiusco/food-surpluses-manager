@@ -211,7 +211,7 @@
 
                 <div id="customer-data">
 
-                    <div class="h4" style="height: 45px;">
+                    <div class="h4" style="padding: 6px; margin-bottom: 15px;">
                         Cliente <span data-id="cod"></span>
                     </div>
 
