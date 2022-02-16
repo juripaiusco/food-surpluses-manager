@@ -212,15 +212,15 @@
                 <div id="customer-data">
 
                     <div class="h4" style="padding: 6px; margin-bottom: 15px;">
-                        Cliente <span data-id="cod"></span>
+                        Cod. Cliente <span data-id="cod"></span>
                     </div>
 
                     <table class="table table-borderless table-success">
                         <thead>
                         <tr>
                             {{--<th>Codice</th>--}}
-                            <th>Nome</th>
-                            <th>Cognome</th>
+                            <th></th>
+                            {{--<th>Cognome</th>--}}
                             {{--<th class="">Indirizzo</th>--}}
                             <th class="text-right">Punti</th>
                         </tr>
@@ -229,10 +229,16 @@
                         <tr>
                             {{--<td class="align-middle"
                                 data-id="cod"></td>--}}
-                            <td class="align-middle"
-                                data-id="name"></td>
-                            <td class="align-middle"
-                                data-id="surname"></td>
+                            <td class="align-middle">
+                                <span data-id="name"></span>
+                                <span data-id="surname"></span>
+                                <br>
+                                <small>
+                                    <span data-id="address"></span>
+                                </small>
+                            </td>
+                            {{--<td class="align-middle"
+                                data-id="surname"></td>--}}
                             {{--<td class="align-middle"
                                 data-id="address"></td>--}}
                             <td class="align-middle text-right h1"
@@ -241,8 +247,6 @@
                         </tbody>
                     </table>
 
-                    <br>
-                    <hr width="50%">
                     <br>
 
                 </div>
