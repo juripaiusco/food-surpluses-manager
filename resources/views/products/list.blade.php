@@ -47,9 +47,9 @@
             <th width="10%">Codice</th>
             <th width="10%">Tipo</th>
             <th>Nome</th>
-            <th width="10%" class="text-right">Punti</th>
             <th width="10%" class="text-right">Kg.</th>
             <th width="10%" class="text-right">Q.tà</th>
+            <th width="10%" class="text-right">Punti</th>
             <th width="120px"></th>
         </tr>
         </thead>
@@ -66,9 +66,9 @@
                     @endif
                 </td>
                 <td class="align-middle">{{ $product->name }}</td>
-                <td class="align-middle text-right">{{ $product->points }}</td>
                 <td class="align-middle text-right">{{ $product->kg }}</td>
                 <td class="align-middle text-right">{{ $product->amount }}</td>
+                <td class="align-middle text-right">{{ $product->points }}</td>
                 <td class="text-center">
 
                     <div class="row no-gutters">

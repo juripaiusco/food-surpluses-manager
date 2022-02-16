@@ -47,7 +47,7 @@
             <th>Codice</th>
             <th>Utente</th>
             <th>Indirizzo</th>
-            <th>Punti</th>
+            <th class="text-right">Punti</th>
             <th width="120px"></th>
         </tr>
         </thead>
@@ -60,7 +60,7 @@
                 <td class="align-middle">{{ $customer->cod }}</td>
                 <td class="align-middle">{{ $customer->name }} {{ $customer->surname }}</td>
                 <td class="align-middle">{{ $customer->address }}</td>
-                <td class="align-middle">{{ $customer->points }}</td>
+                <td class="align-middle text-right">{{ $customer->points }}</td>
                 <td class="text-center">
 
                     <div class="row no-gutters">
