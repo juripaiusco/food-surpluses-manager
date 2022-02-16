@@ -14,7 +14,7 @@ class UserSeeder extends Seeder
         \Illuminate\Support\Facades\DB::table('users')->insert([
             'name' => 'Juri',
             'email' => 'juri@mr-j.it',
-            'password' => Hash::make('12345'),
+            'password' => Hash::make('12345')
         ]);
     }
 }
