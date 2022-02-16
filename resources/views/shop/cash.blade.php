@@ -6,7 +6,8 @@
 
         #customer-data,
         #product-container,
-        #product-data {
+        #product-data,
+        #order-summary {
             /*display: none;*/
         }
 
@@ -43,9 +44,13 @@
 
         function summarySet()
         {
+            var Obj = $('#order-summary');
+
+            // - - -
+
             var customerPoints = parseInt($('#customer-data').find('[data-id="points"]').html());
 
-            $('div').find('[data-id="customer-points"]').html(customerPoints);
+            Obj.find('[data-id="customer-points"]').html(customerPoints);
 
             // - - -
 
@@ -57,13 +62,13 @@
 
             });
 
-            $('div').find('[data-id="product-points-sum"]').html(productPointsSUM);
+            Obj.find('[data-id="product-points-sum"]').html(productPointsSUM);
 
             // - - -
 
             var pointsResult = customerPoints - productPointsSUM;
 
-            $('div').find('[data-id="points-result"]').html(pointsResult);
+            Obj.find('[data-id="points-result"]').html(pointsResult);
         }
 
         window.addEventListener('load', function () {
@@ -85,6 +90,8 @@
 
                     summarySet();
 
+                    $('#customer-data-search').css('display', 'none');
+                    $('#order-summary').css('display', 'block');
                     ObjCustomerData.css('display', 'block');
                     ObjProductContainer.css('display', 'block');
                     $('#product_cod').focus();
@@ -134,7 +141,7 @@
 
         @csrf
 
-        <div class="form-group">
+        <div id="customer-data-search" class="form-group">
             <input type="text"
                    class="form-control"
                    id="customer_cod"
@@ -142,122 +149,131 @@
                    placeholder="Inserisci il codice cliente">
         </div>
 
-        <div id="customer-data">
+        <div class="row">
+            <div class="col-lg-8">
 
-            <table class="table table-success">
-                <thead>
-                <tr>
-                    <th>Codice</th>
-                    <th>Nome</th>
-                    <th>Cognome</th>
-                    <th class="">Indirizzo</th>
-                    <th class="text-right">Punti</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td class="align-middle"
-                        data-id="cod"></td>
-                    <td class="align-middle"
-                        data-id="name"></td>
-                    <td class="align-middle"
-                        data-id="surname"></td>
-                    <td class="align-middle"
-                        data-id="address"></td>
-                    <td class="align-middle text-right h1"
-                        data-id="points"></td>
-                </tr>
-                </tbody>
-            </table>
+                <div id="product-container">
 
-            <br>
-            <hr width="50%">
-            <br>
+                    <div class="form-group">
+                        <input type="text"
+                               class="form-control"
+                               id="product_cod"
+                               name="product_cod"
+                               placeholder="Inserisci il codice prodotto">
+                    </div>
 
-        </div>
+                    <div id="product-data">
 
-        <div id="product-container">
+                        <table class="table table-success">
+                            <thead>
+                            <tr>
+                                <th width="1%"></th>
+                                <th>Codice</th>
+                                <th>Tipo</th>
+                                <th>Nome</th>
+                                <th class="text-right">Kg.</th>
+                                <th class="text-right">Q.tà</th>
+                                <th class="text-right">Punti</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td class="align-middle">
 
-            <div class="form-group">
-                <input type="text"
-                       class="form-control"
-                       id="product_cod"
-                       name="product_cod"
-                       placeholder="Inserisci il codice prodotto">
-            </div>
+                                    <button type="button"
+                                            class="btn btn-danger btn-sm del-item">
+                                        <i class="far fa-trash-alt"></i>
+                                    </button>
 
-            <div id="product-data">
+                                </td>
+                                <td class="align-middle"
+                                    data-id="cod"></td>
+                                <td class="align-middle"
+                                    data-id="type"></td>
+                                <td class="align-middle"
+                                    data-id="name"></td>
+                                <td class="align-middle text-right"
+                                    data-id="kg"></td>
+                                <td class="align-middle text-right"
+                                    data-id="amount"></td>
+                                <td class="align-middle text-right h4"
+                                    data-id="points"></td>
+                            </tr>
+                            </tbody>
+                        </table>
 
-                <table class="table table-success">
-                    <thead>
-                    <tr>
-                        <th width="1%"></th>
-                        <th>Codice</th>
-                        <th>Tipo</th>
-                        <th>Nome</th>
-                        <th class="text-right">Kg.</th>
-                        <th class="text-right">Q.tà</th>
-                        <th class="text-right">Punti</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td class="align-middle">
+                    </div>
 
-                            <button type="button"
-                                    class="btn btn-danger btn-sm del-item">
-                                <i class="far fa-trash-alt"></i>
-                            </button>
-
-                        </td>
-                        <td class="align-middle"
-                            data-id="cod"></td>
-                        <td class="align-middle"
-                            data-id="type"></td>
-                        <td class="align-middle"
-                            data-id="name"></td>
-                        <td class="align-middle text-right"
-                            data-id="kg"></td>
-                        <td class="align-middle text-right"
-                            data-id="amount"></td>
-                        <td class="align-middle text-right h4"
-                            data-id="points"></td>
-                    </tr>
-                    </tbody>
-                </table>
-
-                <br>
-                <hr width="50%">
-                <br>
+                </div>
 
             </div>
+            <div class="col-lg-4">
 
-        </div>
+                <div id="customer-data">
 
-        <div class="order-summary">
+                    <div class="h4" style="height: 45px;">
+                        Cliente <span data-id="cod"></span>
+                    </div>
 
-            <table class="table table-sm col-4">
-                <tbody>
-                <tr>
-                    <td class="align-middle">Punti cliente</td>
-                    <td class="align-middle text-right"
-                        data-id="customer-points"></td>
-                </tr>
-                <tr>
-                    <td class="align-middle">Punti prodotto</td>
-                    <td class="align-middle text-right"
-                        data-id="product-points-sum"></td>
-                </tr>
-                </tbody>
-                <tfoot>
-                <tr>
-                    <td class="align-middle">Punti rimanenti</td>
-                    <td class="align-middle text-right h3"
-                        data-id="points-result"></td>
-                </tr>
-                </tfoot>
-            </table>
+                    <table class="table table-success">
+                        <thead>
+                        <tr>
+                            {{--<th>Codice</th>--}}
+                            <th>Nome</th>
+                            <th>Cognome</th>
+                            {{--<th class="">Indirizzo</th>--}}
+                            <th class="text-right">Punti</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            {{--<td class="align-middle"
+                                data-id="cod"></td>--}}
+                            <td class="align-middle"
+                                data-id="name"></td>
+                            <td class="align-middle"
+                                data-id="surname"></td>
+                            {{--<td class="align-middle"
+                                data-id="address"></td>--}}
+                            <td class="align-middle text-right h1"
+                                data-id="points"></td>
+                        </tr>
+                        </tbody>
+                    </table>
 
+                    <br>
+                    <hr width="50%">
+                    <br>
+
+                </div>
+
+                <div id="order-summary">
+
+                    <table class="table table-sm">
+                        <tbody>
+                        <tr>
+                            <td class="align-middle">Punti cliente</td>
+                            <td class="align-middle text-right"
+                                data-id="customer-points"></td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">Punti prodotto</td>
+                            <td class="align-middle text-right"
+                                data-id="product-points-sum"></td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td class="align-middle">Punti rimanenti</td>
+                            <td class="align-middle text-right h3"
+                                data-id="points-result"></td>
+                        </tr>
+                        </tfoot>
+                    </table>
+
+                </div>
+
+            </div>
         </div>
 
         {{--<ul class="nav nav-pills justify-content-center" id="pills-tab" role="tablist">
