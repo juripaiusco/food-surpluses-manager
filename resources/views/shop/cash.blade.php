@@ -12,35 +12,10 @@
         }
 
     </style>
+
+    @include('js/search')
+
     <script language="JavaScript">
-
-        function dataSet(ObjDataContainer, jsonData)
-        {
-            $.each(jsonData, function(k, v) {
-
-                ObjDataContainer.find('[data-id="' + k + '"]').html(v);
-
-            });
-        }
-
-        function dataSearch(ObjData, codSearch, urlQuery, callforward, callback)
-        {
-            if (callforward != null)
-                callforward();
-
-            $.getJSON('{{ route('shop.search') }}/?' + urlQuery + '=' + codSearch, function (d) {
-
-                if (d != null) {
-
-                    dataSet(ObjData, d);
-
-                    if (callback != null)
-                        callback();
-
-                }
-
-            });
-        }
 
         function summarySet()
         {
@@ -81,7 +56,7 @@
                 var ObjCustomerData = $('#customer-data');
                 var ObjProductContainer = $('#product-container');
 
-                dataSearch(ObjCustomerData, $(this).val(), 'customer_cod', function () {
+                dataSearch(ObjCustomerData, '{{ route('shop.search') }}/?', $(this).val(), 'customer_cod', function () {
 
                     ObjCustomerData.css('display', 'none');
                     ObjProductContainer.css('display', 'none');
@@ -107,7 +82,7 @@
                 var ObjProductDataTR = ObjProductData.find('tbody > tr').last();
                 var ObjProductDataTRClone = ObjProductDataTR.clone().css('display', 'none');
 
-                dataSearch(ObjProductDataTR, $(this).val(), 'product_cod', function () {
+                dataSearch(ObjProductDataTR, '{{ route('shop.search') }}/?', $(this).val(), 'product_cod', function () {
 
                     ObjProductDataTR.css('display', 'table-row');
                     ObjProductDataTR.after(ObjProductDataTRClone);

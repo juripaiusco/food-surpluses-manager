@@ -10,6 +10,10 @@ return [
         'title' => 'Prodotti'
     ],
 
+    'store' => [
+        'title' => 'Magazzino'
+    ],
+
     'customers' => [
         'title' => 'Anagrafica'
     ]
