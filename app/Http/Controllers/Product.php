@@ -7,8 +7,8 @@ use Illuminate\Http\Request;
 class Product extends Controller
 {
     var $type_array = array(
-        'fear',
-        'fear no',
+        'fead',
+        'fead no',
     );
 
     /**

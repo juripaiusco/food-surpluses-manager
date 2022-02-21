@@ -13,7 +13,7 @@
             }*/
 
             switch ($typeElementValue) {
-                case 'fear':
+                case 'fead':
 
                     $('#kg')
                         .attr('disabled', false)
@@ -25,7 +25,7 @@
 
                     break;
 
-                case 'fear no':
+                case 'fead no':
 
                     $('#kg')
                         .attr('disabled', true)
