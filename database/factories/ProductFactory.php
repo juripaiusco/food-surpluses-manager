@@ -15,6 +15,7 @@ $factory->define(Model\Product::class, function (Faker $faker) {
     return [
         'cod' => \Illuminate\Support\Str::random(5),
         'name' => $faker->colorName,
+        'description' => $faker->sentence(40),
         'type' => $type_array[$random_id_type],
         'points' => random_int(1, 20),
         'kg' => $type_array[$random_id_type] == 'fead no' ? NULL : random_int(1, 5),

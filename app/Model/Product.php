@@ -10,6 +10,6 @@ class Product extends Model
     {
         return $this->hasMany(Store::class, 'product_id', 'id')
             ->orderBy('date', 'DESC')
-            ->take(20);
+            ->take(10);
     }
 }
