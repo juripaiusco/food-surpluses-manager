@@ -61,15 +61,19 @@
                     ObjCustomerData.css('display', 'none');
                     ObjProductContainer.css('display', 'none');
 
-                }, function () {
+                }, function (d) {
 
-                    summarySet();
+                    if (d != null) {
 
-                    $('#customer-data-search').css('display', 'none');
-                    $('#order-summary').css('display', 'block');
-                    ObjCustomerData.css('display', 'block');
-                    ObjProductContainer.css('display', 'block');
-                    $('#product_cod').focus();
+                        summarySet();
+
+                        $('#customer-data-search').css('display', 'none');
+                        $('#order-summary').css('display', 'block');
+                        ObjCustomerData.css('display', 'block');
+                        ObjProductContainer.css('display', 'block');
+                        $('#product_cod').focus();
+
+                    }
 
                 });
 
@@ -84,15 +88,24 @@
 
                 dataSearch(ObjProductDataTR, '{{ route('shop.search') }}/?', $(this).val(), 'product_cod', function () {
 
-                    ObjProductDataTR.css('display', 'table-row');
                     ObjProductDataTR.after(ObjProductDataTRClone);
 
-                }, function () {
+                }, function (d) {
 
-                    summarySet();
+                    if (d == null) {
 
-                    ObjProductData.css('display', 'block');
-                    $('#product_cod').val('').focus();
+                        ObjProductDataTRClone.remove();
+                        alert('Prodotto non trovato');
+
+                    } else {
+
+                        summarySet();
+
+                        ObjProductDataTR.css('display', 'table-row');
+                        ObjProductData.css('display', 'block');
+                        $('#product_cod').val('').focus();
+
+                    }
 
                 });
 

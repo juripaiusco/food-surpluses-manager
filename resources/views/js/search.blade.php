@@ -16,13 +16,13 @@
 
         $.getJSON(resSearch + urlQuery + '=' + codSearch, function (d) {
 
+            // alert(d);
             if (d != null) {
-
                 dataSet(ObjData, d);
+            }
 
-                if (callback != null)
-                    callback();
-
+            if (callback != null) {
+                callback(d);
             }
 
         });
