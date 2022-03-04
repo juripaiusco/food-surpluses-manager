@@ -15,8 +15,7 @@
             callforward();
 
         $.getJSON(resSearch + urlQuery + '=' + codSearch, function (d) {
-
-            // alert(d);
+            
             if (d != null) {
                 dataSet(ObjData, d);
             }
