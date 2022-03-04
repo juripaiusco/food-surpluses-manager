@@ -213,7 +213,7 @@
 
                 <h2>Presenti in magazzino</h2>
 
-                <table class="table table-success table-borderless rounded">
+                <table class="table table-success table-borderless">
                     <thead>
                     <tr>
                         <th class="w-50 text-center">Kg.</th>

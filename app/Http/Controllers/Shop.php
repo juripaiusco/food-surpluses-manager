@@ -78,7 +78,7 @@ class Shop extends Controller
             if (!isset($array_group[$product_id])) {
                 $array_group[$product_id] = 0;
             }
-            
+
             $array_group[$product_id] += 1;
 
         }
