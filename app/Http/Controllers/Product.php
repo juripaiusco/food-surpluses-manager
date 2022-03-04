@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class Product extends Controller
 {
@@ -104,7 +105,8 @@ class Product extends Controller
      */
     public function edit($id)
     {
-        $product = \App\Model\Product::find($id);
+        $product = \App\Model\Product::with('store')
+            ->find($id);
 
         return view('products.form', [
             'product' => $product,

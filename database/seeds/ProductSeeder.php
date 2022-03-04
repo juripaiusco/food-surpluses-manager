@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use \Illuminate\Support\Facades\DB;
 
 class ProductSeeder extends Seeder
 {
@@ -21,5 +22,25 @@ class ProductSeeder extends Seeder
                 ]);
 
             });
+
+        $stores = DB::table('stores')
+            ->select([
+                'product_id',
+                DB::raw('SUM(kg) AS kg_total'),
+                DB::raw('SUM(amount) AS amount_total'),
+            ])
+            ->groupBy('product_id')
+            ->get();
+
+        foreach ($stores as $store) {
+
+            $product = \App\Model\Product::find($store->product_id);
+
+            $product->kg_total = $store->kg_total;
+            $product->amount_total = $store->amount_total;
+
+            $product->save();
+
+        }
     }
 }

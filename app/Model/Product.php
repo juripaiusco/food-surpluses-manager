@@ -8,6 +8,8 @@ class Product extends Model
 {
     public function store()
     {
-        return $this->hasMany(Store::class, 'product_id', 'id');
+        return $this->hasMany(Store::class, 'product_id', 'id')
+            ->orderBy('date', 'DESC')
+            ->take(20);
     }
 }

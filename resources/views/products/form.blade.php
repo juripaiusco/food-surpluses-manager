@@ -52,6 +52,8 @@
 
     </script>
 
+    <h2>Scheda prodotto</h2>
+
     <form action="{{ isset($product->id) ? route('products.update', $product->id) : route('products.store') }}" method="post">
 
         @csrf
@@ -195,5 +197,63 @@
         </div>
 
     </form>
+
+    <br>
+
+    <h2>Presenti in magazzino</h2>
+
+    <table class="table table-success table-borderless">
+        <thead>
+        <tr>
+            <th class="w-50 text-center">Kg.</th>
+            <th class="w-50 text-center">Q.tà</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td class="text-center">
+                <h2>
+                    {{ $product->kg_total == null ? '/' : $product->kg_total }}
+                </h2>
+            </td>
+            <td class="text-center">
+                <h2>
+                    {{ $product->amount_total == null ? '/' : $product->amount_total }}
+                </h2>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    @if(isset($product->store))
+
+        <br>
+
+        <h2>Movimentazioni (ultime 20)</h2>
+
+        <table class="table table-sm table-hover table-striped table-info">
+            <thead>
+            <tr>
+                <th class="w-75">Data movimentazione</th>
+                <th class="text-center">Kg.</th>
+                <th class="text-center">Q.tà</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            @foreach($product->store as $movimento)
+
+                <tr>
+                    <td>{{ $movimento->date }}</td>
+                    <td class="text-center">{{ $movimento->kg }}</td>
+                    <td class="text-center">{{ $movimento->amount }}</td>
+                </tr>
+
+            @endforeach
+
+            </tbody>
+        </table>
+
+    @endif
 
 @endsection

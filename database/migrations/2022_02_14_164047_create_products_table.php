@@ -21,6 +21,8 @@ class CreateProductsTable extends Migration
             $table->integer('points');
             $table->float('kg')->nullable();
             $table->float('amount')->nullable();
+            $table->float('kg_total')->nullable();
+            $table->float('amount_total')->nullable();
             $table->timestamps();
         });
     }
