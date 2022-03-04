@@ -120,8 +120,8 @@
                                class="form-control text-center"
                                id="date"
                                name="date"
-                               value="{{ date('d/m/Y') }}"
-                               placeholder="{{ date('d/m/Y') }}">
+                               value="{{ date('d/m/Y H:i:s') }}"
+                               placeholder="{{ date('d/m/Y H:i:s') }}">
 
                     </td>
                     <td>
