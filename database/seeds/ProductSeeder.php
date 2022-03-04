@@ -16,6 +16,7 @@ class ProductSeeder extends Seeder
             ->each(function ($product) {
 
                 factory(\App\Model\Store::class, random_int(1, 3))->create([
+                    'user_id' => 1,
                     'product_id' => $product->id,
                     'cod' => $product->cod,
                     'kg' => $product->type == 'fead no' ? NULL : random_int(10, 100)

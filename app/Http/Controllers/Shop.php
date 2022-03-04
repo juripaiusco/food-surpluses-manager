@@ -79,6 +79,7 @@ class Shop extends Controller
                 $store->setStore(array(
                     'storeArrayData' => array(
                         'id' => $product_id,
+                        'customer_id' => $request->input('customer_id'),
                         'kg' => isset($product->kg) ? $product->kg * (-1) : null,
                         'amount' => $product->amount * (-1),
                         'date' => date('Y-d-m H:i:s'),

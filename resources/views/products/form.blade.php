@@ -2,12 +2,6 @@
 
 @section('card-body')
 
-    <style>
-        .border-radius {
-            border-radius: 8px;
-        }
-    </style>
-
     <script language="JavaScript">
 
         function tipologiaOnChange(type) {
@@ -219,7 +213,7 @@
 
                 <h2>Presenti in magazzino</h2>
 
-                <table class="table table-success table-borderless border-radius">
+                <table class="table table-success table-borderless rounded">
                     <thead>
                     <tr>
                         <th class="w-50 text-center">Kg.</th>
@@ -248,10 +242,12 @@
 
                     <h2>Movimentazioni (ultime 10)</h2>
 
-                    <table class="table table-sm table-hover table-striped table-borderless table-info border-radius">
+                    <table class="table table-sm table-hover table-striped table-borderless rounded">
                         <thead>
                         <tr>
-                            <th class="w-75">Data movimentazione</th>
+                            <th>Data</th>
+                            <th class="text-center">Utente</th>
+                            <th class="text-center">Cliente</th>
                             <th class="text-center">Kg.</th>
                             <th class="text-center">Q.tà</th>
                         </tr>
@@ -260,8 +256,22 @@
 
                         @foreach($product->store as $movimento)
 
-                            <tr>
-                                <td>{{ date('d/m/Y - H:i:s', strtotime($movimento->date)) }}</td>
+                            <tr class="@if($movimento->amount <= 0) table-danger @else table-success @endif">
+                                <td>
+                                    <small>
+                                        {{ date('d/m/Y - H:i:s', strtotime($movimento->date)) }}
+                                    </small>
+                                </td>
+                                <td class="text-center">
+                                    @if(isset($movimento->user->name))
+                                    {{ $movimento->user->name }}
+                                    @endif
+                                </td>
+                                <td class="text-center">
+                                    @if(isset($movimento->customer->cod))
+                                    {{ $movimento->customer->cod }}
+                                    @endif
+                                </td>
                                 <td class="text-center">{{ $movimento->kg }}</td>
                                 <td class="text-center">{{ $movimento->amount }}</td>
                             </tr>

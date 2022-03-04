@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class Store extends Controller
 {
@@ -136,6 +137,8 @@ class Store extends Controller
                 $store = new \App\Model\Store();
 
                 $store->product_id = $args['storeArrayData']['id'];
+                $store->user_id = Auth::id();
+                $store->customer_id = isset($args['storeArrayData']['customer_id']) ? $args['storeArrayData']['customer_id'] : null;
                 $store->cod = $product->cod;
                 $store->kg = isset($args['storeArrayData']['kg']) ? $args['storeArrayData']['kg'] : null;
                 $store->amount = $args['storeArrayData']['amount'];
