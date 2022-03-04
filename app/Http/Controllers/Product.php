@@ -53,9 +53,12 @@ class Product extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
+        $cod = $request->input('cod');
+
         return view('products.form', [
+            'cod' => isset($cod) ? $cod : '',
             'type_array' => $this->type_array
         ]);
     }

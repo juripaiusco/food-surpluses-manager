@@ -60,6 +60,24 @@
             <div class="col">
 
                 <div class="form-group">
+                    <label for="cod">Codice</label>
+                    <input type="text"
+                           class="form-control disabled"
+                           id="cod"
+                           name="cod"
+                           placeholder="Codice"
+                           @if(isset($product->id))
+                           value="{{ $product->cod }}"
+                           @endif
+                           @if(isset($cod))
+                           value="{{ $cod }}"
+                        @endif>
+                </div>
+
+            </div>
+            <div class="col">
+
+                <div class="form-group">
                     <label for="name">Tipo</label>
                     <select class="form-control"
                             id="type"
@@ -76,21 +94,6 @@
                         @endforeach
 
                     </select>
-                </div>
-
-            </div>
-            <div class="col">
-
-                <div class="form-group">
-                    <label for="cod">Codice</label>
-                    <input type="text"
-                           class="form-control disabled"
-                           id="cod"
-                           name="cod"
-                           placeholder="Codice"
-                           @if(isset($product->id))
-                           value="{{ $product->cod }}"
-                        @endif>
                 </div>
 
             </div>

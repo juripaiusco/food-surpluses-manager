@@ -4,6 +4,15 @@
 
     @include('js/search')
 
+    <style>
+
+        #product-not-find,
+        #product-container {
+            display: none;
+        }
+
+    </style>
+
     <script language="JavaScript">
 
         window.addEventListener('load', function () {
@@ -12,11 +21,26 @@
 
             $(document).on('input', '#product_cod', function () {
 
+                var ObjVal = $(this).val();
                 var ObjProductContainer = $('#product-container');
 
-                dataSearch(ObjProductContainer, '{{ route('store.search') }}/?', $(this).val(), 'product_cod', function () {
+                dataSearch(ObjProductContainer, '{{ route('store.search') }}/?', ObjVal, 'product_cod', function () {
 
-                }, function () {
+                    $('#product-not-find').css('display', 'none');
+                    $('#product-container').css('display', 'none');
+
+                }, function (d) {
+
+                    if (d == null) {
+
+                        $('#product-not-find').css('display', 'block');
+                        $('#product-not-find').find('a').attr('href', '{{ route('products.create') }}/?cod=' + ObjVal);
+
+                    } else {
+
+                        $('#product-container').css('display', 'block');
+
+                    }
 
                 });
 
@@ -32,6 +56,21 @@
                id="product_cod"
                name="product_cod"
                placeholder="Inserisci codice prodotto">
+    </div>
+
+    <div id="product-not-find">
+
+        <br>
+
+        <div class="alert alert-primary text-center" role="alert">
+            Prodotto non trovato.
+        </div>
+
+        <a class="btn btn-lg btn-block btn-primary"
+           href="{{ route('products.create') }}">
+            Inserisci nuovo prodotto
+        </a>
+
     </div>
 
     <div id="product-container">

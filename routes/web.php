@@ -26,8 +26,8 @@ Route::get('/products/create', 'Product@create')->name('products.create');
 Route::post('/products/store', 'Product@store')->name('products.store');
 Route::get('/products/destroy/{id}', 'Product@destroy')->name('products.destroy');
 
-Route::get('/store', 'Store@index')->name('store');
-Route::get('/store/create', 'Store@create')->name('store.create');
+//Route::get('/store', 'Store@index')->name('store');
+Route::get('/store/create', 'Store@create')->name('store');
 Route::get('/store/search', 'Store@search')->name('store.search');
 
 Route::get('/customers', 'Customer@index')->name('customers');
