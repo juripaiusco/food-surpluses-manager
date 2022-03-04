@@ -69,7 +69,7 @@ class Shop extends Controller
      */
     public function store(Request $request)
     {
-        //
+        return redirect()->route('shop');
     }
 
     /**

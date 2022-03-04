@@ -44,6 +44,15 @@
             var pointsResult = customerPoints - productPointsSUM;
 
             Obj.find('[data-id="points-result"]').html(pointsResult);
+
+            if (productPointsSUM === 0) {
+
+                $('#shopSubmit').attr('disabled', true);
+
+            } else {
+
+                $('#shopSubmit').attr('disabled', false);
+            }
         }
 
         window.addEventListener('load', function () {
@@ -129,7 +138,7 @@
 
     </script>
 
-    <form action="#" method="post">
+    <form action="{{ route('shop.store') }}" method="post">
 
         @csrf
 
@@ -266,6 +275,10 @@
                         </tr>
                         </tfoot>
                     </table>
+
+                    <button type="submit"
+                            id="shopSubmit"
+                            class="btn btn-block btn-lg btn-success" disabled>Termina Ordine</button>
 
                 </div>
 
