@@ -97,54 +97,77 @@
 
     <div id="product-container">
 
-        <table class="table">
-            <thead>
-            <tr>
-                <th class="text-center w-25">Codice</th>
-                <th class="text-center w-25">Data di carico</th>
-                <th class="text-center w-25">Kg.</th>
-                <th class="text-center w-25">Q.tà</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td class="align-middle text-center"
-                    data-id="cod"></td>
-                <td>
+        <form action="{{ route('store.store') }}" method="post" autocomplete="off">
 
-                    <input type="text"
-                           class="form-control text-center"
-                           id="date_input"
-                           name="date_input"
-                           value="{{ date('d/m/Y') }}"
-                           placeholder="{{ date('d/m/Y') }}">
+            @csrf
 
-                </td>
-                <td>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th class="text-center w-25">Codice</th>
+                    <th class="text-center w-25">Data di carico</th>
+                    <th class="text-center w-25">Kg.</th>
+                    <th class="text-center w-25">Q.tà</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="align-middle text-center"
+                        data-id="cod"></td>
+                    <td>
 
-                    <input type="text"
-                           class="form-control text-center"
-                           id="kg"
-                           name="kg"
-                           placeholder="kg. prodotto">
+                        <input type="text"
+                               class="form-control text-center"
+                               id="date"
+                               name="date"
+                               value="{{ date('d/m/Y') }}"
+                               placeholder="{{ date('d/m/Y') }}">
 
-                </td>
-                <td>
+                    </td>
+                    <td>
 
-                    <input type="text"
-                           class="form-control text-center"
-                           id="amount"
-                           name="amount"
-                           placeholder="q.tà prodotto">
+                        <input type="text"
+                               class="form-control text-center"
+                               id="kg"
+                               name="kg"
+                               placeholder="kg. prodotto"
+                               autocomplete="off"
+                               autofill="off">
 
-                </td>
-            </tr>
-            </tbody>
-        </table>
+                    </td>
+                    <td>
 
-        <div class="text-center">
-            Per confermare premi INVIO
-        </div>
+                        <input type="text"
+                               class="form-control text-center"
+                               id="amount"
+                               name="amount"
+                               placeholder="q.tà prodotto"
+                               autocomplete="off"
+                               autofill="off">
+
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3"></td>
+                    <td>
+
+                        <button class="btn btn-block btn-success">Salva</button>
+
+                        <br>
+
+                        <div class="text-center">
+                            Oppure premi INVIO
+                        </div>
+
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <input type="hidden" name="id" data-id="id">
+            <input type="hidden" name="cod" data-id="cod">
+
+        </form>
 
     </div>
 

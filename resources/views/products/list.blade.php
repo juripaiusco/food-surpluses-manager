@@ -66,8 +66,8 @@
                     @endif
                 </td>
                 <td class="align-middle">{{ $product->name }}</td>
-                <td class="align-middle text-right">{{ $product->kg }}</td>
-                <td class="align-middle text-right">{{ $product->amount }}</td>
+                <td class="align-middle text-right">{{ $product->kg_total }}</td>
+                <td class="align-middle text-right">{{ $product->amount_total }}</td>
                 <td class="align-middle text-right">{{ $product->points }}</td>
                 <td class="text-center">
 

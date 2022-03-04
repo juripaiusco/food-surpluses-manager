@@ -44,7 +44,19 @@ class Store extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $store = new \App\Model\Store();
+
+        $store->product_id = $request->input('id');
+        $store->cod = $request->input('cod');
+        $store->kg = $request->input('kg');
+        $store->amount = $request->input('amount');
+        $store->date = date('Y-m-d H:i:s', strtotime($request->input('date')));
+
+        $store->save();
+
+        $this->setStore($request->input('id'), $request->input('kg'), $request->input('amount'));
+
+        return redirect()->route('store');
     }
 
     /**
@@ -106,5 +118,15 @@ class Store extends Controller
         }
 
         return $out;
+    }
+
+    public function setStore($id, $kg, $amount)
+    {
+        $product = \App\Model\Product::find($id);
+
+        $product->kg_total += $kg;
+        $product->amount_total += $amount;
+
+        $product->save();
     }
 }

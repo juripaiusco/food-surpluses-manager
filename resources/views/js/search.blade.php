@@ -4,7 +4,20 @@
     {
         $.each(jsonData, function(k, v) {
 
-            ObjDataContainer.find('[data-id="' + k + '"]').html(v);
+            ObjDataContainer.find('[data-id="' + k + '"]').each(function () {
+
+                var Obj = $(this);
+
+                if(Obj.is('input') === true) {
+
+                    Obj.val(v);
+
+                } else {
+
+                    Obj.html(v);
+                }
+
+            });
 
         });
     }
@@ -15,7 +28,7 @@
             callforward();
 
         $.getJSON(resSearch + urlQuery + '=' + codSearch, function (d) {
-            
+
             if (d != null) {
                 dataSet(ObjData, d);
             }
