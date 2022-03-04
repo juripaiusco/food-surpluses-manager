@@ -63,7 +63,11 @@
 
                 }, function (d) {
 
-                    if (d != null) {
+                    if (d == null) {
+
+                        alert('Cliente non trovato');
+
+                    } else {
 
                         summarySet();
 
