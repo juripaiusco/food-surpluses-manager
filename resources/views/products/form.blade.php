@@ -261,7 +261,7 @@
                         @foreach($product->store as $movimento)
 
                             <tr>
-                                <td>{{ $movimento->date }}</td>
+                                <td>{{ date('d/m/Y - H:i:s', strtotime($movimento->date)) }}</td>
                                 <td class="text-center">{{ $movimento->kg }}</td>
                                 <td class="text-center">{{ $movimento->amount }}</td>
                             </tr>

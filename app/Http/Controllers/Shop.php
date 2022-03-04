@@ -69,6 +69,26 @@ class Shop extends Controller
      */
     public function store(Request $request)
     {
+        foreach ($request->input('product_id') as $product_id) {
+
+            $product = \App\Model\Product::find($product_id);
+
+            if (isset($product->id)) {
+
+                $store = new Store();
+                $store->setStore(array(
+                    'storeArrayData' => array(
+                        'id' => $product_id,
+                        'kg' => isset($product->kg) ? $product->kg * (-1) : null,
+                        'amount' => $product->amount * (-1),
+                        'date' => date('Y-d-m H:i:s'),
+                    )
+                ));
+
+            }
+
+        }
+
         return redirect()->route('shop');
     }
 

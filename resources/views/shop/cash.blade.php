@@ -186,6 +186,10 @@
                                         <i class="far fa-trash-alt"></i>
                                     </button>
 
+                                    <input type="hidden"
+                                           name="product_id[]"
+                                           data-id="id">
+
                                 </td>
                                 <td class="align-middle"
                                     data-id="cod"></td>
@@ -211,6 +215,10 @@
             <div class="col-lg-4">
 
                 <div id="customer-data">
+
+                    <input type="hidden"
+                           name="customer_id"
+                           data-id="id">
 
                     <div class="h4" style="padding: 6px; margin-bottom: 15px;">
                         Cod. Cliente <span data-id="cod"></span>

@@ -44,7 +44,7 @@ class Store extends Controller
      */
     public function store(Request $request)
     {
-        $store = new \App\Model\Store();
+        /*$store = new \App\Model\Store();
 
         $store->product_id = $request->input('id');
         $store->cod = $request->input('cod');
@@ -52,9 +52,13 @@ class Store extends Controller
         $store->amount = $request->input('amount');
         $store->date = date('Y-m-d H:i:s', strtotime($request->input('date')));
 
-        $store->save();
+        $store->save();*/
 
-        $this->setStore($request->input('id'), $request->input('kg'), $request->input('amount'));
+        /*$this->setStore($request->input('id'), $request->input('kg'), $request->input('amount'));*/
+
+        $this->setStore(array(
+            'storeArrayData' => $request->input(),
+        ));
 
         return redirect()->route('store');
     }
@@ -120,21 +124,33 @@ class Store extends Controller
         return $out;
     }
 
-    public function setStore($id, $kg, $amount)
+    public function setStore($args = array())
     {
-        $product = \App\Model\Product::find($id);
+        if ($args['storeArrayData']) {
 
-        if ($product->type == 'fead no') {
+            $product = \App\Model\Product::find($args['storeArrayData']['id']);
 
-            $product->kg_total = null;
+            if (isset($product->id)) {
 
-        } else {
+                // Inserimento movimento magazzino
+                $store = new \App\Model\Store();
 
-            $product->kg_total += $kg;
+                $store->product_id = $args['storeArrayData']['id'];
+                $store->cod = $product->cod;
+                $store->kg = isset($args['storeArrayData']['kg']) ? $args['storeArrayData']['kg'] : null;
+                $store->amount = $args['storeArrayData']['amount'];
+                $store->date = date('Y-d-m H:i:s', strtotime($args['storeArrayData']['date']));
+
+                $store->save();
+
+                // Modifica quantità totale prodotto
+                $product->type == 'fead no' ? $product->kg_total = null : $product->kg_total += $args['storeArrayData']['kg'];
+                $product->amount_total += $args['storeArrayData']['amount'];
+
+                $product->save();
+
+            }
+
         }
-
-        $product->amount_total += $amount;
-
-        $product->save();
     }
 }
