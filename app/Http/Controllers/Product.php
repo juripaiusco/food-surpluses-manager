@@ -131,7 +131,16 @@ class Product extends Controller
         $product->name = $request->input('name');
         $product->description = $request->input('description');
         $product->points = $request->input('points');
-        $product->kg = str_replace(',', '.', $request->input('kg'));
+
+        if ($request->input('kg')) {
+
+            $product->kg = str_replace(',', '.', $request->input('kg'));
+
+        } else {
+
+            $product->kg = null;
+        }
+
         $product->amount = $request->input('amount');
 
         $product->save();

@@ -74,7 +74,7 @@
 
     <div id="customer-data-search" class="form-group">
         <input type="text"
-               class="form-control text-center"
+               class="form-control form-control-lg text-center"
                id="product_cod"
                name="product_cod"
                placeholder="Inserisci codice prodotto">

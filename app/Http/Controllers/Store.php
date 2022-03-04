@@ -124,7 +124,15 @@ class Store extends Controller
     {
         $product = \App\Model\Product::find($id);
 
-        $product->kg_total += $kg;
+        if ($product->type == 'fead no') {
+
+            $product->kg_total = null;
+
+        } else {
+
+            $product->kg_total += $kg;
+        }
+
         $product->amount_total += $amount;
 
         $product->save();
