@@ -22,23 +22,45 @@
             $(document).on('input', '#product_cod', function () {
 
                 var ObjVal = $(this).val();
+                var ObjProductNotFind = $('#product-not-find');
                 var ObjProductContainer = $('#product-container');
 
                 dataSearch(ObjProductContainer, '{{ route('store.search') }}/?', ObjVal, 'product_cod', function () {
 
-                    $('#product-not-find').css('display', 'none');
-                    $('#product-container').css('display', 'none');
+                    ObjProductNotFind.css('display', 'none');
+                    ObjProductContainer.css('display', 'none');
 
                 }, function (d) {
 
                     if (d == null) {
 
-                        $('#product-not-find').css('display', 'block');
-                        $('#product-not-find').find('a').attr('href', '{{ route('products.create') }}/?cod=' + ObjVal);
+                        ObjProductNotFind.css('display', 'block');
+                        ObjProductNotFind.find('a').attr('href', '{{ route('products.create') }}/?cod=' + ObjVal);
 
                     } else {
 
-                        $('#product-container').css('display', 'block');
+                        ObjProductContainer.css('display', 'block');
+
+                        switch (d.type) {
+                            case 'fead':
+
+                                ObjProductContainer.find('#kg')
+                                    .attr('readonly', false)
+                                    .attr('disabled', false)
+                                    .focus();
+
+                                break;
+
+                            case 'fead no':
+
+                                ObjProductContainer.find('#kg')
+                                    .attr('readonly', true)
+                                    .attr('disabled', true);
+
+                                ObjProductContainer.find('#amount').focus();
+
+                                break;
+                        }
 
                     }
 
@@ -78,10 +100,10 @@
         <table class="table">
             <thead>
             <tr>
-                <th width="25%" class="text-center">Codice</th>
-                <th width="25%" class="text-center">Data di carico</th>
-                <th width="25%" class="text-center">Kg.</th>
-                <th width="25%" class="text-center">Q.tà</th>
+                <th class="text-center w-25">Codice</th>
+                <th class="text-center w-25">Data di carico</th>
+                <th class="text-center w-25">Kg.</th>
+                <th class="text-center w-25">Q.tà</th>
             </tr>
             </thead>
             <tbody>
@@ -119,6 +141,10 @@
             </tr>
             </tbody>
         </table>
+
+        <div class="text-center">
+            Per confermare premi INVIO
+        </div>
 
     </div>
 
