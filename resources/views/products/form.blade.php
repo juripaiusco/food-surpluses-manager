@@ -224,12 +224,16 @@
                     <tr>
                         <td class="text-center">
                             <h2>
+                                @if(isset($product->kg_total))
                                 {{ $product->kg_total == null ? '/' : $product->kg_total }}
+                                @endif
                             </h2>
                         </td>
                         <td class="text-center">
                             <h2>
+                                @if(isset($product->amount_total))
                                 {{ $product->amount_total == null ? '/' : $product->amount_total }}
+                                @endif
                             </h2>
                         </td>
                     </tr>

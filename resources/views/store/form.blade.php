@@ -84,7 +84,7 @@
 
         <br>
 
-        <div class="alert alert-primary text-center" role="alert">
+        <div class="alert alert-warning text-center" role="alert">
             Prodotto non trovato.
         </div>
 

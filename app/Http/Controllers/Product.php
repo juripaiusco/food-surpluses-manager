@@ -79,12 +79,12 @@ class Product extends Controller
         $product->name = $request->input('name');
         $product->description = $request->input('description');
         $product->points = $request->input('points');
-        $product->kg = str_replace(',', '.', $request->input('kg'));
+        $product->kg = $request->input('kg') ? str_replace(',', '.', $request->input('kg')) : null;
         $product->amount = $request->input('amount');
 
         $product->save();
 
-        return redirect()->route('products');
+        return redirect()->route('store');
     }
 
     /**
