@@ -252,6 +252,7 @@
                             <th>Data</th>
                             <th class="text-center">Utente</th>
                             <th class="text-center">Cliente</th>
+                            <th class="text-center">Ordine</th>
                             <th class="text-center">Kg.</th>
                             <th class="text-center">Q.tà</th>
                         </tr>
@@ -274,6 +275,11 @@
                                 <td class="text-center">
                                     @if(isset($movimento->customer->cod))
                                     {{ $movimento->customer->cod }}
+                                    @endif
+                                </td>
+                                <td class="text-center">
+                                    @if(isset($movimento->order->reference))
+                                        {{ $movimento->order->reference }}
                                     @endif
                                 </td>
                                 <td class="text-center">{{ $movimento->kg }}</td>

@@ -109,6 +109,7 @@ class Product extends Controller
         $product = \App\Model\Product::with('store')
             ->with('store.user')
             ->with('store.customer')
+            ->with('store.order')
             ->find($id);
 
         return view('products.form', [
