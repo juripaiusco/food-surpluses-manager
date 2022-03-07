@@ -95,7 +95,8 @@ class Customer extends Controller
      */
     public function edit($id)
     {
-        $customer = \App\Model\Customer::find($id);
+        $customer = \App\Model\Customer::with('order')
+            ->find($id);
 
         return view('customers.form', [
             'customer' => $customer

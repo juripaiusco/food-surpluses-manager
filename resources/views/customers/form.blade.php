@@ -6,6 +6,8 @@
 
         @csrf
 
+        <h2>Scheda cliente</h2>
+
         <div class="row">
             <div class="col">
 
@@ -92,5 +94,34 @@
         </div>
 
     </form>
+
+    @if(count($customer->order) > 0)
+
+        <br>
+        <h2>Ordini eseguiti (ultimi 10)</h2>
+
+        <table class="table table-info table-striped table-hover">
+            <thead>
+            <tr>
+                <th class="w-25">Data ordine</th>
+                <th class="w-25">Riferimento</th>
+                <th class="text-right">Punti</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            @foreach($customer->order as $order)
+
+                <tr>
+                    <td>{{ $order->date }}</td>
+                    <td>{{ $order->reference }}</td>
+                    <td class="text-right">{{ $order->points }}</td>
+                </tr>
+
+            @endforeach
+            </tbody>
+        </table>
+
+    @endif
 
 @endsection
