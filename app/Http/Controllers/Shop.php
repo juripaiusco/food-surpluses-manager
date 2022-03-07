@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class Shop extends Controller
 {
@@ -81,6 +82,26 @@ class Shop extends Controller
 
         }
 
+        $order_reference = strtoupper(\Illuminate\Support\Str::random(5));
+        $oder_data = date('Y-d-m H:i:s', strtotime(date('Y-d-m H:i:s')));
+
+        $customer = \App\Model\Customer::find($request->input('customer_id'));
+
+        // Creazione ordine
+        $order = new Order();
+        $order_id = $order->store(array(
+            'data' => array(
+                'reference' => $order_reference,
+                'user_id' => Auth::id(),
+                'customer_id' => $request->input('customer_id'),
+                'json_customer' => json_encode($customer),
+                'date' => $oder_data
+            )
+        ));
+
+        $points = 0;
+        $product_array = array();
+
         foreach ($array_group as $product_id => $count) {
 
             $product = \App\Model\Product::find($product_id);
@@ -91,17 +112,32 @@ class Shop extends Controller
                 $store->setStore(array(
                     'storeArrayData' => array(
                         'id' => $product_id,
+                        'order_reference' => $order_reference,
+                        'order_id' => $order_id,
                         'customer_id' => $request->input('customer_id'),
                         'kg' => isset($product->kg) ? $product->kg * $count * (-1) : null,
                         'amount' => $product->amount * $count * (-1),
                         'products_count' => $count,
-                        'date' => date('Y-d-m H:i:s'),
+                        'date' => $oder_data,
                     )
                 ));
+
+                $points += $count * $product->points;
+                $product_array[] = $product;
 
             }
 
         }
+
+        // Modifica ordine appena creato, per aggiungere i dati mancanti
+        $order = new Order();
+        $order->store(array(
+            'id' => $order_id,
+            'data' => array(
+                'points' => $points,
+                'json_products' => json_encode($product_array)
+            )
+        ));
 
         return redirect()->route('shop');
     }

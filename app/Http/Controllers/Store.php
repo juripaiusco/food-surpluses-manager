@@ -153,11 +153,12 @@ class Store extends Controller
 
                 $store->product_id = $args['storeArrayData']['id'];
                 $store->user_id = Auth::id();
+                $store->order_id = $args['storeArrayData']['order_id'];
                 $store->customer_id = isset($args['storeArrayData']['customer_id']) ? $args['storeArrayData']['customer_id'] : null;
                 $store->cod = $product->cod;
                 $store->kg = isset($args['storeArrayData']['kg']) ? $args['storeArrayData']['kg'] : null;
                 $store->amount = $args['storeArrayData']['amount'];
-                $store->date = date('Y-d-m H:i:s', strtotime($args['storeArrayData']['date']));
+                $store->date = $args['storeArrayData']['date'];
 
                 $store->save();
 
