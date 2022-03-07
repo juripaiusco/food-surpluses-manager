@@ -131,6 +131,21 @@ class Store extends Controller
 
             $product = \App\Model\Product::find($args['storeArrayData']['id']);
 
+            // Tolgo i punti CLIENTE dalla tessera.
+            // Il cliente non può inserire prodotti, quindi ogni volta che
+            // è presente un customer_id significa che l'operazione è di acquisto
+            // prodotto, quindi al cliente devono essere scalati i punti.
+            if (isset($args['storeArrayData']['customer_id'])) {
+
+                $customer = \App\Model\Customer::find($args['storeArrayData']['customer_id']);
+
+                $customer->points += $product->points * (-1);
+
+                $customer->save();
+
+            }
+
+            // Modifico i dati PRODOTTO
             if (isset($product->id)) {
 
                 // Inserimento movimento magazzino
@@ -153,7 +168,6 @@ class Store extends Controller
                 $product->save();
 
             }
-
         }
     }
 }
