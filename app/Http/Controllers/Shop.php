@@ -94,6 +94,7 @@ class Shop extends Controller
                         'customer_id' => $request->input('customer_id'),
                         'kg' => isset($product->kg) ? $product->kg * $count * (-1) : null,
                         'amount' => $product->amount * $count * (-1),
+                        'products_count' => $count,
                         'date' => date('Y-d-m H:i:s'),
                     )
                 ));
