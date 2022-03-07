@@ -14,7 +14,13 @@ class Order extends Controller
      */
     public function index()
     {
-        //
+        $orders = \App\Model\Order::with('customer')
+            ->orderBy('id', 'DESC')
+            ->paginate(10);
+
+        return view('order.list', [
+            'orders' => $orders
+        ]);
     }
 
     /**
@@ -60,7 +66,16 @@ class Order extends Controller
      */
     public function show($id)
     {
-        //
+        $order = \App\Model\Order::with('user')
+            ->with('customer')
+            ->find($id);
+
+        $products = json_decode($order->json_products);
+
+        return view('order.show', [
+            'order' => $order,
+            'products' => $products
+        ]);
     }
 
     /**

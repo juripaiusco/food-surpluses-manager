@@ -20,6 +20,9 @@ Route::get('/shop', 'Shop@index')->name('shop');
 Route::post('/shop/store', 'Shop@store')->name('shop.store');
 Route::get('/shop/search', 'Shop@search')->name('shop.search');
 
+Route::get('/order', 'Order@index')->name('order');
+Route::get('/order/{id}', 'Order@show')->name('order.show');
+
 Route::get('/products', 'Product@index')->name('products');
 Route::get('/products/edit/{id}', 'Product@edit')->name('products.edit');
 Route::post('/products/update/{id}', 'Product@update')->name('products.update');

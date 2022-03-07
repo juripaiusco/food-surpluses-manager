@@ -4,6 +4,10 @@
         <a class="nav-link" href="{{ route('shop') }}">{{ __('layout.shop.title') }}</a>
     </li>
 
+    <li class="nav-item {{ Route::is('order*') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('order') }}">{{ __('layout.order.title') }}</a>
+    </li>
+
     <li class="nav-item {{ Route::is('products*') ? 'active' : '' }}">
         <a class="nav-link" href="{{ route('products') }}">{{ __('layout.products.title') }}</a>
     </li>

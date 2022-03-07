@@ -6,6 +6,10 @@ return [
         'title' => 'Cassa'
     ],
 
+    'order' => [
+        'title' => 'Ordini'
+    ],
+
     'products' => [
         'title' => 'Prodotti'
     ],
