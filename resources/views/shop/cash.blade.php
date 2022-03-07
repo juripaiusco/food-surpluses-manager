@@ -225,15 +225,15 @@
                     </div>
 
                     <table class="table table-borderless table-success">
-                        <thead>
+                        {{--<thead>
                         <tr>
-                            {{--<th>Codice</th>--}}
+                            --}}{{--<th>Codice</th>--}}{{--
                             <th></th>
-                            {{--<th>Cognome</th>--}}
-                            {{--<th class="">Indirizzo</th>--}}
+                            --}}{{--<th>Cognome</th>--}}{{--
+                            --}}{{--<th class="">Indirizzo</th>--}}{{--
                             <th class="text-right">Punti</th>
                         </tr>
-                        </thead>
+                        </thead>--}}
                         <tbody>
                         <tr>
                             {{--<td class="align-middle"
@@ -250,8 +250,10 @@
                                 data-id="surname"></td>--}}
                             {{--<td class="align-middle"
                                 data-id="address"></td>--}}
-                            <td class="align-middle text-right h1"
-                                data-id="points"></td>
+                            <td class="align-top text-right">
+                                <strong>Punti</strong>
+                                <h1 data-id="points"></h1>
+                            </td>
                         </tr>
                         </tbody>
                     </table>
