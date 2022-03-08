@@ -44,3 +44,8 @@ Route::post('/customers/store', 'Customer@store')->name('customers.store');
 Route::get('/customers/destroy/{id}', 'Customer@destroy')->name('customers.destroy');
 
 Route::get('/users', 'User@index')->name('users');
+Route::get('/users/edit/{id}', 'User@edit')->name('users.edit');
+Route::post('/users/update/{id}', 'User@update')->name('users.update');
+Route::get('/users/create', 'User@create')->name('users.create');
+Route::post('/users/store', 'User@store')->name('users.store');
+Route::get('/users/destroy/{id}', 'User@destroy')->name('users.destroy');

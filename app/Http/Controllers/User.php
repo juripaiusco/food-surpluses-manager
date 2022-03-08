@@ -13,7 +13,11 @@ class User extends Controller
      */
     public function index()
     {
-        //
+        $users = \App\Model\User::paginate(15);
+
+        return view('users.list', [
+            'users' => $users
+        ]);
     }
 
     /**
