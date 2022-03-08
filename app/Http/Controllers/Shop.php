@@ -70,6 +70,8 @@ class Shop extends Controller
      */
     public function store(Request $request)
     {
+        // Raggruppo i prodotti, così da scalare in una sola volta
+        // gli stessi prodotti
         $array_group = array();
 
         foreach ($request->input('product_id') as $product_id) {
@@ -82,9 +84,13 @@ class Shop extends Controller
 
         }
 
+        // Creo un codice di riferimento random
         $order_reference = strtoupper(\Illuminate\Support\Str::random(5));
+
+        // Imposto la data attuale dell'ordine
         $oder_data = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s')));
 
+        // Recupero i dati del cliente
         $customer = \App\Model\Customer::find($request->input('customer_id'));
 
         // Creazione ordine
@@ -99,6 +105,7 @@ class Shop extends Controller
             )
         ));
 
+        // Scarico i prodotti da magazzino
         $points = 0;
         $product_array = array();
 
@@ -123,7 +130,10 @@ class Shop extends Controller
                 ));
 
                 $points += $count * $product->points;
-                $product_array[] = $product;
+
+                for ($i = 0; $i < $count; $i++) {
+                    $product_array[] = $product;
+                }
 
             }
 

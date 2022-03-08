@@ -2,32 +2,54 @@
 
 @section('card-body')
 
-    <table class="table table-info">
-        <thead>
-        <tr>
-            <th class="w-25">Riferimento</th>
-            <th class="w-25">Data</th>
-            <th class="w-25">Utente</th>
-            <th class="w-25">Cliente</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td>
-                {{ $order->reference }}
-            </td>
-            <td>
-                {{ $order->date }}
-            </td>
-            <td>
-                {{ $order->user->name }}
-            </td>
-            <td>
-                {{ $order->customer->name }} {{ $order->customer->surname }}
-            </td>
-        </tr>
-        </tbody>
-    </table>
+    <div class="row">
+        <div class="col-9">
+
+            <h2>Dati cliente</h2>
+            <table class="table table-info">
+                <thead>
+                <tr>
+                    <th class="w-25">Riferimento</th>
+                    <th class="w-25">Data</th>
+                    <th class="w-25">Utente</th>
+                    <th class="w-25">Cliente</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>
+                        {{ $order->reference }}
+                    </td>
+                    <td>
+                        {{ $order->date }}
+                    </td>
+                    <td>
+                        {{ $order->user->name }}
+                    </td>
+                    <td>
+                        {{ $order->customer->name }} {{ $order->customer->surname }}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+        <div class="col text-center">
+
+            <h2>Punti scalati</h2>
+
+            <br>
+
+            <span class="h1">
+                {{ $order->points * (-1) }}
+            </span>
+
+        </div>
+    </div>
+
+    <br>
+
+    <h2>Prodotti consegnati</h2>
 
     <table class="table table-striped table-hover table-warning">
         <thead>
