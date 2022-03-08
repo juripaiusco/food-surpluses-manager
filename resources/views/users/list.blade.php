@@ -6,7 +6,7 @@
 
     <div class="row">
         <div class="col-lg-8">
-            <a class="btn btn-primary" href="{{ route('users.create') }}">Nuovo prodotto</a>
+            <a class="btn btn-primary" href="{{ route('users.create') }}">Nuovo utente</a>
         </div>
         <div class="col-lg-4">
 
