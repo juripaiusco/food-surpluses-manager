@@ -56,13 +56,14 @@ class User extends Controller
      */
     public function store(Request $request)
     {
-        $users = new \App\Model\User();
+        $user = new \App\Model\User();
 
-        $users->name = $request->input('name');
-        $users->email = $request->input('email');
-        $users->password = Hash::make($request->input('password'));
+        $user->name = $request->input('name');
+        $user->email = $request->input('email');
+        $user->password = Hash::make($request->input('password'));
+        $user->json_modules = json_encode($request->input('modules'));
 
-        $users->save();
+        $user->save();
 
         return redirect()->route('users');
     }
@@ -90,7 +91,7 @@ class User extends Controller
 
         return view('users.form', [
             'user' => $user,
-            'modules' => json_decode($user->modules, true),
+            'modules' => json_decode($user->json_modules, true),
             'modules_array' => $this->modules_array
         ]);
     }
@@ -108,7 +109,7 @@ class User extends Controller
 
         $user->name = $request->input('name');
         $user->email = $request->input('email');
-        $user->modules = json_encode($request->input('modules'));
+        $user->json_modules = json_encode($request->input('modules'));
 
         $user->save();
 

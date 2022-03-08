@@ -36,6 +36,7 @@
         <tr>
             <th>Nome</th>
             <th>Email</th>
+            <th>Moduli attivi</th>
             <th width="120px"></th>
         </tr>
         </thead>
@@ -44,9 +45,21 @@
 
         @foreach($users as $user)
 
+            @php
+                $module_name = array();
+                $k = array_keys(json_decode($user->json_modules, true));
+
+                foreach ($k as $id) {
+                    $module_name[] = __('layout.' . $id . '.title');
+                }
+            @endphp
+
             <tr>
                 <td class="align-middle">{{ $user->name }}</td>
                 <td class="align-middle">{{ $user->email }}</td>
+                <td class="align-middle">
+                    {{ implode(' | ', $module_name) }}
+                </td>
                 <td class="text-center">
 
                     <div class="row no-gutters">
