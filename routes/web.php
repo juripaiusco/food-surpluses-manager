@@ -21,8 +21,8 @@ Route::get('/shop', 'Shop@index')->name('shop');
 Route::post('/shop/store', 'Shop@store')->name('shop.store');
 Route::get('/shop/search', 'Shop@search')->name('shop.search');
 
-Route::get('/order', 'Order@index')->name('order');
-Route::get('/order/{id}', 'Order@show')->name('order.show');
+Route::get('/orders', 'Order@index')->name('orders');
+Route::get('/orders/{id}', 'Order@show')->name('orders.show');
 
 Route::get('/products', 'Product@index')->name('products');
 Route::get('/products/edit/{id}', 'Product@edit')->name('products.edit');
@@ -42,3 +42,5 @@ Route::post('/customers/update/{id}', 'Customer@update')->name('customers.update
 Route::get('/customers/create', 'Customer@create')->name('customers.create');
 Route::post('/customers/store', 'Customer@store')->name('customers.store');
 Route::get('/customers/destroy/{id}', 'Customer@destroy')->name('customers.destroy');
+
+Route::get('/users', 'User@index')->name('users');

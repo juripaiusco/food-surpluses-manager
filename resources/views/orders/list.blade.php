@@ -70,7 +70,7 @@
                 <td class="align-middle text-right">{{ $order->points }}</td>
                 <td class="text-center">
 
-                    <a href="{{ route('order.show', $order->id) }}" class="btn btn-primary">
+                    <a href="{{ route('orders.show', $order->id) }}" class="btn btn-primary">
                         <i class="fas fa-info"></i>
                     </a>
 

@@ -6,7 +6,7 @@
 
         <div class="col">
 
-            <div class="card">
+            <div class="card border-warning">
                 <div class="card-body">
 
                     <div class="row">
@@ -32,7 +32,7 @@
 
         <div class="col">
 
-            <div class="card">
+            <div class="card border-info">
                 <div class="card-body">
 
                     <div class="row">
@@ -58,7 +58,7 @@
 
         <div class="col">
 
-            <div class="card">
+            <div class="card border-secondary">
                 <div class="card-body">
 
                     <div class="row">
@@ -72,7 +72,7 @@
                         </div>
                         <div class="col">
 
-                            <i class="fas fa-bullseye fa-4x"></i>
+                            <i class="fas fa-shopping-bag fa-4x"></i>
 
                         </div>
                     </div>
@@ -85,7 +85,7 @@
 
         <div class="col">
 
-            <div class="card bg-success text-white">
+            <div class="card border-success">
                 <div class="card-body">
 
                     <div class="row">

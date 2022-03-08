@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
-class Order extends Controller
+class User extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,13 +13,7 @@ class Order extends Controller
      */
     public function index()
     {
-        $orders = \App\Model\Order::with('customer')
-            ->orderBy('id', 'DESC')
-            ->paginate(10);
-
-        return view('orders.list', [
-            'orders' => $orders
-        ]);
+        //
     }
 
     /**
@@ -39,23 +32,9 @@ class Order extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store($args = array())
+    public function store(Request $request)
     {
-        if (isset($args['id'])) {
-
-            $order_id = $args['id'];
-
-            DB::table('orders')
-                ->where('id', $args['id'])
-                ->update($args['data']);
-
-        } else {
-
-            $order_id = DB::table('orders')
-                ->insertGetId($args['data']);
-        }
-
-        return $order_id;
+        //
     }
 
     /**
@@ -66,16 +45,7 @@ class Order extends Controller
      */
     public function show($id)
     {
-        $order = \App\Model\Order::with('user')
-            ->with('customer')
-            ->find($id);
-
-        $products = json_decode($order->json_products);
-
-        return view('orders.show', [
-            'order' => $order,
-            'products' => $products
-        ]);
+        //
     }
 
     /**

@@ -10,7 +10,7 @@ return [
         'title' => 'Cassa'
     ],
 
-    'order' => [
+    'orders' => [
         'title' => 'Ordini'
     ],
 
@@ -24,6 +24,12 @@ return [
 
     'customers' => [
         'title' => 'Anagrafica'
-    ]
+    ],
+
+    'users' => [
+        'title' => 'Utenti'
+    ],
+
+    'Logout' => 'Esci'
 
 ];
