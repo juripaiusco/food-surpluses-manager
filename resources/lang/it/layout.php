@@ -2,6 +2,10 @@
 
 return [
 
+    'home' => [
+        'title' => 'Dashboard'
+    ],
+
     'shop' => [
         'title' => 'Cassa'
     ],

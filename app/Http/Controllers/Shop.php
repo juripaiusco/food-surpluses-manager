@@ -83,7 +83,7 @@ class Shop extends Controller
         }
 
         $order_reference = strtoupper(\Illuminate\Support\Str::random(5));
-        $oder_data = date('Y-d-m H:i:s', strtotime(date('Y-d-m H:i:s')));
+        $oder_data = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s')));
 
         $customer = \App\Model\Customer::find($request->input('customer_id'));
 
