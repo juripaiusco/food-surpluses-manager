@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class User extends Controller
 {
@@ -27,7 +28,7 @@ class User extends Controller
      */
     public function create()
     {
-        //
+        return view('users.form');
     }
 
     /**
@@ -38,7 +39,15 @@ class User extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $users = new \App\Model\User();
+
+        $users->name = $request->input('name');
+        $users->email = $request->input('email');
+        $users->password = Hash::make($request->input('password'));
+
+        $users->save();
+
+        return redirect()->route('users');
     }
 
     /**
@@ -60,7 +69,11 @@ class User extends Controller
      */
     public function edit($id)
     {
-        //
+        $user = \App\Model\User::find($id);
+
+        return view('users.form', [
+            'user' => $user
+        ]);
     }
 
     /**
@@ -72,7 +85,14 @@ class User extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $user = \App\Model\User::find($id);
+
+        $user->name = $request->input('name');
+        $user->email = $request->input('email');
+
+        $user->save();
+
+        return redirect()->route('users');
     }
 
     /**
@@ -83,6 +103,8 @@ class User extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = \App\Model\User::destroy($id);
+
+        return redirect()->route('users');
     }
 }
