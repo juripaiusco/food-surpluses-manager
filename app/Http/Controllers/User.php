@@ -4,9 +4,24 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Lang;
 
 class User extends Controller
 {
+    var $modules_array = array();
+
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+
+        $this->modules_array = Lang::get('layout');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -28,7 +43,9 @@ class User extends Controller
      */
     public function create()
     {
-        return view('users.form');
+        return view('users.form', [
+            'modules_array' => $this->modules_array
+        ]);
     }
 
     /**
@@ -72,7 +89,9 @@ class User extends Controller
         $user = \App\Model\User::find($id);
 
         return view('users.form', [
-            'user' => $user
+            'user' => $user,
+            'modules' => json_decode($user->modules, true),
+            'modules_array' => $this->modules_array
         ]);
     }
 
@@ -89,6 +108,7 @@ class User extends Controller
 
         $user->name = $request->input('name');
         $user->email = $request->input('email');
+        $user->modules = json_encode($request->input('modules'));
 
         $user->save();
 

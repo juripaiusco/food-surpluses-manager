@@ -14,13 +14,15 @@ class UserSeeder extends Seeder
         \Illuminate\Support\Facades\DB::table('users')->insert([
             'name' => 'Juri',
             'email' => 'juri@mr-j.it',
-            'password' => Hash::make('12345')
+            'password' => Hash::make('12345'),
+            'modules' => '{"home":"on","shop":"on","orders":"on","products":"on","store":"on","customers":"on","users":"on"}'
         ]);
 
         \Illuminate\Support\Facades\DB::table('users')->insert([
             'name' => 'Christian',
             'email' => 'bastasprechi.vi@gmail.com',
-            'password' => Hash::make('12345')
+            'password' => Hash::make('12345'),
+            'modules' => '{"home":"on","shop":"on","orders":"on","products":"on","store":"on","customers":"on","users":"on"}'
         ]);
     }
 }

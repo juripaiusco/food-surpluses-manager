@@ -59,9 +59,31 @@
 
         <h2>Moduli attivi</h2>
 
-        <div class="custom-control custom-switch custom-switch-md form-control-lg">
-            <input type="checkbox" class="custom-control-input" id="shop">
-            <label class="custom-control-label" for="shop">Cassa</label>
+        <div class="row">
+
+            @foreach($modules_array as $k => $module)
+
+                @if(isset($module['title']))
+
+                    <div class="col-3">
+
+                        <div class="custom-control custom-switch custom-switch-md form-control-lg">
+                            <input type="checkbox"
+                                   class="custom-control-input"
+                                   id="{{ $k }}"
+                                   name="modules[{{ $k }}]"
+                            @if(isset($modules[$k]) && $modules[$k] == 'on')
+                                checked
+                                @endif>
+                            <label class="custom-control-label" for="{{ $k }}">{{ $module['title'] }}</label>
+                        </div>
+
+                    </div>
+
+                @endif
+
+            @endforeach
+
         </div>
 
         <div class="text-right">
