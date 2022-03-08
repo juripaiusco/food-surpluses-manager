@@ -45,20 +45,20 @@ class Store extends Controller
      */
     public function store(Request $request)
     {
-        /*$store = new \App\Model\Store();
-
-        $store->product_id = $request->input('id');
-        $store->cod = $request->input('cod');
-        $store->kg = $request->input('kg');
-        $store->amount = $request->input('amount');
-        $store->date = date('Y-m-d H:i:s', strtotime($request->input('date')));
-
-        $store->save();*/
-
-        /*$this->setStore($request->input('id'), $request->input('kg'), $request->input('amount'));*/
+        $storeArrayData = $request->input();
+        $storeArrayData['date'] = date(
+            'Y-m-d H:i:s',
+            strtotime(
+                str_replace(
+                    '/',
+                    '-',
+                    $request->input('date')
+                )
+            )
+        );
 
         $this->setStore(array(
-            'storeArrayData' => $request->input(),
+            'storeArrayData' => $storeArrayData,
         ));
 
         return redirect()->route('store');
@@ -153,7 +153,7 @@ class Store extends Controller
 
                 $store->product_id = $args['storeArrayData']['id'];
                 $store->user_id = Auth::id();
-                $store->order_id = $args['storeArrayData']['order_id'];
+                $store->order_id = isset($args['storeArrayData']['order_id']) ? $args['storeArrayData']['order_id'] : null;
                 $store->customer_id = isset($args['storeArrayData']['customer_id']) ? $args['storeArrayData']['customer_id'] : null;
                 $store->cod = $product->cod;
                 $store->kg = isset($args['storeArrayData']['kg']) ? $args['storeArrayData']['kg'] : null;

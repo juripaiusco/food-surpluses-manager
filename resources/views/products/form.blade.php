@@ -200,6 +200,12 @@
                     </div>
                 </div>
 
+                <small>
+                    Queste sono le quantità che vengono scalata al momento dell'acquisto.
+                </small>
+
+                <br><br>
+
                 <div class="text-right">
 
                     <a href="javascript: history.go(-1);" class="btn btn-secondary">Annulla</a>

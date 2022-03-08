@@ -1,0 +1,20 @@
+.navbar-nav.mr-auto {
+    width: 100%;
+}
+.navbar-nav.mr-auto .nav-item {
+    text-align: center;
+    width: 100%;
+    margin: 0 2px 0 2px;
+}
+.navbar-nav.mr-auto .nav-item:hover,
+.navbar-nav.mr-auto .nav-item.active {
+    border-radius: 4px;
+    background-color: #cce5ff !important;
+    color: white !important;
+}
+.navbar-nav.mr-auto .nav-item.active * {
+    color: white !important;
+}
+.navbar-nav.mr-auto .nav-item.active {
+    background-color: #227dc7 !important;
+}
