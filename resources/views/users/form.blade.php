@@ -97,10 +97,13 @@
                 <div class="col-3">
 
                     <div class="custom-control custom-switch custom-switch-md form-control-lg">
-                        <input type="checkbox"
+                        <input type="radio"
+                               {{--type="checkbox"--}}
                                class="custom-control-input"
                                id="retail_{{ $retail->id }}"
-                               name="retails[{{ $retail->id }}]"
+                               {{--name="retails[{{ $retail->id }}]"--}}
+                               name="retails"
+                               value="{{ $retail->id }}"
                                @if(isset($retails_user[$retail->id]) && $retails_user[$retail->id] == 'on')
                                checked
                             @endif>

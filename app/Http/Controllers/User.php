@@ -116,7 +116,10 @@ class User extends Controller
         $user->name = $request->input('name');
         $user->email = $request->input('email');
         $user->json_modules = json_encode($request->input('modules'));
-        $user->json_retails = json_encode($request->input('retails'));
+
+        $retails[$request->input('retails')] = 'on';
+
+        $user->json_retails = json_encode($retails);
 
         $user->save();
 
