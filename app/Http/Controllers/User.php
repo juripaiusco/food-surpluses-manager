@@ -43,8 +43,11 @@ class User extends Controller
      */
     public function create()
     {
+        $retails = \App\Model\Retail::get();
+
         return view('users.form', [
-            'modules_array' => $this->modules_array
+            'modules_array' => $this->modules_array,
+            'retails' => $retails
         ]);
     }
 
@@ -88,11 +91,14 @@ class User extends Controller
     public function edit($id)
     {
         $user = \App\Model\User::find($id);
+        $retails = \App\Model\Retail::get();
 
         return view('users.form', [
             'user' => $user,
+            'modules_array' => $this->modules_array,
             'modules' => json_decode($user->json_modules, true),
-            'modules_array' => $this->modules_array
+            'retails' => $retails,
+            'retails_user' => json_decode($user->json_retails, true)
         ]);
     }
 
@@ -110,6 +116,7 @@ class User extends Controller
         $user->name = $request->input('name');
         $user->email = $request->input('email');
         $user->json_modules = json_encode($request->input('modules'));
+        $user->json_retails = json_encode($request->input('retails'));
 
         $user->save();
 

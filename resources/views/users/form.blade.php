@@ -86,6 +86,33 @@
 
         </div>
 
+        <br>
+
+        <h2>Negozi (dove l'utente opera)</h2>
+        
+        <div class="row">
+
+            @foreach($retails as $retail)
+
+                <div class="col-3">
+
+                    <div class="custom-control custom-switch custom-switch-md form-control-lg">
+                        <input type="checkbox"
+                               class="custom-control-input"
+                               id="retail_{{ $retail->id }}"
+                               name="retails[{{ $retail->id }}]"
+                               @if(isset($retails_user[$retail->id]) && $retails_user[$retail->id] == 'on')
+                               checked
+                            @endif>
+                        <label class="custom-control-label" for="retail_{{ $retail->id }}">{{ $retail->name }}</label>
+                    </div>
+
+                </div>
+
+            @endforeach
+
+        </div>
+
         <div class="text-right">
 
             <a href="javascript: history.go(-1);" class="btn btn-secondary">Annulla</a>
