@@ -31,8 +31,29 @@ class User extends Controller
     {
         $users = \App\Model\User::paginate(15);
 
+        $users_retails = array();
+
+        foreach ($users as $user) {
+
+            if (isset($user->json_retails)) {
+
+                $retails_id_array = array_keys(json_decode($user->json_retails, true));
+
+                foreach ($retails_id_array as $retail_id) {
+
+                    $retails = \App\Model\Retail::find($retail_id);
+
+                    $users_retails[$user->id][] = $retails->name;
+
+                }
+
+            }
+
+        }
+
         return view('users.list', [
-            'users' => $users
+            'users' => $users,
+            'users_retails' => $users_retails
         ]);
     }
 
@@ -46,7 +67,7 @@ class User extends Controller
         $retails = \App\Model\Retail::get();
 
         return view('users.form', [
-            'modules_array' => $this->modules_array,
+            'modules' => $this->modules_array,
             'retails' => $retails
         ]);
     }
@@ -65,6 +86,9 @@ class User extends Controller
         $user->email = $request->input('email');
         $user->password = Hash::make($request->input('password'));
         $user->json_modules = json_encode($request->input('modules'));
+
+        $retails[$request->input('retails')] = 'on';
+        $user->json_retails = json_encode($retails);
 
         $user->save();
 
@@ -118,7 +142,6 @@ class User extends Controller
         $user->json_modules = json_encode($request->input('modules'));
 
         $retails[$request->input('retails')] = 'on';
-
         $user->json_retails = json_encode($retails);
 
         $user->save();

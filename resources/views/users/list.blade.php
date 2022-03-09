@@ -37,6 +37,7 @@
             <th>Nome</th>
             <th>Email</th>
             <th>Moduli attivi</th>
+            <th>Negozio</th>
             <th width="120px"></th>
         </tr>
         </thead>
@@ -59,6 +60,11 @@
                 <td class="align-middle">{{ $user->email }}</td>
                 <td class="align-middle">
                     {{ implode(' | ', $module_name) }}
+                </td>
+                <td class="align-middle">
+                    @if(isset($users_retails[$user->id]))
+                    {{ implode(' | ', $users_retails[$user->id]) }}
+                    @endif
                 </td>
                 <td class="text-center">
 
