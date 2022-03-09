@@ -43,6 +43,13 @@ Route::get('/customers/create', 'Customer@create')->name('customers.create');
 Route::post('/customers/store', 'Customer@store')->name('customers.store');
 Route::get('/customers/destroy/{id}', 'Customer@destroy')->name('customers.destroy');
 
+Route::get('/retails', 'Retail@index')->name('retails');
+Route::get('/retails/edit/{id}', 'Retail@edit')->name('retails.edit');
+Route::post('/retails/update/{id}', 'Retail@update')->name('retails.update');
+Route::get('/retails/create', 'Retail@create')->name('retails.create');
+Route::post('/retails/store', 'Retail@store')->name('retails.store');
+Route::get('/retails/destroy/{id}', 'Retail@destroy')->name('retails.destroy');
+
 Route::get('/users', 'User@index')->name('users');
 Route::get('/users/edit/{id}', 'User@edit')->name('users.edit');
 Route::post('/users/update/{id}', 'User@update')->name('users.update');

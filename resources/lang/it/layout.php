@@ -26,6 +26,10 @@ return [
         'title' => 'Anagrafica'
     ],
 
+    'retails' => [
+        'title' => 'Negozio'
+    ],
+
     'users' => [
         'title' => 'Utenti'
     ],

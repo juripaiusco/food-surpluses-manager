@@ -34,10 +34,16 @@
     </li>
     @endif
 
-    @if(isset($modules['users']) && $modules['users'] == 'on')
-    <li class="nav-item {{ Route::is('users*') ? 'active' : '' }}">
-        <a class="nav-link" href="{{ route('users') }}">{{ __('layout.users.title') }}</a>
+    @if(isset($modules['retails']) && $modules['retails'] == 'on')
+    <li class="nav-item {{ Route::is('retails*') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('retails') }}">{{ __('layout.retails.title') }}</a>
     </li>
+    @endif
+
+    @if(isset($modules['users']) && $modules['users'] == 'on')
+        <li class="nav-item {{ Route::is('users*') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('users') }}">{{ __('layout.users.title') }}</a>
+        </li>
     @endif
 
 </ul>
