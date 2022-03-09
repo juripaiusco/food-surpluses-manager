@@ -15,7 +15,7 @@
 
                     <input class="form-control mr-sm-2"
                            type="search"
-                           placeholder="cerca prodotto"
+                           placeholder="cerca utente"
                            aria-label="Search"
                            name="s"
                            value="{{ $s ?? '' }}" />
