@@ -95,8 +95,8 @@ class User extends Controller
 
         return view('users.form', [
             'user' => $user,
-            'modules_array' => $this->modules_array,
-            'modules' => json_decode($user->json_modules, true),
+            'modules' => $this->modules_array,
+            'modules_user' => json_decode($user->json_modules, true),
             'retails' => $retails,
             'retails_user' => json_decode($user->json_retails, true)
         ]);

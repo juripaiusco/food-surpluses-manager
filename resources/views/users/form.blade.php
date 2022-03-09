@@ -61,7 +61,7 @@
 
         <div class="row">
 
-            @foreach($modules_array as $k => $module)
+            @foreach($modules as $k => $module)
 
                 @if(isset($module['title']))
 
@@ -72,7 +72,7 @@
                                    class="custom-control-input"
                                    id="{{ $k }}"
                                    name="modules[{{ $k }}]"
-                            @if(isset($modules[$k]) && $modules[$k] == 'on')
+                            @if(isset($modules_user[$k]) && $modules_user[$k] == 'on')
                                 checked
                                 @endif>
                             <label class="custom-control-label" for="{{ $k }}">{{ $module['title'] }}</label>
@@ -89,7 +89,7 @@
         <br>
 
         <h2>Negozi (dove l'utente opera)</h2>
-        
+
         <div class="row">
 
             @foreach($retails as $retail)
