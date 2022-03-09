@@ -88,7 +88,8 @@
 
         <div class="text-right">
 
-            <button type="submit" class="btn btn-success">Salve</button>
+            <a href="javascript: history.go(-1);" class="btn btn-secondary">Annulla</a>
+            <button type="submit" class="btn btn-success">@if(isset($user->id)) Modifica @else Inserisci @endif</button>
 
         </div>
 
