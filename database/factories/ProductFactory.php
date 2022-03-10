@@ -13,7 +13,7 @@ $factory->define(Model\Product::class, function (Faker $faker) {
     $random_id_type = random_int(0, 1);
 
     return [
-        'cod' => \Illuminate\Support\Str::random(5),
+        'cod' => strtoupper(\Illuminate\Support\Str::random(5)),
         'name' => $faker->colorName,
         'description' => $faker->sentence(40),
         'type' => $type_array[$random_id_type],
