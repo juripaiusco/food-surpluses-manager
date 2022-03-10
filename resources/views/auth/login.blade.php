@@ -2,6 +2,29 @@
 
 @section('content')
 <div class="container">
+
+    <div class="text-center h1">
+        {{ config('app.name', 'Laravel') }}
+    </div>
+
+    <br><br>
+
+    {{--<div class="row">
+
+        <div class="col-5"></div>
+        <div class="col text-center bg-dark rounded">
+
+            <br>
+            <img src="{{ asset('../storage/app/public/img/logo.png') }}" alt="logo" width="100px">
+            <br><br>
+
+        </div>
+        <div class="col-5"></div>
+
+    </div>
+
+    <br><br>--}}
+
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
