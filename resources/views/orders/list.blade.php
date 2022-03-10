@@ -31,6 +31,7 @@
         <tr>
             <th width="10%" class="text-center">Data</th>
             <th width="10%" class="text-center">Riferimento</th>
+            <th>Negozio</th>
             <th>Cliente</th>
             <th width="10%" class="text-right">Punti</th>
             <th width="1%"></th>
@@ -50,6 +51,7 @@
                     </small>
                 </td>
                 <td class="align-middle text-center">{{ $order->reference }}</td>
+                <td class="align-middle">{{ $order->retail->name }}</td>
                 <td class="align-middle">
                     {{ $order->customer->cod }}
                     -

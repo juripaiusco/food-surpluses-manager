@@ -9,19 +9,23 @@
             <table class="table table-info">
                 <thead>
                 <tr>
-                    <th class="w-25">Riferimento</th>
-                    <th class="w-25">Data</th>
-                    <th class="w-25">Utente</th>
-                    <th class="w-25">Cliente</th>
+                    <th>Data</th>
+                    <th>Riferimento</th>
+                    <th>Negozio</th>
+                    <th>Utente</th>
+                    <th>Cliente</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr>
                     <td>
+                        {{ $order->date }}
+                    </td>
+                    <td>
                         {{ $order->reference }}
                     </td>
                     <td>
-                        {{ $order->date }}
+                        {{ $order->retail->name }}
                     </td>
                     <td>
                         {{ $order->user->name }}

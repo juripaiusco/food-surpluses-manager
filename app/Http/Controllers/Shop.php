@@ -100,6 +100,7 @@ class Shop extends Controller
                 'reference' => $order_reference,
                 'user_id' => Auth::id(),
                 'customer_id' => $request->input('customer_id'),
+                'retail_id' => current(array_keys(json_decode(Auth::user()->json_retails, true))),
                 'json_customer' => json_encode($customer),
                 'date' => $oder_data
             )

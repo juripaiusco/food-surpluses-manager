@@ -25,6 +25,7 @@ class Order extends Controller
     public function index()
     {
         $orders = \App\Model\Order::with('customer')
+            ->with('retail')
             ->orderBy('id', 'DESC')
             ->paginate(10);
 
@@ -77,6 +78,7 @@ class Order extends Controller
     public function show($id)
     {
         $order = \App\Model\Order::with('user')
+            ->with('retail')
             ->with('customer')
             ->find($id);
 
