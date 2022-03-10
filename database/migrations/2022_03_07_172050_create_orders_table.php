@@ -18,6 +18,7 @@ class CreateOrdersTable extends Migration
             $table->char('reference', 5)->nullable();
             $table->integer('user_id')->nullable()->index();
             $table->integer('customer_id')->nullable()->index();
+            $table->integer('retail_id')->nullable()->index();
             $table->float('points')->nullable();
             $table->longText('json_customer')->nullable();
             $table->longText('json_products')->nullable();
