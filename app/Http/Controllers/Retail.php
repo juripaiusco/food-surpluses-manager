@@ -13,7 +13,7 @@ class Retail extends Controller
      */
     public function index()
     {
-        $retails = \App\Model\Retail::orderBy('id', 'DESC')
+        $retails = \App\Model\Retail::orderBy('name')
             ->paginate(15);
 
         return view('retails.list', [

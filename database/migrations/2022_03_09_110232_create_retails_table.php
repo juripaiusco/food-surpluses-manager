@@ -21,6 +21,7 @@ class CreateRetailsTable extends Migration
             $table->char('zip');
             $table->char('city');
 
+            $table->softDeletes();
             $table->timestamps();
         });
     }

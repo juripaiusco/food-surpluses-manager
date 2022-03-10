@@ -43,7 +43,9 @@ class User extends Controller
 
                     $retails = \App\Model\Retail::find($retail_id);
 
-                    $users_retails[$user->id][] = $retails->name;
+                    if (isset($retails->name)) {
+                        $users_retails[$user->id][] = $retails->name;
+                    }
 
                 }
 
@@ -64,7 +66,8 @@ class User extends Controller
      */
     public function create()
     {
-        $retails = \App\Model\Retail::get();
+        $retails = \App\Model\Retail::orderBy('name')
+            ->get();
 
         return view('users.form', [
             'modules' => $this->modules_array,
@@ -115,7 +118,8 @@ class User extends Controller
     public function edit($id)
     {
         $user = \App\Model\User::find($id);
-        $retails = \App\Model\Retail::get();
+        $retails = \App\Model\Retail::orderBy('name')
+            ->get();
 
         return view('users.form', [
             'user' => $user,
