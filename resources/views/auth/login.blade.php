@@ -7,7 +7,7 @@
         {{ config('app.name', 'Laravel') }}
     </div>
 
-    <br><br>
+    <br>
 
     {{--<div class="row">
 
