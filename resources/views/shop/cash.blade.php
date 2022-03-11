@@ -11,7 +11,24 @@
             display: none;
         }
 
+        @if(!Auth::user()->json_retails)
+        form {
+            display: none;
+        }
+        @endif
+
     </style>
+
+    @if(!Auth::user()->json_retails)
+
+        <div class="text-center alert alert-warning">
+            <h1>L'utente non gestisce alcun negozio.</h1>
+            <span class="h4">
+                Collegare negozio all'utente per poter effettuare l'ordine.
+            </span>
+        </div>
+
+    @endif
 
     @include('js/search')
 
