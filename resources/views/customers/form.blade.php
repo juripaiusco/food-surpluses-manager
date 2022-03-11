@@ -54,7 +54,7 @@
         </div>
 
         <div class="row">
-            <div class="col">
+            <div class="col-6">
 
                 <div class="form-group">
                     <label for="cod">Codice</label>
@@ -68,15 +68,12 @@
                         @endif>
                 </div>
 
-            </div>
-
-            <div class="col">
-
                 <div class="form-group">
                     <label for="cod">Componenti famiglia</label>
                     <input type="text"
                            class="form-control"
                            id="family_number"
+                           name="family_number"
                            placeholder="Numero di componenti presenti in famiglia"
                            @if(isset($customer->id))
                            value="{{ $customer->family_number }}"
@@ -85,20 +82,32 @@
 
             </div>
 
-            <div class="col">
+            <div class="col-6">
 
                 <div class="form-group">
-                    <label for="points">Punti</label>
+                    <label for="points">Punti da rinnovare a fine mese</label>
                     <input type="text"
-                           class="form-control disabled"
+                           class="form-control border-success"
+                           id="points_renew"
+                           name="points_renew"
+                           @if(isset($customer->id))
+                           value="{{ $customer->points_renew }}"
+                        @endif>
+                </div>
+
+                <div class="form-group">
+                    <label for="points">Punti rimanenti per questo mese</label>
+                    <input type="text"
+                           class="form-control border-info"
                            id="points"
-                           readonly disabled
+                           name="points"
                            @if(isset($customer->id))
                            value="{{ $customer->points }}"
                         @endif>
                 </div>
 
             </div>
+
         </div>
 
         <div class="text-right">

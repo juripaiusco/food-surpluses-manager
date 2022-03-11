@@ -38,7 +38,7 @@
             <th>Utente</th>
             <th>Indirizzo</th>
             <th class="text-right">Componenti</th>
-            <th class="text-right">Punti</th>
+            <th class="text-center">Punti</th>
             <th width="120px"></th>
         </tr>
         </thead>
@@ -52,7 +52,16 @@
                 <td class="align-middle">{{ $customer->name }} {{ $customer->surname }}</td>
                 <td class="align-middle">{{ $customer->address }}</td>
                 <td class="align-middle text-right">{{ $customer->family_number }}</td>
-                <td class="align-middle text-right">{{ $customer->points }}</td>
+                <td class="align-middle text-center">
+                    <small>
+                        {{ $customer->points }}&nbsp;/&nbsp;{{ $customer->points_renew }}
+                    </small>
+
+                    <div class="progress" style="height: 8px;">
+                        <div class="progress-bar" role="progressbar" style="width: {{ $customer->points / $customer->points_renew * 100 }}%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+
+                </td>
                 <td class="text-center">
 
                     <div class="row no-gutters">

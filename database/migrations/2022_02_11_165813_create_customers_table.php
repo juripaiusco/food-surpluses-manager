@@ -21,6 +21,7 @@ class CreateCustomersTable extends Migration
             $table->string('address');
             $table->integer('family_number');
             $table->integer('points');
+            $table->integer('points_renew');
             $table->timestamps();
         });
     }

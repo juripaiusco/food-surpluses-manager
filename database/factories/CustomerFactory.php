@@ -13,5 +13,6 @@ $factory->define(Model\Customer::class, function (Faker $faker) {
         'address' => $faker->address,
         'family_number' => random_int(1, 5),
         'points' => random_int(500, 1000),
+        'points_renew' => random_int(1000, 2000),
     ];
 });
