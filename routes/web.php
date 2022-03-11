@@ -42,6 +42,7 @@ Route::post('/customers/update/{id}', 'Customer@update')->name('customers.update
 Route::get('/customers/create', 'Customer@create')->name('customers.create');
 Route::post('/customers/store', 'Customer@store')->name('customers.store');
 Route::get('/customers/destroy/{id}', 'Customer@destroy')->name('customers.destroy');
+Route::get('/customers/renew', 'Customer@points_renew')->name('customers.renew');
 
 Route::get('/retails', 'Retail@index')->name('retails');
 Route::get('/retails/edit/{id}', 'Retail@edit')->name('retails.edit');

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class Customer extends Controller
@@ -139,5 +140,12 @@ class Customer extends Controller
         \App\Model\Customer::destroy($id);
 
         return redirect()->route('customers');
+    }
+
+    public function points_renew()
+    {
+        DB::table('customers')->update([
+            'points' => DB::raw('points_renew')
+        ]);
     }
 }
