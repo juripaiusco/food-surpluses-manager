@@ -62,7 +62,7 @@
 
             Obj.find('[data-id="points-result"]').html(pointsResult);
 
-            if (productPointsSUM === 0) {
+            if (productPointsSUM === 0 || pointsResult < 0) {
 
                 $('#shopSubmit').attr('disabled', true);
 
@@ -95,13 +95,13 @@
 
                     } else {
 
-                        summarySet();
-
                         $('#customer-data-search').css('display', 'none');
                         $('#order-summary').css('display', 'block');
                         ObjCustomerData.css('display', 'block');
                         ObjProductContainer.css('display', 'block');
                         $('#product_cod').focus();
+
+                        summarySet();
 
                     }
 
@@ -129,11 +129,11 @@
 
                     } else {
 
-                        summarySet();
-
                         ObjProductDataTR.css('display', 'table-row');
                         ObjProductData.css('display', 'block');
                         $('#product_cod').val('').focus();
+
+                        summarySet();
 
                     }
 
@@ -145,9 +145,9 @@
 
                 $(this).closest('tr').remove();
 
-                summarySet();
-
                 $('#product_cod').val('').focus();
+
+                summarySet();
 
             });
 
