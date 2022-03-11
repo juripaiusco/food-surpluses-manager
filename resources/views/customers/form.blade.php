@@ -73,6 +73,21 @@
             <div class="col">
 
                 <div class="form-group">
+                    <label for="cod">Componenti famiglia</label>
+                    <input type="text"
+                           class="form-control"
+                           id="family_number"
+                           placeholder="Numero di componenti presenti in famiglia"
+                           @if(isset($customer->id))
+                           value="{{ $customer->family_number }}"
+                        @endif>
+                </div>
+
+            </div>
+
+            <div class="col">
+
+                <div class="form-group">
                     <label for="points">Punti</label>
                     <input type="text"
                            class="form-control disabled"
@@ -95,7 +110,7 @@
 
     </form>
 
-    @if(count($customer->order) > 0)
+    @if(isset($customer) && count($customer->order) > 0)
 
         <br>
         <h2>Ordini eseguiti (ultimi 10)</h2>

@@ -30,13 +30,14 @@
 
     <br>
 
-    <table class="table">
+    <table class="table table-hover table-striped">
 
         <thead>
         <tr>
             <th>Codice</th>
             <th>Utente</th>
             <th>Indirizzo</th>
+            <th class="text-right">Componenti</th>
             <th class="text-right">Punti</th>
             <th width="120px"></th>
         </tr>
@@ -50,6 +51,7 @@
                 <td class="align-middle">{{ $customer->cod }}</td>
                 <td class="align-middle">{{ $customer->name }} {{ $customer->surname }}</td>
                 <td class="align-middle">{{ $customer->address }}</td>
+                <td class="align-middle text-right">{{ $customer->family_number }}</td>
                 <td class="align-middle text-right">{{ $customer->points }}</td>
                 <td class="text-center">
 
