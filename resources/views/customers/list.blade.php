@@ -37,7 +37,7 @@
             <th>Codice</th>
             <th>Utente</th>
             <th>Indirizzo</th>
-            <th class="text-right">Componenti</th>
+            <th class="text-center">Componenti</th>
             <th class="text-center">Punti</th>
             <th width="120px"></th>
         </tr>
@@ -51,7 +51,7 @@
                 <td class="align-middle">{{ $customer->cod }}</td>
                 <td class="align-middle">{{ $customer->name }} {{ $customer->surname }}</td>
                 <td class="align-middle">{{ $customer->address }}</td>
-                <td class="align-middle text-right">{{ $customer->family_number }}</td>
+                <td class="align-middle text-center">{{ $customer->family_number }}</td>
                 <td class="align-middle text-center">
                     <small>
                         {{ $customer->points }}&nbsp;/&nbsp;{{ $customer->points_renew }}
