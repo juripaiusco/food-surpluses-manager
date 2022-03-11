@@ -101,7 +101,83 @@
 
             @csrf
 
-            <table class="table">
+            <br>
+            <div class="h1 text-center">
+                <span data-id="cod"></span>
+                <br>
+                <span data-id="name"></span>
+            </div>
+
+            <br>
+
+            <div class="text-center h3">
+                Inserisci qui sotto le quantità del prodotto ricercato
+            </div>
+
+            <br>
+
+            <div class="row alert alert-info">
+                <div class="col">
+
+                    <div class="form-group text-center">
+                        <label for="date">Data</label>
+                        <input type="text"
+                               class="form-control text-center"
+                               id="date"
+                               name="date"
+                               value="{{ date('d/m/Y H:i:s') }}"
+                               placeholder="{{ date('d/m/Y H:i:s') }}">
+                    </div>
+
+                </div>
+                <div class="col">
+
+                    <div class="form-group text-center">
+                        <label for="kg">Kg totali da inserire</label>
+                        <input type="text"
+                               class="form-control text-center"
+                               id="kg"
+                               name="kg"
+                               placeholder="kg. prodotto"
+                               autocomplete="off"
+                               autofill="off">
+                    </div>
+
+                </div>
+                <div class="col">
+
+                    <div class="form-group text-center">
+                        <label for="amount">Q.tà totale da inserire</label>
+                        <input type="text"
+                               class="form-control text-center"
+                               id="amount"
+                               name="amount"
+                               placeholder="q.tà prodotto"
+                               autocomplete="off"
+                               autofill="off">
+                    </div>
+
+                </div>
+            </div>
+
+            <br>
+
+            <div class="row">
+                <div class="col-8"></div>
+                <div class="col">
+                    <button class="btn btn-success btn-lg btn-block">
+                        Salva
+                    </button>
+
+                    <br>
+
+                    <div class="text-center">
+                        Oppure premi INVIO
+                    </div>
+                </div>
+            </div>
+
+            {{--<table class="table">
                 <thead>
                 <tr>
                     <th class="text-center w-25">Codice</th>
@@ -162,7 +238,7 @@
                     </td>
                 </tr>
                 </tbody>
-            </table>
+            </table>--}}
 
             <input type="hidden" name="id" data-id="id">
             <input type="hidden" name="cod" data-id="cod">
