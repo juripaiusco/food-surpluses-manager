@@ -30,6 +30,10 @@ return [
         'title' => 'Negozio'
     ],
 
+    'report' => [
+        'title' => 'Report'
+    ],
+
     'users' => [
         'title' => 'Utenti'
     ],

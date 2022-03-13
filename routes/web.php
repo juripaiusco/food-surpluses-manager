@@ -57,3 +57,5 @@ Route::post('/users/update/{id}', 'User@update')->name('users.update');
 Route::get('/users/create', 'User@create')->name('users.create');
 Route::post('/users/store', 'User@store')->name('users.store');
 Route::get('/users/destroy/{id}', 'User@destroy')->name('users.destroy');
+
+Route::get('/report', 'Report@index')->name('report');

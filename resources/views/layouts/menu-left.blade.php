@@ -40,6 +40,12 @@
     </li>
     @endif
 
+    @if(isset($modules['report']) && $modules['report'] == 'on')
+        <li class="nav-item {{ Route::is('report*') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('report') }}">{{ __('layout.report.title') }}</a>
+        </li>
+    @endif
+
     @if(isset($modules['users']) && $modules['users'] == 'on')
         <li class="nav-item {{ Route::is('users*') ? 'active' : '' }}">
             <a class="nav-link" href="{{ route('users') }}">{{ __('layout.users.title') }}</a>
