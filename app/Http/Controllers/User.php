@@ -31,12 +31,8 @@ class User extends Controller
     {
         $s = $request->input('s');
 
-        $users = \App\Model\User::paginate(15);
-
-        if (isset($s)) {
-            $users = \App\Model\User::where('name', 'LIKE', '%' . $s . '%')
-                ->paginate(15);
-        }
+        $users = \App\Model\User::where('name', 'LIKE', '%' . $s . '%')
+            ->paginate(15);
 
         $users_retails = array();
 

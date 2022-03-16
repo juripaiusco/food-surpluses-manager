@@ -25,13 +25,9 @@ class Retail extends Controller
     {
         $s = $request->input('s');
 
-        $retails = \App\Model\Retail::orderBy('name');
-
-        if (isset($s)) {
-            $retails = $retails->where('name', 'LIKE', '%' . $s . '%');
-        }
-
-        $retails = $retails->paginate(15);
+        $retails = \App\Model\Retail::orderBy('name')
+            ->where('name', 'LIKE', '%' . $s . '%')
+            ->paginate(15);
 
         return view('retails.list', [
             'retails' => $retails,
