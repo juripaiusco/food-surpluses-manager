@@ -16,7 +16,8 @@ return [
     ],
 
     'products' => [
-        'title' => 'Prodotti'
+        'title' => 'Prodotti',
+        'single' => 'prodotto'
     ],
 
     'store' => [

@@ -31,17 +31,10 @@ class Product extends Controller
     {
         $s = $request->input('s');
 
-        if (isset($s))
-        {
-            $products = \App\Model\Product::where('name', 'LIKE', '%'.$s.'%')
-                ->orderBy('id', 'DESC')
-                ->paginate(10);
-
-        } else {
-
-            $products = \App\Model\Product::orderBy('id', 'DESC')
-                ->paginate(10);
-        }
+        $products = \App\Model\Product::where('name', 'LIKE', '%'.$s.'%')
+            ->orWhere('cod', 'LIKE', '%'.$s.'%')
+            ->orderBy('id', 'DESC')
+            ->paginate(10);
 
         return view('products.list', [
             'products' => $products,
