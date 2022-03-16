@@ -2,6 +2,10 @@
 
 @section('card-body')
 
+    @php
+        $route_name = current(explode('.', \Illuminate\Support\Facades\Route::currentRouteName()));
+    @endphp
+
     <div class="row">
         <div class="col-9">
 

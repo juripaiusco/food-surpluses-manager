@@ -2,6 +2,10 @@
 
 @section('card-body')
 
+    @php
+        $route_name = current(explode('.', \Illuminate\Support\Facades\Route::currentRouteName()));
+    @endphp
+
     <table class="table">
         <thead>
         <tr>

@@ -35,7 +35,8 @@ return [
     ],
 
     'users' => [
-        'title' => 'Utenti'
+        'title' => 'Volontari',
+        'single' => 'volontario'
     ],
 
     'Logout' => 'Esci'

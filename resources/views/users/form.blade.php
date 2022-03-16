@@ -2,11 +2,15 @@
 
 @section('card-body')
 
+    @php
+        $route_name = current(explode('.', \Illuminate\Support\Facades\Route::currentRouteName()));
+    @endphp
+
     <form action="{{ isset($user->id) ? route('users.update', $user->id) : route('users.store') }}" method="post">
 
         @csrf
 
-        <h2>Dati utente</h2>
+        <h2>Dati {{ __('layout.' . $route_name . '.single') }}</h2>
 
         <div class="row">
             <div class="col">

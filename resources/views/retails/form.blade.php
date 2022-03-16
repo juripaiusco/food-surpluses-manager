@@ -2,6 +2,10 @@
 
 @section('card-body')
 
+    @php
+        $route_name = current(explode('.', \Illuminate\Support\Facades\Route::currentRouteName()));
+    @endphp
+
     <form action="{{ isset($retail->id) ? route('retails.update', $retail->id) : route('retails.store') }}" method="post">
 
         @csrf

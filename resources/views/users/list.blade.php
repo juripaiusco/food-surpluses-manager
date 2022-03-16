@@ -2,20 +2,24 @@
 
 @section('card-body')
 
+    @php
+        $route_name = current(explode('.', \Illuminate\Support\Facades\Route::currentRouteName()));
+    @endphp
+
     @include('js.modalDelete')
 
     <div class="row">
         <div class="col-lg-8">
-            <a class="btn btn-primary" href="{{ route('users.create') }}">Nuovo utente</a>
+            <a class="btn btn-primary" href="{{ route('users.create') }}">Nuovo {{ __('layout.' . $route_name . '.single') }}</a>
         </div>
         <div class="col-lg-4">
 
             <div class="float-right">
-                <form class="form-inline my-2 my-lg-0" action="{{ route('users') }}" method="get">
+                <form class="form-inline my-2 my-lg-0" action="{{ route($route_name) }}" method="get">
 
                     <input class="form-control mr-sm-2"
                            type="search"
-                           placeholder="cerca utente"
+                           placeholder="cerca {{ __('layout.' . $route_name . '.single') }}"
                            aria-label="Search"
                            name="s"
                            value="{{ $s ?? '' }}" />
