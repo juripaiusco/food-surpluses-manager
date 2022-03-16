@@ -11,7 +11,8 @@ return [
     ],
 
     'orders' => [
-        'title' => 'Ordini'
+        'title' => 'Ordini',
+        'single' => 'ordine'
     ],
 
     'products' => [

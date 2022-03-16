@@ -27,9 +27,16 @@ class User extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $s = $request->input('s');
+
         $users = \App\Model\User::paginate(15);
+
+        if (isset($s)) {
+            $users = \App\Model\User::where('name', 'LIKE', '%' . $s . '%')
+                ->paginate(15);
+        }
 
         $users_retails = array();
 
@@ -55,7 +62,8 @@ class User extends Controller
 
         return view('users.list', [
             'users' => $users,
-            'users_retails' => $users_retails
+            'users_retails' => $users_retails,
+            's' => $s
         ]);
     }
 
