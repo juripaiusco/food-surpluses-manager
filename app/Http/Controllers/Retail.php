@@ -21,13 +21,21 @@ class Retail extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $retails = \App\Model\Retail::orderBy('name')
-            ->paginate(15);
+        $s = $request->input('s');
+
+        $retails = \App\Model\Retail::orderBy('name');
+
+        if (isset($s)) {
+            $retails = $retails->where('name', 'LIKE', '%' . $s . '%');
+        }
+
+        $retails = $retails->paginate(15);
 
         return view('retails.list', [
-            'retails' => $retails
+            'retails' => $retails,
+            's' => $s
         ]);
     }
 

@@ -10,7 +10,7 @@
 
     <div class="row">
         <div class="col-lg-8">
-            <a class="btn btn-primary" href="{{ route('retails.create') }}">Nuovo negozio</a>
+            <a class="btn btn-primary" href="{{ route('retails.create') }}">Nuovo {{ __('layout.' . $route_name . '.single') }}</a>
         </div>
         <div class="col-lg-4">
 
@@ -19,7 +19,7 @@
 
                     <input class="form-control mr-sm-2"
                            type="search"
-                           placeholder="cerca negozio"
+                           placeholder="cerca {{ __('layout.' . $route_name . '.single') }}"
                            aria-label="Search"
                            name="s"
                            value="{{ $s ?? '' }}" />

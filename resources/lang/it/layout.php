@@ -28,7 +28,8 @@ return [
     ],
 
     'retails' => [
-        'title' => 'Negozio'
+        'title' => 'Negozi',
+        'single' => 'negozio'
     ],
 
     'report' => [
