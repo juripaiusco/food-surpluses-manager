@@ -24,7 +24,8 @@ return [
     ],
 
     'customers' => [
-        'title' => 'Anagrafica'
+        'title' => 'Assistiti',
+        'single' => 'assistito'
     ],
 
     'retails' => [

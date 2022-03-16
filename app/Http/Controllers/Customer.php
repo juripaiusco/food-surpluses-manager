@@ -27,18 +27,11 @@ class Customer extends Controller
     {
         $s = $request->input('s');
 
-        if (isset($s))
-        {
-            $customers = \App\Model\Customer::where('name', 'LIKE', '%'.$s.'%')
-                ->orWhere('surname', 'LIKE', '%'.$s.'%')
-                ->orderBy('id', 'DESC')
-                ->paginate(10);
-
-        } else {
-
-            $customers = \App\Model\Customer::orderBy('id', 'DESC')
-                ->paginate(10);
-        }
+        $customers = \App\Model\Customer::where('name', 'LIKE', '%'.$s.'%')
+            ->orWhere('surname', 'LIKE', '%'.$s.'%')
+            ->orWhere('cod', 'LIKE', '%'.$s.'%')
+            ->orderBy('id', 'DESC')
+            ->paginate(10);
 
         return view('customers.list', [
             'customers' => $customers,
