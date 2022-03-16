@@ -61,7 +61,7 @@
             <div class="col-6">
 
                 <div class="form-group">
-                    <label for="cod">Codice</label>
+                    <label for="cod">n. Tessera</label>
                     <input type="text"
                            class="form-control disabled"
                            id="cod"

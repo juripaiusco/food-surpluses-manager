@@ -38,7 +38,7 @@
 
         <thead>
         <tr>
-            <th>Codice</th>
+            <th>n. Tessera</th>
             <th>Utente</th>
             <th>Indirizzo</th>
             <th class="text-center">Componenti</th>
