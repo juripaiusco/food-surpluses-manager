@@ -10,7 +10,7 @@
         <div class="col">
 
             <div class="float-right">
-                <form class="form-inline my-2 my-lg-0" action="{{ route('products') }}" method="get">
+                <form class="form-inline my-2 my-lg-0" action="{{ route('orders') }}" method="get">
 
                     <input class="form-control mr-sm-2"
                            type="search"

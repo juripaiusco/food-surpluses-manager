@@ -22,15 +22,19 @@ class Order extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $s = $request->input('s');
+
         $orders = \App\Model\Order::with('customer')
             ->with('retail')
+            ->where('reference', 'LIKE', '%' . $s . '%')
             ->orderBy('id', 'DESC')
             ->paginate(10);
 
         return view('orders.list', [
-            'orders' => $orders
+            'orders' => $orders,
+            's' => $s
         ]);
     }
 
