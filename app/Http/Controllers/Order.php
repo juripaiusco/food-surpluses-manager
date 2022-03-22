@@ -29,6 +29,8 @@ class Order extends Controller
         $orders = \App\Model\Order::with('customer')
             ->with('retail')
             ->where('reference', 'LIKE', '%' . $s . '%')
+            ->orWhere('date', 'LIKE', '%' . $s . '%')
+            ->orWhere('json_customer', 'LIKE', '%' . $s . '%')
             ->orderBy('id', 'DESC')
             ->paginate(10);
 
