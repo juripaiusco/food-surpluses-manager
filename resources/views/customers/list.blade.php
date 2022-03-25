@@ -38,7 +38,7 @@
 
         <thead>
         <tr>
-            <th>n. Tessera</th>
+            <th>n.&nbsp;Tessera</th>
             <th>Utente</th>
             <th>Indirizzo</th>
             <th class="text-center">Componenti</th>
