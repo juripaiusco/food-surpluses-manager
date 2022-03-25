@@ -18,7 +18,8 @@ class Report extends Controller
 
     public function index()
     {
-        $orders = \App\Model\Order::get();
+        $orders = \App\Model\Order::where('date', 'LIKE', date('Y-m-d') . '%')
+            ->get();
         $reports = array();
 
         // Prendo la lista degli ordini

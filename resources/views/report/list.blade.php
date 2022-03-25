@@ -6,7 +6,11 @@
         $route_name = current(explode('.', \Illuminate\Support\Facades\Route::currentRouteName()));
     @endphp
 
-    <table class="table">
+    <div class="h2 text-center">Report del {{ date('d/m/Y') }}</div>
+
+    <br>
+
+    <table class="table table-striped table-hover">
         <thead>
         <tr>
             <th>Prodotto</th>
