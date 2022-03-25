@@ -133,11 +133,19 @@
 
                     } else {
 
-                        ObjProductDataTR.css('display', 'table-row');
-                        ObjProductData.css('display', 'block');
-                        $('#product_cod').val('').focus();
+                        if (d.amount_total <= 0) {
 
-                        summarySet();
+                            ObjProductDataTRClone.remove();
+                            alert('Prodotto esaurito');
+
+                        } else {
+
+                            ObjProductDataTR.css('display', 'table-row');
+                            ObjProductData.css('display', 'block');
+                            $('#product_cod').val('').focus();
+
+                            summarySet();
+                        }
 
                     }
 
