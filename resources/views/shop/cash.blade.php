@@ -259,13 +259,18 @@
                         <tr>
                             {{--<td class="align-middle"
                                 data-id="cod"></td>--}}
-                            <td class="align-middle">
-                                <span data-id="name"></span>
-                                <span data-id="surname"></span>
+                            <td class="align-top">
+
+                                <span data-id="name" class="h5"></span>
+                                <span data-id="surname" class="h5"></span>
+
                                 <br>
-                                <small>
-                                    <span data-id="address"></span>
-                                </small>
+
+                                Componenti
+                                <strong>
+                                    <span data-id="family_number"></span>
+                                </strong>
+
                             </td>
                             {{--<td class="align-middle"
                                 data-id="surname"></td>--}}
