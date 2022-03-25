@@ -21,23 +21,34 @@ class Report extends Controller
         $orders = \App\Model\Order::get();
         $reports = array();
 
+        // Prendo la lista degli ordini
         foreach ($orders as $order) {
 
             $products_obj = json_decode($order->json_products);
             $customer_obj = json_decode($order->json_customer);
 
+            // Ogni ordine ha una lista di prodotti che ciclo
             foreach ($products_obj as $product) {
 
+                // Recupero soltanto i prodotti FEAD
                 if ($product->type == 'fead') {
 
-                    if (!isset($reports[$product->cod]['customers_count']['n_family_total']))
-                        $reports[$product->cod]['customers_count']['n_family_total'] = 0;
+                    if (!isset($n_family_total[$customer_obj->cod]))
+                        $n_family_total[$product->cod][$customer_obj->cod] = 0;
 
                     $reports[$product->cod]['product'] = $product;
-                    $reports[$product->cod]['customers'][] = $customer_obj;
+
+                    // Se voglio contare tutte le volte che ogni cliente ha acquistato il prodotto
+                    /*$reports[$product->cod]['customers'][] = $customer_obj;
+                    $n_family_total[$product->cod][] = $customer_obj->family_number;*/
+
+                    // Se voglio contare da quale singola famiglia è stato acquistato il prodotto
+                    $reports[$product->cod]['customers'][$customer_obj->cod] = $customer_obj;
+                    $n_family_total[$product->cod][$customer_obj->cod] = $customer_obj->family_number;
+
                     $reports[$product->cod]['customers_count'] = array(
                         'n_family' => count($reports[$product->cod]['customers']),
-                        'n_family_total' => $customer_obj->family_number + $reports[$product->cod]['customers_count']['n_family_total']
+                        'n_family_total' => array_sum($n_family_total[$product->cod])
                     );
 
                 }
