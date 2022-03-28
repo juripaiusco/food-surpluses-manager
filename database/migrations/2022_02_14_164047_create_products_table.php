@@ -17,6 +17,7 @@ class CreateProductsTable extends Migration
             $table->id();
             $table->string('cod')->unique();
             $table->string('type');
+            $table->char('monitoring_buy', 2)->nullable();
             $table->string('name');
             $table->longText('description')->nullable();
             $table->integer('points');

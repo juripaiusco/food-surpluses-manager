@@ -38,6 +38,7 @@
 
         <thead>
         <tr>
+            <th width="10%" class="text-center">Control.</th>
             <th width="10%">Codice</th>
             <th width="10%">Tipo</th>
             <th>Nome</th>
@@ -53,6 +54,11 @@
         @foreach($products as $product)
 
             <tr>
+                <td class="align-middle text-center">
+                    @if($product->monitoring_buy == 'on')
+                        <i class="fas fa-check"></i>
+                    @endif
+                </td>
                 <td class="align-middle">{{ $product->cod }}</td>
                 <td class="align-middle">
                     @if($product->type == 'fead')

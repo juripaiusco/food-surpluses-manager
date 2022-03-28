@@ -69,6 +69,7 @@ class Product extends Controller
 
         $product->cod = $request->input('cod');
         $product->type = $request->input('type');
+        $product->monitoring_buy = $request->input('monitoring_buy');
         $product->name = $request->input('name');
         $product->description = $request->input('description');
         $product->points = $request->input('points');
@@ -124,6 +125,7 @@ class Product extends Controller
 
         $product->cod = $request->input('cod');
         $product->type = $request->input('type');
+        $product->monitoring_buy = $request->input('monitoring_buy');
         $product->name = $request->input('name');
         $product->description = $request->input('description');
         $product->points = $request->input('points');

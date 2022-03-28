@@ -146,11 +146,28 @@
                               class="form-control">@if(isset($product->id)){{ $product->description }}@endif</textarea>
                 </div>
 
+                <div class="custom-control custom-switch">
+                    <input type="checkbox"
+                           class="custom-control-input"
+                           id="monitoring_buy"
+                           name="monitoring_buy"
+                           @if(isset($product->monitoring_buy) && $product->monitoring_buy == 'on')
+                           checked
+                        @endif>
+                    <label class="custom-control-label" for="monitoring_buy">
+                        <small>
+                            In cassa, al momento dell'acquisto, mostra se l'articolo è già stato acquistato.
+                            <br>
+                            Verrà mostrata una piccola icona prima del nome prodotto.
+                        </small>
+                    </label>
+                </div>
+
                 <div class="row">
                     <div class="col">
 
                         <div class="form-group">
-                            <label for="kg">&nbsp;</label>
+                            <label for="kg"></label>
 
                             <div class="input-group">
                                 <div class="input-group-prepend">
@@ -178,7 +195,7 @@
                     <div class="col">
 
                         <div class="form-group">
-                            <label for="amount">&nbsp;</label>
+                            <label for="amount"></label>
 
                             <div class="input-group">
                                 <div class="input-group-prepend">
@@ -204,11 +221,13 @@
                     </div>
                 </div>
 
-                <small>
-                    Queste sono le quantità che vengono scalata al momento dell'acquisto.
-                </small>
+                <div class="text-center">
+                    <small>
+                        Queste sono le quantità che vengono scalata al momento dell'acquisto.
+                    </small>
+                </div>
 
-                <br><br>
+                <br>
 
                 <div class="text-right">
 

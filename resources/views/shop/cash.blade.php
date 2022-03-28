@@ -119,38 +119,53 @@
                 var ObjProductData = $('#product-data');
                 var ObjProductDataTR = ObjProductData.find('tbody > tr').last();
                 var ObjProductDataTRClone = ObjProductDataTR.clone().css('display', 'none');
+                var CustomerCod = $('#customer_cod').val();
 
-                dataSearch(ObjProductDataTR, '{{ route('shop.search') }}/?', $(this).val(), 'product_cod', function () {
+                dataSearch(
+                    ObjProductDataTR,
+                    '{{ route('shop.search') }}/?customer_cod=' + CustomerCod + '&',
+                    $(this).val(),
+                    'product_cod',
 
-                    ObjProductDataTR.after(ObjProductDataTRClone);
+                    function () {
 
-                }, function (d) {
+                        ObjProductDataTR.after(ObjProductDataTRClone);
 
-                    if (d == null) {
+                    }, function (d) {
 
-                        ObjProductDataTRClone.remove();
-                        alert('Prodotto non trovato');
-
-                    } else {
-
-                        if (d.amount_total <= 0) {
+                        if (d == null) {
 
                             ObjProductDataTRClone.remove();
-                            alert('Prodotto esaurito');
+                            alert('Prodotto non trovato');
 
                         } else {
 
-                            ObjProductDataTR.css('display', 'table-row');
-                            ObjProductData.css('display', 'block');
-                            $('#product_cod').val('').focus();
+                            if (d.bought === 1) {
 
-                            summarySet();
+                                ObjProductDataTR.find('.bought').html(
+                                    '<div class="spinner-grow spinner-grow-sm text-danger" role="status">'+
+                                    '<span class="sr-only">Loading...</span>'+
+                                    '</div>'
+                                );
+
+                            }
+
+                            if (d.amount_total <= 0) {
+
+                                ObjProductDataTRClone.remove();
+                                alert('Prodotto esaurito');
+
+                            } else {
+
+                                ObjProductDataTR.css('display', 'table-row');
+                                ObjProductData.css('display', 'block');
+                                $('#product_cod').val('').focus();
+
+                                summarySet();
+                            }
                         }
-
                     }
-
-                });
-
+                );
             });
 
             $(document).on('click', '.del-item', function () {
@@ -198,6 +213,7 @@
                             <thead>
                             <tr>
                                 <th width="1%"></th>
+                                <th width="1%"></th>
                                 <th>Codice</th>
                                 <th>Tipo</th>
                                 <th>Nome</th>
@@ -219,6 +235,9 @@
                                            name="product_id[]"
                                            data-id="id">
 
+                                </td>
+                                <td class="align-middle">
+                                    <div class="bought"></div>
                                 </td>
                                 <td class="align-middle"
                                     data-id="cod"></td>
