@@ -16,7 +16,7 @@ class Report extends Controller
         $this->middleware('auth');
     }
 
-    public function index()
+    public function get_reports()
     {
         $orders = \App\Model\Order::where('date', 'LIKE', date('Y-m-d') . '%')
             ->get();
@@ -53,10 +53,15 @@ class Report extends Controller
                     );
 
                 }
-
             }
-
         }
+
+        return $reports;
+    }
+
+    public function index()
+    {
+        $reports = $this->get_reports();
 
         return view('report.list', [
             'reports' => $reports
