@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 
 class Report extends Controller
 {
+    var $path_report_csv = 'report/csv/';
+
     /**
      * Create a new controller instance.
      *
@@ -66,6 +70,59 @@ class Report extends Controller
         return view('report.list', [
             'reports' => $reports
         ]);
+    }
+
+    public function csvMake($data, $out_name)
+    {
+        // Creo la directory
+        $path_reportCSV_send = Storage::disk('public')->makeDirectory($this->path_report_csv . 'send');
+        $path_reportCSV_queue = Storage::disk('public')->makeDirectory($this->path_report_csv . 'queue');
+
+        if ($path_reportCSV_queue) {
+
+            $csv_content = 'Prodotto;Famiglie n.;Componenti n. tot.' . "\n";
+
+            foreach ($data as $d) {
+                $csv_content .= $d['product']->cod . ' - ' . $d['product']->name . ';';
+                $csv_content .= $d['customers_count']['n_family'] . ';';
+                $csv_content .= $d['customers_count']['n_family_total'];
+                $csv_content .= "\n";
+            }
+
+            $path_report_csv = Storage::disk('public')->put(
+                $this->path_report_csv . 'queue/' . $out_name,
+                $csv_content
+            );
+        }
+    }
+
+    public function mailSend()
+    {
+        // Creo i file CSV
+        $this->csvMake($this->get_reports(), date('Ymd') . '.csv');
+
+        // Invio email con i file CSV come allegato
+        Mail::to(env('MAIL_TO'))
+            ->send(new \App\Mail\Report(array(
+                'attach_path' => $this->path_report_csv . 'queue/'
+            )));
+
+        // Se la mail è andata a buon fine sposto i file CSV nella directory send
+        if (count(Mail::failures()) == 0) {
+
+            $files = Storage::disk('public')->files($this->path_report_csv . 'queue/');
+
+            foreach ($files as $file) {
+
+                // Se il file esiste viene eliminato
+                Storage::disk('public')->delete($this->path_report_csv . 'send/' . basename($file));
+
+                Storage::disk('public')->move(
+                    $file,
+                    $this->path_report_csv . 'send/' . basename($file)
+                );
+            }
+        }
     }
 
 }
