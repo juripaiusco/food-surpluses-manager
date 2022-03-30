@@ -74,25 +74,28 @@ class Report extends Controller
 
     public function csvMake($data, $out_name)
     {
-        // Creo la directory
-        $path_reportCSV_send = Storage::disk('public')->makeDirectory($this->path_report_csv . 'send');
-        $path_reportCSV_queue = Storage::disk('public')->makeDirectory($this->path_report_csv . 'queue');
+        if (count($data) > 0) {
 
-        if ($path_reportCSV_queue) {
+            // Creo la directory
+            $path_reportCSV_send = Storage::disk('public')->makeDirectory($this->path_report_csv . 'send');
+            $path_reportCSV_queue = Storage::disk('public')->makeDirectory($this->path_report_csv . 'queue');
 
-            $csv_content = 'Prodotto;Famiglie n.;Componenti n. tot.' . "\n";
+            if ($path_reportCSV_queue) {
 
-            foreach ($data as $d) {
-                $csv_content .= $d['product']->cod . ' - ' . $d['product']->name . ';';
-                $csv_content .= $d['customers_count']['n_family'] . ';';
-                $csv_content .= $d['customers_count']['n_family_total'];
-                $csv_content .= "\n";
+                $csv_content = 'Prodotto;Famiglie n.;Componenti n. tot.' . "\n";
+
+                foreach ($data as $d) {
+                    $csv_content .= $d['product']->cod . ' - ' . $d['product']->name . ';';
+                    $csv_content .= $d['customers_count']['n_family'] . ';';
+                    $csv_content .= $d['customers_count']['n_family_total'];
+                    $csv_content .= "\n";
+                }
+
+                $path_report_csv = Storage::disk('public')->put(
+                    $this->path_report_csv . 'queue/' . $out_name,
+                    $csv_content
+                );
             }
-
-            $path_report_csv = Storage::disk('public')->put(
-                $this->path_report_csv . 'queue/' . $out_name,
-                $csv_content
-            );
         }
     }
 
@@ -100,27 +103,32 @@ class Report extends Controller
     {
         // Creo i file CSV
         $this->csvMake($this->get_reports(), date('Ymd') . '.csv');
+        $files = Storage::disk('public')->files($this->path_report_csv . 'queue/');
 
-        // Invio email con i file CSV come allegato
-        Mail::to(env('MAIL_TO'))
-            ->send(new \App\Mail\Report(array(
-                'attach_path' => $this->path_report_csv . 'queue/'
-            )));
+        // Verifico se esistono file da inviare
+        if (count($files) > 0) {
 
-        // Se la mail è andata a buon fine sposto i file CSV nella directory send
-        if (count(Mail::failures()) == 0) {
+            // Invio email con i file CSV come allegato
+            Mail::to(env('MAIL_TO'))
+                ->send(new \App\Mail\Report(array(
+                    'attach_path' => $this->path_report_csv . 'queue/'
+                )));
 
-            $files = Storage::disk('public')->files($this->path_report_csv . 'queue/');
+            // Se la mail è andata a buon fine sposto i file CSV nella directory send
+            if (count(Mail::failures()) == 0) {
 
-            foreach ($files as $file) {
+                $files = Storage::disk('public')->files($this->path_report_csv . 'queue/');
 
-                // Se il file esiste viene eliminato
-                Storage::disk('public')->delete($this->path_report_csv . 'send/' . basename($file));
+                foreach ($files as $file) {
 
-                Storage::disk('public')->move(
-                    $file,
-                    $this->path_report_csv . 'send/' . basename($file)
-                );
+                    // Se il file esiste viene eliminato
+                    Storage::disk('public')->delete($this->path_report_csv . 'send/' . basename($file));
+
+                    Storage::disk('public')->move(
+                        $file,
+                        $this->path_report_csv . 'send/' . basename($file)
+                    );
+                }
             }
         }
     }
