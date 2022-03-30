@@ -38,7 +38,8 @@
 
         <thead>
         <tr>
-            <th>n.&nbsp;Tessera</th>
+            <th>n.&nbsp;A.</th>
+            <th>n.&nbsp;T.</th>
             <th>Utente</th>
             <th>Indirizzo</th>
             <th class="text-center">Componenti</th>
@@ -52,6 +53,7 @@
         @foreach($customers as $customer)
 
             <tr>
+                <td class="align-middle">{{ $customer->number }}</td>
                 <td class="align-middle">{{ $customer->cod }}</td>
                 <td class="align-middle">{{ $customer->name }} {{ $customer->surname }}</td>
                 <td class="align-middle">{{ $customer->address }}</td>

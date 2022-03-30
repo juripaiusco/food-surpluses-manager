@@ -62,7 +62,8 @@ class Customer extends Controller
         $customer->name = $request->input('name');
         $customer->surname = $request->input('surname');
         $customer->address = $request->input('address');
-        $customer->cod = strtoupper(Str::random(5));
+        $customer->cod = $request->input('cod');
+        $customer->number = $request->input('number');
         $customer->family_number = $request->input('family_number');
         $customer->points = $request->input('points');
         $customer->points_renew = $request->input('points_renew');
@@ -113,6 +114,8 @@ class Customer extends Controller
         $customer->name = $request->input('name');
         $customer->surname = $request->input('surname');
         $customer->address = $request->input('address');
+        $customer->cod = $request->input('cod');
+        $customer->number = $request->input('number');
         $customer->family_number = $request->input('family_number');
         $customer->points = $request->input('points');
         $customer->points_renew = $request->input('points_renew');

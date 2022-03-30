@@ -45,32 +45,23 @@
             </div>
         </div>
 
-        <div class="form-group">
-            <label for="address">Indirizzo</label>
-            <input type="text"
-                   class="form-control"
-                   id="address"
-                   name="address"
-                   placeholder="Indirizzo"
-                   @if(isset($customer->id))
-                   value="{{ $customer->address }}"
-                @endif>
-        </div>
-
         <div class="row">
-            <div class="col-6">
+            <div class="col-8">
 
                 <div class="form-group">
-                    <label for="cod">n. Tessera</label>
+                    <label for="address">Indirizzo</label>
                     <input type="text"
-                           class="form-control disabled"
-                           id="cod"
-                           placeholder="Codice"
-                           readonly disabled
+                           class="form-control"
+                           id="address"
+                           name="address"
+                           placeholder="Indirizzo"
                            @if(isset($customer->id))
-                           value="{{ $customer->cod }}"
+                           value="{{ $customer->address }}"
                         @endif>
                 </div>
+
+            </div>
+            <div class="col">
 
                 <div class="form-group">
                     <label for="cod">Componenti famiglia</label>
@@ -85,8 +76,40 @@
                 </div>
 
             </div>
+        </div>
 
-            <div class="col-6">
+        <div class="row">
+            <div class="col">
+
+                <div class="form-group">
+                    <label for="cod">n. Assistito</label>
+                    <input type="text"
+                           class="form-control"
+                           id="number"
+                           name="number"
+                           placeholder="n. assistito"
+                           @if(isset($customer->id))
+                           value="{{ $customer->number }}"
+                        @endif>
+                </div>
+
+            </div>
+            <div class="col">
+
+                <div class="form-group">
+                    <label for="cod">n. Tessera</label>
+                    <input type="text"
+                           class="form-control border-dark"
+                           id="cod"
+                           name="cod"
+                           placeholder="Codice"
+                           @if(isset($customer->id))
+                           value="{{ $customer->cod }}"
+                        @endif>
+                </div>
+
+            </div>
+            <div class="col">
 
                 <div class="form-group">
                     <label for="points">Punti da rinnovare a fine mese</label>
@@ -98,6 +121,9 @@
                            value="{{ $customer->points_renew }}"
                         @endif>
                 </div>
+
+            </div>
+            <div class="col">
 
                 <div class="form-group">
                     <label for="points">Punti rimanenti per questo mese</label>
@@ -111,7 +137,6 @@
                 </div>
 
             </div>
-
         </div>
 
         <div class="text-right">
