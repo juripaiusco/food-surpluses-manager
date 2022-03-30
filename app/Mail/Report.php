@@ -12,7 +12,8 @@ class Report extends Mailable
 {
     use Queueable, SerializesModels;
 
-    protected $attach_path;
+    protected $attach_path, $host;
+
     /**
      * Create a new message instance.
      *
@@ -21,6 +22,7 @@ class Report extends Mailable
     public function __construct($args = array())
     {
         $this->attach_path = $args['attach_path'];
+        $this->host = $args['host'];
     }
 
     /**
@@ -33,7 +35,7 @@ class Report extends Mailable
         $files = Storage::disk('public')->files($this->attach_path);
 
         $mail = $this->from('emporioapp@emporiosd.it', 'EmporioApp')
-            ->subject('[EmporioApp] - Report prodotti FEAD');
+            ->subject('[EmporioApp ' . strtoupper($this->host) . '] - Report prodotti FEAD');
 
         foreach ($files as $file) {
 

@@ -101,8 +101,10 @@ class Report extends Controller
 
     public function mailSend()
     {
+        $host = current(explode('.', \request()->getHttpHost()));
+
         // Creo i file CSV
-        $this->csvMake($this->get_reports(), date('Ymd') . '.csv');
+        $this->csvMake($this->get_reports(), $host . '_' . date('Ymd') . '.csv');
         $files = Storage::disk('public')->files($this->path_report_csv . 'queue/');
 
         // Verifico se esistono file da inviare
@@ -111,6 +113,7 @@ class Report extends Controller
             // Invio email con i file CSV come allegato
             Mail::to(env('MAIL_TO'))
                 ->send(new \App\Mail\Report(array(
+                    'host' => $host,
                     'attach_path' => $this->path_report_csv . 'queue/'
                 )));
 
