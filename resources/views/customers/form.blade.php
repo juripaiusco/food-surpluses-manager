@@ -6,6 +6,21 @@
         $route_name = current(explode('.', \Illuminate\Support\Facades\Route::currentRouteName()));
     @endphp
 
+    <script language="JavaScript">
+
+        window.addEventListener('load', function () {
+
+            $(document).on("keydown", ":input:not(textarea):not(:submit)", function(event) {
+
+                if (event.keyCode == 13) {
+                    return false;
+                }
+            });
+
+        });
+
+    </script>
+
     <form action="{{ isset($customer->id) ? route('customers.update', $customer->id) : route('customers.store') }}" method="post">
 
         @csrf
