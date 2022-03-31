@@ -48,34 +48,38 @@ class Shop extends Controller
             // Monitoraggio prodotto già acquistato
             // se il prodotto è già stato acquistato nel mese corrente dell'ordine
             // questo dato viene inviato come bought;
-            $bought = 0;
+            if (isset($product->id)) {
 
-            if ($product->monitoring_buy == 'on') {
+                $bought = 0;
 
-                $orders = \App\Model\Order::where('customer_id', $customer->id)
-                    ->where('date', 'LIKE', date('Y-m') . '%')
-                    ->get();
+                if ($product->monitoring_buy == 'on') {
 
-                foreach ($orders as $order) {
+                    $orders = \App\Model\Order::where('customer_id', $customer->id)
+                        ->where('date', 'LIKE', date('Y-m') . '%')
+                        ->get();
 
-                    $products = json_decode($order->json_products);
+                    foreach ($orders as $order) {
 
-                    foreach ($products as $product_bought) {
+                        $products = json_decode($order->json_products);
 
-                        if ($product_bought->id == $product->id) {
+                        foreach ($products as $product_bought) {
 
-                            $bought = 1;
-                            break;
+                            if ($product_bought->id == $product->id) {
 
+                                $bought = 1;
+                                break;
+
+                            }
                         }
+
+                        if ($bought == 1) { break; }
                     }
-
-                    if ($bought == 1) { break; }
                 }
-            }
 
-            $product->bought = $bought;
-            // Fine codice monitoraggio prodotto acquistato
+                $product->bought = $bought;
+                // Fine codice monitoraggio prodotto acquistato
+
+            }
 
             $out = json_encode($product);
 

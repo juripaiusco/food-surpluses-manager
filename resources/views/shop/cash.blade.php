@@ -78,94 +78,112 @@
 
         window.addEventListener('load', function () {
 
+            $(document).on("keydown", ":input:not(textarea):not(:submit)", function(event) {
+
+                if (event.keyCode == 13) {
+                    return false;
+                }
+
+            });
+
             $('#customer_cod').focus();
 
             // Customer Search
             $(document).on('input', '#customer_cod', function () {
 
-                var ObjCustomerData = $('#customer-data');
-                var ObjProductContainer = $('#product-container');
+                if ($(this).val().length === 8) {
 
-                dataSearch(ObjCustomerData, '{{ route('shop.search') }}/?', $(this).val(), 'customer_cod', function () {
+                    var ObjCustomerData = $('#customer-data');
+                    var ObjProductContainer = $('#product-container');
 
-                    ObjCustomerData.css('display', 'none');
-                    ObjProductContainer.css('display', 'none');
+                    dataSearch(ObjCustomerData, '{{ route('shop.search') }}/?', $(this).val(), 'customer_cod', function () {
 
-                }, function (d) {
+                        ObjCustomerData.css('display', 'none');
+                        ObjProductContainer.css('display', 'none');
 
-                    if (d == null) {
+                    }, function (d) {
 
-                        alert('Cliente non trovato');
+                        if (d == null) {
 
-                    } else {
+                            alert('Cliente non trovato');
 
-                        $('#customer-data-search').css('display', 'none');
-                        $('#order-summary').css('display', 'block');
-                        ObjCustomerData.css('display', 'block');
-                        ObjProductContainer.css('display', 'block');
-                        $('#product_cod').focus();
+                        } else {
 
-                        summarySet();
+                            $('#customer-data-search').css('display', 'none');
+                            $('#order-summary').css('display', 'block');
+                            ObjCustomerData.css('display', 'block');
+                            ObjProductContainer.css('display', 'block');
+                            $('#product_cod').focus();
 
-                    }
+                            summarySet();
 
-                });
+                        }
+
+                    });
+
+                }
 
             });
 
             // Product Search
             $(document).on('input', '#product_cod', function () {
 
-                var ObjProductData = $('#product-data');
-                var ObjProductDataTR = ObjProductData.find('tbody > tr').last();
-                var ObjProductDataTRClone = ObjProductDataTR.clone().css('display', 'none');
-                var CustomerCod = $('#customer_cod').val();
+                if ($(this).val().length === 7) {
 
-                dataSearch(
-                    ObjProductDataTR,
-                    '{{ route('shop.search') }}/?customer_cod=' + CustomerCod + '&',
-                    $(this).val(),
-                    'product_cod',
+                    var ObjProductData = $('#product-data');
+                    var ObjProductDataTR = ObjProductData.find('tbody > tr').last();
+                    var ObjProductDataTRClone = ObjProductDataTR.clone().css('display', 'none');
+                    var CustomerCod = $('#customer_cod').val();
 
-                    function () {
+                    dataSearch(
+                        ObjProductDataTR,
+                        '{{ route('shop.search') }}/?customer_cod=' + CustomerCod + '&',
+                        $(this).val(),
+                        'product_cod',
 
-                        ObjProductDataTR.after(ObjProductDataTRClone);
+                        function () {
 
-                    }, function (d) {
+                            ObjProductDataTR.after(ObjProductDataTRClone);
 
-                        if (d == null) {
+                        }, function (d) {
 
-                            ObjProductDataTRClone.remove();
-                            alert('Prodotto non trovato');
-
-                        } else {
-
-                            if (d.bought === 1) {
-
-                                ObjProductDataTR.find('.bought').html(
-                                    '<div class="spinner-grow spinner-grow-sm text-danger" role="status">'+
-                                    '<span class="sr-only">Loading...</span>'+
-                                    '</div>'
-                                );
-
-                            }
-
-                            if (d.amount_total <= 0) {
+                            if (d == null) {
 
                                 ObjProductDataTRClone.remove();
-                                alert('Prodotto esaurito');
+                                $('#product_cod').val('').focus();
+                                alert('Prodotto non trovato');
 
                             } else {
 
-                                ObjProductDataTR.css('display', 'table-row');
-                                ObjProductData.css('display', 'block');
-                                $('#product_cod').val('').focus();
+                                if (d.bought === 1) {
 
-                                summarySet();
+                                    ObjProductDataTR.find('.bought').html(
+                                        '<div class="spinner-grow spinner-grow-sm text-danger" role="status">'+
+                                        '<span class="sr-only">Loading...</span>'+
+                                        '</div>'
+                                    );
+
+                                }
+
+                                if (d.amount_total <= 0) {
+
+                                    ObjProductDataTRClone.remove();
+                                    alert('Prodotto esaurito');
+
+                                } else {
+
+                                    ObjProductDataTR.css('display', 'table-row');
+                                    ObjProductData.css('display', 'block');
+                                    $('#product_cod').val('').focus();
+
+                                    summarySet();
+                                }
                             }
                         }
-                    }
-                );
+                    );
+
+                }
+
             });
 
             $(document).on('click', '.del-item', function () {
