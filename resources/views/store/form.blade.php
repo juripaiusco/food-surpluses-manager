@@ -26,49 +26,54 @@
             $(document).on('input', '#product_cod', function () {
 
                 var ObjVal = $(this).val();
-                var ObjProductNotFind = $('#product-not-find');
-                var ObjProductContainer = $('#product-container');
 
-                dataSearch(ObjProductContainer, '{{ route('store.search') }}/?', ObjVal, 'product_cod', function () {
+                if (ObjVal.length === 7) {
 
-                    ObjProductNotFind.css('display', 'none');
-                    ObjProductContainer.css('display', 'none');
+                    var ObjProductNotFind = $('#product-not-find');
+                    var ObjProductContainer = $('#product-container');
 
-                }, function (d) {
+                    dataSearch(ObjProductContainer, '{{ route('store.search') }}/?', ObjVal, 'product_cod', function () {
 
-                    if (d == null) {
+                        ObjProductNotFind.css('display', 'none');
+                        ObjProductContainer.css('display', 'none');
 
-                        ObjProductNotFind.css('display', 'block');
-                        ObjProductNotFind.find('a').attr('href', '{{ route('products.create') }}/?cod=' + ObjVal);
+                    }, function (d) {
 
-                    } else {
+                        if (d == null) {
 
-                        ObjProductContainer.css('display', 'block');
+                            ObjProductNotFind.css('display', 'block');
+                            ObjProductNotFind.find('a').attr('href', '{{ route('products.create') }}/?cod=' + ObjVal);
 
-                        switch (d.type) {
-                            case 'fead':
+                        } else {
 
-                                ObjProductContainer.find('#kg')
-                                    .attr('readonly', false)
-                                    .attr('disabled', false)
-                                    .focus();
+                            ObjProductContainer.css('display', 'block');
 
-                                break;
+                            switch (d.type) {
+                                case 'fead':
 
-                            case 'fead no':
+                                    ObjProductContainer.find('#kg')
+                                        .attr('readonly', false)
+                                        .attr('disabled', false)
+                                        .focus();
 
-                                ObjProductContainer.find('#kg')
-                                    .attr('readonly', true)
-                                    .attr('disabled', true);
+                                    break;
 
-                                ObjProductContainer.find('#amount').focus();
+                                case 'fead no':
 
-                                break;
+                                    ObjProductContainer.find('#kg')
+                                        .attr('readonly', true)
+                                        .attr('disabled', true);
+
+                                    ObjProductContainer.find('#amount').focus();
+
+                                    break;
+                            }
+
                         }
 
-                    }
-
-                });
+                    });
+                    
+                }
 
             });
 
