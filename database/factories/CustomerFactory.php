@@ -7,7 +7,7 @@ use Faker\Generator as Faker;
 
 $factory->define(Model\Customer::class, function (Faker $faker) {
     return [
-        'cod' => strtoupper(\Illuminate\Support\Str::random(5)),
+        'cod' => strtoupper(\Illuminate\Support\Str::random(8)),
         'number' => \Illuminate\Support\Str::random(5),
         'name' => $faker->firstName,
         'surname' => $faker->lastName,
