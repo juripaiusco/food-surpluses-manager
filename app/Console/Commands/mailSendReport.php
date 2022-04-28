@@ -19,7 +19,7 @@ class mailSendReport extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Invio dei report come allegato CSV';
 
     /**
      * Create a new command instance.
