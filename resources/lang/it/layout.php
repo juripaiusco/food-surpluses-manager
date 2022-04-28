@@ -35,7 +35,8 @@ return [
     ],
 
     'report' => [
-        'title' => 'Report'
+        'title' => 'Report',
+        'single' => 'es.: ' . date('d/m/Y')
     ],
 
     'users' => [

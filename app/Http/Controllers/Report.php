@@ -20,9 +20,18 @@ class Report extends Controller
         $this->middleware('auth');
     }
 
-    public function get_reports()
+    public function get_reports($date_search = '')
     {
-        $orders = \App\Model\Order::where('date', 'LIKE', date('Y-m-d') . '%')
+        if ($date_search == '') {
+
+            $date_search = date('Y-m-d');
+
+        } else {
+
+            $date_search = date('Y-m-d', strtotime(str_replace('/', '-', $date_search)));
+        }
+
+        $orders = \App\Model\Order::where('date', 'LIKE', $date_search . '%')
             ->get();
         $reports = array();
 
@@ -63,12 +72,15 @@ class Report extends Controller
         return $reports;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $reports = $this->get_reports();
+        $s = $request->input('s');
+
+        $reports = $this->get_reports($s);
 
         return view('report.list', [
-            'reports' => $reports
+            'reports' => $reports,
+            's' => $s
         ]);
     }
 
@@ -99,12 +111,33 @@ class Report extends Controller
         }
     }
 
-    public function mailSend()
+    public function mailSendWeb(Request $request)
     {
+        $s = $request->input('s');
+
+        $this->mailSend($s);
+
+        return redirect()->route('report');
+    }
+
+    public function mailSend($date_send = '')
+    {
+        if ($date_send == '') {
+
+            $date_send = date('d/m/Y');
+            $name_file = date('Ymd');
+
+        } else {
+
+            $date_time = strtotime(str_replace('/', '-', $date_send));
+            $date_send = date('d/m/Y', $date_time);
+            $name_file = date('Ymd', $date_time);
+        }
+
         $host = current(explode('.', \request()->getHttpHost()));
 
         // Creo i file CSV
-        $this->csvMake($this->get_reports(), $host . '_' . date('Ymd') . '.csv');
+        $this->csvMake($this->get_reports($date_send), $host . '_' . $name_file . '.csv');
         $files = Storage::disk('public')->files($this->path_report_csv . 'queue/');
 
         // Verifico se esistono file da inviare

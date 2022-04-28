@@ -59,3 +59,4 @@ Route::post('/users/store', 'User@store')->name('users.store');
 Route::get('/users/destroy/{id}', 'User@destroy')->name('users.destroy');
 
 Route::get('/report', 'Report@index')->name('report');
+Route::get('/report/send', 'Report@mailSendWeb')->name('report.mailsend');
