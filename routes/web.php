@@ -42,7 +42,6 @@ Route::post('/customers/update/{id}', 'Customer@update')->name('customers.update
 Route::get('/customers/create', 'Customer@create')->name('customers.create');
 Route::post('/customers/store', 'Customer@store')->name('customers.store');
 Route::get('/customers/destroy/{id}', 'Customer@destroy')->name('customers.destroy');
-Route::get('/customers/renew', 'Customer@points_renew')->name('customers.renew');
 
 Route::get('/retails', 'Retail@index')->name('retails');
 Route::get('/retails/edit/{id}', 'Retail@edit')->name('retails.edit');
@@ -60,3 +59,6 @@ Route::get('/users/destroy/{id}', 'User@destroy')->name('users.destroy');
 
 Route::get('/report', 'Report@index')->name('report');
 Route::get('/report/send', 'Report@mailSendWeb')->name('report.mailsend');
+
+Route::get('/cron/customers/renew', 'Cron@customerRenew');
+Route::get('/cron/report/send', 'Cron@reportSend');
