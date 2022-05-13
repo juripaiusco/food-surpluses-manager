@@ -135,7 +135,7 @@ class Report extends Controller
         ]);
     }
 
-    public function csvMake($data, $out_name)
+    public function csvMake($type, $data, $out_name)
     {
         if (count($data) > 0) {
 
@@ -145,13 +145,27 @@ class Report extends Controller
 
             if ($path_reportCSV_queue) {
 
-                $csv_content = 'Prodotto;Famiglie n.;Componenti n. tot.' . "\n";
+                if ($type == 'customers') {
 
-                foreach ($data as $d) {
-                    $csv_content .= $d['product']->cod . ' - ' . $d['product']->name . ';';
-                    $csv_content .= $d['customers_count']['n_family'] . ';';
-                    $csv_content .= $d['customers_count']['n_family_total'];
+                    $csv_content = 'Famiglie;Componenti' . "\n";
+                    
+                    $csv_content .= $data['family'] . ';';
+                    $csv_content .= $data['family_number'];
                     $csv_content .= "\n";
+
+                }
+
+                if ($type == 'products') {
+
+                    $csv_content = 'Prodotto;kg.;q.tà' . "\n";
+
+                    foreach ($data as $d) {
+                        $csv_content .= $d['product']->cod . ' - ' . $d['product']->name . ';';
+                        $csv_content .= $d['kg'] . ';';
+                        $csv_content .= $d['amount'];
+                        $csv_content .= "\n";
+                    }
+
                 }
 
                 $path_report_csv = Storage::disk('public')->put(
@@ -188,7 +202,8 @@ class Report extends Controller
         $host = current(explode('.', \request()->getHttpHost()));
 
         // Creo i file CSV
-        $this->csvMake($this->get_reports($date_send), $host . '_' . $name_file . '.csv');
+        $this->csvMake('products', $this->get_reports($date_send, 'products'), $host . '_prodotti_' . $name_file . '.csv');
+        $this->csvMake('customers', $this->get_reports($date_send, 'customers'), $host . '_famiglie_' . $name_file . '.csv');
         $files = Storage::disk('public')->files($this->path_report_csv . 'queue/');
 
         // Verifico se esistono file da inviare
