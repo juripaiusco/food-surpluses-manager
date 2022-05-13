@@ -40,18 +40,41 @@
     </div>
     @endif
 
+    <hr>
+
     <br>
+
+    <h2>Famiglie servite</h2>
+
+    <table class="table table-striped table-hover">
+        <thead>
+        <tr>
+            <th class="text-center">Famiglie</th>
+            <th class="text-center">Componenti</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td class="text-center">{{ $reports_customers['family'] }}</td>
+            <td class="text-center">{{ $reports_customers['family_number'] }}</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <br><br>
+
+    <h2>Prodotti distribuiti</h2>
 
     <table class="table table-striped table-hover">
         <thead>
         <tr>
             <th>Prodotto</th>
-            <th class="text-right">Famiglie n.</th>
-            <th class="text-right">Componenti n. tot.</th>
+            <th class="text-right">Kg.</th>
+            <th class="text-right">Pezzi</th>
         </tr>
         </thead>
         <tbody>
-        @foreach($reports as $report)
+        @foreach($reports_procuts as $report)
         <tr>
             <td>
                 {{ $report['product']->cod }}
@@ -59,10 +82,12 @@
                 {{ $report['product']->name }}
             </td>
             <td class="text-right">
-                {{ $report['customers_count']['n_family'] }}
+                {{--{{ $report['customers_count']['n_family'] }}--}}
+                {{ $report['kg'] }}
             </td>
             <td class="text-right">
-                {{ $report['customers_count']['n_family_total'] }}
+                {{--{{ $report['customers_count']['n_family_total'] }}--}}
+                {{ $report['amount'] }}
             </td>
         </tr>
         @endforeach

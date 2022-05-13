@@ -20,7 +20,7 @@ class Report extends Controller
         $this->middleware('auth');
     }
 
-    public function get_reports($date_search = '')
+    public function get_reports($date_search = '', $type = 'products')
     {
         if ($date_search == '') {
 
@@ -41,32 +41,81 @@ class Report extends Controller
             $products_obj = json_decode($order->json_products);
             $customer_obj = json_decode($order->json_customer);
 
-            // Ogni ordine ha una lista di prodotti che ciclo
-            foreach ($products_obj as $product) {
+            // Report clienti
+            if ($type == 'products') {
 
-                // Recupero soltanto i prodotti FEAD
-                if ($product->type == 'fead') {
+                // Ogni ordine ha una lista di prodotti che ciclo
+                foreach ($products_obj as $product) {
 
-                    if (!isset($n_family_total[$customer_obj->cod]))
-                        $n_family_total[$product->cod][$customer_obj->cod] = 0;
+                    // Recupero soltanto i prodotti FEAD
+                    if ($product->type == 'fead') {
 
-                    $reports[$product->cod]['product'] = $product;
+                        if (!isset($n_family_total[$customer_obj->cod]))
+                            $n_family_total[$product->cod][$customer_obj->cod] = 0;
 
-                    // Se voglio contare tutte le volte che ogni cliente ha acquistato il prodotto
-                    /*$reports[$product->cod]['customers'][] = $customer_obj;
-                    $n_family_total[$product->cod][] = $customer_obj->family_number;*/
+                        if (!isset($reports[$product->cod]['kg']))
+                            $reports[$product->cod]['kg'] = 0;
 
-                    // Se voglio contare da quale singola famiglia è stato acquistato il prodotto
-                    $reports[$product->cod]['customers'][$customer_obj->cod] = $customer_obj;
-                    $n_family_total[$product->cod][$customer_obj->cod] = $customer_obj->family_number;
+                        if (!isset($reports[$product->cod]['amount']))
+                            $reports[$product->cod]['amount'] = 0;
 
-                    $reports[$product->cod]['customers_count'] = array(
-                        'n_family' => count($reports[$product->cod]['customers']),
-                        'n_family_total' => array_sum($n_family_total[$product->cod])
-                    );
+                        $reports[$product->cod]['product'] = $product;
+                        $reports[$product->cod]['kg'] += $product->kg;
+                        $reports[$product->cod]['amount'] += $product->amount;
+
+                        // Se voglio contare tutte le volte che ogni cliente ha acquistato il prodotto
+                        /*$reports[$product->cod]['customers'][] = $customer_obj;
+                        $n_family_total[$product->cod][] = $customer_obj->family_number;*/
+
+                        // Se voglio contare da quale singola famiglia è stato acquistato il prodotto
+                        $reports[$product->cod]['customers'][$customer_obj->cod] = $customer_obj;
+                        $n_family_total[$product->cod][$customer_obj->cod] = $customer_obj->family_number;
+
+                        $reports[$product->cod]['customers_count'] = array(
+                            'n_family' => count($reports[$product->cod]['customers']),
+                            'n_family_total' => array_sum($n_family_total[$product->cod])
+                        );
+
+                    }
+                }
+
+            }
+
+            // Report clienti
+            if ($type == 'customers') {
+
+                $fead = 0;
+
+                foreach ($products_obj as $product) {
+
+                    if ($product->type == 'fead') {
+
+                        $fead = 1;
+                        break;
+
+                    }
 
                 }
+
+                if ($fead == 1) {
+                    $reports[$customer_obj->id] = $customer_obj;
+                }
+
             }
+        }
+
+        if ($type == 'customers') {
+
+            $report_family['family'] = count($reports);
+            $report_family['family_number'] = 0;
+
+            foreach ($reports as $report) {
+
+                $report_family['family_number'] += $report->family_number;
+
+            }
+
+            $reports = $report_family;
         }
 
         return $reports;
@@ -76,10 +125,12 @@ class Report extends Controller
     {
         $s = $request->input('s');
 
-        $reports = $this->get_reports($s);
+        $reports_customers = $this->get_reports($s, 'customers');
+        $reports_products = $this->get_reports($s, 'products');
 
         return view('report.list', [
-            'reports' => $reports,
+            'reports_customers' => $reports_customers,
+            'reports_procuts' => $reports_products,
             's' => $s
         ]);
     }
