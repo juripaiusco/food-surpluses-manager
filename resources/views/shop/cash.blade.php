@@ -131,8 +131,10 @@
                 if ($(this).val().length === 7) {
 
                     var ObjProductData = $('#product-data');
-                    var ObjProductDataTR = ObjProductData.find('tbody > tr').last();
-                    var ObjProductDataTRClone = ObjProductDataTR.clone().css('display', 'none');
+                    var ObjProductDataTR = ObjProductData.find('tbody > tr').first();
+                    var ObjProductDataTRClone = ObjProductDataTR.clone()
+                        .css('opacity', 0)
+                        .css('display', 'none');
                     var CustomerCod = $('#customer_cod').val();
 
                     dataSearch(
@@ -143,7 +145,7 @@
 
                         function () {
 
-                            ObjProductDataTR.after(ObjProductDataTRClone);
+                            ObjProductDataTR.before(ObjProductDataTRClone);
 
                         }, function (d) {
 
@@ -173,6 +175,10 @@
                                 } else {
 
                                     ObjProductDataTR.css('display', 'table-row');
+                                    ObjProductDataTR.animate({
+                                        opacity: '1'
+                                    }, 800);
+
                                     ObjProductData.css('display', 'block');
                                     $('#product_cod').val('').focus();
 
