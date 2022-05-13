@@ -148,7 +148,7 @@ class Report extends Controller
                 if ($type == 'customers') {
 
                     $csv_content = 'Famiglie;Componenti' . "\n";
-                    
+
                     $csv_content .= $data['family'] . ';';
                     $csv_content .= $data['family_number'];
                     $csv_content .= "\n";
