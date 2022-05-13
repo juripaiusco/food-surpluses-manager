@@ -46,7 +46,20 @@
         </nav>
 
         <main class="py-4">
-            @yield('content')
+            @php
+                $modules = json_decode(Auth::user()->json_modules, true);
+            @endphp
+
+            @if(isset($modules[Request::segment(1)]) && $modules[Request::segment(1)] == 'on')
+                @yield('content')
+            @else
+                <div class="container">
+
+                    <br><br><br>
+                    <h1 class="text-center">Non puoi accedere a questo modulo</h1>
+
+                </div>
+            @endif
         </main>
     </div>
 </body>
