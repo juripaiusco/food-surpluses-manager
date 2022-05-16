@@ -52,10 +52,15 @@
 
             @php
                 $module_name = array();
-                $k = array_keys(json_decode($user->json_modules, true));
 
-                foreach ($k as $id) {
-                    $module_name[] = __('layout.' . $id . '.title');
+                if (isset($user->json_modules) && $user->json_modules != 'null') {
+
+                    $k = array_keys(json_decode($user->json_modules, true));
+
+                    foreach ($k as $id) {
+                        $module_name[] = __('layout.' . $id . '.title');
+                    }
+
                 }
             @endphp
 
