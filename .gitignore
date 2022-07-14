@@ -35,3 +35,7 @@ yarn-error.log
 .DS_Store
 .idea/
 .idea/*
+app/.DS_Store
+database/.DS_Store
+resources/.DS_Store
+storage/.DS_Store
