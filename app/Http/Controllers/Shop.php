@@ -79,6 +79,10 @@ class Shop extends Controller
                 $product->bought = $bought;
                 // Fine codice monitoraggio prodotto acquistato
 
+                /*$product->points = $product->points * $request->input('product_amount');
+                $product->kg = $product->kg * $request->input('product_amount');
+                $product->amount = $product->amount * $request->input('product_amount');*/
+
             }
 
             $out = json_encode($product);

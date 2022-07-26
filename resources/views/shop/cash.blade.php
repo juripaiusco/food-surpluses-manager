@@ -131,15 +131,21 @@
                 if ($(this).val().length === 7) {
 
                     var ObjProductData = $('#product-data');
+                    var ObjProductAmount = $('#product_amount');
                     var ObjProductDataTR = ObjProductData.find('tbody > tr').first();
                     var ObjProductDataTRClone = ObjProductDataTR.clone()
                         .css('opacity', 0)
                         .css('display', 'none');
                     var CustomerCod = $('#customer_cod').val();
 
+                    var productAmount = 1;
+                    if (ObjProductAmount.val() !== '') {
+                        productAmount = ObjProductAmount.val();
+                    }
+
                     dataSearch(
                         ObjProductDataTR,
-                        '{{ route('shop.search') }}/?customer_cod=' + CustomerCod + '&',
+                        '{{ route('shop.search') }}/?customer_cod=' + CustomerCod + '&product_amount=' + productAmount + '&',
                         $(this).val(),
                         'product_cod',
 
@@ -181,6 +187,7 @@
                                     }, 800);
 
                                     ObjProductData.css('display', 'block');
+                                    $('#product_amount').val('');
                                     $('#product_cod').val('').focus();
 
                                     summarySet();
@@ -229,12 +236,29 @@
 
                 <div id="product-container">
 
-                    <div class="form-group">
-                        <input type="text"
-                               class="form-control"
-                               id="product_cod"
-                               name="product_cod"
-                               placeholder="Inserisci il codice prodotto">
+                    <div class="row">
+                        <div class="col-10">
+
+                            <div class="form-group">
+                                <input type="text"
+                                       class="form-control"
+                                       id="product_cod"
+                                       name="product_cod"
+                                       placeholder="Inserisci il codice prodotto">
+                            </div>
+
+                        </div>
+                        <div class="col" style="display: none;">
+
+                            <div class="form-group">
+                                <input type="text"
+                                       class="form-control text-center"
+                                       id="product_amount"
+                                       name="product_amount"
+                                       placeholder="1">
+                            </div>
+
+                        </div>
                     </div>
 
                     <div id="product-data">
