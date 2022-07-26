@@ -137,7 +137,10 @@ class Report extends Controller
 
     public function csvMake($type, $data, $out_name)
     {
-        if (count($data) > 0) {
+        if (
+            (count($data) > 0 && $type == 'products') ||
+            (isset($data['family']) && $data['family'] > 0 && $type == 'customers')
+        ) {
 
             // Creo la directory
             $path_reportCSV_send = Storage::disk('public')->makeDirectory($this->path_report_csv . 'send');
@@ -199,7 +202,8 @@ class Report extends Controller
             $name_file = date('Ymd', $date_time);
         }
 
-        $host = current(explode('.', \request()->getHttpHost()));
+//        $host = current(explode('.', \request()->getHttpHost()));
+        $host = env('APP_DOMAIN');
 
         // Creo i file CSV
         $this->csvMake('products', $this->get_reports($date_send, 'products'), $host . '_prodotti_' . $name_file . '.csv');
