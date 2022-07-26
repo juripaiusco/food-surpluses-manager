@@ -170,6 +170,7 @@
                                 if (d.amount_total <= 0) {
 
                                     ObjProductDataTRClone.remove();
+                                    document.getElementById("myAudio").play();
                                     alert('Prodotto esaurito');
 
                                 } else {
@@ -205,6 +206,11 @@
         });
 
     </script>
+
+    <audio id="myAudio">
+        <source src="{{ asset('sound/wrong.mp3') }}" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
 
     <form action="{{ route('shop.store') }}" method="post">
 
