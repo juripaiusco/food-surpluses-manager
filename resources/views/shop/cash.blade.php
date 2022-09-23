@@ -175,6 +175,7 @@
 
                                 if (d.amount_total <= 0) {
 
+                                    ObjProductDataTR.find('input').val('');
                                     ObjProductDataTRClone.remove();
                                     document.getElementById("myAudio").play();
                                     alert('Prodotto esaurito');
