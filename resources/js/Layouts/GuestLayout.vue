@@ -6,6 +6,7 @@ import { Link } from '@inertiajs/vue3';
 <template>
     <div class="min-h-screen flex flex-col items-center bg-gray-100 dark:bg-gray-900 pt-[100px]">
         <div>
+            {{ name }}
             <Link href="/">
                 <ApplicationLogo class="w-20 h-20 fill-current text-gray-500" />
             </Link>
@@ -17,3 +18,19 @@ import { Link } from '@inertiajs/vue3';
         </div>
     </div>
 </template>
+
+<script>
+
+export default {
+    data() {
+
+        console.log('');
+
+        return {
+            name: 'test'
+        }
+
+    }
+}
+
+</script>

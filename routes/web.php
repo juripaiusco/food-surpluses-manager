@@ -26,7 +26,7 @@ use Inertia\Inertia;
 });*/
 
 Route::get('/', function () {
-    return Inertia::render('Dashboard');
+    return redirect()->route('dashboard');
 })->middleware(['auth', 'verified']);
 
 Route::get('/dashboard', function () {
