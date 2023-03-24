@@ -7,9 +7,9 @@ import { Link } from '@inertiajs/vue3';
     <div class="min-h-screen flex flex-col items-center bg-gray-100 dark:bg-gray-900 pt-[100px]">
         <div>
             <Link href="/">
-                <ApplicationLogo class="w-20 h-20 fill-current text-gray-500" />
+                <ApplicationLogo class="w-20 h-20 fill-current text-gray-500 m-auto" />
                 <br>
-                <h1>EmporioApp</h1>
+                <h1 class="text-3xl">Emporio<span class="font-bold">App</span></h1>
             </Link>
         </div>
 
