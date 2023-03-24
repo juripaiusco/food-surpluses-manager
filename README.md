@@ -1,2 +1,2 @@
 # Food Surpluses Manager
-Gestore per le eccedenze alimentari
+Gestore per le eccedenze alimentari V2
