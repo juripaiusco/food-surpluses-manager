@@ -1,7 +1,7 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
-import ItemData from "@/Components/Dashboard/ItemData.vue";
+import ItemData from "@/PagesComponents/Dashboard/ItemData.vue";
 
 defineProps({
     products: '',

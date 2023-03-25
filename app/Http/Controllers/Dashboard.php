@@ -19,12 +19,17 @@ class Dashboard extends Controller
     public function index()
     {
         $products = Product::count();
+
         $customers = Customer::count();
+
         $orders = Order::count();
+
         $orders_today = Order::with('customer')
             /*->where('date', 'LIKE', date('Y-m-d') . '%')*/
             ->orderBy('id', 'DESC')
+            ->take(5)
             ->get();
+
         $points = Order::select([
             DB::raw('SUM(points) AS points_total'),
         ])->first();
