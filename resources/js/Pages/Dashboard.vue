@@ -97,17 +97,25 @@ defineProps({
                                 <thead>
                                 <tr>
                                     <th class="text-left w-[15%]">Data</th>
-                                    <th class="text-left w-[15%]">Rif.</th>
+                                    <th class="text-center w-[15%]">Rif.</th>
                                     <th class="text-left">Cliente</th>
-                                    <th class="text-left w-[15%]">Punti</th>
+                                    <th class="text-right w-[15%]">Punti</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr v-for="order in orders_today">
-                                    <td>{{ order.date }}</td>
-                                    <td>{{ order.reference }}</td>
-                                    <td></td>
-                                    <td></td>
+                                    <td>
+                                        {{ order.date }}
+                                    </td>
+                                    <td class="text-center">
+                                        {{ order.reference }}
+                                    </td>
+                                    <td>
+<!--                                        {{ order.json_customer }}-->
+                                    </td>
+                                    <td class="text-right">
+                                        {{ order.points }}
+                                    </td>
                                 </tr>
                                 </tbody>
                             </table>
