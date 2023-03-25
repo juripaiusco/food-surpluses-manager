@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Inertia\Inertia;
 
 class Dashboard extends Controller
 {
@@ -21,14 +22,14 @@ class Dashboard extends Controller
         $customers = Customer::count();
         $orders = Order::count();
         $orders_today = Order::with('customer')
-            ->where('date', 'LIKE', date('Y-m-d') . '%')
+            /*->where('date', 'LIKE', date('Y-m-d') . '%')*/
             ->orderBy('id', 'DESC')
             ->get();
         $points = Order::select([
             DB::raw('SUM(points) AS points_total'),
         ])->first();
 
-        return view('dashboard.dashboard', [
+        return Inertia::render('Dashboard', [
             'products' => $products,
             'customers' => $customers,
             'orders' => $orders,

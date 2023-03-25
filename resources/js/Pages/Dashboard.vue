@@ -2,6 +2,15 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
 import ItemData from "@/Components/Dashboard/ItemData.vue";
+
+defineProps({
+    products: '',
+    customers: '',
+    orders: '',
+    points: '',
+    orders_today: '',
+});
+
 </script>
 
 <template>
@@ -93,6 +102,14 @@ import ItemData from "@/Components/Dashboard/ItemData.vue";
                                     <th class="text-left w-[15%]">Punti</th>
                                 </tr>
                                 </thead>
+                                <tbody>
+                                <tr v-for="order in orders_today">
+                                    <td>{{ order.date }}</td>
+                                    <td>{{ order.reference }}</td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                </tbody>
                             </table>
 
                         </div>
