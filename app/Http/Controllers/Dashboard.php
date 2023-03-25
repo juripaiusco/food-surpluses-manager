@@ -40,6 +40,7 @@ class Dashboard extends Controller
             'orders_count' => $orders,
             'points_count' => $points->points_total,
             'orders_today' => $orders_today,
+            'filters' => request()->all(['s', 'orderby', 'ordertype'])
         ]);
     }
 }

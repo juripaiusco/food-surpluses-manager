@@ -5,11 +5,12 @@ import ItemData from "@/PagesComponents/Dashboard/ItemData.vue";
 import Table from "@/Components/Table/Table.vue";
 
 defineProps({
-    products_count: Object,
-    customers_count: Object,
-    orders_count: Object,
-    points_count: Object,
+    products_count: Number,
+    customers_count: Number,
+    orders_count: Number,
+    points_count: Number,
     orders_today: Object,
+    filters: Object,
 });
 
 </script>
@@ -22,7 +23,7 @@ defineProps({
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Dashboard</h2>
         </template>
 
-        <div class="container mt-8 p-3 bg-white dark:bg-gray-800 shadow-sm rounded-lg">
+        <div class="container mt-8 p-3 bg-white dark:bg-gray-800 dark:text-white shadow-sm rounded-lg">
 
             <div class="p-6">
 
@@ -95,34 +96,25 @@ defineProps({
                         <div class="card-body">
 
                             <Table :data="{
-                                dataHeader: [{
+                                data: orders_today,
+                                structure: [{
                                     class: 'text-left w-[15%]',
                                     label: 'Data',
+                                    field: 'date',
                                 }, {
                                     class: 'text-center w-[15%]',
                                     label: 'Rif.',
+                                    field: 'reference',
                                 }, {
                                     class: 'text-left',
                                     label: 'Cliente',
+                                    field: '',
                                     order: false
                                 }, {
                                     class: 'text-right w-[15%]',
                                     label: 'Punti',
-                                }],
-                                dataBody: [{
-                                    class: '',
-                                    field: 'date',
-                                }, {
-                                    class: 'text-center',
-                                    field: 'reference',
-                                }, {
-                                    class: '',
-                                    field: '',
-                                }, {
-                                    class: 'text-right',
                                     field: 'points',
                                 }],
-                                dataValue: orders_today,
                             }" />
 
                         </div>

@@ -1,7 +1,10 @@
 <script setup>
 
+import TableTh from "@/Components/Table/TableTh.vue";
+
 defineProps({
-    data: Object
+    data: Object,
+    filters: Object,
 });
 
 </script>
@@ -11,21 +14,20 @@ defineProps({
     <table class="table">
         <thead>
         <tr>
-            <template v-for="h in data.dataHeader">
+            <template v-for="struct in data.structure">
 
-                <th :class="h.class">
-                    {{ h.label }}
-                </th>
+                <TableTh :struct="struct"
+                         :filters="filters" />
 
             </template>
         </tr>
         </thead>
         <tbody>
-        <tr v-for="d in data.dataValue">
-            <template v-for="field in data.dataBody">
+        <tr v-for="d in data.data">
+            <template v-for="struct in data.structure">
 
-                <td :class="field.class">
-                    {{ d[field.field] }}
+                <td :class="struct.class">
+                    {{ d[struct.field] }}
                 </td>
 
             </template>
