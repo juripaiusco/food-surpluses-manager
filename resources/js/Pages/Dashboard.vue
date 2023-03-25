@@ -2,6 +2,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
 import ItemData from "@/PagesComponents/Dashboard/ItemData.vue";
+import Table from "@/Components/Table/Table.vue";
 
 defineProps({
     products: '',
@@ -93,32 +94,36 @@ defineProps({
                         </div>
                         <div class="card-body">
 
-                            <table class="table">
-                                <thead>
-                                <tr>
-                                    <th class="text-left w-[15%]">Data</th>
-                                    <th class="text-center w-[15%]">Rif.</th>
-                                    <th class="text-left">Cliente</th>
-                                    <th class="text-right w-[15%]">Punti</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr v-for="order in orders_today">
-                                    <td>
-                                        {{ order.date }}
-                                    </td>
-                                    <td class="text-center">
-                                        {{ order.reference }}
-                                    </td>
-                                    <td>
-<!--                                        {{ order.json_customer }}-->
-                                    </td>
-                                    <td class="text-right">
-                                        {{ order.points }}
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
+                            <Table :data="{
+                                dataHeader: [{
+                                    class: 'text-left w-[15%]',
+                                    label: 'Data',
+                                }, {
+                                    class: 'text-center w-[15%]',
+                                    label: 'Rif.',
+                                }, {
+                                    class: 'text-left',
+                                    label: 'Cliente',
+                                    order: false
+                                }, {
+                                    class: 'text-right w-[15%]',
+                                    label: 'Punti',
+                                }],
+                                dataBody: [{
+                                    class: '',
+                                    field: 'date',
+                                }, {
+                                    class: 'text-center',
+                                    field: 'reference',
+                                }, {
+                                    class: '',
+                                    field: '',
+                                }, {
+                                    class: 'text-right',
+                                    field: 'points',
+                                }],
+                                dataValue: orders_today,
+                            }" />
 
                         </div>
 
