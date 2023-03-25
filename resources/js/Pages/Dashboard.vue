@@ -5,11 +5,11 @@ import ItemData from "@/PagesComponents/Dashboard/ItemData.vue";
 import Table from "@/Components/Table/Table.vue";
 
 defineProps({
-    products: '',
-    customers: '',
-    orders: '',
-    points: '',
-    orders_today: '',
+    products_count: Object,
+    customers_count: Object,
+    orders_count: Object,
+    points_count: Object,
+    orders_today: Object,
 });
 
 </script>
@@ -31,7 +31,7 @@ defineProps({
 
                         <ItemData class="border-yellow-400" :data="{
                                     label: 'Prodotti',
-                                    count: '95'
+                                    count: products_count
                                 }">
 
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -45,7 +45,7 @@ defineProps({
 
                         <ItemData class="border-blue-400" :data="{
                                     label: 'Tessere',
-                                    count: '217'
+                                    count: customers_count
                                 }">
 
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -59,7 +59,7 @@ defineProps({
 
                         <ItemData class="border-gray-400" :data="{
                                     label: 'Ordini',
-                                    count: '1220'
+                                    count: orders_count
                                 }">
 
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -73,7 +73,7 @@ defineProps({
 
                         <ItemData class="border-green-400" :data="{
                                     label: 'Punti',
-                                    count: '571950'
+                                    count: points_count
                                 }">
 
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">

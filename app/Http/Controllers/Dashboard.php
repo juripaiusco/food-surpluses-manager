@@ -35,10 +35,10 @@ class Dashboard extends Controller
         ])->first();
 
         return Inertia::render('Dashboard', [
-            'products' => $products,
-            'customers' => $customers,
-            'orders' => $orders,
-            'points' => $points->points_total,
+            'products_count' => $products,
+            'customers_count' => $customers,
+            'orders_count' => $orders,
+            'points_count' => $points->points_total,
             'orders_today' => $orders_today,
         ]);
     }
