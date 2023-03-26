@@ -25,7 +25,8 @@ defineProps({
         <tr v-for="d in data.data">
             <template v-for="struct in data.structure">
 
-                <td :class="struct.class">
+                <td class="align-middle"
+                    :class="struct.class">
                     {{ d[struct.field] }}
                 </td>
 

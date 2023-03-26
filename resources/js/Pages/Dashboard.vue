@@ -3,6 +3,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
 import ItemData from "@/PagesComponents/Dashboard/ItemData.vue";
 import Table from "@/Components/Table/Table.vue";
+import Search from "@/Components/Search.vue";
 
 defineProps({
     orders_count: Number,
@@ -38,6 +39,15 @@ defineProps({
         <div class="container mt-8 p-3 bg-white dark:bg-gray-800 dark:text-white shadow-sm rounded-lg">
 
             <div class="p-6">
+
+                <div class="text-right text-xs">
+
+                    I dati mostrati si riferiscono al {{ orders_latest_day_string }}
+                    e alla ricerca eseguita.
+
+                </div>
+
+                <br>
 
                 <div class="row">
                     <div class="col">
@@ -103,8 +113,17 @@ defineProps({
                     <div class="card">
 
                         <div class="card-header">
-                            <span>Ordini di oggi</span>
+
+                            <div class="lg:w-[25%] ml-auto">
+
+                                <Search placeholder="Cerca..."
+                                        route-search="dashboard"
+                                        :filters="filters" />
+
+                            </div>
+
                         </div>
+
                         <div class="card-body">
 
                             <Table class="table-striped"
@@ -121,7 +140,7 @@ defineProps({
                                     label: 'Rif.',
                                     field: 'reference',
                                 }, {
-                                    class: 'text-left',
+                                    class: 'text-left hidden lg:table-cell',
                                     label: 'Cliente',
                                     field: 'customer_name',
                                     order: false
