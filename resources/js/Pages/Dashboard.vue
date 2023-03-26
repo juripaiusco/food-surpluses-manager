@@ -9,8 +9,8 @@ defineProps({
     products_count: Number,
     points_count: Number,
     people_count: Number,
-    orders_today: Object,
-    order_latest_day_string: String,
+    orders_lastday: Object,
+    orders_latest_day_string: String,
     filters: Object,
 });
 
@@ -29,7 +29,7 @@ defineProps({
                 </div>
                 <div class="text-right w-1/2">
                     <span class="text-sm">Ultima spesa
-                        <span class="font-semibold">{{ order_latest_day_string }}</span>
+                        <span class="font-semibold">{{ orders_latest_day_string }}</span>
                     </span>
                 </div>
             </div>
@@ -111,7 +111,7 @@ defineProps({
                                    :data="{
                                 filters: filters,
                                 routeSearch: 'dashboard',
-                                data: orders_today.data,
+                                data: orders_lastday.data,
                                 structure: [{
                                     class: 'text-center w-[15%]',
                                     label: 'Data',
@@ -123,7 +123,7 @@ defineProps({
                                 }, {
                                     class: 'text-left',
                                     label: 'Cliente',
-                                    field: '',
+                                    field: 'customer_name',
                                     order: false
                                 }, {
                                     class: 'text-right w-[10%]',

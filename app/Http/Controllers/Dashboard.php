@@ -23,30 +23,62 @@ class Dashboard extends Controller
         $order_latest = Order::all()->last();
 
         // Formatto la data dell'ultimo ordine
-        $order_latest_day = Carbon::parse($order_latest->date)->format('Y-m-d');
-        $order_latest_day_string = Carbon::parse($order_latest->date)->format('d/m/Y');
+        $orders_latest_date = Carbon::parse($order_latest->date)->format('Y-m-d');
+        $orders_latest_date_string = Carbon::parse($order_latest->date)->format('d/m/Y');
+
+        // ===============================================================
+        request()->validate([
+            'orderby' => ['in:date,reference,customer_name,points'],
+            'ordertype' => ['in:asc,desc']
+        ]);
 
         // Prendo i dati degli ordini dell'ultimo giorno di vendita
         $order_last_day = Order::with('customer')
-            ->where('date', 'LIKE', $order_latest_day . '%');
+            ->where('date', 'LIKE', $orders_latest_date . '%')
+            ->select()
+            ->addSelect('json_customer->name AS customer_firstname')
+            ->addSelect('json_customer->surname AS customer_lastname')
+            ->addSelect(DB::raw(
+                'CONCAT(
+                    JSON_VALUE(json_customer, \'$.surname\'), \' \', JSON_VALUE(json_customer, \'$.name\')
+                ) AS customer_name'
+            ));
+
+        // Filtro i dati degli ordini dell'ultimo giorno
+        if (request('s')) {
+            $order_last_day->orWhere('reference', 'like', '%' . request('s') . '%');
+            $order_last_day->orWhere('json_customer', 'like', '%' . request('s') . '%');
+            $order_last_day->orWhere('points', 'like', '%' . request('s') . '%');
+        }
+
+        // Ordino i dati degli ordini dell'ultimo giorno
+        if (request('orderby') && request('ordertype')) {
+            $order_last_day->orderby(request('orderby'), strtoupper(request('ordertype')));
+        }
+
+        // Prendo i dati degli ordini dell'ultimo giorno
         $order_last_day_data = $order_last_day->get();
 
-        // Conto quanti ordini fatti l'ultimo giorno di vendita
-        $orders_count = $order_last_day->count();
+        // Prendo i dati impaginati degli ordini dell'ultimo giorno
+        $order_last_day_data_paginate = $order_last_day->paginate(5)->withQueryString();
+        // ===============================================================
 
-        // Conto i prodotti venduti l'ultimo giorno di vendita
+        // Conto quanti ORDINI fatti l'ultimo giorno di vendita
+        $orders_count = $order_last_day_data->count();
+
+        // Conto i PRODOTTI venduti l'ultimo giorno di vendita
         $products_count = 0;
         foreach ($order_last_day_data as $order) {
             $products_count += count(json_decode($order->json_products));
         }
 
-        // Conto quanti punti usati l'ultimo giorno di vendita
-        $points_count = $order_last_day
-            ->select([
-                DB::raw('SUM(points) AS points_total'),
-            ])->first();
+        // Conto quanti PUNTI usati l'ultimo giorno di vendita
+        $points_count = 0;
+        foreach ($order_last_day_data as $order) {
+            $points_count += $order->points;
+        }
 
-        // Conto i clienti dell'ultimo giorno di vendita
+        // Conto i CLIENTI dell'ultimo giorno di vendita
         $people_count = 0;
         foreach ($order_last_day_data as $order) {
             $people_count += $order->customer->family_number;
@@ -54,31 +86,28 @@ class Dashboard extends Controller
 
         // - - - - - -
 
-        request()->validate([
-            'orderby' => ['in:date,reference,json_customer,points'],
-            'ordertype' => ['in:asc,desc']
-        ]);
-
-        /*$orders_today = Order::with('customer')
-            //->where('date', 'LIKE', date('Y-m-d') . '%')
-            ->orderBy('id', 'DESC')
-            ->take(5)
-            ->get();*/
-
-        $orders_today = Order::query();
-        $orders_today->where('date', 'LIKE', $order_latest_day . '%');
+//        $orders_today = Order::query();
+//        $orders_today = $order_last_day_data;
+        /*$orders_today->select()
+            ->addSelect('json_customer->name AS customer_firstname')
+            ->addSelect('json_customer->surname AS customer_lastname')
+            ->addSelect(DB::raw(
+                'CONCAT(
+                    JSON_VALUE(json_customer, \'$.surname\'), \' \', JSON_VALUE(json_customer, \'$.name\')
+                ) AS customer_name'
+            ));
 
         if (request('s')) {
             $orders_today->orWhere('reference', request('s'));
-            $orders_today->orWhere('json_customer', 'like', '%' . request('s') . '%');
+            $orders_today->orWhere('customer_name', 'like', '%' . request('s') . '%');
             $orders_today->orWhere('points', 'like', '%' . request('s') . '%');
         }
 
         if (request('orderby') && request('ordertype')) {
             $orders_today = $orders_today->orderby(request('orderby'), strtoupper(request('ordertype')));
-        }
+        }*/
 
-        $orders_today = $orders_today->paginate(5)->withQueryString();
+//        $orders_today = $orders_today->paginate(5)->withQueryString();
 
         // - - - - - -
 
@@ -86,9 +115,9 @@ class Dashboard extends Controller
             'products_count' => $products_count,
             'people_count' => $people_count,
             'orders_count' => $orders_count,
-            'points_count' => $points_count->points_total,
-            'orders_today' => $orders_today,
-            'order_latest_day_string' => $order_latest_day_string,
+            'points_count' => $points_count,
+            'orders_lastday' => $order_last_day_data_paginate,
+            'orders_latest_day_string' => $orders_latest_date_string,
             'filters' => request()->all(['s', 'orderby', 'ordertype'])
         ]);
     }
