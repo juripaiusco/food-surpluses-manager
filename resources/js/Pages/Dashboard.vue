@@ -4,6 +4,7 @@ import { Head } from '@inertiajs/vue3';
 import ItemData from "@/PagesComponents/Dashboard/ItemData.vue";
 import Table from "@/Components/Table/Table.vue";
 import Search from "@/Components/Search.vue";
+import Pagination from "@/Components/Pagination.vue";
 
 defineProps({
     orders_count: Number,
@@ -150,6 +151,9 @@ defineProps({
                                     field: 'points',
                                 }],
                             }" />
+
+                            <Pagination class="mt-6"
+                                        :links="orders_lastday.links" />
 
                         </div>
 
