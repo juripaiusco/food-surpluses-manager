@@ -4,7 +4,6 @@ import TableTh from "@/Components/Table/TableTh.vue";
 
 defineProps({
     data: Object,
-    filters: Object,
 });
 
 </script>
@@ -17,7 +16,7 @@ defineProps({
             <template v-for="struct in data.structure">
 
                 <TableTh :struct="struct"
-                         :filters="filters" />
+                         :data="data" />
 
             </template>
         </tr>

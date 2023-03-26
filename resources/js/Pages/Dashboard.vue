@@ -96,7 +96,9 @@ defineProps({
                         <div class="card-body">
 
                             <Table :data="{
-                                data: orders_today,
+                                filters: filters,
+                                routeSearch: 'dashboard',
+                                data: orders_today.data,
                                 structure: [{
                                     class: 'text-left w-[15%]',
                                     label: 'Data',
