@@ -28,7 +28,9 @@ defineProps({
                     </h2>
                 </div>
                 <div class="text-right w-1/2">
-                    <span class="text-sm">Ultima spesa {{ order_latest_day_string }}</span>
+                    <span class="text-sm">Ultima spesa
+                        <span class="font-semibold">{{ order_latest_day_string }}</span>
+                    </span>
                 </div>
             </div>
         </template>
@@ -105,16 +107,17 @@ defineProps({
                         </div>
                         <div class="card-body">
 
-                            <Table :data="{
+                            <Table class="table-striped"
+                                   :data="{
                                 filters: filters,
                                 routeSearch: 'dashboard',
                                 data: orders_today.data,
                                 structure: [{
-                                    class: 'text-left w-[15%]',
+                                    class: 'text-center w-[15%]',
                                     label: 'Data',
                                     field: 'date',
                                 }, {
-                                    class: 'text-center w-[15%]',
+                                    class: 'text-center w-[10%]',
                                     label: 'Rif.',
                                     field: 'reference',
                                 }, {
@@ -123,7 +126,7 @@ defineProps({
                                     field: '',
                                     order: false
                                 }, {
-                                    class: 'text-right w-[15%]',
+                                    class: 'text-right w-[10%]',
                                     label: 'Punti',
                                     field: 'points',
                                 }],
