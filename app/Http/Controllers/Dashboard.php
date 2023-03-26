@@ -46,9 +46,13 @@ class Dashboard extends Controller
 
         // Filtro i dati degli ordini dell'ultimo giorno
         if (request('s')) {
-            $order_last_day->orWhere('reference', 'like', '%' . request('s') . '%');
-            $order_last_day->orWhere('json_customer', 'like', '%' . request('s') . '%');
-            $order_last_day->orWhere('points', 'like', '%' . request('s') . '%');
+            $order_last_day->where(function ($q) {
+
+                $q->orWhere('reference', 'like', '%' . request('s') . '%');
+                $q->orWhere('json_customer', 'like', '%' . request('s') . '%');
+                $q->orWhere('points', 'like', '%' . request('s') . '%');
+
+            });
         }
 
         // Ordino i dati degli ordini dell'ultimo giorno
@@ -80,36 +84,13 @@ class Dashboard extends Controller
 
         // Conto i CLIENTI dell'ultimo giorno di vendita
         $people_count = 0;
+        $people_count_array = array();
         foreach ($order_last_day_data as $order) {
-            $people_count += $order->customer->family_number;
+            if (!isset($people_count_array[$order->customer->id])) {
+                $people_count_array[$order->customer->id] = $order->customer->family_number;
+                $people_count += $people_count_array[$order->customer->id];
+            }
         }
-
-        // - - - - - -
-
-//        $orders_today = Order::query();
-//        $orders_today = $order_last_day_data;
-        /*$orders_today->select()
-            ->addSelect('json_customer->name AS customer_firstname')
-            ->addSelect('json_customer->surname AS customer_lastname')
-            ->addSelect(DB::raw(
-                'CONCAT(
-                    JSON_VALUE(json_customer, \'$.surname\'), \' \', JSON_VALUE(json_customer, \'$.name\')
-                ) AS customer_name'
-            ));
-
-        if (request('s')) {
-            $orders_today->orWhere('reference', request('s'));
-            $orders_today->orWhere('customer_name', 'like', '%' . request('s') . '%');
-            $orders_today->orWhere('points', 'like', '%' . request('s') . '%');
-        }
-
-        if (request('orderby') && request('ordertype')) {
-            $orders_today = $orders_today->orderby(request('orderby'), strtoupper(request('ordertype')));
-        }*/
-
-//        $orders_today = $orders_today->paginate(5)->withQueryString();
-
-        // - - - - - -
 
         return Inertia::render('Dashboard', [
             'products_count' => $products_count,
