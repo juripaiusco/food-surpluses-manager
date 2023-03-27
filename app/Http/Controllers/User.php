@@ -12,7 +12,12 @@ class User extends Controller
      */
     public function index()
     {
-        return Inertia::render('Users/List');
+        $users = \App\Models\User::paginate(5);
+
+        return Inertia::render('Users/List', [
+            'users' => $users,
+            'filters' => request()->all(['s', 'orderby', 'ordertype'])
+        ]);
     }
 
     /**

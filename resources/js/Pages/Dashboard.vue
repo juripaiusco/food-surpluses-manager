@@ -38,21 +38,6 @@ defineProps({
 
         </template>
 
-<!--        <template #header>
-            <div class="inline-flex w-full">
-                <div class="w-1/2">
-                    <h2 class="text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                        <span class="font-semibold">Dashboard</span>
-                    </h2>
-                </div>
-                <div class="text-right w-1/2">
-                    <span class="text-sm">Ultima spesa
-                        <span class="font-semibold">{{ orders_latest_day_string }}</span>
-                    </span>
-                </div>
-            </div>
-        </template>-->
-
         <div class="container mt-8 p-3 bg-white dark:bg-gray-800 dark:text-white shadow-sm rounded-lg">
 
             <div class="p-6">
