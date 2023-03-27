@@ -64,7 +64,7 @@ class Dashboard extends Controller
         $order_last_day_data = $order_last_day->get();
 
         // Prendo i dati impaginati degli ordini dell'ultimo giorno
-        $order_last_day_data_paginate = $order_last_day->paginate(5)->withQueryString();
+        $order_last_day_data_paginate = $order_last_day->paginate(env('VIEWS_PAGINATE'))->withQueryString();
         // ===============================================================
 
         // Conto quanti ORDINI fatti l'ultimo giorno di vendita
