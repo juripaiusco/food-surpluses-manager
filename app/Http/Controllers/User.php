@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Retail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -61,7 +62,7 @@ class User extends Controller
 
         // Request validate
         request()->validate([
-            'orderby' => ['in:name,email,modules_list'],
+            'orderby' => ['in:name,email,modules_list,retails_list'],
             'ordertype' => ['in:asc,desc']
         ]);
 
@@ -80,10 +81,10 @@ class User extends Controller
             $users->orderby(request('orderby'), strtoupper(request('ordertype')));
         }
 
-        // Converto il compo json_modules in campi virtuali della tabella
-        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         $users = $users->select();
 
+        // Converto il compo json_modules in campi virtuali della tabella
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         foreach ($this->modules_array as $k => $module) {
 
             $users = $users->addSelect(
@@ -104,9 +105,23 @@ class User extends Controller
         ));
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-        $users = $users->paginate(5);
+        // Converto il compo json_retails in campi virtuali della tabella
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        $retails = Retail::get();
 
-//        dd($users->items());
+        $sql_retails_array = array();
+        foreach ($retails as $retail) {
+            $sql_retails_array[] = 'IF (JSON_VALUE(json_retails, \'$.' . $retail->id . '\') = "on", "' . $retail->name . '", "")';
+        }
+
+        $users = $users->addSelect(DB::raw(
+            'CONCAT(
+            ' . implode(', \' | \', ', $sql_retails_array) . '
+            ) as retails_list'
+        ));
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+        $users = $users->paginate(5);
 
         return Inertia::render('Users/List', [
             'users' => $users,

@@ -64,7 +64,7 @@ defineProps({
                         }, {
                             class: 'text-left',
                             label: 'Negozi',
-                            field: '',
+                            field: 'retails_list',
                         }],
                     }" />
 
