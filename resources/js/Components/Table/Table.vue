@@ -1,6 +1,7 @@
 <script setup>
 
 import TableTh from "@/Components/Table/TableTh.vue";
+import {Link} from "@inertiajs/vue3";
 
 defineProps({
     data: Object,
@@ -34,11 +35,12 @@ defineProps({
 
                     <template v-if="struct.btnEdit === true || struct.btnDel === true">
 
-                        <button class="btn btn-sm"
-                                :class="{
-                                    'btn-warning': struct.btnEdit === true,
-                                    'btn-danger': struct.btnDel === true
-                                }">
+                        <Link class="btn btn-sm"
+                              :href="route(struct.route, d.id)"
+                              :class="{
+                                'btn-warning': struct.btnEdit === true,
+                                'btn-danger': struct.btnDel === true
+                              }">
 
                             <svg v-if="struct.btnEdit === true"
                                  class="w-4 h-4"
@@ -53,7 +55,7 @@ defineProps({
                             </svg>
 
 
-                        </button>
+                        </Link>
 
                     </template>
 

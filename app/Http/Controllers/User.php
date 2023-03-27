@@ -158,7 +158,11 @@ class User extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $user = \App\Models\User::find($id);
+
+        return Inertia::render('Users/Form', [
+            'data' => $user
+        ]);
     }
 
     /**

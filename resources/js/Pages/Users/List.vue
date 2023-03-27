@@ -72,11 +72,11 @@ defineProps({
                         }, {
                             class: 'w-[1%]',
                             btnEdit: true,
-                            route: 'users.form'
+                            route: 'users.edit'
                         }, {
                             class: 'w-[1%]',
                             btnDel: true,
-                            route: 'users.delete'
+                            route: 'users.destroy'
                         }],
                     }" />
 

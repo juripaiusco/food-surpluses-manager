@@ -36,6 +36,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/users', [User::class, 'index'])->name('users.list');
     Route::get('/users/create', [User::class, 'create'])->name('users.create');
+    Route::get('/users/edit/{id}', [User::class, 'edit'])->name('users.edit');
+    Route::get('/users/destroy/{id}', [User::class, 'destroy'])->name('users.destroy');
 });
 
 require __DIR__.'/auth.php';
