@@ -29,10 +29,10 @@ const showingNavigationDropdown = ref(false);
 
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                                <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
+                                <NavLink :href="route('dashboard')" :active="route().current().search('dashboard') === 0 ? true : false">
                                     Dashboard
                                 </NavLink>
-                                <NavLink :href="route('users.list')" :active="route().current('users.list')">
+                                <NavLink :href="route('users.list')" :active="route().current().search('users') === 0 ? true : false">
                                     Volontari
                                 </NavLink>
                             </div>
