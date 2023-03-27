@@ -3,16 +3,110 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class User extends Controller
 {
+    var $modules_array = array(
+        'home' => [
+            'title' => 'Dashboard'
+        ],
+
+        'shop' => [
+            'title' => 'Cassa'
+        ],
+
+        'orders' => [
+            'title' => 'Ordini',
+            'single' => 'ordine'
+        ],
+
+        'products' => [
+            'title' => 'Prodotti',
+            'single' => 'prodotto'
+        ],
+
+        'store' => [
+            'title' => 'Magazzino'
+        ],
+
+        'customers' => [
+            'title' => 'Assistiti',
+            'single' => 'assistito'
+        ],
+
+        'retails' => [
+            'title' => 'Negozi',
+            'single' => 'negozio'
+        ],
+
+        'report' => [
+            'title' => 'Report'
+        ],
+
+        'users' => [
+            'title' => 'Volontari',
+            'single' => 'volontario'
+        ]
+    );
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $users = \App\Models\User::paginate(5);
+        // Query data
+        $users = \App\Models\User::query();
+
+        // Request validate
+        request()->validate([
+            'orderby' => ['in:name,email,modules_list'],
+            'ordertype' => ['in:asc,desc']
+        ]);
+
+        // Filtro RICERCA
+        if (request('s')) {
+            $users->where(function ($q) {
+
+                $q->orWhere('name', 'like', '%' . request('s') . '%');
+                $q->orWhere('email', 'like', '%' . request('s') . '%');
+
+            });
+        }
+
+        // Filtro ORDINAMENTO
+        if (request('orderby') && request('ordertype')) {
+            $users->orderby(request('orderby'), strtoupper(request('ordertype')));
+        }
+
+        // Converto il compo json_modules in campi virtuali della tabella
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        $users = $users->select();
+
+        foreach ($this->modules_array as $k => $module) {
+
+            $users = $users->addSelect(
+                'json_modules->' . $k . ' AS mod_' . $k
+            );
+
+        }
+
+        $sql_mod_array = array();
+        foreach ($this->modules_array as $k => $module) {
+            $sql_mod_array[] = 'IF (JSON_VALUE(json_modules, \'$.' . $k . '\') = "on", "' . $module['title'] . '", "")';
+        }
+
+        $users = $users->addSelect(DB::raw(
+            'CONCAT(
+            ' . implode(', \' | \', ', $sql_mod_array) . '
+            ) as modules_list'
+        ));
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+        $users = $users->paginate(5);
+
+//        dd($users->items());
 
         return Inertia::render('Users/List', [
             'users' => $users,

@@ -27,6 +27,7 @@ defineProps({
 
                 <td class="align-middle"
                     :class="struct.class">
+
                     {{ d[struct.field] }}
                 </td>
 
