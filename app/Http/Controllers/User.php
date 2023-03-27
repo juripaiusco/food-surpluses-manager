@@ -95,7 +95,7 @@ class User extends Controller
 
         $sql_mod_array = array();
         foreach ($this->modules_array as $k => $module) {
-            $sql_mod_array[] = 'IF (JSON_VALUE(json_modules, \'$.' . $k . '\') = "on", "' . $module['title'] . '", "")';
+            $sql_mod_array[] = 'IF (JSON_VALUE(json_modules, \'$.' . $k . '\') = "true", "' . $module['title'] . '", "")';
         }
 
         $users = $users->addSelect(DB::raw(
@@ -111,7 +111,7 @@ class User extends Controller
 
         $sql_retails_array = array();
         foreach ($retails as $retail) {
-            $sql_retails_array[] = 'IF (JSON_VALUE(json_retails, \'$.' . $retail->id . '\') = "on", "' . $retail->name . '", "")';
+            $sql_retails_array[] = 'IF (JSON_VALUE(json_retails, \'$.' . $retail->id . '\') = "true", "' . $retail->name . '", "")';
         }
 
         $users = $users->addSelect(DB::raw(
@@ -134,7 +134,9 @@ class User extends Controller
      */
     public function create()
     {
-        return Inertia::render('Users/Form');
+        return Inertia::render('Users/Form', [
+            'modules_array' => $this->modules_array
+        ]);
     }
 
     /**
@@ -158,10 +160,22 @@ class User extends Controller
      */
     public function edit(string $id)
     {
-        $user = \App\Models\User::find($id);
+        $user = \App\Models\User::query();
+        $user->select();
+
+        foreach ($this->modules_array as $k => $module) {
+
+            $user = $user->addSelect(
+                'json_modules->' . $k . ' AS mod_' . $k
+            );
+
+        }
+
+        $user = $user->find($id);
 
         return Inertia::render('Users/Form', [
-            'data' => $user
+            'data' => $user,
+            'modules_array' => $this->modules_array
         ]);
     }
 
@@ -170,7 +184,16 @@ class User extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $user = \App\Models\User::find($id);
+
+        dd($request->input());
+        $user->name = $request->input('name');
+        $user->email = $request->input('email');
+        $user->json_modules = json_encode($request->input('modules'));
+
+        $user->save();
+
+        return to_route('users.list');
     }
 
     /**
