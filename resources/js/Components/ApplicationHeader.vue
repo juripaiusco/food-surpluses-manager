@@ -10,7 +10,7 @@ defineProps({
 </script>
 
 <template>
-    <div class="inline-flex w-full">
+    <div class="inline-flex w-full dark:text-white">
         <div class="w-1/2">
 
             <Breadcrumb :breadcrumb-array="breadcrumbArray" />
