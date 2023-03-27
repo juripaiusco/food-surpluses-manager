@@ -5,6 +5,7 @@ import ItemData from "@/PagesComponents/Dashboard/ItemData.vue";
 import Table from "@/Components/Table/Table.vue";
 import Search from "@/Components/Search.vue";
 import Pagination from "@/Components/Pagination.vue";
+import ApplicationHeader from "@/Components/ApplicationHeader.vue";
 
 defineProps({
     orders_count: Number,
@@ -22,7 +23,22 @@ defineProps({
     <Head title="Dashboard" />
 
     <AuthenticatedLayout>
+
         <template #header>
+
+            <ApplicationHeader :breadcrumb-array="['Dashboard']">
+
+                <template #textRight>
+                    <span class="text-sm">Ultima spesa
+                        <span class="font-semibold">{{ orders_latest_day_string }}</span>
+                    </span>
+                </template>
+
+            </ApplicationHeader>
+
+        </template>
+
+<!--        <template #header>
             <div class="inline-flex w-full">
                 <div class="w-1/2">
                     <h2 class="text-xl text-gray-800 dark:text-gray-200 leading-tight">
@@ -35,7 +51,7 @@ defineProps({
                     </span>
                 </div>
             </div>
-        </template>
+        </template>-->
 
         <div class="container mt-8 p-3 bg-white dark:bg-gray-800 dark:text-white shadow-sm rounded-lg">
 

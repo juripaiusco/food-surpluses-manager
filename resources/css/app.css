@@ -6,3 +6,9 @@
     background-image: url('../img/logo.png');
     background-size: cover;
 }
+.breadcrumb {
+    margin-bottom: 0 !important;
+}
+.breadcrumb-item.active {
+    color: unset !important;
+}
