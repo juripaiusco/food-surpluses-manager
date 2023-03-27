@@ -134,7 +134,7 @@ class User extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('Users/Form');
     }
 
     /**

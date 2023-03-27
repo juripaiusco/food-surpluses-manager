@@ -5,6 +5,7 @@ import ApplicationHeader from "@/Components/ApplicationHeader.vue";
 import Table from "@/Components/Table/Table.vue";
 import Search from "@/Components/Search.vue";
 import ApplicationContainer from "@/Components/ApplicationContainer.vue";
+import {Link} from "@inertiajs/vue3";
 
 defineProps({
     users: Object,
@@ -31,7 +32,10 @@ defineProps({
 
                 <div class="w-3/4">
 
-                    <button class="btn btn-primary">Nuovo Volontario</button>
+                    <Link :href="route('users.create')"
+                          class="btn btn-primary">
+                        Nuovo Volontario
+                    </Link>
 
                 </div>
                 <div class="w-1/4">
