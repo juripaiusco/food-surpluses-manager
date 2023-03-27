@@ -95,12 +95,12 @@ class User extends Controller
 
         $sql_mod_array = array();
         foreach ($this->modules_array as $k => $module) {
-            $sql_mod_array[] = 'IF (JSON_VALUE(json_modules, \'$.' . $k . '\') = "true", "' . $module['title'] . '", "")';
+            $sql_mod_array[] = 'IF (JSON_VALUE(json_modules, \'$.' . $k . '\') = true, "' . $module['title'] . ' |", "")';
         }
 
         $users = $users->addSelect(DB::raw(
-            'CONCAT(
-            ' . implode(', \' | \', ', $sql_mod_array) . '
+            'CONCAT(\'| \',
+            ' . implode(', \' \', ', $sql_mod_array) . '
             ) as modules_list'
         ));
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -111,7 +111,7 @@ class User extends Controller
 
         $sql_retails_array = array();
         foreach ($retails as $retail) {
-            $sql_retails_array[] = 'IF (JSON_VALUE(json_retails, \'$.' . $retail->id . '\') = "true", "' . $retail->name . '", "")';
+            $sql_retails_array[] = 'IF (JSON_VALUE(json_retails, \'$.' . $retail->id . '\') = true, "' . $retail->name . '", "")';
         }
 
         $users = $users->addSelect(DB::raw(
@@ -186,7 +186,6 @@ class User extends Controller
     {
         $user = \App\Models\User::find($id);
 
-        dd($request->input());
         $user->name = $request->input('name');
         $user->email = $request->input('email');
         $user->json_modules = json_encode($request->input('modules'));

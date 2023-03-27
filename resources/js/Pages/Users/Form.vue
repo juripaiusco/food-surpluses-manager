@@ -22,7 +22,7 @@ const form = useForm({
     modules: Object.keys(props.modules_array).map((v) => {
         return {[v]: props.data['mod_' + v]};
     }).reduce((json, value, key) => {
-        json[Object.keys(value)] = Object.values(value)[0];
+        json[Object.keys(value)] = Object.values(value)[0] === 'true' ? true : false;
         return json;
     }, {})
 
