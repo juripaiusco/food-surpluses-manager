@@ -65,6 +65,14 @@ defineProps({
                             class: 'text-left',
                             label: 'Negozi',
                             field: 'retails_list',
+                        }, {
+                            class: 'w-[1%]',
+                            btnEdit: true,
+                            route: 'users.form'
+                        }, {
+                            class: 'w-[1%]',
+                            btnDel: true,
+                            route: 'users.delete'
                         }],
                     }" />
 
