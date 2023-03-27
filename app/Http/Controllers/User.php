@@ -144,7 +144,15 @@ class User extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = new \App\Models\User();
+
+        $user->name = $request->input('name');
+        $user->email = $request->input('email');
+        $user->json_modules = json_encode($request->input('modules'));
+
+        $user->save();
+
+        return to_route('users.list');
     }
 
     /**

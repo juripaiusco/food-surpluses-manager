@@ -20,7 +20,7 @@ const form = useForm({
     name: props.data ? props.data.name : null,
     email: props.data ? props.data.email : null,
     modules: Object.keys(props.modules_array).map((v) => {
-        return {[v]: props.data['mod_' + v]};
+        return {[v]: props.data ? props.data['mod_' + v] : ''};
     }).reduce((json, value, key) => {
         json[Object.keys(value)] = Object.values(value)[0] === 'true' ? true : false;
         return json;
@@ -46,7 +46,10 @@ const form = useForm({
 
             <h2 class="text-3xl mb-2">Dati Volontario</h2>
 
-            <form @submit.prevent="form.post(route('users.update', form.id))">
+            <form @submit.prevent="form.post(route(
+                form.id ? 'users.update' : 'users.store',
+                form.id ? form.id : ''
+                ))">
 
                 <div class="row mb-8">
                     <div class="col">
