@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Retail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
 
 class User extends Controller
@@ -143,7 +144,8 @@ class User extends Controller
     public function create()
     {
         return Inertia::render('Users/Form', [
-            'modules_array' => $this->modules_array
+            'modules_array' => $this->modules_array,
+            'retails_data' => Retail::get()
         ]);
     }
 
@@ -156,7 +158,9 @@ class User extends Controller
 
         $user->name = $request->input('name');
         $user->email = $request->input('email');
+        $user->password = Hash::make($request->input('password'));
         $user->json_modules = json_encode($request->input('modules'));
+        $user->json_retails = json_encode($request->input('retails'));
 
         $user->save();
 
