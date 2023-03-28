@@ -90,7 +90,7 @@ defineProps({
             <Teleport to="body">
 
                 <ModalSimple :show="showModal"
-                                @close="showModal = false">
+                             @close="showModal = false">
 
                     <template #title>Elimina Volontario</template>
                     <template #body>Vuoi eliminare il volontario?</template>

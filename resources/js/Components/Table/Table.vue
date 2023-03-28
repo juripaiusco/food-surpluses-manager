@@ -41,9 +41,9 @@ defineProps({
                             <Link class="btn btn-sm"
                                   :href="struct.btnDel === true ? '#' : route(struct.route, d.id)"
                                   :class="{
-                                  'btn-warning': struct.btnEdit === true,
-                                  'btn-danger': struct.btnDel === true
-                              }">
+                                      'btn-warning': struct.btnEdit === true,
+                                      'btn-danger': struct.btnDel === true
+                                  }">
 
                                 <svg v-if="struct.btnEdit === true"
                                      class="w-4 h-4"
