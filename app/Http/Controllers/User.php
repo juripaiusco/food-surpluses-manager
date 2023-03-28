@@ -231,6 +231,8 @@ class User extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        \App\Models\User::destroy($id);
+
+        return to_route('users.list');
     }
 }
