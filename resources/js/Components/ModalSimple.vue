@@ -13,7 +13,7 @@ const props = defineProps({
         <div v-if="show"
              class="bg-black absolute w-full h-full top-0 left-0 bg-opacity-30">
 
-            <div class="mt-[10%] w-1/3 bg-white border border-gray-500 p-6 m-auto rounded-lg">
+            <div class="mt-[10%] w-1/3 bg-white border border-gray-500 p-6 m-auto rounded-lg shadow-md shadow-gray-500">
 
                 <div class="inline-flex w-full">
 

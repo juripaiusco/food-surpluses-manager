@@ -6,12 +6,12 @@ import Table from "@/Components/Table/Table.vue";
 import Search from "@/Components/Search.vue";
 import ApplicationContainer from "@/Components/ApplicationContainer.vue";
 import {Link} from "@inertiajs/vue3";
-import ModalBootstrap from "@/Components/ModalBootstrap.vue";
+import ModalSimple from "@/Components/ModalSimple.vue";
 
 defineProps({
     users: Object,
     filters: Object,
-    showModalBootstrap: false
+    showModal: false
 })
 
 </script>
@@ -50,8 +50,8 @@ defineProps({
 
             </div>
 
-            <Table class="table-striped"
-                   :data="{
+            <Table :data="{
+                        class: 'table-striped',
                         filters: filters,
                         routeSearch: 'users.list',
                         data: users.data,
@@ -83,19 +83,19 @@ defineProps({
                     }" />
 
             <button class="btn btn-primary"
-                    @click="showModalBootstrap = true">
+                    @click="showModal = true">
                 Modal Bootstrap
             </button>
 
             <Teleport to="body">
 
-                <ModalBootstrap :show="showModalBootstrap"
-                                @close="showModalBootstrap = false">
+                <ModalSimple :show="showModal"
+                                @close="showModal = false">
 
                     <template #title>Elimina Volontario</template>
                     <template #body>Vuoi eliminare il volontario?</template>
 
-                </ModalBootstrap>
+                </ModalSimple>
 
             </Teleport>
 
