@@ -48,8 +48,8 @@ defineProps({
 
             </div>
 
-            <Table :data="{
-                        class: 'table-striped',
+            <Table class="table-striped"
+                   :data="{
                         filters: filters,
                         routeSearch: 'users.list',
                         data: users.data,
