@@ -10,7 +10,8 @@ import {useForm} from "@inertiajs/vue3";
 const props = defineProps({
 
     data: Object,
-    modules_array: Object
+    modules_array: Object,
+    retails_data: Object,
 
 });
 
@@ -21,6 +22,12 @@ const form = useForm({
     email: props.data ? props.data.email : null,
     modules: Object.keys(props.modules_array).map((v) => {
         return {[v]: props.data ? props.data['mod_' + v] : ''};
+    }).reduce((json, value, key) => {
+        json[Object.keys(value)] = Object.values(value)[0] === 'true' ? true : false;
+        return json;
+    }, {}),
+    retails: props.retails_data.map((v) => {
+        return {[v.id]: props.data ? props.data['retail_' + v.id] : ''};
     }).reduce((json, value, key) => {
         json[Object.keys(value)] = Object.values(value)[0] === 'true' ? true : false;
         return json;
@@ -79,8 +86,6 @@ const form = useForm({
 
                 <div class="mb-8">
 
-                    <hr class="mb-6">
-
                     <div class="row">
 
                         <div class="col col-lg-3 mb-2"
@@ -102,7 +107,32 @@ const form = useForm({
 
                 </div>
 
-                <h2 class="text-3xl mb-2">Negozi <span class="text-lg">(dove l'utente opera)</span></h2>
+                <h2 class="text-3xl mb-2">
+                    Negozi <span class="text-lg">(dove l'utente opera)</span>
+                </h2>
+
+                <div class="mb-8">
+
+                    <div class="row">
+
+                        <div class="col col-lg-3 mb-2"
+                             v-for="(retail) in retails_data">
+
+                            <div class="form-check">
+                                <input type="checkbox"
+                                       class="form-check-input"
+                                       v-model="form.retails[retail.id]"
+                                       :id="'retail_' + retail.id"
+                                       :name="'retails[' + retail.id + ']'" />
+                                <label class="form-check-label"
+                                       :for="'retail_' + retail.id">{{ retail.name }}</label>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
 
                 <div class="text-right">
 

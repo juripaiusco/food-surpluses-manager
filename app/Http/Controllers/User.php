@@ -109,6 +109,14 @@ class User extends Controller
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         $retails = Retail::get();
 
+        foreach ($retails as $k => $retail) {
+
+            $users = $users->addSelect(
+                'json_retails->' . $k . ' AS retail_' . $k
+            );
+
+        }
+
         $sql_retails_array = array();
         foreach ($retails as $retail) {
             $sql_retails_array[] = 'IF (JSON_VALUE(json_retails, \'$.' . $retail->id . '\') = true, "' . $retail->name . '", "")';
@@ -171,6 +179,15 @@ class User extends Controller
         $user = \App\Models\User::query();
         $user->select();
 
+        $retails_data = Retail::get();
+        foreach ($retails_data as $retail) {
+
+            $user = $user->addSelect(
+                'json_retails->' . $retail->id . ' AS retail_' . $retail->id
+            );
+
+        }
+
         foreach ($this->modules_array as $k => $module) {
 
             $user = $user->addSelect(
@@ -183,7 +200,8 @@ class User extends Controller
 
         return Inertia::render('Users/Form', [
             'data' => $user,
-            'modules_array' => $this->modules_array
+            'modules_array' => $this->modules_array,
+            'retails_data' => $retails_data
         ]);
     }
 
@@ -197,6 +215,7 @@ class User extends Controller
         $user->name = $request->input('name');
         $user->email = $request->input('email');
         $user->json_modules = json_encode($request->input('modules'));
+        $user->json_retails = json_encode($request->input('retails'));
 
         $user->save();
 
