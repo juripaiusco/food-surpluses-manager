@@ -19,7 +19,7 @@ const props = defineProps({
 
                     <div class="w-1/2 text-xl font-semibold">
 
-                        Titolo
+                        <slot name="title" />
 
                     </div>
                     <div class="w-1/2 text-right">
@@ -39,7 +39,9 @@ const props = defineProps({
                 </div>
 
                 <div class="text-center mt-8 mb-10">
-                    Vuoi eliminare questo prodotto?
+
+                    <slot name="body" />
+
                 </div>
 
                 <div class="inline-flex w-full mt-1">
