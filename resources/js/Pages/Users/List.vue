@@ -6,10 +6,12 @@ import Table from "@/Components/Table/Table.vue";
 import Search from "@/Components/Search.vue";
 import ApplicationContainer from "@/Components/ApplicationContainer.vue";
 import {Link} from "@inertiajs/vue3";
+import ModalBootstrap from "@/Components/ModalBootstrap.vue";
 
 defineProps({
     users: Object,
-    filters: Object
+    filters: Object,
+    showModalBootstrap: false
 })
 
 </script>
@@ -79,6 +81,18 @@ defineProps({
                             route: 'users.destroy'
                         }],
                     }" />
+
+            <button class="btn btn-primary"
+                    @click="showModalBootstrap = true">
+                Modal Bootstrap
+            </button>
+
+            <Teleport to="body">
+
+                <ModalBootstrap :show="showModalBootstrap"
+                                @close="showModalBootstrap = false"></ModalBootstrap>
+
+            </Teleport>
 
         </ApplicationContainer>
 
