@@ -46,7 +46,7 @@ const form = useForm({
 
         <template #header>
 
-            <ApplicationHeader :breadcrumb-array="['Volontari', 'nuovo Volontario']" />
+            <ApplicationHeader :breadcrumb-array="['Volontari', data ? data.name : 'nuovo Volontario']" />
 
         </template>
 

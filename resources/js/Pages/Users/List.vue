@@ -33,7 +33,7 @@ defineProps({
                 <div class="w-3/4">
 
                     <Link :href="route('users.create')"
-                          class="btn btn-primary">
+                          class="btn btn-outline-primary">
                         Nuovo Volontario
                     </Link>
 
