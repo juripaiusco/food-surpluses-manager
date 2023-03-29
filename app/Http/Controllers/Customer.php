@@ -114,7 +114,8 @@ class Customer extends Controller
      */
     public function edit(string $id)
     {
-        $data = \App\Models\Customer::find($id);
+        $data = \App\Models\Customer::with('order')
+            ->find($id);
 
         return Inertia::render('Customers/Form', [
             'data' => $data

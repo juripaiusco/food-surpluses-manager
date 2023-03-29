@@ -6,6 +6,7 @@ import ApplicationHeader from "@/Components/ApplicationHeader.vue";
 import ApplicationContainer from "@/Components/ApplicationContainer.vue";
 import {Link} from "@inertiajs/vue3";
 import {useForm} from "@inertiajs/vue3";
+import Table from "@/Components/Table/Table.vue";
 
 const props = defineProps({
 
@@ -134,6 +135,28 @@ const form = useForm(dataForm);
                 </div>
 
             </form>
+
+            <h2 class="text-3xl mb-2">Ordini eseguiti (ultimi 10)</h2>
+
+            <Table class="table-striped table-info"
+                   :data="{
+                        filters: '',
+                        routeSearch: '',
+                        data: data.order,
+                        structure: [{
+                            class: 'text-left w-[20%]',
+                            label: 'Data ordine',
+                            field: 'date',
+                        }, {
+                            class: 'text-left',
+                            label: 'Riferimento',
+                            field: 'reference',
+                        }, {
+                            class: 'text-right w-[20%]',
+                            label: 'Punti',
+                            field: 'points',
+                        }],
+                    }" />
 
         </ApplicationContainer>
 
