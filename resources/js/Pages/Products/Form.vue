@@ -37,7 +37,7 @@ const form = useForm(dataForm);
         <ApplicationContainer>
 
             <form @submit.prevent="form.post(route(
-                form.id ? 'customers.update' : 'customers.store',
+                form.id ? 'products.update' : 'products.store',
                 form.id ? form.id : ''
                 ))">
 
@@ -95,7 +95,7 @@ const form = useForm(dataForm);
                         <label for="description" class="form-label">Descrizione</label>
                         <textarea id="description"
                                   name="description"
-                                  class="form-control mb-4 h-[188px]"
+                                  class="form-control mb-4 h-[178px]"
                                   v-model="form.description"></textarea>
 
                         <div class="form-check">
@@ -150,7 +150,7 @@ const form = useForm(dataForm);
 
                         <div class="text-right mt-8">
 
-                            <Link :href="route('customers.list')"
+                            <Link :href="route('products.list')"
                                   class="btn btn-secondary w-[100px]">Annulla</Link>
 
                             <button type="submit"
