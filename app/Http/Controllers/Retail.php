@@ -121,7 +121,13 @@ class Retail extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $retail = \App\Models\Retail::find($id);
+
+        $retail->fill($request->all());
+
+        $retail->save();
+
+        return to_route('retails.list');
     }
 
     /**
