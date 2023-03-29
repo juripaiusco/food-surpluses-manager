@@ -7,6 +7,7 @@ import Search from "@/Components/Search.vue";
 import ApplicationContainer from "@/Components/ApplicationContainer.vue";
 import {Link} from "@inertiajs/vue3";
 import ModalSimple from "@/Components/ModalSimple.vue";
+import Pagination from "@/Components/Pagination.vue";
 
 defineProps({
     users: Object,
@@ -88,6 +89,9 @@ defineProps({
                        modalConfirm = route;
                        modalShow = true;
                    }" />
+
+            <Pagination class="mt-6"
+                        :links="users.links" />
 
             <Teleport to="body">
 
