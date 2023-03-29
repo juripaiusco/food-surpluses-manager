@@ -129,6 +129,8 @@ class Retail extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        \App\Models\Retail::destroy($id);
+
+        return to_route('retails.list');
     }
 }
