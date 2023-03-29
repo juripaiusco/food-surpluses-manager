@@ -42,42 +42,83 @@ const form = useForm(dataForm);
                 form.id ? form.id : ''
                 ))">
 
-                <label for="name" class="form-label">Nome</label>
-
-                <input name="name"
-                       type="text"
-                       class="form-control mb-4"
-                       v-model="form.name" />
-
                 <div class="row">
-                    <div class="col-2">
+                    <div class="col">
 
-                        <label for="name" class="form-label">CAP</label>
-
+                        <label for="name" class="form-label">Nome</label>
                         <input name="name"
                                type="text"
-                               class="form-control"
-                               v-model="form.zip" />
+                               class="form-control mb-4"
+                               v-model="form.name" />
 
                     </div>
-                    <div class="col-6">
+                    <div class="col">
 
-                        <label for="name" class="form-label">Indirizzo</label>
-
-                        <input name="name"
+                        <label for="surname" class="form-label">Cognome</label>
+                        <input name="surname"
                                type="text"
-                               class="form-control"
+                               class="form-control mb-4"
+                               v-model="form.surname" />
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-8">
+
+                        <label for="address" class="form-label">Indirizzo</label>
+                        <input name="address"
+                               type="text"
+                               class="form-control mb-4"
                                v-model="form.address" />
 
                     </div>
-                    <div class="col-4">
+                    <div class="col">
 
-                        <label for="name" class="form-label">Città</label>
-
-                        <input name="name"
+                        <label for="family_number" class="form-label">Componenti famiglia</label>
+                        <input name="family_number"
                                type="text"
-                               class="form-control"
-                               v-model="form.city" />
+                               class="form-control mb-4"
+                               v-model="form.family_number" />
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+
+                        <label for="number" class="form-label">n. Assistito</label>
+                        <input name="number"
+                               type="text"
+                               class="form-control mb-4"
+                               v-model="form.number" />
+
+                    </div>
+                    <div class="col">
+
+                        <label for="cod" class="form-label">n. Tessera</label>
+                        <input name="cod"
+                               type="text"
+                               class="form-control mb-4 !border-gray-500"
+                               v-model="form.cod" />
+
+                    </div>
+                    <div class="col">
+
+                        <label for="points_renew" class="form-label">Punti da rinnovare a fine mese</label>
+                        <input name="points_renew"
+                               type="text"
+                               class="form-control mb-4 !border-green-500"
+                               v-model="form.points_renew" />
+
+                    </div>
+                    <div class="col">
+
+                        <label for="points" class="form-label">Punti rimanenti per questo mese</label>
+                        <input name="points"
+                               type="text"
+                               class="form-control mb-4 !border-sky-500"
+                               v-model="form.points" />
 
                     </div>
                 </div>
