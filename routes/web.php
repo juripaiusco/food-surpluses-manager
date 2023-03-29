@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\User;
+use App\Http\Controllers\Product;
 use App\Http\Controllers\Customer;
 use App\Http\Controllers\Retail;
 use Illuminate\Foundation\Application;
@@ -35,6 +36,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::get('/products', [Product::class, 'index'])->name('products.list');
+    Route::get('/products/create', [Product::class, 'create'])->name('products.create');
+    Route::post('/products/store', [Product::class, 'store'])->name('products.store');
+    Route::get('/products/edit/{id}', [Product::class, 'edit'])->name('products.edit');
+    Route::post('/products/update/{id}', [Product::class, 'update'])->name('products.update');
+    Route::get('/products/destroy/{id}', [Product::class, 'destroy'])->name('products.destroy');
 
     Route::get('/customers', [Customer::class, 'index'])->name('customers.list');
     Route::get('/customers/create', [Customer::class, 'create'])->name('customers.create');

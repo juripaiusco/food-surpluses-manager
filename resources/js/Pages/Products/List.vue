@@ -20,13 +20,13 @@ defineProps({
 
 <template>
 
-    <Head title="Assistiti" />
+    <Head title="Prodotti" />
 
     <AuthenticatedLayout>
 
         <template #header>
 
-            <ApplicationHeader :breadcrumb-array="['Assistiti', 'Lista']" />
+            <ApplicationHeader :breadcrumb-array="['Prodotti', 'Lista']" />
 
         </template>
 
@@ -36,16 +36,16 @@ defineProps({
 
                 <div class="w-3/4">
 
-                    <Link :href="route('customers.create')"
+                    <Link :href="route('products.create')"
                           class="btn btn-outline-primary">
-                        Nuovo Assistito
+                        Nuovo Prodotto
                     </Link>
 
                 </div>
                 <div class="w-1/4">
 
                     <Search placeholder="Cerca..."
-                            route-search="customers.list"
+                            route-search="products.list"
                             :filters="filters" />
 
                 </div>
@@ -55,28 +55,32 @@ defineProps({
             <Table class="table-striped"
                    :data="{
                         filters: filters,
-                        routeSearch: 'customers.list',
+                        routeSearch: 'products.list',
                         data: data.data,
                         structure: [{
                             class: 'text-center w-[5%]',
-                            label: 'n.A.',
-                            field: 'number',
+                            label: 'Control.',
+                            field: 'monitoring_buy',
                         }, {
-                            class: 'text-center w-[5%]',
-                            label: 'n.T.',
+                            class: 'text-left w-[5%]',
+                            label: 'Codice',
                             field: 'cod',
                         }, {
-                            class: 'text-left w-[20%]',
-                            label: 'Assistito',
-                            field: 'name',
+                            class: 'text-left w-[10%]',
+                            label: 'Tipo',
+                            field: 'type',
                         }, {
                             class: 'text-left',
-                            label: 'Indirizzo',
-                            field: 'address',
+                            label: 'Nome',
+                            field: 'name',
                         }, {
                             class: 'text-center w-[10%]',
-                            label: 'Componenti',
-                            field: 'family_number',
+                            label: 'Kg.',
+                            field: 'kg_total',
+                        }, {
+                            class: 'text-center w-[10%]',
+                            label: 'Q.tà',
+                            field: 'amount_total',
                         }, {
                             class: 'text-center w-[10%]',
                             label: 'Punti',
@@ -84,11 +88,11 @@ defineProps({
                         }, {
                             class: 'w-[1%]',
                             btnEdit: true,
-                            route: 'customers.edit'
+                            route: 'products.edit'
                         }, {
                             class: 'w-[1%]',
                             btnDel: true,
-                            route: 'customers.destroy'
+                            route: 'products.destroy'
                         }],
                     }"
                    @openModal="(data, route) => {
@@ -104,9 +108,9 @@ defineProps({
                              :confirm="modalConfirm"
                              @closeModal="modalShow = false">
 
-                    <template #title>Elimina Assistito</template>
+                    <template #title>Elimina Prodotto</template>
                     <template #body>
-                        Vuoi eliminare il l'assistito <span class="font-semibold">{{ modalData.name }}</span> ?
+                        Vuoi eliminare il prodotto <span class="font-semibold">{{ modalData.name }}</span> ?
                     </template>
 
                 </ModalSimple>
