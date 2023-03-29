@@ -13,7 +13,7 @@ defineProps({
 
         <template v-if="struct.btnEdit !== true && struct.btnDel !== true">
 
-            <div @click="sort(struct.field)"
+            <div @click="sort(struct.field, struct.order)"
                  class="inline-flex cursor-pointer">
 
                 <div class="mr-2">
@@ -52,16 +52,20 @@ export default {
         }
     },
     methods: {
-        sort(field) {
+        sort(field, order) {
 
-            if (this.params.orderby !== field) {
-                this.params.ordertype = 'asc';
-            } else {
-                this.params.ordertype = this.params.ordertype === 'asc' ? 'desc' : 'asc';
+            if (order !== false) {
+
+                if (this.params.orderby !== field) {
+                    this.params.ordertype = 'asc';
+                } else {
+                    this.params.ordertype = this.params.ordertype === 'asc' ? 'desc' : 'asc';
+                }
+
+                this.params.s = this.data.filters.s;
+                this.params.orderby = field;
+
             }
-
-            this.params.s = this.data.filters.s;
-            this.params.orderby = field;
         }
     },
     watch: {

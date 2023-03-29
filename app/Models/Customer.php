@@ -14,7 +14,6 @@ class Customer extends Model
     public function order()
     {
         return $this->hasMany(\App\Models\Order::class, 'customer_id', 'id')
-            ->where('date', 'LIKE', date('Y-m') . '%')
             ->orderBy('id', 'DESC')
             ->orderBy('date', 'DESC')
             ->take(10);

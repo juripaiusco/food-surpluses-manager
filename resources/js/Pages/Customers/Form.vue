@@ -136,10 +136,17 @@ const form = useForm(dataForm);
 
             </form>
 
-            <h2 class="text-3xl mb-2">Ordini eseguiti (ultimi 10)</h2>
+            <hr class="mt-10 mb-10">
 
-            <Table class="table-striped table-info"
-                   :data="{
+            <h2 class="text-3xl mb-2">
+                Ordini eseguiti
+                <span class="text-lg">(ultimi 10 ordini)</span>
+            </h2>
+
+            <div class="border border-sky-200 rounded-md">
+
+                <Table class="table-striped table-info !mb-0"
+                       :data="{
                         filters: '',
                         routeSearch: '',
                         data: data.order,
@@ -147,16 +154,21 @@ const form = useForm(dataForm);
                             class: 'text-left w-[20%]',
                             label: 'Data ordine',
                             field: 'date',
+                            order: false,
                         }, {
                             class: 'text-left',
                             label: 'Riferimento',
                             field: 'reference',
+                            order: false,
                         }, {
                             class: 'text-right w-[20%]',
                             label: 'Punti',
                             field: 'points',
+                            order: false,
                         }],
                     }" />
+
+            </div>
 
         </ApplicationContainer>
 

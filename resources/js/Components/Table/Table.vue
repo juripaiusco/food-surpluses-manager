@@ -11,7 +11,7 @@ defineProps({
 
 <template>
 
-    <table class="table">
+    <table class="table table-hover">
         <thead>
         <tr>
             <template v-for="struct in data.structure">
