@@ -11,7 +11,9 @@ import ModalSimple from "@/Components/ModalSimple.vue";
 defineProps({
     users: Object,
     filters: Object,
-    showModal: false
+    modalShow: false,
+    modalData: Object,
+    modalConfirm: Object,
 })
 
 </script>
@@ -50,8 +52,8 @@ defineProps({
 
             </div>
 
-            <Table :data="{
-                        class: 'table-striped',
+            <Table class="table-striped"
+                   :data="{
                         filters: filters,
                         routeSearch: 'users.list',
                         data: users.data,
@@ -80,20 +82,24 @@ defineProps({
                             btnDel: true,
                             route: 'users.destroy'
                         }],
-                    }" />
-
-            <button class="btn btn-primary"
-                    @click="showModal = true">
-                Modal Bootstrap
-            </button>
+                    }"
+                   @openModal="(data, route) => {
+                       modalData = data;
+                       modalConfirm = route;
+                       modalShow = true;
+                   }" />
 
             <Teleport to="body">
 
-                <ModalSimple :show="showModal"
-                             @close="showModal = false">
+                <ModalSimple :show="modalShow"
+                             :data="modalData"
+                             :confirm="modalConfirm"
+                             @closeModal="modalShow = false">
 
                     <template #title>Elimina Volontario</template>
-                    <template #body>Vuoi eliminare il volontario?</template>
+                    <template #body>
+                        Vuoi eliminare il volontario <span class="font-semibold">{{ modalData.name }}</span> ?
+                    </template>
 
                 </ModalSimple>
 

@@ -1,6 +1,10 @@
 <script setup>
 
+import {Link} from "@inertiajs/vue3";
+
 const props = defineProps({
+    data: Object,
+    confirm: String,
     show: Boolean
 });
 
@@ -25,7 +29,7 @@ const props = defineProps({
                     <div class="w-1/2 text-right">
 
                         <button class="ml-auto"
-                                @click="$emit('close')">
+                                @click="$emit('closeModal')">
 
                             <svg class="w-6 h-6"
                                  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -46,11 +50,18 @@ const props = defineProps({
 
                 <div class="inline-flex w-full mt-1">
                     <div class="w-1/2">
+
                         <button class="btn btn-secondary w-full mr-2"
-                                @click="$emit('close')">No</button>
+                                @click="$emit('closeModal')">No</button>
+
                     </div>
                     <div class="w-1/2">
-                        <button class="btn btn-danger w-full ml-2">Sì, elimina</button>
+
+                        <Link class="btn btn-danger w-full ml-2"
+                              :href="confirm">
+                            Sì, elimina
+                        </Link>
+
                     </div>
                 </div>
 
