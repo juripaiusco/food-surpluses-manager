@@ -1,4 +1,4 @@
-<script setup>
+<script setup xmlns="http://www.w3.org/1999/html">
 
 import {Head} from "@inertiajs/vue3";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
@@ -24,19 +24,17 @@ const form = useForm(dataForm);
 
 <template>
 
-    <Head title="Assistiti" />
+    <Head title="Prodotti" />
 
     <AuthenticatedLayout>
 
         <template #header>
 
-            <ApplicationHeader :breadcrumb-array="['Assistiti', data.name !== null ? data.name + ' ' + data.surname : 'nuovo Assistito']" />
+            <ApplicationHeader :breadcrumb-array="['Prodotti', data.name !== null ? data.name : 'nuovo Prodotto']" />
 
         </template>
 
         <ApplicationContainer>
-
-            <h2 class="text-3xl mb-2">Dati Assistito</h2>
 
             <form @submit.prevent="form.post(route(
                 form.id ? 'customers.update' : 'customers.store',
@@ -44,131 +42,134 @@ const form = useForm(dataForm);
                 ))">
 
                 <div class="row">
-                    <div class="col">
-
-                        <label for="name" class="form-label">Nome</label>
-                        <input name="name"
-                               type="text"
-                               class="form-control mb-4"
-                               v-model="form.name" />
-
-                    </div>
-                    <div class="col">
-
-                        <label for="surname" class="form-label">Cognome</label>
-                        <input name="surname"
-                               type="text"
-                               class="form-control mb-4"
-                               v-model="form.surname" />
-
-                    </div>
-                </div>
-
-                <div class="row">
                     <div class="col-8">
 
-                        <label for="address" class="form-label">Indirizzo</label>
-                        <input name="address"
-                               type="text"
-                               class="form-control mb-4"
-                               v-model="form.address" />
+                        <h2 class="text-3xl mb-2">Dati Prodotto</h2>
+
+                        <div class="row">
+                            <div class="col">
+
+                                <label for="cod" class="form-label">Codice</label>
+                                <input id="cod"
+                                       name="cod"
+                                       type="text"
+                                       class="form-control mb-4"
+                                       v-model="form.cod" />
+
+                            </div>
+                            <div class="col">
+
+                                <label for="type" class="form-label">Tipo</label>
+                                <input id="type"
+                                       name="type"
+                                       type="text"
+                                       class="form-control mb-4"
+                                       v-model="form.type" />
+
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-8">
+
+                                <label for="name" class="form-label">Nome</label>
+                                <input id="name"
+                                       name="name"
+                                       type="text"
+                                       class="form-control mb-4"
+                                       v-model="form.name" />
+
+                            </div>
+                            <div class="col text-center">
+
+                                <label for="points" class="form-label text-center">Punti</label>
+                                <input id="points"
+                                       name="points"
+                                       type="text"
+                                       class="form-control mb-4 text-center"
+                                       v-model="form.points" />
+
+                            </div>
+                        </div>
+
+                        <label for="description" class="form-label">Descrizione</label>
+                        <textarea id="description"
+                                  name="description"
+                                  class="form-control mb-4 h-[160px]"
+                                  v-model="form.description"></textarea>
+
+                        <div class="form-check">
+
+                            <input type="checkbox"
+                                   class="form-check-input"
+                                   id="monitoring_buy"
+                                   v-model="form.monitoring_buy" />
+
+                            <label class="form-check-label text-sm"
+                                   :for="'monitoring_buy'">
+                                In cassa, al momento dell'acquisto, mostra se l'articolo è già stato acquistato.
+                                <br>
+                                Verrà mostrata una piccola icona prima del nome prodotto.
+                            </label>
+
+                        </div>
+
+                        <div class="row border border-gray-300 !mt-4 pt-4 pb-4 rounded-md bg-gray-100">
+                            <div class="col">
+
+                                <div class="input-group">
+                                    <span class="input-group-text">Kg.</span>
+                                    <input id="kg"
+                                           name="kg"
+                                           type="text"
+                                           class="form-control text-center"
+                                           placeholder="es. 0.5"
+                                           v-model="form.kg" />
+                                </div>
+
+                            </div>
+                            <div class="col">
+
+                                <div class="input-group">
+                                    <span class="input-group-text">Q.tà</span>
+                                    <input id="amount"
+                                           name="amount"
+                                           type="text"
+                                           class="form-control text-center"
+                                           placeholder="es. 2"
+                                           v-model="form.amount" />
+                                </div>
+
+                            </div>
+                            <div class="col-12 text-center text-xs pt-4">
+
+                                Queste sono le quantità che vengono scalata al momento dell'acquisto.
+
+                            </div>
+                        </div>
+
+                        <div class="text-right mt-8">
+
+                            <Link :href="route('customers.list')"
+                                  class="btn btn-secondary w-[100px]">Annulla</Link>
+
+                            <button type="submit"
+                                    class="btn btn-success ml-2 w-[100px]">Salva</button>
+
+                        </div>
 
                     </div>
                     <div class="col">
 
-                        <label for="family_number" class="form-label">Componenti famiglia</label>
-                        <input name="family_number"
-                               type="text"
-                               class="form-control mb-4"
-                               v-model="form.family_number" />
+                        <h2 class="text-3xl mb-2">Presenti in magazzino</h2>
+                        <h2 class="text-3xl mb-2">
+                            Movimentazioni <span class="text-lg">(ultime 10)</span>
+                        </h2>
 
                     </div>
-                </div>
-
-                <div class="row">
-                    <div class="col">
-
-                        <label for="number" class="form-label">n. Assistito</label>
-                        <input name="number"
-                               type="text"
-                               class="form-control mb-4"
-                               v-model="form.number" />
-
-                    </div>
-                    <div class="col">
-
-                        <label for="cod" class="form-label">n. Tessera</label>
-                        <input name="cod"
-                               type="text"
-                               class="form-control mb-4 !border-gray-500"
-                               v-model="form.cod" />
-
-                    </div>
-                    <div class="col">
-
-                        <label for="points_renew" class="form-label">Punti da rinnovare a fine mese</label>
-                        <input name="points_renew"
-                               type="text"
-                               class="form-control mb-4 !border-green-500"
-                               v-model="form.points_renew" />
-
-                    </div>
-                    <div class="col">
-
-                        <label for="points" class="form-label">Punti rimanenti per questo mese</label>
-                        <input name="points"
-                               type="text"
-                               class="form-control mb-4 !border-sky-500"
-                               v-model="form.points" />
-
-                    </div>
-                </div>
-
-                <div class="text-right mt-8">
-
-                    <Link :href="route('customers.list')"
-                          class="btn btn-secondary w-[100px]">Annulla</Link>
-
-                    <button type="submit"
-                            class="btn btn-success ml-2 w-[100px]">Salva</button>
-
                 </div>
 
             </form>
-
-            <hr class="mt-10 mb-10">
-
-            <h2 class="text-3xl mb-2">
-                Ordini eseguiti
-                <span class="text-lg">(ultimi 10 ordini)</span>
-            </h2>
-
-            <div class="border border-sky-200 rounded-md">
-
-                <Table class="table-striped table-info !mb-0"
-                       :data="{
-                        filters: '',
-                        routeSearch: '',
-                        data: data.order,
-                        structure: [{
-                            class: 'text-left w-[20%]',
-                            label: 'Data ordine',
-                            field: 'date',
-                            order: false,
-                        }, {
-                            class: 'text-left',
-                            label: 'Riferimento',
-                            field: 'reference',
-                            order: false,
-                        }, {
-                            class: 'text-right w-[20%]',
-                            label: 'Punti',
-                            field: 'points',
-                            order: false,
-                        }],
-                    }" />
-
-            </div>
 
         </ApplicationContainer>
 

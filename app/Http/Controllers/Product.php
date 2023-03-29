@@ -114,8 +114,7 @@ class Product extends Controller
      */
     public function edit(string $id)
     {
-        $data = \App\Models\Product::with('order')
-            ->find($id);
+        $data = \App\Models\Product::find($id);
 
         return Inertia::render('Products/Form', [
             'data' => $data
