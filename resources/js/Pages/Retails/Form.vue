@@ -29,7 +29,7 @@ const form = useForm(dataForm);
 
         <template #header>
 
-            <ApplicationHeader :breadcrumb-array="['Negozi', data ? data.name : 'nuovo Negozio']" />
+            <ApplicationHeader :breadcrumb-array="['Negozi', data.name !== null ? data.name : 'nuovo Negozio']" />
 
         </template>
 

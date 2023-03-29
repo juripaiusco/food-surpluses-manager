@@ -26,7 +26,7 @@ defineProps({
 
         <template #header>
 
-            <ApplicationHeader :breadcrumb-array="['Negozi', 'Lista']" />
+            <ApplicationHeader :breadcrumb-array="['Assistiti', 'Lista']" />
 
         </template>
 
