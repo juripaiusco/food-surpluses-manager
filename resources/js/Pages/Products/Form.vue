@@ -95,7 +95,7 @@ const form = useForm(dataForm);
                         <label for="description" class="form-label">Descrizione</label>
                         <textarea id="description"
                                   name="description"
-                                  class="form-control mb-4 h-[160px]"
+                                  class="form-control mb-4 h-[188px]"
                                   v-model="form.description"></textarea>
 
                         <div class="form-check">
@@ -162,9 +162,105 @@ const form = useForm(dataForm);
                     <div class="col">
 
                         <h2 class="text-3xl mb-2">Presenti in magazzino</h2>
-                        <h2 class="text-3xl mb-2">
+
+                        <div class="border border-green-500 rounded-md bg-green-300 text-green-900">
+
+                            <div class="inline-flex w-full">
+                                <div class="w-1/2 text-center p-4">
+
+                                    Kg.
+
+                                    <div class="text-3xl mt-3">
+                                        {{ data.kg_total }}
+                                    </div>
+
+                                </div>
+                                <div class="w-1/2 text-center p-4">
+
+                                    Q.tà
+
+                                    <div class="text-3xl mt-3">
+                                        {{ data.amount_total }}
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <h2 class="text-3xl mb-2 mt-8">
                             Movimentazioni <span class="text-lg">(ultime 10)</span>
                         </h2>
+
+                        <div class="text-xs border border-gray-300 rounded-md">
+
+                            <table class="table table-hover table-striped table-sm !mb-0">
+
+                                <thead>
+
+                                <tr>
+                                    <th>Data</th>
+                                    <th>Utente</th>
+                                    <th>Cliente</th>
+                                    <th>Ordine</th>
+                                    <th>Kg.</th>
+                                    <th>Q.tà</th>
+                                </tr>
+
+                                </thead>
+
+                                <tbody>
+
+                                <tr v-for="d in data.store">
+                                    <td class="text-center !pt-2 !pb-2"
+                                        :class="{
+                                            '!bg-red-300 !text-red-900': d.amount <= 0,
+                                            '!bg-green-300 !text-green-900': d.amount > 0
+                                        }">
+                                        {{ d.date }}
+                                    </td>
+                                    <td class="text-center !pt-2 !pb-2"
+                                        :class="{
+                                            '!bg-red-300 !text-red-900': d.amount <= 0,
+                                            '!bg-green-300 !text-green-900': d.amount > 0
+                                        }">
+                                        {{ d.user.name }}
+                                    </td>
+                                    <td class="text-center !pt-2 !pb-2"
+                                        :class="{
+                                            '!bg-red-300 !text-red-900': d.amount <= 0,
+                                            '!bg-green-300 !text-green-900': d.amount > 0
+                                        }">
+                                        {{ d.customer.cod }}
+                                    </td>
+                                    <td class="text-center !pt-2 !pb-2"
+                                        :class="{
+                                            '!bg-red-300 !text-red-900': d.amount <= 0,
+                                            '!bg-green-300 !text-green-900': d.amount > 0
+                                        }">
+                                        {{ d.order.reference }}
+                                    </td>
+                                    <td class="text-center !pt-2 !pb-2"
+                                        :class="{
+                                            '!bg-red-300 !text-red-900': d.amount <= 0,
+                                            '!bg-green-300 !text-green-900': d.amount > 0
+                                        }">
+                                        {{ d.kg }}
+                                    </td>
+                                    <td class="text-center !pt-2 !pb-2"
+                                        :class="{
+                                            '!bg-red-300 !text-red-900': d.amount <= 0,
+                                            '!bg-green-300 !text-green-900': d.amount > 0
+                                        }">
+                                        {{ d.amount }}
+                                    </td>
+                                </tr>
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
 
                     </div>
                 </div>
