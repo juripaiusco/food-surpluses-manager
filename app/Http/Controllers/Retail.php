@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
 use Inertia\Inertia;
 
 class Retail extends Controller
@@ -61,7 +62,24 @@ class Retail extends Controller
      */
     public function create()
     {
-        //
+        // Creo un oggetto di dati vuoto
+        $retail_columns = Schema::getColumnListing('retails');
+
+        $retails_array = array();
+        foreach ($retail_columns as $retails_field) {
+            $retails_array[$retails_field] = null;
+        }
+
+        unset($retails_array['id']);
+        unset($retails_array['deleted_at']);
+        unset($retails_array['created_at']);
+        unset($retails_array['updated_at']);
+
+        $retail = json_decode(json_encode($retails_array), true);
+
+        return Inertia::render('Retails/Form', [
+            'data' => $retail
+        ]);
     }
 
     /**
@@ -69,7 +87,13 @@ class Retail extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $retail = new \App\Models\Retail();
+
+        $retail->fill($request->all());
+
+        $retail->save();
+
+        return to_route('retails.list');
     }
 
     /**
@@ -85,7 +109,11 @@ class Retail extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $retail = \App\Models\Retail::find($id);
+
+        return Inertia::render('Retails/Form', [
+            'data' => $retail
+        ]);
     }
 
     /**
