@@ -125,12 +125,12 @@ class User extends Controller
 
         $sql_retails_array = array();
         foreach ($retails as $retail) {
-            $sql_retails_array[] = 'IF (JSON_VALUE(json_retails, \'$.' . $retail->id . '\') = true, "' . $retail->name . '", "")';
+            $sql_retails_array[] = 'IF (JSON_VALUE(json_retails, \'$.' . $retail->id . '\') = true, "' . $retail->name . ' |", "")';
         }
 
         $users = $users->addSelect(DB::raw(
-            'CONCAT(
-            ' . implode(', \' | \', ', $sql_retails_array) . '
+            'CONCAT(\'| \',
+            ' . implode(', \' \', ', $sql_retails_array) . '
             ) as retails_list'
         ));
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
