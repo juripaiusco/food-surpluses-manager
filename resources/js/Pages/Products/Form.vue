@@ -42,7 +42,7 @@ const form = useForm(dataForm);
                 ))">
 
                 <div class="row">
-                    <div class="col-8">
+                    <div class="col-7">
 
                         <h2 class="text-3xl mb-2">Dati Prodotto</h2>
 
@@ -171,7 +171,7 @@ const form = useForm(dataForm);
                                     Kg.
 
                                     <div class="text-3xl mt-3">
-                                        {{ data.kg_total }}
+                                        {{ data.kg_total === 0 ? '/' : data.kg_total }}
                                     </div>
 
                                 </div>
@@ -231,21 +231,21 @@ const form = useForm(dataForm);
                                             '!bg-red-300 !text-red-900': d.amount <= 0,
                                             '!bg-green-300 !text-green-900': d.amount > 0
                                         }">
-                                        {{ d.customer.cod }}
+                                        {{ d.customer_id === null ? '' : d.customer.cod }}
                                     </td>
                                     <td class="text-center !pt-2 !pb-2"
                                         :class="{
                                             '!bg-red-300 !text-red-900': d.amount <= 0,
                                             '!bg-green-300 !text-green-900': d.amount > 0
                                         }">
-                                        {{ d.order.reference }}
+                                        {{ d.order_id === null ? '' : d.order.reference }}
                                     </td>
                                     <td class="text-center !pt-2 !pb-2"
                                         :class="{
                                             '!bg-red-300 !text-red-900': d.amount <= 0,
                                             '!bg-green-300 !text-green-900': d.amount > 0
                                         }">
-                                        {{ d.kg }}
+                                        {{ d.kg === null ? '' : d.kg.toFixed(2) }}
                                     </td>
                                     <td class="text-center !pt-2 !pb-2"
                                         :class="{
