@@ -33,6 +33,10 @@ const showingNavigationDropdown = ref(false);
                                          :active="route().current().search('dashboard') === 0 ? true : false">
                                     Dashboard
                                 </NavLink>
+                                <NavLink :href="route('orders.list')"
+                                         :active="route().current().search('orders') === 0 ? true : false">
+                                    Ordini
+                                </NavLink>
                                 <NavLink :href="route('products.list')"
                                          :active="route().current().search('products') === 0 ? true : false">
                                     Prodotti

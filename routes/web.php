@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\User;
+use App\Http\Controllers\Order;
 use App\Http\Controllers\Product;
 use App\Http\Controllers\Customer;
 use App\Http\Controllers\Retail;
@@ -36,6 +37,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::get('/orders', [Order::class, 'index'])->name('orders.list');
+    Route::get('/orders/create', [Order::class, 'create'])->name('orders.create');
+    Route::post('/orders/store', [Order::class, 'store'])->name('orders.store');
+    Route::get('/orders/edit/{id}', [Order::class, 'edit'])->name('orders.edit');
+    Route::post('/orders/update/{id}', [Order::class, 'update'])->name('orders.update');
+    Route::get('/orders/destroy/{id}', [Order::class, 'destroy'])->name('orders.destroy');
 
     Route::get('/products', [Product::class, 'index'])->name('products.list');
     Route::get('/products/create', [Product::class, 'create'])->name('products.create');
