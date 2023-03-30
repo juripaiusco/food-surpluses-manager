@@ -49,7 +49,7 @@ class Retail extends Controller
         }
 
         $retails = $retails->select();
-        $retails = $retails->paginate(env('VIEWS_PAGINATE'));
+        $retails = $retails->paginate(env('VIEWS_PAGINATE'))->withQueryString();
 
         return Inertia::render('Retails/List', [
             'retails' => $retails,

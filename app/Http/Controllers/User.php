@@ -135,7 +135,7 @@ class User extends Controller
         ));
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-        $users = $users->paginate(env('VIEWS_PAGINATE'));
+        $users = $users->paginate(env('VIEWS_PAGINATE'))->withQueryString();
 
         return Inertia::render('Users/List', [
             'users' => $users,

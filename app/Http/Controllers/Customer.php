@@ -54,7 +54,7 @@ class Customer extends Controller
         }
 
         $data = $data->select();
-        $data = $data->paginate(env('VIEWS_PAGINATE'));
+        $data = $data->paginate(env('VIEWS_PAGINATE'))->withQueryString();
 
         return Inertia::render('Customers/List', [
             'data' => $data,
