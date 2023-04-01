@@ -120,7 +120,13 @@ class Order extends Controller
      */
     public function show(string $id)
     {
-        //
+        $data = \App\Models\Order::with('customer')
+            ->with('retail')
+            ->find($id);
+
+        return Inertia::render('Orders/Show', [
+            'data' => $data
+        ]);
     }
 
     /**
@@ -128,17 +134,15 @@ class Order extends Controller
      */
     public function edit(string $id)
     {
-        $data = \App\Models\Order::with('store')
+        /*$data = \App\Models\Order::with('store')
             ->with('store.user')
             ->with('store.customer')
             ->with('store.order')
             ->find($id);
 
-//        dd($data);
-
         return Inertia::render('Orders/Form', [
             'data' => $data
-        ]);
+        ]);*/
     }
 
     /**
@@ -146,13 +150,13 @@ class Order extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $order = \App\Models\Order::find($id);
+        /*$order = \App\Models\Order::find($id);
 
         $order->fill($request->all());
 
         $order->save();
 
-        return to_route('orders.list');
+        return to_route('orders.list');*/
     }
 
     /**
@@ -160,8 +164,8 @@ class Order extends Controller
      */
     public function destroy(string $id)
     {
-        \App\Models\Order::destroy($id);
+        /*\App\Models\Order::destroy($id);
 
-        return to_route('orders.list');
+        return to_route('orders.list');*/
     }
 }

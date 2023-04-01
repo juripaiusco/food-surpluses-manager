@@ -38,6 +38,7 @@ const form = useForm(dataForm);
 
             <h2 class="text-3xl mb-2">Dati Ordine</h2>
 
+            {{ data.customer.name }} {{ data.customer.surname }}
 
         </ApplicationContainer>
 
