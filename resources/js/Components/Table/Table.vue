@@ -31,7 +31,7 @@ defineProps({
                         'text-center': (struct.btnEdit === true || struct.btnDel === true)
                     }">
 
-                    {{ d[struct.field] }}
+                    {{ struct.array === true ? readArray(d, struct.field) : d[struct.field] }}
 
                     <!-- Button Edit -->
                     <template v-if="struct.btnEdit === true">
@@ -71,3 +71,21 @@ defineProps({
     </table>
 
 </template>
+
+<script>
+export default {
+    data()
+    {
+        return {}
+    },
+    methods: {
+        readArray(d, array) {
+
+            let data = eval('d.' + array);
+
+            return data;
+
+        }
+    }
+}
+</script>

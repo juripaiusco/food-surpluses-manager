@@ -21,6 +21,6 @@ class Order extends Model
 
     public function retail()
     {
-        return $this->hasOne(\App\Models\Retail::class, 'id', 'retail_id')->withTrashed();
+        return $this->hasOne(\App\Models\Retail::class, 'id', 'retail_id');
     }
 }

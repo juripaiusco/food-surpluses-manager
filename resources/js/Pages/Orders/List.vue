@@ -67,16 +67,18 @@ defineProps({
                             label: 'Riferimento',
                             field: 'reference',
                         }, {
-                            class: 'text-left',
+                            class: 'text-center w-[12%]',
                             label: 'Negozio',
-                            field: 'retail_id',
+                            field: 'retail.name',
+                            array: true,
+                            order: false
                         }, {
                             class: 'text-left',
                             label: 'Cliente',
-                            field: 'customer_id',
+                            field: 'customer_name',
                         }, {
                             class: 'text-center w-[10%]',
-                            label: 'Punti',
+                            label: 'Punti usati',
                             field: 'points',
                         }, {
                             class: 'w-[1%]',

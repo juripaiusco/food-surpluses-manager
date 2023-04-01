@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Inertia\Inertia;
 
@@ -21,13 +22,14 @@ class Order extends Controller
         $request_validate_array = [
             'date',
             'reference',
+            'customer_name',
             'points',
         ];
 
         // Query data
         $data = \App\Models\Order::query();
         $data->with('customer');
-//        $data->with('retail');
+        $data->with('retail');
 
         // Request validate
         request()->validate([
@@ -52,9 +54,14 @@ class Order extends Controller
         }
 
         $data = $data->select();
+
+        $data->addSelect(DB::raw(
+            'CONCAT(JSON_VALUE(json_customer, \'$.surname\'), \' \', JSON_VALUE(json_customer, \'$.name\')) as customer_name'
+        ));
+
         $data = $data->paginate(env('VIEWS_PAGINATE'))->withQueryString();
 
-        dd($data->items());
+//        dd($data->items());
 
         return Inertia::render('Orders/List', [
             'data' => $data,
