@@ -39,11 +39,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::get('/orders', [Order::class, 'index'])->name('orders.list');
-    Route::get('/orders/create', [Order::class, 'create'])->name('orders.create');
+    Route::get('/orders/show/{id}', [Order::class, 'show'])->name('orders.show');
+    /*Route::get('/orders/create', [Order::class, 'create'])->name('orders.create');
     Route::post('/orders/store', [Order::class, 'store'])->name('orders.store');
     Route::get('/orders/edit/{id}', [Order::class, 'edit'])->name('orders.edit');
     Route::post('/orders/update/{id}', [Order::class, 'update'])->name('orders.update');
-    Route::get('/orders/destroy/{id}', [Order::class, 'destroy'])->name('orders.destroy');
+    Route::get('/orders/destroy/{id}', [Order::class, 'destroy'])->name('orders.destroy');*/
 
     Route::get('/products', [Product::class, 'index'])->name('products.list');
     Route::get('/products/create', [Product::class, 'create'])->name('products.create');

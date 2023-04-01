@@ -79,8 +79,8 @@ defineProps({
                             field: 'points',
                         }, {
                             class: 'w-[1%]',
-                            btnEdit: true,
-                            route: 'orders.edit'
+                            btnShow: true,
+                            route: 'orders.show'
                         }],
                     }"
                    @openModal="(data, route) => {

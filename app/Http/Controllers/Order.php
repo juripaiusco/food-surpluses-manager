@@ -81,7 +81,7 @@ class Order extends Controller
      */
     public function create()
     {
-        // Creo un oggetto di dati vuoto
+        /*// Creo un oggetto di dati vuoto
         $columns = Schema::getColumnListing('orders');
 
         $orders_array = array();
@@ -98,7 +98,7 @@ class Order extends Controller
 
         return Inertia::render('Orders/Form', [
             'data' => $data
-        ]);
+        ]);*/
     }
 
     /**
@@ -106,13 +106,13 @@ class Order extends Controller
      */
     public function store(Request $request)
     {
-        $order = new \App\Models\Order();
+        /*$order = new \App\Models\Order();
 
         $order->fill($request->all());
 
         $order->save();
 
-        return to_route('orders.list');
+        return to_route('orders.list');*/
     }
 
     /**
