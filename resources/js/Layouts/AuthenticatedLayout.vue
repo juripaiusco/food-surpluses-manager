@@ -29,27 +29,33 @@ const showingNavigationDropdown = ref(false);
 
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                                <NavLink :href="route('dashboard')"
+                                <NavLink class="w-[80px] text-center"
+                                         :href="route('dashboard')"
                                          :active="route().current().search('dashboard') === 0 ? true : false">
                                     Dashboard
                                 </NavLink>
-                                <NavLink :href="route('orders.list')"
+                                <NavLink class="w-[80px] text-center"
+                                         :href="route('orders.list')"
                                          :active="route().current().search('orders') === 0 ? true : false">
                                     Ordini
                                 </NavLink>
-                                <NavLink :href="route('products.list')"
+                                <NavLink class="w-[80px] text-center"
+                                         :href="route('products.list')"
                                          :active="route().current().search('products') === 0 ? true : false">
                                     Prodotti
                                 </NavLink>
-                                <NavLink :href="route('customers.list')"
+                                <NavLink class="w-[80px] text-center"
+                                         :href="route('customers.list')"
                                          :active="route().current().search('customers') === 0 ? true : false">
                                     Assistiti
                                 </NavLink>
-                                <NavLink :href="route('retails.list')"
+                                <NavLink class="w-[80px] text-center"
+                                         :href="route('retails.list')"
                                          :active="route().current().search('retails') === 0 ? true : false">
                                     Negozi
                                 </NavLink>
-                                <NavLink :href="route('users.list')"
+                                <NavLink class="w-[80px] text-center"
+                                         :href="route('users.list')"
                                          :active="route().current().search('users') === 0 ? true : false">
                                     Volontari
                                 </NavLink>
