@@ -28,7 +28,7 @@ defineProps({
 
                 <td class="align-middle"
                     :class="struct.class, {
-                        'text-center': (struct.btnEdit === true || struct.btnDel === true)
+                        'text-center': (struct.btnShow === true || struct.btnEdit === true || struct.btnDel === true)
                     }">
 
                     {{ struct.array === true ? readArray(d, struct.field) : d[struct.field] }}

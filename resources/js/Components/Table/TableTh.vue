@@ -11,7 +11,7 @@ defineProps({
 
     <th :class="struct.class">
 
-        <template v-if="struct.btnEdit !== true && struct.btnDel !== true">
+        <template v-if="struct.btnShow !== true && struct.btnEdit !== true && struct.btnDel !== true">
 
             <div @click="sort(struct.field, struct.order)"
                  class="inline-flex cursor-pointer">
