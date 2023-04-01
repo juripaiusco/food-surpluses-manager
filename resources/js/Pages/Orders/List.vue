@@ -37,10 +37,7 @@ defineProps({
 
                 <div class="w-3/4">
 
-                    <Link :href="route('orders.create')"
-                          class="btn btn-outline-primary">
-                        Nuovo Ordine
-                    </Link>
+
 
                 </div>
                 <div class="w-1/4">
