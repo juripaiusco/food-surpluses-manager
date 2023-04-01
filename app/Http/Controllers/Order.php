@@ -42,7 +42,16 @@ class Order extends Controller
             $data->where(function ($q) use ($request_validate_array) {
 
                 foreach ($request_validate_array as $field) {
-                    $q->orWhere($field, 'like', '%' . request('s') . '%');
+
+                    if ($field === 'customer_name') {
+
+                        $q->orWhere('json_customer', 'like', '%' . request('s') . '%');
+
+                    } else {
+
+                        $q->orWhere($field, 'like', '%' . request('s') . '%');
+                    }
+
                 }
 
             });
@@ -60,8 +69,6 @@ class Order extends Controller
         ));
 
         $data = $data->paginate(env('VIEWS_PAGINATE'))->withQueryString();
-
-//        dd($data->items());
 
         return Inertia::render('Orders/List', [
             'data' => $data,
