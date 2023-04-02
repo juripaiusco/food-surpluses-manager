@@ -11,7 +11,7 @@ use Inertia\Inertia;
 class User extends Controller
 {
     var $modules_array = array(
-        'home' => [
+        'dashboard' => [
             'title' => 'Dashboard'
         ],
 
@@ -169,7 +169,7 @@ class User extends Controller
 
         $user->save();
 
-        return to_route('users.list');
+        return to_route('users.index');
     }
 
     /**
@@ -228,7 +228,7 @@ class User extends Controller
 
         $user->save();
 
-        return to_route('users.list');
+        return to_route('users.index');
     }
 
     /**
@@ -238,6 +238,6 @@ class User extends Controller
     {
         \App\Models\User::destroy($id);
 
-        return to_route('users.list');
+        return to_route('users.index');
     }
 }

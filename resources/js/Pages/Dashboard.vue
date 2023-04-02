@@ -118,7 +118,7 @@ defineProps({
                         <div class="lg:w-[25%] ml-auto">
 
                             <Search placeholder="Cerca..."
-                                    route-search="dashboard"
+                                    route-search="dashboard.index"
                                     :filters="filters" />
 
                         </div>
@@ -130,7 +130,7 @@ defineProps({
                         <Table class="table-striped"
                                :data="{
                                 filters: filters,
-                                routeSearch: 'dashboard',
+                                routeSearch: 'dashboard.index',
                                 data: orders_lastday.data,
                                 structure: [{
                                     class: 'text-center w-[15%]',

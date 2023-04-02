@@ -20,7 +20,7 @@ const showingNavigationDropdown = ref(false);
                         <div class="flex">
                             <!-- Logo -->
                             <div class="shrink-0 flex items-center">
-                                <Link :href="route('dashboard')">
+                                <Link :href="route('dashboard.index')">
                                     <ApplicationLogo
                                         class="block h-9 w-9 fill-current text-gray-800 dark:text-gray-200"
                                     />
@@ -29,7 +29,17 @@ const showingNavigationDropdown = ref(false);
 
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                                <NavLink class="w-[80px] text-center"
+                                <template v-for="(active, mod) in JSON.parse($page.props.auth.user.json_modules)">
+
+                                    <NavLink v-if="active === true"
+                                             class="w-[80px] text-center"
+                                             :href="route(mod + '.index')"
+                                             :active="route().current().search(mod) === 0 ? true : false">
+                                        {{ mod }}
+                                    </NavLink>
+
+                                </template>
+<!--                                <NavLink class="w-[80px] text-center"
                                          :href="route('dashboard')"
                                          :active="route().current().search('dashboard') === 0 ? true : false">
                                     Dashboard
@@ -58,7 +68,7 @@ const showingNavigationDropdown = ref(false);
                                          :href="route('users.list')"
                                          :active="route().current().search('users') === 0 ? true : false">
                                     Volontari
-                                </NavLink>
+                                </NavLink>-->
                             </div>
                         </div>
 
@@ -139,7 +149,7 @@ const showingNavigationDropdown = ref(false);
                     class="sm:hidden"
                 >
                     <div class="pt-2 pb-3 space-y-1">
-                        <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
+                        <ResponsiveNavLink :href="route('dashboard.index')" :active="route().current('dashboard')">
                             Dashboard
                         </ResponsiveNavLink>
                     </div>

@@ -139,7 +139,7 @@ const form = useForm({
 
                 <div class="text-right mt-8">
 
-                    <Link :href="route('users.list')"
+                    <Link :href="route('users.index')"
                           class="btn btn-secondary w-[100px]">Annulla</Link>
 
                     <button type="submit"
