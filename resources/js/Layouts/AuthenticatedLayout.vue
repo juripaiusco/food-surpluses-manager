@@ -6,6 +6,7 @@ import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import { Link } from '@inertiajs/vue3';
+import { __ } from "@/extComponents/Translations";
 
 const showingNavigationDropdown = ref(false);
 </script>
@@ -35,40 +36,10 @@ const showingNavigationDropdown = ref(false);
                                              class="w-[80px] text-center"
                                              :href="route(mod + '.index')"
                                              :active="route().current().search(mod) === 0 ? true : false">
-                                        {{ mod }}
+                                        {{ __(mod) }}
                                     </NavLink>
 
                                 </template>
-<!--                                <NavLink class="w-[80px] text-center"
-                                         :href="route('dashboard')"
-                                         :active="route().current().search('dashboard') === 0 ? true : false">
-                                    Dashboard
-                                </NavLink>
-                                <NavLink class="w-[80px] text-center"
-                                         :href="route('orders.list')"
-                                         :active="route().current().search('orders') === 0 ? true : false">
-                                    Ordini
-                                </NavLink>
-                                <NavLink class="w-[80px] text-center"
-                                         :href="route('products.list')"
-                                         :active="route().current().search('products') === 0 ? true : false">
-                                    Prodotti
-                                </NavLink>
-                                <NavLink class="w-[80px] text-center"
-                                         :href="route('customers.list')"
-                                         :active="route().current().search('customers') === 0 ? true : false">
-                                    Assistiti
-                                </NavLink>
-                                <NavLink class="w-[80px] text-center"
-                                         :href="route('retails.list')"
-                                         :active="route().current().search('retails') === 0 ? true : false">
-                                    Negozi
-                                </NavLink>
-                                <NavLink class="w-[80px] text-center"
-                                         :href="route('users.list')"
-                                         :active="route().current().search('users') === 0 ? true : false">
-                                    Volontari
-                                </NavLink>-->
                             </div>
                         </div>
 
