@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Dashboard;
+use App\Http\Controllers\Store;
 use App\Http\Controllers\User;
 use App\Http\Controllers\Order;
 use App\Http\Controllers\Product;
@@ -46,6 +47,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/orders/edit/{id}', [Order::class, 'edit'])->name('orders.edit');
     Route::post('/orders/update/{id}', [Order::class, 'update'])->name('orders.update');
     Route::get('/orders/destroy/{id}', [Order::class, 'destroy'])->name('orders.destroy');*/
+
+    Route::get('/store', [Store::class, 'index'])->name('store.index');
 
     Route::get('/products', [Product::class, 'index'])->name('products.index');
     Route::get('/products/create', [Product::class, 'create'])->name('products.create');
