@@ -94,11 +94,18 @@ class Product extends Controller
     {
         $product = new \App\Models\Product();
 
-        $product->fill($request->all());
+        $product->cod = $request->input('cod');
+        $product->type = $request->input('type');
+        $product->monitoring_buy = $request->input('monitoring_buy');
+        $product->name = $request->input('name');
+        $product->description = $request->input('description');
+        $product->points = $request->input('points');
+        $product->kg = $request->input('kg');
+        $product->amount = $request->input('amount');
 
         $product->save();
 
-        return to_route('products.list');
+        return to_route('products.index');
     }
 
     /**
@@ -120,8 +127,6 @@ class Product extends Controller
             ->with('store.order')
             ->find($id);
 
-//        dd($data);
-
         return Inertia::render('Products/Form', [
             'data' => $data
         ]);
@@ -134,11 +139,18 @@ class Product extends Controller
     {
         $product = \App\Models\Product::find($id);
 
-        $product->fill($request->all());
+        $product->cod = $request->input('cod');
+        $product->type = $request->input('type');
+        $product->monitoring_buy = $request->input('monitoring_buy');
+        $product->name = $request->input('name');
+        $product->description = $request->input('description');
+        $product->points = $request->input('points');
+        $product->kg = $request->input('kg');
+        $product->amount = $request->input('amount');
 
         $product->save();
 
-        return to_route('products.list');
+        return to_route('products.index');
     }
 
     /**
@@ -148,6 +160,6 @@ class Product extends Controller
     {
         \App\Models\Product::destroy($id);
 
-        return to_route('products.list');
+        return to_route('products.index');
     }
 }
