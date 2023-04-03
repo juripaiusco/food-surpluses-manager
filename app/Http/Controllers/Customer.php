@@ -98,7 +98,7 @@ class Customer extends Controller
 
         $customer->save();
 
-        return to_route('customers.list');
+        return to_route('customers.index');
     }
 
     /**
@@ -129,11 +129,18 @@ class Customer extends Controller
     {
         $customer = \App\Models\Customer::find($id);
 
-        $customer->fill($request->all());
+        $customer->cod = $request->input('cod');
+        $customer->number = $request->input('number');
+        $customer->name = $request->input('name');
+        $customer->surname = $request->input('surname');
+        $customer->address = $request->input('address');
+        $customer->family_number = $request->input('family_number');
+        $customer->points = $request->input('points');
+        $customer->points_renew = $request->input('points_renew');
 
         $customer->save();
 
-        return to_route('customers.list');
+        return to_route('customers.index');
     }
 
     /**
@@ -143,6 +150,6 @@ class Customer extends Controller
     {
         \App\Models\Customer::destroy($id);
 
-        return to_route('customers.list');
+        return to_route('customers.index');
     }
 }
