@@ -46,37 +46,38 @@ const form = useForm(dataForm);
 
                         <h2 class="text-3xl mb-2">Dati Prodotto</h2>
 
-                        <div class="row">
+                        <div class="row mb-4">
                             <div class="col">
 
                                 <label for="cod" class="form-label">Codice</label>
                                 <input id="cod"
                                        name="cod"
                                        type="text"
-                                       class="form-control mb-4"
+                                       class="form-control"
                                        v-model="form.cod" />
 
                             </div>
                             <div class="col">
 
                                 <label for="type" class="form-label">Tipo</label>
-                                <input id="type"
-                                       name="type"
-                                       type="text"
-                                       class="form-control mb-4"
-                                       v-model="form.type" />
+                                <select class="form-select"
+                                        v-model="form.type">
+                                    <option selected>Seleziona tipologia</option>
+                                    <option value="fead">Fead</option>
+                                    <option value="fead no">Fead NO</option>
+                                </select>
 
                             </div>
                         </div>
 
-                        <div class="row">
+                        <div class="row mb-4">
                             <div class="col-8">
 
                                 <label for="name" class="form-label">Nome</label>
                                 <input id="name"
                                        name="name"
                                        type="text"
-                                       class="form-control mb-4"
+                                       class="form-control"
                                        v-model="form.name" />
 
                             </div>
@@ -86,7 +87,7 @@ const form = useForm(dataForm);
                                 <input id="points"
                                        name="points"
                                        type="text"
-                                       class="form-control mb-4 text-center"
+                                       class="form-control text-center"
                                        v-model="form.points" />
 
                             </div>
