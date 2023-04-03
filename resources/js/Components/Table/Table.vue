@@ -27,11 +27,15 @@ defineProps({
             <template v-for="struct in data.structure">
 
                 <td class="align-middle"
-                    :class="struct.class, {
+                    :class="struct.class, struct.classData, {
                         'text-center': (struct.btnShow === true || struct.btnEdit === true || struct.btnDel === true)
                     }">
 
-                    {{ struct.array === true ? readArray(d, struct.field) : d[struct.field] }}
+                    <template v-if="typeof struct.fnc !== 'function'">
+                        {{ show(d, struct) }}
+                    </template>
+
+                    <div v-if="typeof struct.fnc === 'function'" v-html="show(d, struct)" />
 
                     <!-- Button Edit -->
                     <template v-if="struct.btnShow === true">
@@ -94,9 +98,27 @@ export default {
         return {}
     },
     methods: {
-        readArray(d, array) {
+        show (d, struct) {
 
-            let data = eval('d.' + array);
+            // START - Genero il dato
+            let data = '';
+
+            if (struct.array === true) {
+
+                data = eval('d.' + struct.field);
+
+            } else {
+
+                data = d[struct.field];
+            }
+            // END - Genero il dato
+
+            // Se esiste una funziona manipolo il dato con la funzione
+            if (typeof struct.fnc === 'function') {
+
+                data = struct.fnc(d);
+
+            }
 
             return data;
 

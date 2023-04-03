@@ -80,8 +80,22 @@ defineProps({
                             field: 'family_number',
                         }, {
                             class: 'text-center w-[10%]',
+                            classData: 'text-[11px]',
                             label: 'Punti',
                             field: 'points',
+                            encode64: true,
+                            fnc: function (d) {
+
+                                let html = '';
+                                let percentage = d.points / d.points_renew * 100;
+
+                                html += d.points + ' / ' + d.points_renew;
+                                html += '<div class=\'progress mt-1 m-auto w-[65%] !bg-sky-200 border border-sky-400\' style=\'height: 6px;\'>';
+                                html += '<div class=\'progress-bar !bg-sky-400\' style=\'width: ' + percentage + '%;\'></div>';
+                                html += '</div>';
+
+                                return html;
+                            }
                         }, {
                             class: 'w-[1%]',
                             btnEdit: true,
