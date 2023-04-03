@@ -71,7 +71,15 @@ export default {
     watch: {
         params: {
             handler() {
-                this.$inertia.get(this.route(this.data.routeSearch), this.params, { replace: true, preserveState: false });
+                this.$inertia.get(
+                    this.route(this.data.routeSearch),
+                    this.params,
+                    {
+                        replace: true,
+                        preserveState: false,
+                        preserveScroll: true,
+                    }
+                );
             },
             deep: true
         }

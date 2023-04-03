@@ -45,7 +45,15 @@ export default {
                     }
                 })
 
-                this.$inertia.get(this.route(this.routeSearch), params, { replace: true, preserveState: true});
+                this.$inertia.get(
+                    this.route(this.routeSearch),
+                    params,
+                    {
+                        replace: true,
+                        preserveState: true,
+                        preserveScroll: true,
+                    }
+                );
             },
             deep: true,
         }
