@@ -150,7 +150,7 @@ const form = useForm(dataForm);
 
                         <div class="text-right mt-8">
 
-                            <Link :href="route('products.list')"
+                            <Link :href="route('products.index')"
                                   class="btn btn-secondary w-[100px]">Annulla</Link>
 
                             <button type="submit"
