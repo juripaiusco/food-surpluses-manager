@@ -83,7 +83,6 @@ defineProps({
                             classData: 'text-[11px]',
                             label: 'Punti',
                             field: 'points',
-                            encode64: true,
                             fnc: function (d) {
 
                                 let html = '';
