@@ -144,7 +144,6 @@ defineProps({
                                     class: 'text-left hidden lg:table-cell',
                                     label: 'Cliente',
                                     field: 'customer_name',
-                                    order: false
                                 }, {
                                     class: 'text-right w-[10%]',
                                     label: 'Punti',

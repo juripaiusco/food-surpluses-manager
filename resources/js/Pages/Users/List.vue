@@ -46,7 +46,7 @@ defineProps({
                 <div class="w-1/4">
 
                     <Search placeholder="Cerca..."
-                            route-search="users.list"
+                            route-search="users.index"
                             :filters="filters" />
 
                 </div>
@@ -56,7 +56,7 @@ defineProps({
             <Table class="table-striped"
                    :data="{
                         filters: filters,
-                        routeSearch: 'users.list',
+                        routeSearch: 'users.index',
                         data: users.data,
                         structure: [{
                             class: 'text-left',
