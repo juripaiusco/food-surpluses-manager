@@ -93,7 +93,7 @@ class Retail extends Controller
 
         $retail->save();
 
-        return to_route('retails.list');
+        return to_route('retails.index');
     }
 
     /**
@@ -127,7 +127,7 @@ class Retail extends Controller
 
         $retail->save();
 
-        return to_route('retails.list');
+        return to_route('retails.index');
     }
 
     /**
@@ -137,6 +137,6 @@ class Retail extends Controller
     {
         \App\Models\Retail::destroy($id);
 
-        return to_route('retails.list');
+        return to_route('retails.index');
     }
 }
