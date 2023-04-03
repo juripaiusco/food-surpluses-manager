@@ -104,6 +104,8 @@ const form = useForm(dataForm);
                             <input type="checkbox"
                                    class="form-check-input"
                                    id="monitoring_buy"
+                                   true-value="1"
+                                   false-value="0"
                                    v-model="form.monitoring_buy" />
 
                             <label class="form-check-label text-sm"
