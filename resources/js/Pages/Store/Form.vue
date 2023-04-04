@@ -23,7 +23,7 @@ const formStore = useForm({
     date: dataForm.date,
     kg: null,
     amount: null,
-    cod: props.product.cod,
+    cod: props.product ? props.product.cod : null,
 });
 
 </script>
