@@ -43,6 +43,7 @@ const form = useForm(dataForm);
                     <input class="form-control form-control-lg text-center"
                            type="text"
                            placeholder="Inserisci codice prodotto"
+                           ref="s"
                            name="s"
                            v-model="form.s"
                            @input="form.get(route('store.index'))" />
@@ -87,7 +88,9 @@ const form = useForm(dataForm);
                                 <input type="text"
                                        class="form-control text-center mt-2"
                                        placeholder="kg. prodotto"
-                                       name="date"
+                                       ref="kg"
+                                       id="kg"
+                                       name="kg"
                                        value="" />
 
                             </div>
@@ -97,7 +100,7 @@ const form = useForm(dataForm);
                                 <input type="text"
                                        class="form-control text-center mt-2"
                                        placeholder="q.tà prodotto"
-                                       name="date"
+                                       name="amount"
                                        value="" />
 
                             </div>
@@ -124,3 +127,19 @@ const form = useForm(dataForm);
     </AuthenticatedLayout>
 
 </template>
+
+<script>
+export default {
+    data () {
+        return {}
+    },
+    mounted() {
+        if (this.data.s !== '') {
+            this.$refs.s.focus();
+        }
+        if (this.product && this.product.cod) {
+            this.$refs.kg.focus();
+        }
+    }
+}
+</script>
