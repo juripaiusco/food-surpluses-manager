@@ -144,18 +144,22 @@ const form = useForm(dataForm);
                                 class: 'text-left',
                                 label: 'Codice',
                                 field: 'cod',
+                                order: false
                             }, {
                                 class: 'text-left',
                                 label: 'Tipo',
                                 field: 'type',
+                                order: false
                             }, {
                                 class: 'text-left',
                                 label: 'Nome',
                                 field: 'name',
+                                order: false
                             }, {
                                 class: 'text-right',
                                 label: 'Punti',
                                 field: 'points',
+                                order: false
                             }],
                         }" />
 
