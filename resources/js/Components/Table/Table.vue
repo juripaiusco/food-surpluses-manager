@@ -103,7 +103,7 @@ export default {
             // START - Genero il dato
             let data = '';
 
-            if (struct.array === true) {
+            if (struct.field && struct.field.includes('.') === true) {
 
                 data = eval('d.' + struct.field);
 
