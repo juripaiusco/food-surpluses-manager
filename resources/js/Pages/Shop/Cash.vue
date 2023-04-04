@@ -14,9 +14,14 @@ const props = defineProps({
 
 });
 
-const dataForm = Object.fromEntries(Object.entries(props.data).map((v) => {
+/*const dataForm = Object.fromEntries(Object.entries(props.data).map((v) => {
     return props.data ? v : '';
-}));
+}));*/
+
+const dataForm = {
+    s_customer: props.data ? props.data.s_customer : null,
+    s_product: props.data ? props.data.s_product : null,
+};
 
 const form = useForm(dataForm);
 
@@ -66,6 +71,49 @@ const form = useForm(dataForm);
                                    name="s_product"
                                    v-model="form.s_product"
                                    @input="form.get(route('shop.index'))" />
+
+                            <div class="alert alert-success mt-4">
+
+                                <Table class="table-striped text-sm"
+                                       :data="{
+                                            filters: '',
+                                            routeSearch: '',
+                                            data: [data.product],
+                                            structure: [{
+                                                class: 'text-left',
+                                                label: 'Codice',
+                                                field: 'cod',
+                                                order: false
+                                            }, {
+                                                class: 'text-left',
+                                                label: 'Tipo',
+                                                field: 'type',
+                                                order: false
+                                            }, {
+                                                class: 'text-left',
+                                                label: 'Nome',
+                                                field: 'name',
+                                                order: false
+                                            }, {
+                                                class: 'text-right',
+                                                label: 'Kg',
+                                                field: 'kg',
+                                                order: false
+                                            }, {
+                                                class: 'text-right',
+                                                label: 'Q.tà',
+                                                field: 'amount',
+                                                order: false
+                                            }, {
+                                                class: 'text-right',
+                                                classData: 'font-bold text-2xl',
+                                                label: 'Punti',
+                                                field: 'points',
+                                                order: false
+                                            }],
+                                        }" />
+
+                            </div>
 
                         </form>
 

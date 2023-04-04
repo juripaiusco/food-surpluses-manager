@@ -16,12 +16,15 @@ defineProps({
             <div @click="sort(struct.field, struct.order)"
                  class="inline-flex cursor-pointer">
 
-                <div class="mr-2">
+                <div>
                     {{ struct.label }}
                 </div>
 
-                <div class="w-[12px] h-[12px]"
-                     :class="{ 'invisible': params.orderby !== struct.field }">
+                <div class="ml-2 w-[12px] h-[12px]"
+                     :class="{
+                        'invisible': params.orderby !== struct.field,
+                        'hidden': struct.order === false
+                    }">
                     <svg :class="{ 'text-gray-300': params.ordertype === 'desc' && params.orderby === struct.field }"
                          xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />

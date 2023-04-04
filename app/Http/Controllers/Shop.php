@@ -21,11 +21,19 @@ class Shop extends Controller
 
         }
 
+        if ($request->input('s_product')) {
+
+            $product = \App\Models\Product::where('cod', $request->input('s_product'))
+                ->first();
+
+        }
+
         return Inertia::render('Shop/Cash', [
             'data' => [
                 's_customer' => $request->input('s_customer'),
                 'customer' => isset($customer) ? $customer : [],
                 's_product' => $request->input('s_product'),
+                'product' => isset($product) ? $product : [],
             ],
         ]);
     }
