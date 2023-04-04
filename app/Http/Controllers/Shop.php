@@ -12,10 +12,21 @@ class Shop extends Controller
         $this->middleware('auth');
     }
 
-    public function index()
+    public function index(Request $request)
     {
+        if ($request->input('s_customer')) {
+
+            $customer = \App\Models\Customer::where('cod', $request->input('s_customer'))
+                ->first();
+
+        }
+
         return Inertia::render('Shop/Cash', [
-            'data' => []
+            'data' => [
+                's_customer' => $request->input('s_customer'),
+                'customer' => isset($customer) ? $customer : [],
+                's_product' => $request->input('s_product'),
+            ],
         ]);
     }
 }
