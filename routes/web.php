@@ -49,6 +49,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/orders/destroy/{id}', [Order::class, 'destroy'])->name('orders.destroy');*/
 
     Route::get('/store', [Store::class, 'index'])->name('store.index');
+    Route::post('/store/store/{id}', [Store::class, 'store'])->name('store.store');
 
     Route::get('/products', [Product::class, 'index'])->name('products.index');
     Route::get('/products/create', [Product::class, 'create'])->name('products.create');

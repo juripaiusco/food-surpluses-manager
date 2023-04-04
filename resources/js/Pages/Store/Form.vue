@@ -19,6 +19,12 @@ const dataForm = Object.fromEntries(Object.entries(props.data).map((v) => {
 }));
 
 const form = useForm(dataForm);
+const formStore = useForm({
+    date: dataForm.date,
+    kg: null,
+    amount: null,
+    cod: props.product.cod,
+});
 
 </script>
 
@@ -50,6 +56,10 @@ const form = useForm(dataForm);
 
                 </div>
 
+            </form>
+
+            <form @submit.prevent="formStore.post(route('store.store', product.id));">
+
                 <div v-if="(!product && form.s)"
                      class="mt-10 text-center text-3xl">
                     Prodotto non trovato
@@ -79,7 +89,7 @@ const form = useForm(dataForm);
                                 <input type="text"
                                        class="form-control text-center mt-2"
                                        name="date"
-                                       v-model="form.date" />
+                                       v-model="formStore.date" />
 
                             </div>
                             <div class="col">
@@ -91,7 +101,7 @@ const form = useForm(dataForm);
                                        ref="kg"
                                        id="kg"
                                        name="kg"
-                                       value="" />
+                                       v-model="formStore.kg" />
 
                             </div>
                             <div class="col">
@@ -101,10 +111,14 @@ const form = useForm(dataForm);
                                        class="form-control text-center mt-2"
                                        placeholder="q.tà prodotto"
                                        name="amount"
-                                       value="" />
+                                       v-model="formStore.amount" />
 
                             </div>
                         </div>
+
+                        <input type="hidden"
+                               name="cod"
+                               v-model="formStore.cod" />
 
                     </div>
 
