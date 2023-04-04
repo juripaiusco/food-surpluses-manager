@@ -117,11 +117,11 @@ const form = useForm(dataForm);
                 </div>
                 <div class="col">
 
-                    <div class="border-[12px] border-sky-400 bg-sky-200 rounded-md !pt-[60px] h-[calc(100%-16px)]">
+                    <div class="border-[12px] border-sky-400 bg-sky-200 rounded-md !pt-[68px] h-[calc(100%-16px)]">
 
                         <div class="text-[120px] text-center font-bold text-sky-400">
 
-                            -{{ data.points }}
+                            {{ data.points }}
                             <div class="text-sm mt-[-10px]">punti consumati</div>
 
                         </div>
