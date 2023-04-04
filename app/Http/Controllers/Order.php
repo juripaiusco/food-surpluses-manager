@@ -122,10 +122,16 @@ class Order extends Controller
     {
         $data = \App\Models\Order::with('customer')
             ->with('retail')
+            ->with('user')
             ->find($id);
 
+        $customer = json_decode($data->json_customer);
+        $products = json_decode($data->json_products);
+
         return Inertia::render('Orders/Show', [
-            'data' => $data
+            'data' => $data,
+            'customer' => $customer,
+            'products' => $products,
         ]);
     }
 

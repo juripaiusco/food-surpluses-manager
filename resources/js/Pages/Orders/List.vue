@@ -67,7 +67,6 @@ defineProps({
                             class: 'text-center w-[12%]',
                             label: 'Negozio',
                             field: 'retail.name',
-                            array: true,
                             order: false
                         }, {
                             class: 'text-left',

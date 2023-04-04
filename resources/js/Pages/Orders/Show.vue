@@ -11,6 +11,8 @@ import Table from "@/Components/Table/Table.vue";
 const props = defineProps({
 
     data: Object,
+    customer: Object,
+    products: Object,
 
 });
 
@@ -36,9 +38,128 @@ const form = useForm(dataForm);
 
         <ApplicationContainer>
 
-            <h2 class="text-3xl mb-2">Dati Ordine</h2>
+            <div class="row">
+                <div class="col-8">
 
-            {{ data.customer.name }} {{ data.customer.surname }}
+                    <div class="alert alert-warning !border-8">
+
+                        <h2 class="text-2xl mb-2">Intestazione Ordine</h2>
+
+                        <Table class="table-striped"
+                               :data="{
+                                    filters: '',
+                                    routeSearch: '',
+                                    data: [data],
+                                    structure: [{
+                                        class: 'text-left',
+                                        label: 'Data',
+                                        field: 'date',
+                                        order: false
+                                    }, {
+                                        class: 'text-left',
+                                        label: 'Riferimento',
+                                        field: 'reference',
+                                        order: false
+                                    }, {
+                                        class: 'text-left',
+                                        label: 'Negozio',
+                                        field: 'retail.name',
+                                        order: false
+                                    }, {
+                                        class: 'text-left',
+                                        label: 'Volontario',
+                                        field: 'user.name',
+                                        order: false
+                                    }],
+                                }" />
+
+                    </div>
+
+                    <div class="alert alert-info !border-8">
+
+                        <h2 class="text-2xl mb-2">Dati cliente</h2>
+
+                        <Table class="table-striped"
+                               :data="{
+                                    filters: '',
+                                    routeSearch: '',
+                                    data: [customer],
+                                    structure: [{
+                                        class: 'text-left',
+                                        label: 'n.A.',
+                                        field: 'number',
+                                        order: false
+                                    }, {
+                                        class: 'text-left',
+                                        label: 'n.T.',
+                                        field: 'cod',
+                                        order: false
+                                    }, {
+                                        class: 'text-left',
+                                        label: 'Nome',
+                                        field: 'name',
+                                        order: false
+                                    }, {
+                                        class: 'text-left',
+                                        label: 'Cognome',
+                                        field: 'surname',
+                                        order: false
+                                    }, {
+                                        class: 'text-center',
+                                        label: 'Componenti',
+                                        field: 'family_number',
+                                        order: false
+                                    }],
+                                }" />
+
+                    </div>
+
+                </div>
+                <div class="col">
+
+                    <div class="border-[12px] border-sky-400 bg-sky-200 rounded-md !pt-[60px] h-[calc(100%-16px)]">
+
+                        <div class="text-[120px] text-center font-bold text-sky-400">
+
+                            -{{ data.points }}
+                            <div class="text-sm mt-[-10px]">punti consumati</div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="alert alert-success !border-8">
+
+                <h2 class="text-3xl mb-2">Prodotti consegnati</h2>
+
+                <Table class="table-striped"
+                       :data="{
+                            filters: '',
+                            routeSearch: '',
+                            data: products,
+                            structure: [{
+                                class: 'text-left',
+                                label: 'Codice',
+                                field: 'cod',
+                            }, {
+                                class: 'text-left',
+                                label: 'Tipo',
+                                field: 'type',
+                            }, {
+                                class: 'text-left',
+                                label: 'Nome',
+                                field: 'name',
+                            }, {
+                                class: 'text-right',
+                                label: 'Punti',
+                                field: 'points',
+                            }],
+                        }" />
+
+            </div>
 
         </ApplicationContainer>
 
