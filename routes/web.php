@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Dashboard;
+use App\Http\Controllers\Shop;
 use App\Http\Controllers\Store;
 use App\Http\Controllers\User;
 use App\Http\Controllers\Order;
@@ -35,6 +36,8 @@ use Inertia\Inertia;
 Route::middleware('auth')->group(function () {
     Route::get('/', function () { return redirect()->route('dashboard.index'); });
     Route::get('/dashboard', [Dashboard::class, 'index'])->name('dashboard.index');
+
+    Route::get('/shop', [Shop::class, 'index'])->name('shop.index');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

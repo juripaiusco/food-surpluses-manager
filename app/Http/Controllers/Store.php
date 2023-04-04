@@ -8,6 +8,11 @@ use Inertia\Inertia;
 
 class Store extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index(Request $request)
     {
         $product = array();

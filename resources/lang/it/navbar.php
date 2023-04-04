@@ -2,6 +2,7 @@
 
 return [
     'dashboard'     => 'Dashboard',
+    'shop'          => 'Cassa',
     'orders'        => 'Ordini',
     'products'      => 'Prodotti',
     'store'         => 'Magazzino',
