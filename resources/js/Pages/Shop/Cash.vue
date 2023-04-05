@@ -82,6 +82,22 @@ const form = useForm(dataForm);
                                             data: usePage().props.shopProducts.slice().reverse(),
                                             structure: [{
                                                 class: 'text-left',
+                                                label: '',
+                                                field: 'monitoring_buy',
+                                                order: false,
+                                                fnc: function (d) {
+
+                                                    let html = '';
+
+                                                    if (d.monitoring_buy === 1) {
+                                                        html = '<div class=\'w-2 h-2 bg-red-600 rounded-full m-auto animate-ping\'></div>';
+                                                    }
+
+                                                    return html;
+
+                                                }
+                                            }, {
+                                                class: 'text-left',
                                                 label: 'Codice',
                                                 field: 'cod',
                                                 order: false
