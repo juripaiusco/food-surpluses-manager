@@ -11,6 +11,7 @@ import Table from "@/Components/Table/Table.vue";
 const props = defineProps({
 
     data: Object,
+    create_url: String,
 
 });
 
@@ -219,6 +220,10 @@ export default {
 
         if (this.data.customer.id) {
             this.$refs.s_product.focus();
+        }
+
+        if (this.data.s_customer && this.data.s_product) {
+            window.location.href = this.create_url;
         }
 
     }

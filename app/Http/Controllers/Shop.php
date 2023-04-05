@@ -47,6 +47,9 @@ class Shop extends Controller
                 's_product' => $request->input('s_product'),
                 'product' => isset($product) ? $product : [],
             ],
+            'create_url' => route('shop.index', [
+                's_customer' => $request->input('s_customer'),
+            ])
         ]);
     }
 }
