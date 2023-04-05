@@ -250,6 +250,16 @@ export default {
             window.location.href = this.create_url;
         }
 
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+        let shopProducts = usePage().props.shopProducts;
+
+        shopProducts.forEach((d) => {
+            this.params.points_products += d.points;
+        });
+
+        this.params.points_count = this.params.points_customer - this.params.points_products;
+
     }
 }
 </script>
