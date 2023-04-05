@@ -34,7 +34,7 @@ const showingNavigationDropdown = ref(false);
 
                                     <NavLink v-if="active === true"
                                              class="w-[80px] text-center"
-                                             :href="route(mod + '.index')"
+                                             :href="route(mod + '.index', [urlParams[mod] ? urlParams[mod] : null])"
                                              :active="route().current().search(mod) === 0 ? true : false">
                                         {{ __(mod) }}
                                     </NavLink>
@@ -159,3 +159,22 @@ const showingNavigationDropdown = ref(false);
         </div>
     </div>
 </template>
+
+<script>
+export default {
+    data () {
+        return {
+            urlParams: {
+                orders: {
+                    orderby: 'date',
+                    ordertype: 'desc'
+                },
+                products: {
+                    orderby: 'cod',
+                    ordertype: 'asc'
+                }
+            }
+        }
+    }
+}
+</script>
