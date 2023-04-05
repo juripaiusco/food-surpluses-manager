@@ -62,7 +62,7 @@ class Shop extends Controller
 
     /**
      * Rimuove i prodotti dal carrello della cassa
-     * 
+     *
      * @param Request $request
      * @param $id
      * @return \Illuminate\Http\RedirectResponse
