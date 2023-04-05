@@ -33,6 +33,7 @@ class Shop extends Controller
                 ->first();
 
             if (isset($product->id)) {
+                $product->index = $request->session()->get('shopProducts') ? array_key_last($request->session()->get('shopProducts')) + 1 : 0;
                 $request->session()->push('shopProducts', $product);
             }
         }
@@ -50,6 +51,33 @@ class Shop extends Controller
             'create_url' => route('shop.index', [
                 's_customer' => $request->input('s_customer'),
             ])
+        ]);
+    }
+
+    public function remove(Request $request, $id)
+    {
+        // Recupero Sessione Dati
+        $shopProducts_array = $request->session()->get('shopProducts');
+
+        // Elimino il prodotto selezionato
+        unset($shopProducts_array[$request->input('product.index')]);
+
+        // Ricreo l'indice
+        $shopProducts_array = array_values($shopProducts_array);
+
+        // Importo il valore index
+        foreach ($shopProducts_array as $k => $product) {
+            $shopProducts_array[$k]->index = $k;
+        }
+
+        // Imposto il valore sessione
+        $request->session()->put('shopProducts', $shopProducts_array);
+
+        // Salvo la sessione prodotti tramite inertia
+        Inertia::share('shopProducts', $request->session()->get('shopProducts'));
+
+        return to_route('shop.index', [
+            's_customer' => $request->input('s_customer')
         ]);
     }
 }

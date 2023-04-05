@@ -73,67 +73,76 @@ const form = useForm(dataForm);
                                    v-model="form.s_product"
                                    @input="form.get(route('shop.index'))" />
 
-                            <div v-if="usePage().props.shopProducts"
-                                 class="alert alert-success mt-4">
-
-                                <Table class="table-striped text-sm"
-                                       :data="{
-                                            filters: '',
-                                            routeSearch: '',
-                                            data: usePage().props.shopProducts.slice().reverse(),
-                                            structure: [{
-                                                class: 'text-left',
-                                                label: '',
-                                                field: 'monitoring_buy',
-                                                order: false,
-                                                fnc: function (d) {
-
-                                                    let html = '';
-
-                                                    if (d.monitoring_buy === 1) {
-                                                        html = '<div class=\'w-2 h-2 bg-red-600 rounded-full m-auto animate-ping\'></div>';
-                                                    }
-
-                                                    return html;
-
-                                                }
-                                            }, {
-                                                class: 'text-left',
-                                                label: 'Codice',
-                                                field: 'cod',
-                                                order: false
-                                            }, {
-                                                class: 'text-left',
-                                                label: 'Tipo',
-                                                field: 'type',
-                                                order: false
-                                            }, {
-                                                class: 'text-left',
-                                                label: 'Nome',
-                                                field: 'name',
-                                                order: false
-                                            }, {
-                                                class: 'text-right',
-                                                label: 'Kg',
-                                                field: 'kg',
-                                                order: false
-                                            }, {
-                                                class: 'text-right',
-                                                label: 'Q.tà',
-                                                field: 'amount',
-                                                order: false
-                                            }, {
-                                                class: 'text-right',
-                                                classData: 'font-bold text-2xl',
-                                                label: 'Punti',
-                                                field: 'points',
-                                                order: false
-                                            }],
-                                        }" />
-
-                            </div>
-
                         </form>
+
+                        <div v-if="usePage().props.shopProducts && usePage().props.shopProducts.length > 0"
+                             class="alert alert-success mt-4">
+
+                            <Table class="table-striped text-sm"
+                                   :data="{
+                                        filters: '',
+                                        routeSearch: '',
+                                        data: usePage().props.shopProducts.slice().reverse(),
+                                        structure: [{
+                                            class: 'w-[1%]',
+                                            btnDel: true,
+                                            route: 'shop.remove'
+                                        }, {
+                                            class: 'text-left',
+                                            label: 'Codice',
+                                            field: 'cod',
+                                            order: false
+                                        }, {
+                                            class: 'text-left',
+                                            label: 'Tipo',
+                                            field: 'type',
+                                            order: false
+                                        }, {
+                                            class: 'text-left',
+                                            label: 'Nome',
+                                            field: 'name',
+                                            order: false
+                                        }, {
+                                            class: 'text-right',
+                                            label: 'Kg',
+                                            field: 'kg',
+                                            order: false
+                                        }, {
+                                            class: 'text-right',
+                                            label: 'Q.tà',
+                                            field: 'amount',
+                                            order: false
+                                        }, {
+                                            class: 'text-right',
+                                            classData: 'font-bold text-2xl',
+                                            label: 'Punti',
+                                            field: 'points',
+                                            order: false
+                                        }, {
+                                            class: 'text-left',
+                                            label: '',
+                                            field: 'monitoring_buy',
+                                            order: false,
+                                            fnc: function (d) {
+
+                                                let html = '';
+
+                                                if (d.monitoring_buy === 1) {
+                                                    html = '<div class=\'w-2 h-2 bg-red-600 rounded-full m-auto animate-ping\'></div>';
+                                                }
+
+                                                return html;
+
+                                            }
+                                        }],
+                                    }"
+                                    @openModal="(data, route) => {
+
+                                        routeTo(route, data);
+
+                                    }" />
+
+                        </div>
 
                     </div>
                     <div class="col">
@@ -202,6 +211,8 @@ const form = useForm(dataForm);
 </template>
 
 <script>
+import {useForm} from "@inertiajs/vue3";
+
 export default {
     data () {
         return {
@@ -210,6 +221,19 @@ export default {
                 points_products: 0,
                 points_count: this.data.customer.points,
             }
+        }
+    },
+    methods: {
+        routeTo(route, data) {
+
+            let dataForm = {
+                product: data,
+                s_customer: this.$props.data.s_customer
+            };
+
+            let form = useForm(dataForm);
+            form.get(route);
+
         }
     },
     mounted() {

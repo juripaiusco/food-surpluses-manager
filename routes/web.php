@@ -38,6 +38,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [Dashboard::class, 'index'])->name('dashboard.index');
 
     Route::get('/shop', [Shop::class, 'index'])->name('shop.index');
+    Route::get('/shop/remove/{id}', [Shop::class, 'remove'])->name('shop.remove');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
