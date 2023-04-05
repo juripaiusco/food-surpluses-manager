@@ -63,4 +63,51 @@ class Store extends Controller
 
         return Inertia::location(to_route('store.index')->getTargetUrl());
     }
+
+    public function setStore($args = array())
+    {
+        if ($args['storeArrayData']) {
+
+            $product = \App\Models\Product::find($args['storeArrayData']['id']);
+
+            // Tolgo i punti CLIENTE dalla tessera.
+            // Il cliente non può inserire prodotti, quindi ogni volta che
+            // è presente un customer_id significa che l'operazione è di acquisto
+            // prodotto, quindi al cliente devono essere scalati i punti.
+            if (isset($args['storeArrayData']['customer_id'])) {
+
+                $customer = \App\Models\Customer::find($args['storeArrayData']['customer_id']);
+
+                $customer->points += $product->points * $args['storeArrayData']['products_count'] * (-1);
+
+                $customer->save();
+
+            }
+
+            // Modifico i dati PRODOTTO
+            if (isset($product->id)) {
+
+                // Inserimento movimento magazzino
+                $store = new \App\Models\Store();
+
+                $store->product_id = $args['storeArrayData']['id'];
+                $store->user_id = Auth::id();
+                $store->order_id = isset($args['storeArrayData']['order_id']) ? $args['storeArrayData']['order_id'] : null;
+                $store->customer_id = isset($args['storeArrayData']['customer_id']) ? $args['storeArrayData']['customer_id'] : null;
+                $store->cod = $product->cod;
+                $store->kg = isset($args['storeArrayData']['kg']) ? $args['storeArrayData']['kg'] : null;
+                $store->amount = $args['storeArrayData']['amount'];
+                $store->date = $args['storeArrayData']['date'];
+
+                $store->save();
+
+                // Modifica quantità totale prodotto
+                $product->type == 'fead no' ? $product->kg_total = null : $product->kg_total += $args['storeArrayData']['kg'];
+                $product->amount_total += $args['storeArrayData']['amount'];
+
+                $product->save();
+
+            }
+        }
+    }
 }

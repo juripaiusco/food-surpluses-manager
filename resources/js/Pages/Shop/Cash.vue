@@ -15,16 +15,15 @@ const props = defineProps({
 
 });
 
-/*const dataForm = Object.fromEntries(Object.entries(props.data).map((v) => {
-    return props.data ? v : '';
-}));*/
-
-const dataForm = {
+const form = useForm({
     s_customer: props.data ? props.data.s_customer : null,
     s_product: null,
-};
+});
 
-const form = useForm(dataForm);
+const formConfirm = useForm({
+    customer_id: props.data ? props.data.customer.id : null,
+    products: usePage().props.shopProducts
+});
 
 </script>
 
@@ -197,7 +196,14 @@ const form = useForm(dataForm);
                             </div>
                         </div>
 
-                        <button class="btn btn-success btn-lg w-full mt-6">Termina Ordine</button>
+                        <form @submit.prevent="formConfirm.post(route('shop.store'))">
+
+                            <button type="submit"
+                                    class="btn btn-success btn-lg w-full mt-6"
+                                    :disabled="btn_shopStore_disabled"
+                                    ref="submitShopStore" >Termina Ordine</button>
+
+                        </form>
 
                     </div>
                 </div>
@@ -220,18 +226,18 @@ export default {
                 points_customer: this.data.customer.points,
                 points_products: 0,
                 points_count: this.data.customer.points,
-            }
+            },
+            btn_shopStore_disabled: false
         }
     },
     methods: {
         routeTo(route, data) {
 
-            let dataForm = {
+            let form = useForm({
                 product: data,
                 s_customer: this.$props.data.s_customer
-            };
+            });
 
-            let form = useForm(dataForm);
             form.get(route);
 
         }
@@ -254,11 +260,23 @@ export default {
 
         let shopProducts = usePage().props.shopProducts;
 
-        shopProducts.forEach((d) => {
-            this.params.points_products += d.points;
-        });
+        // Calcolo dei punti cassa
+        if (shopProducts) {
 
-        this.params.points_count = this.params.points_customer - this.params.points_products;
+            shopProducts.forEach((d) => {
+                this.params.points_products += d.points;
+            });
+
+            this.params.points_count = this.params.points_customer - this.params.points_products;
+
+            // Verifico che il punteggio sia superiore a ZERO
+            if (this.params.points_count < 0) {
+
+                this.btn_shopStore_disabled = true;
+
+            }
+
+        }
 
     }
 }

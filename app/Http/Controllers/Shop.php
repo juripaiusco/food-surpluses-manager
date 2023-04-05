@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class Shop extends Controller
@@ -92,5 +93,100 @@ class Shop extends Controller
         return to_route('shop.index', [
             's_customer' => $request->input('s_customer')
         ]);
+    }
+
+    public function store(Request $request)
+    {
+        // Raggruppo i prodotti, così da scalare in una sola volta
+        // gli stessi prodotti
+        $array_group = array();
+
+        foreach ($request->input('products') as $product) {
+
+            if (!isset($array_group[$product['id']])) {
+                $array_group[$product['id']] = 0;
+            }
+
+            $array_group[$product['id']] += 1;
+
+        }
+
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+        // Creo un codice di riferimento random
+        $order_reference = strtoupper(\Illuminate\Support\Str::random(5));
+
+        // Imposto la data attuale dell'ordine
+        $oder_data = date('Y-m-d H:i:s');
+
+        // Recupero i dati del cliente
+        $customer_id = $request->input('customer_id');
+        $customer = \App\Models\Customer::find($customer_id);
+
+        // Recupero l'ID retail
+        $retail_id = current(array_keys(json_decode(Auth::user()->json_retails, true)));
+
+        // User ID
+        $user_id = Auth::user()->id;
+
+        // Inserimento ordine ------------------------------------------------------
+        $order = new Order();
+
+        $order_id = $order->store(array(
+            'data' => array(
+                'reference' => $order_reference,
+                'user_id' => $user_id,
+                'customer_id' => $customer_id,
+                'retail_id' => $retail_id,
+                'json_customer' => json_encode($customer),
+                'date' => $oder_data
+            )
+        ));
+
+        // Scarico i prodotti da magazzino -----------------------------------------
+        $points = 0;
+        $product_array = array();
+
+        foreach ($array_group as $product_id => $count) {
+
+            $product = \App\Models\Product::find($product_id);
+
+            if (isset($product->id)) {
+
+                $store = new Store();
+                $store->setStore(array(
+                    'storeArrayData' => array(
+                        'id' => $product_id,
+                        'order_reference' => $order_reference,
+                        'order_id' => $order_id,
+                        'customer_id' => $customer_id,
+                        'kg' => isset($product->kg) ? $product->kg * $count * (-1) : null,
+                        'amount' => $product->amount * $count * (-1),
+                        'products_count' => $count,
+                        'date' => $oder_data,
+                    )
+                ));
+
+                $points += $count * $product->points;
+
+                for ($i = 0; $i < $count; $i++) {
+                    $product_array[] = $product;
+                }
+
+            }
+
+        }
+
+        // Modifica ordine appena creato, per aggiungere i dati mancanti -----------------------
+        $order = new Order();
+        $order->store(array(
+            'id' => $order_id,
+            'data' => array(
+                'points' => $points,
+                'json_products' => json_encode($product_array)
+            )
+        ));
+        
+        return Inertia::location(to_route('shop.index')->getTargetUrl());
     }
 }

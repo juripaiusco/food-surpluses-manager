@@ -103,16 +103,27 @@ class Order extends Controller
 
     /**
      * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store($args = array())
     {
-        /*$order = new \App\Models\Order();
+        if (isset($args['id'])) {
 
-        $order->fill($request->all());
+            $order_id = $args['id'];
 
-        $order->save();
+            DB::table('orders')
+                ->where('id', $args['id'])
+                ->update($args['data']);
 
-        return to_route('orders.list');*/
+        } else {
+
+            $order_id = DB::table('orders')
+                ->insertGetId($args['data']);
+        }
+
+        return $order_id;
     }
 
     /**
