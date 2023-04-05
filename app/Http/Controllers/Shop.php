@@ -12,6 +12,12 @@ class Shop extends Controller
         $this->middleware('auth');
     }
 
+    /**
+     * Mostra la cassa
+     *
+     * @param Request $request
+     * @return \Inertia\Response
+     */
     public function index(Request $request)
     {
         // Ricerco il cliente
@@ -54,6 +60,13 @@ class Shop extends Controller
         ]);
     }
 
+    /**
+     * Rimuove i prodotti dal carrello della cassa
+     * 
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function remove(Request $request, $id)
     {
         // Recupero Sessione Dati
