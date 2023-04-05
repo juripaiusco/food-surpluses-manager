@@ -186,7 +186,7 @@ class Shop extends Controller
                 'json_products' => json_encode($product_array)
             )
         ));
-        
+
         return Inertia::location(to_route('shop.index')->getTargetUrl());
     }
 }
