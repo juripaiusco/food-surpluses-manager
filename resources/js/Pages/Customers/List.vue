@@ -69,7 +69,7 @@ defineProps({
                         }, {
                             class: 'text-left w-[20%]',
                             label: 'Assistito',
-                            field: 'name',
+                            field: 'customer_name',
                         }, {
                             class: 'text-left',
                             label: 'Indirizzo',

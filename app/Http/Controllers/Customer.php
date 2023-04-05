@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Inertia\Inertia;
 
@@ -21,6 +22,7 @@ class Customer extends Controller
         $request_validate_array = [
             'cod',
             'number',
+            'customer_name',
             'name',
             'surname',
             'address',
@@ -42,7 +44,9 @@ class Customer extends Controller
             $data->where(function ($q) use ($request_validate_array) {
 
                 foreach ($request_validate_array as $field) {
-                    $q->orWhere($field, 'like', '%' . request('s') . '%');
+                    if ($field != 'customer_name') {
+                        $q->orWhere($field, 'like', '%' . request('s') . '%');
+                    }
                 }
 
             });
@@ -54,6 +58,9 @@ class Customer extends Controller
         }
 
         $data = $data->select();
+        $data = $data->addSelect(DB::raw('
+            CONCAT(surname, \' \', name) AS customer_name
+        '));
         $data = $data->paginate(env('VIEWS_PAGINATE'))->withQueryString();
 
         return Inertia::render('Customers/List', [
