@@ -120,7 +120,9 @@ const form = useForm(dataForm);
                     </div>
                     <div class="col">
 
-                        Cod. Cliente <span class="text-2xl font-semibold">{{ data.customer.cod }}</span>
+                        <div class="text-right">
+                            Cod. Cliente: <span class="text-2xl font-semibold">{{ data.customer.cod }}</span>
+                        </div>
 
                         <div class="alert alert-success mt-4">
 
