@@ -1,6 +1,6 @@
 <script setup>
 
-import {Head} from "@inertiajs/vue3";
+import {Head, usePage} from "@inertiajs/vue3";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import ApplicationHeader from "@/Components/ApplicationHeader.vue";
 import ApplicationContainer from "@/Components/ApplicationContainer.vue";
@@ -20,7 +20,7 @@ const props = defineProps({
 
 const dataForm = {
     s_customer: props.data ? props.data.s_customer : null,
-    s_product: props.data ? props.data.s_product : null,
+    s_product: null,
 };
 
 const form = useForm(dataForm);
@@ -66,19 +66,20 @@ const form = useForm(dataForm);
 
                             <input class="form-control form-control-lg"
                                    type="text"
-                                   placeholder="Inserisci codice assistito"
+                                   placeholder="Inserisci codice prodotto"
                                    ref="s_product"
                                    name="s_product"
                                    v-model="form.s_product"
                                    @input="form.get(route('shop.index'))" />
 
-                            <div class="alert alert-success mt-4">
+                            <div v-if="usePage().props.shopProducts"
+                                 class="alert alert-success mt-4">
 
                                 <Table class="table-striped text-sm"
                                        :data="{
                                             filters: '',
                                             routeSearch: '',
-                                            data: [data.product],
+                                            data: usePage().props.shopProducts.slice().reverse(),
                                             structure: [{
                                                 class: 'text-left',
                                                 label: 'Codice',

@@ -14,19 +14,31 @@ class Shop extends Controller
 
     public function index(Request $request)
     {
+        // Ricerco il cliente
         if ($request->input('s_customer')) {
 
             $customer = \App\Models\Customer::where('cod', $request->input('s_customer'))
                 ->first();
 
+        } else {
+
+            // Elimino la sessione quando inizio la cassa
+            $request->session()->forget('shopProducts');
         }
 
+        // Ricerco il prodotto
         if ($request->input('s_product')) {
 
             $product = \App\Models\Product::where('cod', $request->input('s_product'))
                 ->first();
 
+            if (isset($product->id)) {
+                $request->session()->push('shopProducts', $product);
+            }
         }
+
+        // Salvo la sessione prodotti tramite inertia
+        Inertia::share('shopProducts', $request->session()->get('shopProducts'));
 
         return Inertia::render('Shop/Cash', [
             'data' => [
