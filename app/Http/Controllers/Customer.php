@@ -99,6 +99,16 @@ class Customer extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'number'        => ['required', 'unique:customers'],
+            'cod'           => ['required', 'unique:customers', 'min:8'],
+            'name'          => ['required'],
+            'surname'       => ['required'],
+            'family_number' => ['required'],
+            'points'        => ['required'],
+            'points_renew'  => ['required'],
+        ]);
+
         $customer = new \App\Models\Customer();
 
         $customer->fill($request->all());
@@ -134,6 +144,16 @@ class Customer extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $request->validate([
+            'number'        => ['required', 'unique:customers,number,' . $id],
+            'cod'           => ['required', 'unique:customers,cod,' . $id, 'min:8'],
+            'name'          => ['required'],
+            'surname'       => ['required'],
+            'family_number' => ['required'],
+            'points'        => ['required'],
+            'points_renew'  => ['required'],
+        ]);
+
         $customer = \App\Models\Customer::find($id);
 
         $customer->cod = $request->input('cod');

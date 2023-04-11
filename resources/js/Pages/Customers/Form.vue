@@ -7,6 +7,7 @@ import ApplicationContainer from "@/Components/ApplicationContainer.vue";
 import {Link} from "@inertiajs/vue3";
 import {useForm} from "@inertiajs/vue3";
 import Table from "@/Components/Table/Table.vue";
+import {__} from "@/extComponents/Translations";
 
 const props = defineProps({
 
@@ -51,6 +52,8 @@ const form = useForm(dataForm);
                                type="text"
                                class="form-control mb-4"
                                v-model="form.name" />
+                        <div class="text-red-500"
+                             v-if="form.errors.name">{{ __(form.errors.name) }}</div>
 
                     </div>
                     <div class="col">
@@ -60,6 +63,8 @@ const form = useForm(dataForm);
                                type="text"
                                class="form-control mb-4"
                                v-model="form.surname" />
+                        <div class="text-red-500"
+                             v-if="form.errors.surname">{{ __(form.errors.surname) }}</div>
 
                     </div>
                 </div>
@@ -81,6 +86,8 @@ const form = useForm(dataForm);
                                type="text"
                                class="form-control mb-4"
                                v-model="form.family_number" />
+                        <div class="text-red-500"
+                             v-if="form.errors.family_number">{{ __(form.errors.family_number) }}</div>
 
                     </div>
                 </div>
@@ -93,6 +100,8 @@ const form = useForm(dataForm);
                                type="text"
                                class="form-control mb-4"
                                v-model="form.number" />
+                        <div class="text-red-500"
+                             v-if="form.errors.number">{{ __(form.errors.number) }}</div>
 
                     </div>
                     <div class="col">
@@ -102,6 +111,8 @@ const form = useForm(dataForm);
                                type="text"
                                class="form-control mb-4 !border-gray-500"
                                v-model="form.cod" />
+                        <div class="text-red-500"
+                             v-if="form.errors.cod">{{ __('customers.cod.' + form.errors.cod) }}</div>
 
                     </div>
                     <div class="col">
@@ -111,6 +122,8 @@ const form = useForm(dataForm);
                                type="text"
                                class="form-control mb-4 !border-green-500"
                                v-model="form.points_renew" />
+                        <div class="text-red-500"
+                             v-if="form.errors.points_renew">{{ __(form.errors.points_renew) }}</div>
 
                     </div>
                     <div class="col">
@@ -120,6 +133,8 @@ const form = useForm(dataForm);
                                type="text"
                                class="form-control mb-4 !border-sky-500"
                                v-model="form.points" />
+                        <div class="text-red-500"
+                             v-if="form.errors.points">{{ __(form.errors.points) }}</div>
 
                     </div>
                 </div>
