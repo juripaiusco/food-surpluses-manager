@@ -97,7 +97,6 @@ class Product extends Controller
             'type'      => ['required'],
             'name'      => ['required'],
             'points'    => ['required'],
-            'kg'        => ['required'],
             'amount'    => ['required'],
         ]);
 
@@ -146,6 +145,14 @@ class Product extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $request->validate([
+            'cod'       => ['required', 'unique:products,cod,' . $id, 'min:7'],
+            'type'      => ['required'],
+            'name'      => ['required'],
+            'points'    => ['required'],
+            'amount'    => ['required'],
+        ]);
+
         $product = \App\Models\Product::find($id);
 
         $product->cod = $request->input('cod');
