@@ -177,6 +177,11 @@ const formConfirm = useForm({
 
                         </div>
 
+                        <div v-if="data.customer.note_alert"
+                             class="alert alert-danger whitespace-break-spaces">
+                            {{ data.customer.note_alert }}
+                        </div>
+
                         <div class="row pt-2 pb-2">
                             <div class="col">Punti cliente</div>
                             <div class="col text-right">
