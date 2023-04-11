@@ -7,6 +7,7 @@ import ApplicationContainer from "@/Components/ApplicationContainer.vue";
 import {Link} from "@inertiajs/vue3";
 import {useForm} from "@inertiajs/vue3";
 import Table from "@/Components/Table/Table.vue";
+import {__} from "../../extComponents/Translations";
 
 const props = defineProps({
 
@@ -55,6 +56,8 @@ const form = useForm(dataForm);
                                        type="text"
                                        class="form-control"
                                        v-model="form.cod" />
+                                <div class="text-red-500"
+                                     v-if="form.errors.cod">{{ __('products.cod.' + form.errors.cod) }}</div>
 
                             </div>
                             <div class="col">
@@ -66,6 +69,8 @@ const form = useForm(dataForm);
                                     <option value="fead">Fead</option>
                                     <option value="fead no">Fead NO</option>
                                 </select>
+                                <div class="text-red-500"
+                                     v-if="form.errors.type">{{ __(form.errors.type) }}</div>
 
                             </div>
                         </div>
@@ -79,6 +84,8 @@ const form = useForm(dataForm);
                                        type="text"
                                        class="form-control"
                                        v-model="form.name" />
+                                <div class="text-red-500"
+                                     v-if="form.errors.name">{{ __(form.errors.name) }}</div>
 
                             </div>
                             <div class="col text-center">
@@ -89,6 +96,8 @@ const form = useForm(dataForm);
                                        type="text"
                                        class="form-control text-center"
                                        v-model="form.points" />
+                                <div class="text-red-500"
+                                     v-if="form.errors.points">{{ __(form.errors.points) }}</div>
 
                             </div>
                         </div>
@@ -129,6 +138,8 @@ const form = useForm(dataForm);
                                            placeholder="es. 0.5"
                                            v-model="form.kg" />
                                 </div>
+                                <div class="text-red-500"
+                                     v-if="form.errors.kg">{{ __(form.errors.kg) }}</div>
 
                             </div>
                             <div class="col">
@@ -142,6 +153,8 @@ const form = useForm(dataForm);
                                            placeholder="es. 2"
                                            v-model="form.amount" />
                                 </div>
+                                <div class="text-red-500"
+                                     v-if="form.errors.amount">{{ __(form.errors.amount) }}</div>
 
                             </div>
                             <div class="col-12 text-center text-xs pt-4">

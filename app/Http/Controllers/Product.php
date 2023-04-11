@@ -92,6 +92,15 @@ class Product extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'cod'       => ['required', 'unique:products', 'min:7'],
+            'type'      => ['required'],
+            'name'      => ['required'],
+            'points'    => ['required'],
+            'kg'        => ['required'],
+            'amount'    => ['required'],
+        ]);
+
         $product = new \App\Models\Product();
 
         $product->cod = $request->input('cod');
