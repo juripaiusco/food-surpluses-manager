@@ -182,4 +182,15 @@ class Customer extends Controller
 
         return to_route('customers.index');
     }
+
+    public function active(Request $request, string $id)
+    {
+        $customer = \App\Models\Customer::find($id);
+
+        $customer->active = $customer->active == 1 ? 0 : 1;
+
+        $customer->save();
+
+        return to_route('customers.index', $request->all());
+    }
 }

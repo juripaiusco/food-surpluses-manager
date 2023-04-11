@@ -59,6 +59,26 @@ defineProps({
                         routeSearch: 'customers.index',
                         data: data.data,
                         structure: [{
+                            class: 'w-[1%]',
+                            btnCustom: true,
+                            route: 'customers.active',
+                            icon: '<svg class=\'w-6 h-6\' xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 24 24\' stroke-width=\'1.5\' stroke=\'currentColor\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' d=\'M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z\' /></svg>'
+                        }, {
+                            class: 'text-center w-[100px]',
+                            classData: 'text-[11px]',
+                            label: '',
+                            field: 'active',
+                            fnc: function (d) {
+
+                                let html = '';
+
+                                html += '<div>';
+                                html += '<a class=\'!text-[10px] btn btn-outline-primary\' href=\'#\'>Attiva</a>';
+                                html += '</div>';
+
+                                return html;
+                            }
+                        }, {
                             class: 'text-center w-[5%]',
                             label: 'n.A.',
                             field: 'number',

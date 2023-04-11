@@ -69,6 +69,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/customers/edit/{id}', [Customer::class, 'edit'])->name('customers.edit');
     Route::post('/customers/update/{id}', [Customer::class, 'update'])->name('customers.update');
     Route::get('/customers/destroy/{id}', [Customer::class, 'destroy'])->name('customers.destroy');
+    Route::get('/customers/active/{id}', [Customer::class, 'active'])->name('customers.active');
 
     Route::get('/retails', [Retail::class, 'index'])->name('retails.index');
     Route::get('/retails/create', [Retail::class, 'create'])->name('retails.create');
