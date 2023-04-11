@@ -47,17 +47,6 @@ const form = useForm(dataForm);
                 <div class="row">
                     <div class="col">
 
-                        <label for="name" class="form-label">Nome</label>
-                        <input name="name"
-                               type="text"
-                               class="form-control mb-4"
-                               v-model="form.name" />
-                        <div class="text-red-500"
-                             v-if="form.errors.name">{{ __(form.errors.name) }}</div>
-
-                    </div>
-                    <div class="col">
-
                         <label for="surname" class="form-label">Cognome</label>
                         <input name="surname"
                                type="text"
@@ -67,16 +56,36 @@ const form = useForm(dataForm);
                              v-if="form.errors.surname">{{ __(form.errors.surname) }}</div>
 
                     </div>
+                    <div class="col">
+
+                        <label for="name" class="form-label">Nome</label>
+                        <input name="name"
+                               type="text"
+                               class="form-control mb-4"
+                               v-model="form.name" />
+                        <div class="text-red-500"
+                             v-if="form.errors.name">{{ __(form.errors.name) }}</div>
+
+                    </div>
                 </div>
 
                 <div class="row">
-                    <div class="col-8">
+                    <div class="col-6">
 
                         <label for="address" class="form-label">Indirizzo</label>
                         <input name="address"
                                type="text"
                                class="form-control mb-4"
                                v-model="form.address" />
+
+                    </div>
+                    <div class="col-3">
+
+                        <label for="phone" class="form-label">Telefono</label>
+                        <input name="phone"
+                               type="tel"
+                               class="form-control mb-4"
+                               v-model="form.phone" />
 
                     </div>
                     <div class="col">

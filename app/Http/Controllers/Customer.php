@@ -164,6 +164,7 @@ class Customer extends Controller
         $customer->family_number = $request->input('family_number');
         $customer->points = $request->input('points');
         $customer->points_renew = $request->input('points_renew');
+        $customer->phone = $request->input('phone');
 
         $customer->save();
 
