@@ -38,112 +38,192 @@ const form = useForm(dataForm);
         <ApplicationContainer>
 
             <h2 class="text-3xl mb-2">Dati Assistito</h2>
+            <br>
 
             <form @submit.prevent="form.post(route(
                 form.id ? 'customers.update' : 'customers.store',
                 form.id ? form.id : ''
                 ))">
 
-                <div class="row">
-                    <div class="col">
+                <ul class="nav nav-tabs" id="customerTab" role="tablist">
+                    <li class="nav-item" role="presentation">
 
-                        <label for="surname" class="form-label">Cognome</label>
-                        <input name="surname"
-                               type="text"
-                               class="form-control mb-4"
-                               v-model="form.surname" />
-                        <div class="text-red-500"
-                             v-if="form.errors.surname">{{ __(form.errors.surname) }}</div>
+                        <button class="nav-link active w-[120px]"
+                                id="home-tab"
+                                data-bs-toggle="tab"
+                                data-bs-target="#anagrafica"
+                                type="button"
+                                role="tab"
+                                aria-controls="anagrafica"
+                                aria-selected="true" >
+                            Anagrafica
+                        </button>
+
+                    </li>
+                    <li class="nav-item" role="presentation">
+
+                        <button class="nav-link w-[120px]"
+                                id="profile-tab"
+                                data-bs-toggle="tab"
+                                data-bs-target="#note"
+                                type="button"
+                                role="tab"
+                                aria-controls="note"
+                                aria-selected="false">
+                            Note
+                        </button>
+
+                    </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active p-4"
+                         id="anagrafica"
+                         role="tabpanel"
+                         aria-labelledby="home-tab">
+
+                        <!-- ANAGRAFICA -->
+                        <div class="row">
+                            <div class="col">
+
+                                <label for="surname" class="form-label">Cognome</label>
+                                <input name="surname"
+                                       type="text"
+                                       class="form-control mb-4"
+                                       v-model="form.surname" />
+                                <div class="text-red-500"
+                                     v-if="form.errors.surname">{{ __(form.errors.surname) }}</div>
+
+                            </div>
+                            <div class="col">
+
+                                <label for="name" class="form-label">Nome</label>
+                                <input name="name"
+                                       type="text"
+                                       class="form-control mb-4"
+                                       v-model="form.name" />
+                                <div class="text-red-500"
+                                     v-if="form.errors.name">{{ __(form.errors.name) }}</div>
+
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-6">
+
+                                <label for="address" class="form-label">Indirizzo</label>
+                                <input name="address"
+                                       type="text"
+                                       class="form-control mb-4"
+                                       v-model="form.address" />
+
+                            </div>
+                            <div class="col-3">
+
+                                <label for="phone" class="form-label">Telefono</label>
+                                <input name="phone"
+                                       type="tel"
+                                       class="form-control mb-4"
+                                       v-model="form.phone" />
+
+                            </div>
+                            <div class="col">
+
+                                <label for="family_number" class="form-label">Componenti famiglia</label>
+                                <input name="family_number"
+                                       type="text"
+                                       class="form-control mb-4"
+                                       v-model="form.family_number" />
+                                <div class="text-red-500"
+                                     v-if="form.errors.family_number">{{ __(form.errors.family_number) }}</div>
+
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col">
+
+                                <label for="number" class="form-label">n. Assistito</label>
+                                <input name="number"
+                                       type="text"
+                                       class="form-control mb-4"
+                                       v-model="form.number" />
+                                <div class="text-red-500"
+                                     v-if="form.errors.number">{{ __(form.errors.number) }}</div>
+
+                            </div>
+                            <div class="col">
+
+                                <label for="cod" class="form-label">n. Tessera</label>
+                                <input name="cod"
+                                       type="text"
+                                       class="form-control mb-4 !border-gray-500"
+                                       v-model="form.cod" />
+                                <div class="text-red-500"
+                                     v-if="form.errors.cod">{{ __('customers.cod.' + form.errors.cod) }}</div>
+
+                            </div>
+                            <div class="col">
+
+                                <label for="points_renew" class="form-label">Punti da rinnovare a fine mese</label>
+                                <input name="points_renew"
+                                       type="text"
+                                       class="form-control mb-4 !border-green-500"
+                                       v-model="form.points_renew" />
+                                <div class="text-red-500"
+                                     v-if="form.errors.points_renew">{{ __(form.errors.points_renew) }}</div>
+
+                            </div>
+                            <div class="col">
+
+                                <label for="points" class="form-label">Punti rimanenti per questo mese</label>
+                                <input name="points"
+                                       type="text"
+                                       class="form-control mb-4 !border-sky-500"
+                                       v-model="form.points" />
+                                <div class="text-red-500"
+                                     v-if="form.errors.points">{{ __(form.errors.points) }}</div>
+
+                            </div>
+                        </div>
+
+                        <!-- END - ANAGRAFICA -->
 
                     </div>
-                    <div class="col">
+                    <div class="tab-pane fade p-4"
+                         id="note"
+                         role="tabpanel"
+                         aria-labelledby="profile-tab">
 
-                        <label for="name" class="form-label">Nome</label>
-                        <input name="name"
-                               type="text"
-                               class="form-control mb-4"
-                               v-model="form.name" />
-                        <div class="text-red-500"
-                             v-if="form.errors.name">{{ __(form.errors.name) }}</div>
+                        <!-- NOTE -->
 
-                    </div>
-                </div>
+                        <div class="row">
+                            <div class="col">
 
-                <div class="row">
-                    <div class="col-6">
+                                <label for="note" class="form-label">Note</label>
+                                <textarea id="note"
+                                          name="note"
+                                          class="form-control mb-4 h-[194px]"
+                                          v-model="form.note"></textarea>
 
-                        <label for="address" class="form-label">Indirizzo</label>
-                        <input name="address"
-                               type="text"
-                               class="form-control mb-4"
-                               v-model="form.address" />
+                            </div>
+                            <div class="col">
 
-                    </div>
-                    <div class="col-3">
+                                <label for="note_alert"
+                                       class="form-label text-red-500">
+                                    Note Avviso
+                                    <span class="text-xs">
+                                        (note di avviso cassa)
+                                    </span>
+                                </label>
+                                <textarea id="note_alert"
+                                          name="note_alert"
+                                          class="form-control mb-4 h-[194px] border !border-red-500 !text-red-500"
+                                          v-model="form.note_alert"></textarea>
 
-                        <label for="phone" class="form-label">Telefono</label>
-                        <input name="phone"
-                               type="tel"
-                               class="form-control mb-4"
-                               v-model="form.phone" />
+                            </div>
+                        </div>
 
-                    </div>
-                    <div class="col">
-
-                        <label for="family_number" class="form-label">Componenti famiglia</label>
-                        <input name="family_number"
-                               type="text"
-                               class="form-control mb-4"
-                               v-model="form.family_number" />
-                        <div class="text-red-500"
-                             v-if="form.errors.family_number">{{ __(form.errors.family_number) }}</div>
-
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col">
-
-                        <label for="number" class="form-label">n. Assistito</label>
-                        <input name="number"
-                               type="text"
-                               class="form-control mb-4"
-                               v-model="form.number" />
-                        <div class="text-red-500"
-                             v-if="form.errors.number">{{ __(form.errors.number) }}</div>
-
-                    </div>
-                    <div class="col">
-
-                        <label for="cod" class="form-label">n. Tessera</label>
-                        <input name="cod"
-                               type="text"
-                               class="form-control mb-4 !border-gray-500"
-                               v-model="form.cod" />
-                        <div class="text-red-500"
-                             v-if="form.errors.cod">{{ __('customers.cod.' + form.errors.cod) }}</div>
-
-                    </div>
-                    <div class="col">
-
-                        <label for="points_renew" class="form-label">Punti da rinnovare a fine mese</label>
-                        <input name="points_renew"
-                               type="text"
-                               class="form-control mb-4 !border-green-500"
-                               v-model="form.points_renew" />
-                        <div class="text-red-500"
-                             v-if="form.errors.points_renew">{{ __(form.errors.points_renew) }}</div>
-
-                    </div>
-                    <div class="col">
-
-                        <label for="points" class="form-label">Punti rimanenti per questo mese</label>
-                        <input name="points"
-                               type="text"
-                               class="form-control mb-4 !border-sky-500"
-                               v-model="form.points" />
-                        <div class="text-red-500"
-                             v-if="form.errors.points">{{ __(form.errors.points) }}</div>
+                        <!-- END - NOTE -->
 
                     </div>
                 </div>

@@ -165,6 +165,8 @@ class Customer extends Controller
         $customer->points = $request->input('points');
         $customer->points_renew = $request->input('points_renew');
         $customer->phone = $request->input('phone');
+        $customer->note = $request->input('note');
+        $customer->note_alert = $request->input('note_alert');
 
         $customer->save();
 
