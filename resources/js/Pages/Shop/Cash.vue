@@ -41,7 +41,7 @@ const formConfirm = useForm({
 
         <ApplicationContainer>
 
-            <form v-if="!data.customer.id">
+            <form v-if="!data.customer.id || data.customer.active === 0">
 
                 <div class="w-1/2 m-auto">
 
@@ -53,11 +53,28 @@ const formConfirm = useForm({
                            v-model="form.s_customer"
                            @input="form.get(route('shop.index'))" />
 
+                    <div v-if="form.s_customer"
+                         class="mt-8 text-center text-red-500">
+
+                        <div v-if="form.s_customer && data.customer.active !== 0"
+                             class="alert alert-danger">
+                            Assistito non trovato
+                        </div>
+
+                        <div v-if="form.s_customer && data.customer.active === 0"
+                             class="alert alert-danger">
+                            <span class="font-semibold">Assistito NON ATTIVO</span>
+                            <br>
+                            L'assistito deve passare in accettazione ed essere attivato
+                        </div>
+
+                    </div>
+
                 </div>
 
             </form>
 
-            <div v-if="data.customer.id">
+            <div v-if="data.customer.id && data.customer.active === 1">
 
                 <div class="row">
                     <div class="col-8">
@@ -249,11 +266,13 @@ export default {
     },
     mounted() {
 
-        if (this.data.s_customer === null || (this.data.s_customer && !this.data.customer.id)) {
+        if (this.data.s_customer === null ||
+            (this.data.s_customer && !this.data.customer.id) ||
+            (this.data.s_customer && this.data.customer.active === 0)) {
             this.$refs.s_customer.focus();
         }
 
-        if (this.data.customer.id) {
+        if (this.data.customer.id && this.data.customer.active === 1) {
             this.$refs.s_product.focus();
         }
 
