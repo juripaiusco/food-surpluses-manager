@@ -35,17 +35,20 @@ defineProps({
                         {{ show(d, struct) }}
                     </template>
 
-                    <div v-if="typeof struct.fnc === 'function'" v-html="show(d, struct)" />
+                    <div v-if="struct.btnCustom !== true && typeof struct.fnc === 'function'" v-html="show(d, struct)" />
 
                     <!-- Button Custom -->
                     <template v-if="struct.btnCustom === true">
 
                         <Link class="btn btn-sm"
-                              :class="{'btn-success': d.active === 1}"
                               :href="route(struct.route, d.id)"
                               :data="data.filters">
 
-                            <div v-html="struct.icon" />
+                            <template v-if="typeof struct.fnc !== 'function'">
+                                {{ show(d, struct) }}
+                            </template>
+                            
+                            <div v-if="typeof struct.fnc === 'function'" v-html="show(d, struct)" />
 
                         </Link>
 
