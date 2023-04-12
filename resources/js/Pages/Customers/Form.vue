@@ -105,28 +105,7 @@ const form = useForm(dataForm);
                                      v-if="form.errors.name">{{ __(form.errors.name) }}</div>
 
                             </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-6">
-
-                                <label for="address" class="form-label">Indirizzo</label>
-                                <input name="address"
-                                       type="text"
-                                       class="form-control mb-4"
-                                       v-model="form.address" />
-
-                            </div>
-                            <div class="col-3">
-
-                                <label for="phone" class="form-label">Telefono</label>
-                                <input name="phone"
-                                       type="tel"
-                                       class="form-control mb-4"
-                                       v-model="form.phone" />
-
-                            </div>
-                            <div class="col">
+                            <div class="col-2">
 
                                 <label for="family_number" class="form-label">Componenti famiglia</label>
                                 <input name="family_number"
@@ -135,6 +114,45 @@ const form = useForm(dataForm);
                                        v-model="form.family_number" />
                                 <div class="text-red-500"
                                      v-if="form.errors.family_number">{{ __(form.errors.family_number) }}</div>
+
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-7">
+
+                                <label for="address" class="form-label">Indirizzo</label>
+                                <input name="address"
+                                       type="text"
+                                       class="form-control mb-4"
+                                       v-model="form.address" />
+
+                            </div>
+                            <div class="col-2">
+
+                                <label for="city" class="form-label">Città</label>
+                                <input name="city"
+                                       type="text"
+                                       class="form-control mb-4"
+                                       v-model="form.city" />
+
+                            </div>
+                            <div class="col-1">
+
+                                <label for="provincia" class="form-label">Provincia</label>
+                                <input name="provincia"
+                                       type="text"
+                                       class="form-control mb-4"
+                                       v-model="form.provincia" />
+
+                            </div>
+                            <div class="col-2">
+
+                                <label for="phone" class="form-label">Telefono</label>
+                                <input name="phone"
+                                       type="tel"
+                                       class="form-control mb-4"
+                                       v-model="form.phone" />
 
                             </div>
                         </div>
