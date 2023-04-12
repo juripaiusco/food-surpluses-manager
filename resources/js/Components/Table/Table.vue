@@ -47,7 +47,7 @@ defineProps({
                             <template v-if="typeof struct.fnc !== 'function'">
                                 {{ show(d, struct) }}
                             </template>
-                            
+
                             <div v-if="typeof struct.fnc === 'function'" v-html="show(d, struct)" />
 
                         </Link>

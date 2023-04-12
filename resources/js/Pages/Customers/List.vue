@@ -75,22 +75,7 @@ defineProps({
 
                                 return html;
                             }
-                        }/*, {
-                            class: 'text-center w-[100px]',
-                            classData: 'text-[11px]',
-                            label: '',
-                            field: 'active',
-                            fnc: function (d) {
-
-                                let html = '';
-
-                                html += '<div>';
-                                html += '<a class=\'!text-[10px] btn btn-outline-primary\' href=\'#\'>Attiva</a>';
-                                html += '</div>';
-
-                                return html;
-                            }
-                        }*/, {
+                        }, {
                             class: 'text-center w-[5%]',
                             label: 'n.A.',
                             field: 'number',
