@@ -154,19 +154,13 @@ class Customer extends Controller
             'points_renew'  => ['required'],
         ]);
 
+        unset($request['order']);
+        unset($request['created_at']);
+        unset($request['updated_at']);
+
         $customer = \App\Models\Customer::find($id);
 
-        $customer->cod = $request->input('cod');
-        $customer->number = $request->input('number');
-        $customer->name = $request->input('name');
-        $customer->surname = $request->input('surname');
-        $customer->address = $request->input('address');
-        $customer->family_number = $request->input('family_number');
-        $customer->points = $request->input('points');
-        $customer->points_renew = $request->input('points_renew');
-        $customer->phone = $request->input('phone');
-        $customer->note = $request->input('note');
-        $customer->note_alert = $request->input('note_alert');
+        $customer->fill($request->all());
 
         $customer->save();
 

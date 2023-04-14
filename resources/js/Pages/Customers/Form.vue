@@ -48,13 +48,13 @@ const form = useForm(dataForm);
                 <ul class="nav nav-tabs" id="customerTab" role="tablist">
                     <li class="nav-item" role="presentation">
 
-                        <button class="nav-link active w-[120px]"
-                                id="home-tab"
+                        <button class="nav-link active w-[140px]"
+                                id="anagrafica-tab"
                                 data-bs-toggle="tab"
                                 data-bs-target="#anagrafica"
                                 type="button"
                                 role="tab"
-                                aria-controls="anagrafica"
+                                aria-controls="anagrafica-tab"
                                 aria-selected="true" >
                             Anagrafica
                         </button>
@@ -62,24 +62,38 @@ const form = useForm(dataForm);
                     </li>
                     <li class="nav-item" role="presentation">
 
-                        <button class="nav-link w-[120px]"
-                                id="profile-tab"
+                        <button class="nav-link w-[140px]"
+                                id="note-tab"
                                 data-bs-toggle="tab"
                                 data-bs-target="#note"
                                 type="button"
                                 role="tab"
-                                aria-controls="note"
+                                aria-controls="note-tab"
                                 aria-selected="false">
                             Note
                         </button>
 
                     </li>
+                    <li class="nav-item" role="presentation">
+
+                        <button class="nav-link w-[140px]"
+                                id="more-tab"
+                                data-bs-toggle="tab"
+                                data-bs-target="#more"
+                                type="button"
+                                role="tab"
+                                aria-controls="more-tab"
+                                aria-selected="false">
+                            Dati aggiuntivi
+                        </button>
+
+                    </li>
                 </ul>
-                <div class="tab-content" id="myTabContent">
+                <div class="tab-content">
                     <div class="tab-pane fade show active p-4"
                          id="anagrafica"
                          role="tabpanel"
-                         aria-labelledby="home-tab">
+                         aria-labelledby="anagrafica">
 
                         <!-- ANAGRAFICA -->
                         <div class="row">
@@ -210,7 +224,7 @@ const form = useForm(dataForm);
                     <div class="tab-pane fade p-4"
                          id="note"
                          role="tabpanel"
-                         aria-labelledby="profile-tab">
+                         aria-labelledby="note">
 
                         <!-- NOTE -->
 
@@ -242,6 +256,136 @@ const form = useForm(dataForm);
                         </div>
 
                         <!-- END - NOTE -->
+
+                    </div>
+                    <div class="tab-pane fade p-4"
+                         id="more"
+                         role="tabpanel"
+                         aria-labelledby="more">
+
+                        <!-- MORE -->
+
+                        <div class="row">
+                            <div class="col">
+
+                                <label for="name_delegato" class="form-label">Nome del Delegato</label>
+                                <input name="name_delegato"
+                                       type="text"
+                                       class="form-control mb-4"
+                                       v-model="form.name_delegato" />
+                                <div class="text-red-500"
+                                     v-if="form.errors.name_delegato">{{ __(form.errors.name_delegato) }}</div>
+
+                                <label for="c_group" class="form-label">Gruppo</label>
+                                <input name="c_group"
+                                       type="text"
+                                       class="form-control mb-4"
+                                       v-model="form.c_group" />
+                                <div class="text-red-500"
+                                     v-if="form.errors.c_group">{{ __(form.errors.c_group) }}</div>
+
+                                <label for="channel" class="form-label">Tipo canale</label>
+                                <input name="channel"
+                                       type="text"
+                                       class="form-control mb-4"
+                                       v-model="form.channel" />
+                                <div class="text-red-500"
+                                     v-if="form.errors.channel">{{ __(form.errors.channel) }}</div>
+
+                            </div>
+                            <div class="col">
+
+                                <label for="char1" class="form-label">Campo 1</label>
+                                <input name="char1"
+                                       type="text"
+                                       class="form-control mb-4"
+                                       v-model="form.char1" />
+                                <div class="text-red-500"
+                                     v-if="form.errors.char1">{{ __(form.errors.char1) }}</div>
+
+                                <label for="char2" class="form-label">Campo 2</label>
+                                <input name="char2"
+                                       type="text"
+                                       class="form-control mb-4"
+                                       v-model="form.char2" />
+                                <div class="text-red-500"
+                                     v-if="form.errors.char2">{{ __(form.errors.char2) }}</div>
+
+                                <label for="char3" class="form-label">Campo 3</label>
+                                <input name="char3"
+                                       type="text"
+                                       class="form-control mb-4"
+                                       v-model="form.char3" />
+                                <div class="text-red-500"
+                                     v-if="form.errors.char3">{{ __(form.errors.char3) }}</div>
+
+                            </div>
+                            <div class="col">
+
+                                <div class="alert alert-secondary !bg-gray-100 !pt-[18px]">
+
+                                    <div class="row">
+                                        <div class="col">
+
+                                            <div class="form-check">
+                                                <input class="form-check-input"
+                                                       type="checkbox"
+                                                       v-model="form.b1"
+                                                       true-value="1"
+                                                       false-value="0"
+                                                       name="b1"
+                                                       id="b1">
+                                                <label class="form-check-label" for="b1">B1</label>
+                                            </div>
+
+                                        </div>
+                                        <div class="col">
+
+                                            <div class="form-check">
+                                                <input class="form-check-input"
+                                                       type="checkbox"
+                                                       v-model="form.b2"
+                                                       true-value="1"
+                                                       false-value="0"
+                                                       name="b2"
+                                                       id="b2">
+                                                <label class="form-check-label" for="b2">B2</label>
+                                            </div>
+
+                                        </div>
+                                        <div class="col">
+
+                                            <div class="form-check">
+                                                <input class="form-check-input"
+                                                       type="checkbox"
+                                                       v-model="form.b3"
+                                                       true-value="1"
+                                                       false-value="0"
+                                                       name="b3"
+                                                       id="b3">
+                                                <label class="form-check-label" for="b3">B3</label>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="form-check">
+                                    <input class="form-check-input"
+                                           type="checkbox"
+                                           name="active"
+                                           id="active"
+                                           true-value="1"
+                                           false-value="0"
+                                           v-model="form.active">
+                                    <label class="form-check-label" for="active">Visto Reception</label>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- END - MORE -->
 
                     </div>
                 </div>
