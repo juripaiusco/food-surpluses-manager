@@ -147,6 +147,49 @@ defineProps({
 
             </Teleport>
 
+            <template v-if="data.total === 1">
+
+                <hr class="mt-8 mb-4">
+
+                <h2 class="text-3xl mb-2">
+                    Ordini eseguiti da
+                    <span class="font-semibold">
+                        {{ data.data[0].name }} {{ data.data[0].surname }}
+                    </span>
+                    <span class="text-lg">
+                        (ultimi 10 ordini)
+                    </span>
+                </h2>
+
+                <div class="border border-sky-200 rounded-md">
+
+                    <Table class="table-striped table-info !mb-0"
+                           :data="{
+                        filters: '',
+                        routeSearch: '',
+                        data: data.data[0].order,
+                        structure: [{
+                            class: 'text-left w-[20%]',
+                            label: 'Data ordine',
+                            field: 'date',
+                            order: false,
+                        }, {
+                            class: 'text-left',
+                            label: 'Riferimento',
+                            field: 'reference',
+                            order: false,
+                        }, {
+                            class: 'text-right w-[20%]',
+                            label: 'Punti',
+                            field: 'points',
+                            order: false,
+                        }],
+                    }" />
+
+                </div>
+
+            </template>
+
         </ApplicationContainer>
 
     </AuthenticatedLayout>
