@@ -28,6 +28,7 @@ class Customer extends Controller
             'address',
             'family_number',
             'points',
+            'phone',
         ];
 
         // Query data

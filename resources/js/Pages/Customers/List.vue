@@ -92,6 +92,10 @@ defineProps({
                             label: 'Indirizzo',
                             field: 'address',
                         }, {
+                            class: 'text-left',
+                            label: 'Telefono',
+                            field: 'phone',
+                        }, {
                             class: 'text-center w-[10%]',
                             label: 'Componenti',
                             field: 'family_number',
