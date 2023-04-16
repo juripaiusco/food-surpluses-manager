@@ -27,9 +27,10 @@ class Shop extends Controller
             $customer = \App\Models\Customer::where('cod', $request->input('s_customer'))
                 ->first();
 
-            // Al primo inserimento del cliente inserire la borsa frutta / verdura
+            // Al primo inserimento del cliente inserire la borsa frutta / verdura -----------------
             $product = $this->add($request, 'P000093');
             $product = $this->add($request, 'P000093');
+            // -------------------------------------------------------------------------------------
 
         } else {
 
