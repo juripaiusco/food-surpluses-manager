@@ -35,7 +35,7 @@ defineProps({
 
             <div class="inline-flex w-full mb-6">
 
-                <div class="w-3/4">
+                <div class="w-2/4">
 
                     <Link :href="route('customers.create')"
                           class="btn btn-outline-primary">
@@ -43,13 +43,14 @@ defineProps({
                     </Link>
 
                 </div>
-<!--                <div class="w-1/4 pr-3">
+                <div class="w-1/4 pr-3">
 
                     <Search placeholder="Cerca n. assistito"
                             route-search="customers.index"
+                            var-search="number"
                             :filters="filters" />
 
-                </div>-->
+                </div>
                 <div class="w-1/4">
 
                     <Search placeholder="Cerca..."

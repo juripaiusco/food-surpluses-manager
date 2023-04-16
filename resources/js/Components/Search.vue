@@ -3,6 +3,7 @@
 defineProps({
     placeholder: String,
     routeSearch: String,
+    varSearch: String,
     filters: Object
 });
 
@@ -10,11 +11,11 @@ defineProps({
 
 <template>
 
-    <input name="s"
+    <input :name="varSearchName"
            :placeholder="placeholder"
            autocomplete="off"
            class="form-control"
-           v-model="params.s"
+           v-model="params[varSearchName]"
            type="search" />
 
 </template>
@@ -22,9 +23,13 @@ defineProps({
 <script>
 export default {
     data() {
+
+        let varSearchName = this.$props.varSearch === undefined ? 's' : this.$props.varSearch;
+
         return {
+            varSearchName: varSearchName,
             params: {
-                s: this.filters.s,
+                s: this.filters[varSearchName],
             }
         }
     },

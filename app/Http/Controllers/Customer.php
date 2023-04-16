@@ -53,6 +53,11 @@ class Customer extends Controller
             });
         }
 
+        // Filtro RICERCA Numero Assistito
+        if (request('number')) {
+            $data->where('number', request('number'));
+        }
+
         // Filtro ORDINAMENTO
         if (request('orderby') && request('ordertype')) {
             $data->orderby(request('orderby'), strtoupper(request('ordertype')));
