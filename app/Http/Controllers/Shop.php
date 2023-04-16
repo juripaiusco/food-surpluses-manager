@@ -27,22 +27,19 @@ class Shop extends Controller
             $customer = \App\Models\Customer::where('cod', $request->input('s_customer'))
                 ->first();
 
+            // Al primo inserimento del cliente inserire la borsa frutta / verdura
+            $product = $this->add($request, 'P000093');
+            $product = $this->add($request, 'P000093');
+
         } else {
 
             // Elimino la sessione quando inizio la cassa
             $request->session()->forget('shopProducts');
         }
 
-        // Ricerco il prodotto
+        // Ricerco il prodotto e lo aggiungo alla sessione
         if ($request->input('s_product')) {
-
-            $product = \App\Models\Product::where('cod', $request->input('s_product'))
-                ->first();
-
-            if (isset($product->id)) {
-                $product->index = $request->session()->get('shopProducts') ? array_key_last($request->session()->get('shopProducts')) + 1 : 0;
-                $request->session()->push('shopProducts', $product);
-            }
+            $product = $this->add($request, $request->input('s_product'));
         }
 
         // Salvo la sessione prodotti tramite inertia
@@ -59,6 +56,24 @@ class Shop extends Controller
                 's_customer' => $request->input('s_customer'),
             ])
         ]);
+    }
+
+    /**
+     * Aggiungo i prodotti nel carrello
+     *
+     * @return void
+     */
+    public function add(Request $request, $product_cod)
+    {
+        $product = \App\Models\Product::where('cod', $product_cod)
+            ->first();
+
+        if (isset($product->id)) {
+            $product->index = $request->session()->get('shopProducts') ? array_key_last($request->session()->get('shopProducts')) + 1 : 0;
+            $request->session()->push('shopProducts', $product);
+        }
+
+        return $product;
     }
 
     /**
