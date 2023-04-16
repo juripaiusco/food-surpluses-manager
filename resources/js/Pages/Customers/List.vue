@@ -45,7 +45,7 @@ defineProps({
                 </div>
                 <div class="w-1/4 pr-3">
 
-                    <Search placeholder="Cerca n. assistito"
+                    <Search placeholder="Cerca per numero fascicolo"
                             route-search="customers.index"
                             var-search="number"
                             :filters="filters" />

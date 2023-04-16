@@ -72,7 +72,7 @@ class Customer extends Controller
 
         return Inertia::render('Customers/List', [
             'data' => $data,
-            'filters' => request()->all(['s', 'orderby', 'ordertype'])
+            'filters' => request()->all(['number', 's', 'orderby', 'ordertype'])
         ]);
     }
 
