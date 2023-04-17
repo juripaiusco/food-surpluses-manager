@@ -37,7 +37,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/', function () { return redirect()->route('dashboard.index'); });
     Route::get('/dashboard', [Dashboard::class, 'index'])->name('dashboard.index');
 
-    Route::get('/shop', [Shop::class, 'index'])->name('shop.index');
+    Route::any('/shop', [Shop::class, 'index'])->name('shop.index');
     Route::get('/shop/remove/{id}', [Shop::class, 'remove'])->name('shop.remove');
     Route::post('/shop/store', [Shop::class, 'store'])->name('shop.store');
 

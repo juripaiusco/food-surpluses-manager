@@ -34,8 +34,24 @@ class Shop extends Controller
         }
 
         // Ricerco il prodotto e lo aggiungo alla sessione
-        if ($request->input('s_product')) {
-            $product = $this->add($request, $request->input('s_product'));
+        $s_product = $request->input('s_product');
+        $s_product_amount = 1;
+
+        if ($request->input('s_product_fead')) {
+            $s_product = $request->input('s_product_fead');
+            $s_product_amount = $request->input('s_product_fead_amount');
+        }
+
+        if ($request->input('s_product_feadno')) {
+            $s_product = $request->input('s_product_feadno');
+            $s_product_amount = $request->input('s_product_feadno_amount');
+        }
+
+        // Aggiunta prodotto al carrello
+        if ($s_product) {
+            for ($i = 0; $i < $s_product_amount; $i++) {
+                $product = $this->add($request, $s_product);
+            }
         }
 
         // Salvo la sessione prodotti tramite inertia
@@ -69,7 +85,7 @@ class Shop extends Controller
             'data' => [
                 's_customer' => $request->input('s_customer'),
                 'customer' => isset($customer) ? $customer : [],
-                's_product' => $request->input('s_product'),
+                's_product' => $s_product,
                 'product' => isset($product) ? $product : [],
                 'is_first_order' => isset($customer) ? $this->is_first_order($customer) : false,
                 'products_fead' => $products_fead,

@@ -18,6 +18,10 @@ const props = defineProps({
 const form = useForm({
     s_customer: props.data ? props.data.s_customer : null,
     s_product: null,
+    s_product_fead: '',
+    s_product_fead_amount: 1,
+    s_product_feadno: '',
+    s_product_feadno_amount: 1,
 });
 
 const formConfirm = useForm({
@@ -93,75 +97,95 @@ const formConfirm = useForm({
 
                         <div class="alert alert-secondary !bg-gray-50 mt-4">
 
-                            <div class="row">
-                                <div class="col">
+                            <form @submit.prevent="form.get(route('shop.index'))">
 
-                                    <select class="form-select">
-                                        <option selected>Prodotti FEAD</option>
-                                        <option v-for="product in data.products_fead"
-                                                :value="product.id">
-                                            {{ product.name }}
-                                        </option>
-                                    </select>
+                                <div class="row">
+                                    <div class="col">
 
+                                        <select ref="s_product_fead"
+                                                name="s_product_fead"
+                                                v-model="form.s_product_fead"
+                                                class="form-select">
+                                            <option value=""
+                                                    selected>Prodotti FEAD</option>
+                                            <option v-for="product in data.products_fead"
+                                                    :value="product.cod">
+                                                {{ product.name }}
+                                            </option>
+                                        </select>
+
+                                    </div>
+                                    <div class="col-2">
+
+                                        <input class="form-control text-center"
+                                               type="text"
+                                               placeholder="1"
+                                               ref="s_product_fead_amount"
+                                               name="s_product_fead_amount"
+                                               v-model="form.s_product_fead_amount" />
+
+                                    </div>
+                                    <div class="col-1">
+
+                                        <button type="submit"
+                                                class="btn btn-primary w-full h-full">
+
+                                            <svg class="w-4 h-4 m-auto"
+                                                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                            </svg>
+
+                                        </button>
+
+                                    </div>
                                 </div>
-                                <div class="col-2">
 
-                                    <input class="form-control text-center"
-                                           type="text"
-                                           placeholder="1"
-                                           ref="amount_product"
-                                           name="amount_product" />
+                            </form>
 
+                            <form @submit.prevent="form.get(route('shop.index'))">
+
+                                <div class="row !mt-4">
+                                    <div class="col">
+
+                                        <select ref="s_product_feadno"
+                                                name="s_product_feadno"
+                                                v-model="form.s_product_feadno"
+                                                class="form-select">
+                                            <option selected
+                                                    value="">Prodotti NO FEAD</option>
+                                            <option v-for="product in data.products_feadno"
+                                                    :value="product.cod">
+                                                {{ product.name }}
+                                            </option>
+                                        </select>
+
+                                    </div>
+                                    <div class="col-2">
+
+                                        <input class="form-control text-center"
+                                               type="text"
+                                               placeholder="1"
+                                               ref="s_product_feadno_amount"
+                                               name="s_product_feadno_amount"
+                                               v-model="form.s_product_feadno_amount" />
+
+                                    </div>
+                                    <div class="col-1">
+
+                                        <button type="submit"
+                                                class="btn btn-primary w-full h-full">
+
+                                            <svg class="w-4 h-4 m-auto"
+                                                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                            </svg>
+
+                                        </button>
+
+                                    </div>
                                 </div>
-                                <div class="col-1">
 
-                                    <button class="btn btn-primary w-full h-full">
-
-                                        <svg class="w-4 h-4 m-auto"
-                                             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                                        </svg>
-
-                                    </button>
-
-                                </div>
-                            </div>
-
-                            <div class="row !mt-4">
-                                <div class="col">
-
-                                    <select class="form-select">
-                                        <option selected>Prodotti NO FEAD</option>
-                                        <option v-for="product in data.products_feadno"
-                                                :value="product.id">
-                                            {{ product.name }}
-                                        </option>
-                                    </select>
-
-                                </div>
-                                <div class="col-2">
-
-                                    <input class="form-control text-center"
-                                           type="text"
-                                           placeholder="1"
-                                           ref="amount_product"
-                                           name="amount_product" />
-
-                                </div>
-                                <div class="col-1">
-
-                                    <button class="btn btn-primary w-full h-full">
-
-                                        <svg class="w-4 h-4 m-auto"
-                                             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                                        </svg>
-
-                                    </button>
-
-                                </div>
-                            </div>
+                            </form>
 
                             <div class="mt-4">
 
@@ -252,6 +276,15 @@ const formConfirm = useForm({
                                         routeTo(route, data);
 
                                     }" />
+
+                            <hr class="border-spacing-0.5 border-green-900">
+
+                            <div class="text-right mt-4 pr-[34px]">
+                                Totale
+                                <span class="text-3xl font-bold ml-4">
+                                    {{ params.points_products }}
+                                </span>
+                            </div>
 
                         </div>
 
