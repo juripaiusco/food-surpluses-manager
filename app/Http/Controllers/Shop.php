@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class Shop extends Controller
@@ -40,6 +41,29 @@ class Shop extends Controller
         // Salvo la sessione prodotti tramite inertia
         Inertia::share('shopProducts', $request->session()->get('shopProducts'));
 
+        // Data per popolare l'interfaccia ---------------------------------------------------
+        $products_fead = \App\Models\Product::where('type', 'fead')
+            ->orderby('name')
+            ->get();
+
+        $products_feadno = \App\Models\Product::where('type', 'fead no')
+            ->orderby('name')
+            ->get();
+
+        $products_more_moved = DB::table('stores')
+            ->select([
+                'stores.product_id',
+                'stores.cod',
+                'products.name',
+                DB::raw('count(*) AS count')
+            ])
+            ->join('products', 'products.id', '=', 'stores.product_id')
+            ->groupBy('product_id')
+            ->orderBy('count', 'DESC')
+            ->limit(16)
+            ->get();
+        // -----------------------------------------------------------------------------------
+
         return Inertia::render('Shop/Cash', [
             'data' => [
                 's_customer' => $request->input('s_customer'),
@@ -47,6 +71,9 @@ class Shop extends Controller
                 's_product' => $request->input('s_product'),
                 'product' => isset($product) ? $product : [],
                 'is_first_order' => isset($customer) ? $this->is_first_order($customer) : false,
+                'products_fead' => $products_fead,
+                'products_feadno' => $products_feadno,
+                'products_more_moved' => $products_more_moved,
             ],
             'create_url' => route('shop.index', [
                 's_customer' => $request->input('s_customer'),

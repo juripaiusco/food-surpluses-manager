@@ -91,6 +91,95 @@ const formConfirm = useForm({
 
                         </form>
 
+                        <div class="alert alert-secondary !bg-gray-50 mt-4">
+
+                            <div class="row">
+                                <div class="col">
+
+                                    <select class="form-select">
+                                        <option selected>Prodotti FEAD</option>
+                                        <option v-for="product in data.products_fead"
+                                                :value="product.id">
+                                            {{ product.name }}
+                                        </option>
+                                    </select>
+
+                                </div>
+                                <div class="col-2">
+
+                                    <input class="form-control text-center"
+                                           type="text"
+                                           placeholder="1"
+                                           ref="amount_product"
+                                           name="amount_product" />
+
+                                </div>
+                                <div class="col-1">
+
+                                    <button class="btn btn-primary w-full h-full">
+
+                                        <svg class="w-4 h-4 m-auto"
+                                             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                        </svg>
+
+                                    </button>
+
+                                </div>
+                            </div>
+
+                            <div class="row !mt-4">
+                                <div class="col">
+
+                                    <select class="form-select">
+                                        <option selected>Prodotti NO FEAD</option>
+                                        <option v-for="product in data.products_feadno"
+                                                :value="product.id">
+                                            {{ product.name }}
+                                        </option>
+                                    </select>
+
+                                </div>
+                                <div class="col-2">
+
+                                    <input class="form-control text-center"
+                                           type="text"
+                                           placeholder="1"
+                                           ref="amount_product"
+                                           name="amount_product" />
+
+                                </div>
+                                <div class="col-1">
+
+                                    <button class="btn btn-primary w-full h-full">
+
+                                        <svg class="w-4 h-4 m-auto"
+                                             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                        </svg>
+
+                                    </button>
+
+                                </div>
+                            </div>
+
+                            <div class="mt-4">
+
+                                <div v-for="product in data.products_more_moved"
+                                     class="w-1/4 p-1 inline-flex">
+
+                                    <button class="btn btn-outline-primary w-full !text-sm">
+                                        {{
+                                            product.name.length > 18 ? product.name.substring(0, 18) + ' ...' : product.name
+                                        }}
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
                         <div v-if="usePage().props.shopProducts && usePage().props.shopProducts.length > 0"
                              class="alert alert-success mt-4">
 
