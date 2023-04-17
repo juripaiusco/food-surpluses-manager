@@ -169,9 +169,7 @@ const formConfirm = useForm({
                                      class="w-1/4 p-1 inline-flex">
 
                                     <button class="btn btn-outline-primary w-full !text-sm">
-                                        {{
-                                            product.name.length > 18 ? product.name.substring(0, 18) + ' ...' : product.name
-                                        }}
+                                        {{ product.name.length > 18 ? product.name.substring(0, 18) + ' ...' : product.name }}
                                     </button>
 
                                 </div>
