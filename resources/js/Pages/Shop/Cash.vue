@@ -53,15 +53,15 @@ const formConfirm = useForm({
                            v-model="form.s_customer"
                            @input="form.get(route('shop.index'))" />
 
-                    <div v-if="form.s_customer"
+                    <div v-if="data.s_customer"
                          class="mt-8 text-center text-red-500">
 
-                        <div v-if="form.s_customer && data.customer.active !== 0"
+                        <div v-if="data.customer && data.customer.active !== 0"
                              class="alert alert-danger">
                             Assistito non trovato
                         </div>
 
-                        <div v-if="form.s_customer && data.customer.active === 0"
+                        <div v-if="data.customer && data.customer.active === 0"
                              class="alert alert-danger">
                             <span class="font-semibold">Assistito NON ATTIVO</span>
                             <br>
