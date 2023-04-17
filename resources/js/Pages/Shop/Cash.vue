@@ -194,9 +194,21 @@ const formConfirm = useForm({
 
                         </div>
 
-                        <div v-if="data.customer.note_alert"
+                        <div v-if="data.customer.note_alert ||
+                                   data.customer.b1 ||
+                                   data.customer.b2 ||
+                                   data.customer.b3"
                              class="alert alert-danger whitespace-break-spaces">
                             {{ data.customer.note_alert }}
+
+                            <hr v-if="data.customer.note_alert &&
+                            (data.customer.b1 || data.customer.b2 || data.customer.b3)"
+                                class="mt-4 mb-4 border-spacing-0.5 border-red-300">
+
+                            {{ data.customer.b1 ? 'B1' : '' }}
+                            {{ data.customer.b2 ? 'B2' : '' }}
+                            {{ data.customer.b3 ? 'B3' : '' }}
+
                         </div>
 
                         <div class="row pt-2 pb-2">
