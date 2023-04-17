@@ -65,7 +65,15 @@ class Order extends Controller
         $data = $data->select();
 
         $data->addSelect(DB::raw(
-            'CONCAT(JSON_VALUE(json_customer, \'$.surname\'), \' \', JSON_VALUE(json_customer, \'$.name\')) as customer_name'
+            'CONCAT(
+                JSON_VALUE(json_customer, \'$.number\'),
+                \' - \',
+                JSON_VALUE(json_customer, \'$.cod\'),
+                \' - \',
+                JSON_VALUE(json_customer, \'$.name\'),
+                \' \',
+                JSON_VALUE(json_customer, \'$.surname\')
+            ) as customer_name'
         ));
 
         $data = $data->paginate(env('VIEWS_PAGINATE'))->withQueryString();
