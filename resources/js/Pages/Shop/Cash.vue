@@ -220,6 +220,10 @@ const formConfirm = useForm({
                         <div class="row border-t border-t-black pt-2 pb-2">
                             <div class="col">Punti prodotto</div>
                             <div class="col text-right">
+                                <span v-if="data.is_first_order && (params.points_products < (data.customer.points * 80/100))"
+                                      class="text-sm">
+                                    ( almeno {{ data.customer.points * 80/100 }} )
+                                </span>
                                 {{ params.points_products }}
                             </div>
                         </div>
@@ -228,6 +232,16 @@ const formConfirm = useForm({
                             <div class="col text-right text-3xl font-semibold">
                                 {{ params.points_count }}
                             </div>
+                        </div>
+
+                        <div v-if="data.is_first_order && (params.points_products < (data.customer.points * 80/100))"
+                             class="alert alert-info mt-6 animate-pulse !border-4 !border-sky-400 !border-dashed">
+                            Primo ordine del mese,
+                            verranno scalati un minimo di
+                            <span class="font-semibold text-xl">
+                                {{ data.customer.points * 80/100 }}
+                            </span>
+                            punti.
                         </div>
 
                         <form @submit.prevent="formConfirm.post(route('shop.store'))">

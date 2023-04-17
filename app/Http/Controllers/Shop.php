@@ -46,6 +46,7 @@ class Shop extends Controller
                 'customer' => isset($customer) ? $customer : [],
                 's_product' => $request->input('s_product'),
                 'product' => isset($product) ? $product : [],
+                'is_first_order' => isset($customer) ? $this->is_first_order($customer) : false,
             ],
             'create_url' => route('shop.index', [
                 's_customer' => $request->input('s_customer'),
@@ -72,11 +73,7 @@ class Shop extends Controller
         // -------------------------------------------------------------------------------------
 
         // Verifico che sia la prima spesa del mese --------------------------------------------
-        if (isset($customer->order) &&
-            (
-                count($customer->order) <= 0 ||
-                (date('n', strtotime($customer->order[0]->date)) < date('n'))
-            )) {
+        if ($this->is_first_order($customer)) {
 
             $customer->points = $customer->points / 2;
 
@@ -84,6 +81,27 @@ class Shop extends Controller
         // -------------------------------------------------------------------------------------
 
         return $customer;
+    }
+
+    /**
+     * Verifico che sia il primo ordine
+     * @return void
+     */
+    public function is_first_order($customer)
+    {
+        $out = false;
+
+        if (isset($customer->order) &&
+            (
+                count($customer->order) <= 0 ||
+                (date('n', strtotime($customer->order[0]->date)) < date('n'))
+            )) {
+
+            $out = true;
+
+        }
+
+        return $out;
     }
 
     /**
@@ -164,7 +182,11 @@ class Shop extends Controller
 
         // Recupero i dati del cliente
         $customer_id = $request->input('customer_id');
-        $customer = \App\Models\Customer::find($customer_id);
+        $customer = \App\Models\Customer::with('order')
+            ->find($customer_id);
+
+        // Verifico che sia il primo ordine del mese
+        $is_first_order = $this->is_first_order($customer);
 
         // Recupero l'ID retail
         $retail_id = current(array_keys(json_decode(Auth::user()->json_retails, true)));
@@ -229,6 +251,25 @@ class Shop extends Controller
                 'json_products' => json_encode($product_array)
             )
         ));
+
+        // Verifico se è il primo ordine del mese, in caso positivo scalo al cliente
+        // l'80% di metà punteggio se non viene superato l'80% di metà del punteggio
+        if ($is_first_order &&
+            $points < ($customer->points_renew / 2) * 80/100) {
+
+            $points_min = ($customer->points_renew / 2) * 80/100;
+
+            $customer = \App\Models\Customer::find($customer->id);
+
+            // Carico i punti consumati
+            $customer->points += $points;
+
+            // Scarici il minimo dei punti da consumare
+            $customer->points -= $points_min;
+
+            $customer->save();
+
+        }
 
         return Inertia::location(to_route('shop.index')->getTargetUrl());
     }
