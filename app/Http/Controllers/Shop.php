@@ -24,13 +24,7 @@ class Shop extends Controller
         // Ricerco il cliente
         if ($request->input('s_customer')) {
 
-            $customer = \App\Models\Customer::where('cod', $request->input('s_customer'))
-                ->first();
-
-            // Al primo inserimento del cliente inserire la borsa frutta / verdura -----------------
-            $product = $this->add($request, 'P000093');
-            $product = $this->add($request, 'P000093');
-            // -------------------------------------------------------------------------------------
+            $customer = $this->init($request);
 
         } else {
 
@@ -57,6 +51,37 @@ class Shop extends Controller
                 's_customer' => $request->input('s_customer'),
             ])
         ]);
+    }
+
+    /**
+     * Inizializzazione cassa, quando viene identificato il cliente
+     * ed il cliente è attivo, vegono eseguite delle impostazioni
+     * @return void
+     */
+    public function init(Request $request)
+    {
+        $customer = \App\Models\Customer::with('order')
+            ->where('cod', $request->input('s_customer'))
+            ->first();
+
+        // Al primo inserimento del cliente inserire la borsa frutta / verdura -----------------
+        $this->add($request, 'P000093');
+        $this->add($request, 'P000093');
+        // -------------------------------------------------------------------------------------
+
+        // Verifico che sia la prima spesa del mese --------------------------------------------
+        if (isset($customer->order) &&
+            (
+                count($customer->order) <= 0 ||
+                (date('n', strtotime($customer->order[0]->date)) < date('n'))
+            )) {
+
+            $customer->points = $customer->points / 2;
+
+        }
+        // -------------------------------------------------------------------------------------
+
+        return $customer;
     }
 
     /**
