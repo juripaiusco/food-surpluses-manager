@@ -65,8 +65,10 @@ class Shop extends Controller
             ->first();
 
         // Al primo inserimento del cliente inserire la borsa frutta / verdura -----------------
-        $this->add($request, 'P000093');
-        $this->add($request, 'P000093');
+        if ($request->session()->get('shopProducts') == null) {
+            $this->add($request, 'P000093');
+            $this->add($request, 'P000093');
+        }
         // -------------------------------------------------------------------------------------
 
         // Verifico che sia la prima spesa del mese --------------------------------------------
