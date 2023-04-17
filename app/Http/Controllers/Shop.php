@@ -55,6 +55,7 @@ class Shop extends Controller
                 'stores.product_id',
                 'stores.cod',
                 'products.name',
+                'products.type',
                 DB::raw('count(*) AS count')
             ])
             ->join('products', 'products.id', '=', 'stores.product_id')

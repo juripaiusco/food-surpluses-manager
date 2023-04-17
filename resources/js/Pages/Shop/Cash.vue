@@ -168,9 +168,17 @@ const formConfirm = useForm({
                                 <div v-for="product in data.products_more_moved"
                                      class="w-1/4 p-1 inline-flex">
 
-                                    <button class="btn btn-outline-primary w-full !text-sm">
+                                    <Link class="btn w-full !text-sm"
+                                          :class="{
+                                                'btn-outline-primary': product.type === 'fead no',
+                                                'btn-info !text-sky-900': product.type === 'fead',
+                                          }"
+                                          :href="route('shop.index', {
+                                              s_customer: form.s_customer,
+                                              s_product: product.cod,
+                                          })">
                                         {{ product.name.length > 18 ? product.name.substring(0, 18) + ' ...' : product.name }}
-                                    </button>
+                                    </Link>
 
                                 </div>
 
