@@ -203,7 +203,7 @@ const form = useForm(dataForm);
                                 </div>
 
                             </div>
-                            <div class="tab-pane fade show active p-4"
+                            <div class="tab-pane fade p-4"
                                  id="category"
                                  role="tabpanel"
                                  aria-labelledby="category">

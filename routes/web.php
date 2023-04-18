@@ -63,6 +63,13 @@ Route::middleware('auth')->group(function () {
     Route::post('/products/update/{id}', [Product::class, 'update'])->name('products.update');
     Route::get('/products/destroy/{id}', [Product::class, 'destroy'])->name('products.destroy');
 
+    Route::get('/products/categories', [Product::class, 'category_index'])->name('products.categories.index');
+    Route::get('/products/categories/create', [Product::class, 'category_create'])->name('products.categories.create');
+    Route::post('/products/categories/store', [Product::class, 'category_store'])->name('products.categories.store');
+    Route::get('/products/categories/edit/{id}', [Product::class, 'category_edit'])->name('products.categories.edit');
+    Route::post('/products/categories/update/{id}', [Product::class, 'category_update'])->name('products.categories.update');
+    Route::get('/products/categories/destroy/{id}', [Product::class, 'category_destroy'])->name('products.categories.destroy');
+
     Route::get('/customers', [Customer::class, 'index'])->name('customers.index');
     Route::get('/customers/create', [Customer::class, 'create'])->name('customers.create');
     Route::post('/customers/store', [Customer::class, 'store'])->name('customers.store');

@@ -21,13 +21,13 @@ defineProps({
 
 <template>
 
-    <Head title="Prodotti" />
+    <Head title="Categorie Prodotto" />
 
     <AuthenticatedLayout>
 
         <template #header>
 
-            <ApplicationHeader :breadcrumb-array="['Prodotti', 'Lista']" />
+            <ApplicationHeader :breadcrumb-array="['Categorie Prodotto', 'Lista']" />
 
         </template>
 
@@ -37,21 +37,21 @@ defineProps({
 
                 <div class="w-3/4">
 
-                    <Link :href="route('products.create')"
+                    <Link :href="route('products.categories.create')"
                           class="btn btn-outline-primary">
-                        Nuovo Prodotto
+                        Nuova Categoria
                     </Link>
 
-                    <Link :href="route('products.categories.index')"
+                    <Link :href="route('products.index')"
                           class="ml-3 btn btn-outline-primary">
-                        Categorie Prodotto
+                        Torna a Prodotti
                     </Link>
 
                 </div>
                 <div class="w-1/4">
 
                     <Search placeholder="Cerca..."
-                            route-search="products.index"
+                            route-search="products.categories.index"
                             :filters="filters" />
 
                 </div>
@@ -61,57 +61,24 @@ defineProps({
             <Table class="table-striped"
                    :data="{
                         filters: filters,
-                        routeSearch: 'products.index',
+                        routeSearch: 'products.categories.index',
                         data: data.data,
                         structure: [{
-                            class: 'text-center w-[5%]',
-                            label: 'Control.',
-                            field: 'monitoring_buy',
-                            fnc: function (d) {
-
-                                let html = '';
-
-                                if (d.monitoring_buy === 1) {
-                                    html += '<svg class=\'text-white p-1 m-auto w-6 h-6 rounded-full bg-sky-400 border-2 border-sky-200\' xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 24 24\' stroke-width=\'1.5\' stroke=\'currentColor\'>';
-                                    html += '<path stroke-linecap=\'round\' stroke-linejoin=\'round\' d=\'M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0\' />';
-                                    html += '</svg>';
-                                }
-
-                                return html;
-
-                            }
-                        }, {
-                            class: 'text-left w-[5%]',
-                            label: 'Codice',
-                            field: 'cod',
-                        }, {
-                            class: 'text-left w-[10%]',
-                            label: 'Tipo',
-                            field: 'type',
-                        }, {
                             class: 'text-left',
                             label: 'Nome',
                             field: 'name',
                         }, {
                             class: 'text-center w-[10%]',
-                            label: 'Kg.',
-                            field: 'kg_total',
-                        }, {
-                            class: 'text-center w-[10%]',
-                            label: 'Q.tà',
-                            field: 'amount_total',
-                        }, {
-                            class: 'text-center w-[10%]',
-                            label: 'Punti',
-                            field: 'points',
+                            label: 'Limite',
+                            field: 'limit',
                         }, {
                             class: 'w-[1%]',
                             btnEdit: true,
-                            route: 'products.edit'
+                            route: 'products.categories.edit'
                         }, {
                             class: 'w-[1%]',
                             btnDel: true,
-                            route: 'products.destroy'
+                            route: 'products.categories.destroy'
                         }],
                     }"
                    @openModal="(data, route) => {
