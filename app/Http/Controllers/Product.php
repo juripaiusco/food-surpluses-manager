@@ -84,8 +84,12 @@ class Product extends Controller
 
         $data = json_decode(json_encode($products_array), true);
 
+        $categories = Category::orderBy('name')
+            ->get();
+
         return Inertia::render('Products/Form', [
-            'data' => $data
+            'data' => $data,
+            'categories' => $categories,
         ]);
     }
 
