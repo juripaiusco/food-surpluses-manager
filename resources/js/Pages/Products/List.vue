@@ -90,6 +90,11 @@ defineProps({
                             field: 'type',
                         }, {
                             class: 'text-left',
+                            label: 'Categoria',
+                            field: 'category.name',
+                            order: false
+                        }, {
+                            class: 'text-left',
                             label: 'Nome',
                             field: 'name',
                         }, {

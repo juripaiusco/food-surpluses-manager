@@ -122,7 +122,11 @@ export default {
 
             if (struct.field && struct.field.includes('.') === true) {
 
-                data = eval('d.' + struct.field);
+                let keys = struct.field.split('.');
+
+                if (eval('d.' + keys[0])) {
+                    data = eval('d.' + struct.field);
+                }
 
             } else {
 

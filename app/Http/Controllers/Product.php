@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
 use Inertia\Inertia;
@@ -53,6 +54,7 @@ class Product extends Controller
             $data->orderby(request('orderby'), strtoupper(request('ordertype')));
         }
 
+        $data = $data->with('category');
         $data = $data->select();
         $data = $data->paginate(env('VIEWS_PAGINATE'))->withQueryString();
 
@@ -103,6 +105,7 @@ class Product extends Controller
         $product = new \App\Models\Product();
 
         $product->cod = $request->input('cod');
+        $product->category_id = $request->input('category_id');
         $product->type = $request->input('type');
         $product->monitoring_buy = $request->input('monitoring_buy');
         $product->name = $request->input('name');
@@ -135,8 +138,12 @@ class Product extends Controller
             ->with('store.order')
             ->find($id);
 
+        $categories = Category::orderBy('name')
+            ->get();
+
         return Inertia::render('Products/Form', [
-            'data' => $data
+            'data' => $data,
+            'categories' => $categories,
         ]);
     }
 
@@ -156,6 +163,7 @@ class Product extends Controller
         $product = \App\Models\Product::find($id);
 
         $product->cod = $request->input('cod');
+        $product->category_id = $request->input('category_id');
         $product->type = $request->input('type');
         $product->monitoring_buy = $request->input('monitoring_buy');
         $product->name = $request->input('name');

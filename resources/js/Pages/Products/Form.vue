@@ -12,6 +12,7 @@ import {__} from "../../extComponents/Translations";
 const props = defineProps({
 
     data: Object,
+    categories: Object,
 
 });
 
@@ -46,201 +47,136 @@ const form = useForm(dataForm);
                     <div class="col-7">
 
                         <h2 class="text-3xl mb-2">Dati Prodotto</h2>
-                        <br>
 
-                        <ul class="nav nav-tabs" id="customerTab" role="tablist">
-                            <li class="nav-item" role="presentation">
+                        <div class="row mb-4">
+                            <div class="col">
 
-                                <button class="nav-link active w-[140px]"
-                                        id="anagrafica-tab"
-                                        data-bs-toggle="tab"
-                                        data-bs-target="#anagrafica"
-                                        type="button"
-                                        role="tab"
-                                        aria-controls="anagrafica-tab"
-                                        aria-selected="true" >
-                                    Anagrafica
-                                </button>
-
-                            </li>
-                            <li class="nav-item" role="presentation">
-
-                                <button class="nav-link w-[140px]"
-                                        id="category-tab"
-                                        data-bs-toggle="tab"
-                                        data-bs-target="#category"
-                                        type="button"
-                                        role="tab"
-                                        aria-controls="category-tab"
-                                        aria-selected="true" >
-                                    Categoria
-                                </button>
-
-                            </li>
-                        </ul>
-
-                        <div class="tab-content">
-                            <div class="tab-pane fade show active p-4"
-                                 id="anagrafica"
-                                 role="tabpanel"
-                                 aria-labelledby="anagrafica">
-
-                                <div class="row mb-4">
-                                    <div class="col">
-
-                                        <label for="cod" class="form-label">Codice</label>
-                                        <input id="cod"
-                                               name="cod"
-                                               type="text"
-                                               class="form-control"
-                                               v-model="form.cod" />
-                                        <div class="text-red-500"
-                                             v-if="form.errors.cod">{{ __('products.cod.' + form.errors.cod) }}</div>
-
-                                    </div>
-                                    <div class="col">
-
-                                        <label for="type" class="form-label">Tipo</label>
-                                        <select class="form-select"
-                                                v-model="form.type">
-                                            <option selected>Seleziona tipologia</option>
-                                            <option value="fead">Fead</option>
-                                            <option value="fead no">Fead NO</option>
-                                        </select>
-                                        <div class="text-red-500"
-                                             v-if="form.errors.type">{{ __(form.errors.type) }}</div>
-
-                                    </div>
-                                </div>
-
-                                <div class="row mb-4">
-                                    <div class="col-8">
-
-                                        <label for="name" class="form-label">Nome</label>
-                                        <input id="name"
-                                               name="name"
-                                               type="text"
-                                               class="form-control"
-                                               v-model="form.name" />
-                                        <div class="text-red-500"
-                                             v-if="form.errors.name">{{ __(form.errors.name) }}</div>
-
-                                    </div>
-                                    <div class="col text-center">
-
-                                        <label for="points" class="form-label text-center">Punti</label>
-                                        <input id="points"
-                                               name="points"
-                                               type="text"
-                                               class="form-control text-center"
-                                               v-model="form.points" />
-                                        <div class="text-red-500"
-                                             v-if="form.errors.points">{{ __(form.errors.points) }}</div>
-
-                                    </div>
-                                </div>
-
-                                <label for="description" class="form-label">Descrizione</label>
-                                <textarea id="description"
-                                          name="description"
-                                          class="form-control mb-4 h-[178px]"
-                                          v-model="form.description"></textarea>
-
-                                <div class="form-check">
-
-                                    <input type="checkbox"
-                                           class="form-check-input"
-                                           id="monitoring_buy"
-                                           true-value="1"
-                                           false-value="0"
-                                           v-model="form.monitoring_buy" />
-
-                                    <label class="form-check-label text-sm"
-                                           :for="'monitoring_buy'">
-                                        In cassa, al momento dell'acquisto, mostra se l'articolo è già stato acquistato.
-                                        <br>
-                                        Verrà mostrata una piccola icona prima del nome prodotto.
-                                    </label>
-
-                                </div>
-
-                                <div class="row border border-gray-300 !mt-4 pt-4 pb-4 rounded-md bg-gray-100">
-                                    <div class="col">
-
-                                        <div class="input-group">
-                                            <span class="input-group-text">Kg.</span>
-                                            <input id="kg"
-                                                   name="kg"
-                                                   type="text"
-                                                   class="form-control text-center"
-                                                   placeholder="es. 0.5"
-                                                   v-model="form.kg" />
-                                        </div>
-                                        <div class="text-red-500"
-                                             v-if="form.errors.kg">{{ __(form.errors.kg) }}</div>
-
-                                    </div>
-                                    <div class="col">
-
-                                        <div class="input-group">
-                                            <span class="input-group-text">Q.tà</span>
-                                            <input id="amount"
-                                                   name="amount"
-                                                   type="text"
-                                                   class="form-control text-center"
-                                                   placeholder="es. 2"
-                                                   v-model="form.amount" />
-                                        </div>
-                                        <div class="text-red-500"
-                                             v-if="form.errors.amount">{{ __(form.errors.amount) }}</div>
-
-                                    </div>
-                                    <div class="col-12 text-center text-xs pt-4">
-
-                                        Queste sono le quantità che vengono scalata al momento dell'acquisto.
-
-                                    </div>
-                                </div>
+                                <label for="cod" class="form-label">Codice</label>
+                                <input id="cod"
+                                       name="cod"
+                                       type="text"
+                                       class="form-control"
+                                       v-model="form.cod" />
+                                <div class="text-red-500"
+                                     v-if="form.errors.cod">{{ __('products.cod.' + form.errors.cod) }}</div>
 
                             </div>
-                            <div class="tab-pane fade p-4"
-                                 id="category"
-                                 role="tabpanel"
-                                 aria-labelledby="category">
+                            <div class="col">
 
-                                <div class="border border-gray-200 rounded-md p-4 h-[542px]">
+                                <label for="type" class="form-label">Tipo</label>
+                                <select class="form-select"
+                                        v-model="form.type">
+                                    <option selected>Seleziona tipologia</option>
+                                    <option value="fead">Fead</option>
+                                    <option value="fead no">Fead NO</option>
+                                </select>
+                                <div class="text-red-500"
+                                     v-if="form.errors.type">{{ __(form.errors.type) }}</div>
 
-                                    <div class="alert alert-secondary">
+                            </div>
+                            <div class="col">
 
-                                        <div class="row">
-                                            <div class="col">
+                                <label for="type" class="form-label">Categoria</label>
+                                <select class="form-select"
+                                        v-model="form.category_id">
+                                    <option value=""
+                                            selected>Nessuna categoria</option>
+                                    <option v-for="category in categories"
+                                            :value="category.id">
+                                        {{ category.name }}
+                                    </option>
+                                </select>
+                                <div class="text-red-500"
+                                     v-if="form.errors.category_id">{{ __(form.errors.category_id) }}</div>
 
-                                                <input class="form-control"
-                                                       type="text"
-                                                       placeholder="Nuova categoria"
-                                                       ref="cat_name"
-                                                       name="cat_name"
-                                                       v-model="form.cat_name" />
+                            </div>
+                        </div>
 
-                                            </div>
-                                            <div class="col-2">
+                        <div class="row mb-4">
+                            <div class="col-8">
 
-                                                <button type="submit"
-                                                        class="btn btn-primary w-full h-full">
+                                <label for="name" class="form-label">Nome</label>
+                                <input id="name"
+                                       name="name"
+                                       type="text"
+                                       class="form-control"
+                                       v-model="form.name" />
+                                <div class="text-red-500"
+                                     v-if="form.errors.name">{{ __(form.errors.name) }}</div>
 
-                                                    <svg class="w-4 h-4 m-auto"
-                                                         xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                                                    </svg>
+                            </div>
+                            <div class="col text-center">
 
-                                                </button>
+                                <label for="points" class="form-label text-center">Punti</label>
+                                <input id="points"
+                                       name="points"
+                                       type="text"
+                                       class="form-control text-center"
+                                       v-model="form.points" />
+                                <div class="text-red-500"
+                                     v-if="form.errors.points">{{ __(form.errors.points) }}</div>
 
-                                            </div>
-                                        </div>
+                            </div>
+                        </div>
 
-                                    </div>
+                        <label for="description" class="form-label">Descrizione</label>
+                        <textarea id="description"
+                                  name="description"
+                                  class="form-control mb-4 h-[178px]"
+                                  v-model="form.description"></textarea>
 
+                        <div class="form-check">
+
+                            <input type="checkbox"
+                                   class="form-check-input"
+                                   id="monitoring_buy"
+                                   true-value="1"
+                                   false-value="0"
+                                   v-model="form.monitoring_buy" />
+
+                            <label class="form-check-label text-sm"
+                                   :for="'monitoring_buy'">
+                                In cassa, al momento dell'acquisto, mostra se l'articolo è già stato acquistato.
+                                <br>
+                                Verrà mostrata una piccola icona prima del nome prodotto.
+                            </label>
+
+                        </div>
+
+                        <div class="row border border-gray-300 !mt-4 pt-4 pb-4 rounded-md bg-gray-100">
+                            <div class="col">
+
+                                <div class="input-group">
+                                    <span class="input-group-text">Kg.</span>
+                                    <input id="kg"
+                                           name="kg"
+                                           type="text"
+                                           class="form-control text-center"
+                                           placeholder="es. 0.5"
+                                           v-model="form.kg" />
                                 </div>
+                                <div class="text-red-500"
+                                     v-if="form.errors.kg">{{ __(form.errors.kg) }}</div>
+
+                            </div>
+                            <div class="col">
+
+                                <div class="input-group">
+                                    <span class="input-group-text">Q.tà</span>
+                                    <input id="amount"
+                                           name="amount"
+                                           type="text"
+                                           class="form-control text-center"
+                                           placeholder="es. 2"
+                                           v-model="form.amount" />
+                                </div>
+                                <div class="text-red-500"
+                                     v-if="form.errors.amount">{{ __(form.errors.amount) }}</div>
+
+                            </div>
+                            <div class="col-12 text-center text-xs pt-4">
+
+                                Queste sono le quantità che vengono scalata al momento dell'acquisto.
 
                             </div>
                         </div>

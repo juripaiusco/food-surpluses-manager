@@ -16,4 +16,9 @@ class Product extends Model
             ->orderBy('date', 'DESC')
             ->take(10);
     }
+
+    public function category()
+    {
+        return $this->hasOne(\App\Models\Category::class, 'id', 'category_id');
+    }
 }
