@@ -155,15 +155,71 @@ class Shop extends Controller
      */
     public function add(Request $request, $product_cod)
     {
-        $product = \App\Models\Product::where('cod', $product_cod)
+        $product = \App\Models\Product::with('category')
+            ->where('cod', $product_cod)
             ->first();
 
-        if (isset($product->id)) {
-            $product->index = $request->session()->get('shopProducts') ? array_key_last($request->session()->get('shopProducts')) + 1 : 0;
-            $request->session()->push('shopProducts', $product);
+        $error_limit = $this->error_limit($request, $product);
+
+        if ($error_limit) {
+            return 'error.limit';
         }
 
-        return $product;
+        if (isset($product->id) && !$error_limit) {
+            $product->index = $request->session()->get('shopProducts') ? array_key_last($request->session()->get('shopProducts')) + 1 : 0;
+            $request->session()->push('shopProducts', $product);
+
+            return $product;
+        }
+    }
+
+    /**
+     * Verifico il limite categoria prodotto
+     *
+     * @param Request $request
+     * @param $product
+     * @return bool
+     */
+    public function error_limit(Request $request, $product)
+    {
+        $products_session = $request->session()->get('shopProducts');
+        $array_categories_limit = array();
+        $error_limit = false;
+
+        if (isset($products_session)) {
+
+            foreach ($products_session as $product_session) {
+
+                if (isset($product_session->category->limit)) {
+
+                    if (!isset($array_categories_limit[$product_session->category->id])) {
+                        $array_categories_limit[$product_session->category->id] = 1;
+                    } else {
+                        $array_categories_limit[$product_session->category->id] += 1;
+                    }
+                }
+            }
+
+            if (isset($product->category->limit)) {
+
+                if (!isset($array_categories_limit[$product->category->id])) {
+                    $array_categories_limit[$product->category->id] = 1;
+                } else {
+                    $array_categories_limit[$product->category->id] += 1;
+                }
+            }
+
+            if (isset($product->category->id) &&
+                ($array_categories_limit[$product->category->id] > $product->category->limit)) {
+
+                $error_limit = true;
+                //dd($product->category->name . ' ' . $array_categories_limit[$product->category->id] . ' > ' . $product->category->limit);
+
+            }
+
+        }
+
+        return $error_limit;
     }
 
     /**
