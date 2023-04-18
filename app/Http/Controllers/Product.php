@@ -14,10 +14,7 @@ class Product extends Controller
         $this->middleware('auth');
     }
 
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function productsGet()
     {
         $request_validate_array = [
             'monitoring_buy',
@@ -55,12 +52,20 @@ class Product extends Controller
         }
 
         $data = $data->with('category');
-        $data = $data->where('json_box', '=', null);
+        $data = $data->whereNull('json_box');
         $data = $data->select();
         $data = $data->paginate(env('VIEWS_PAGINATE'))->withQueryString();
 
+        return $data;
+    }
+
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
         return Inertia::render('Products/List', [
-            'data' => $data,
+            'data' => $this->productsGet(),
             'filters' => request()->all(['s', 'orderby', 'ordertype'])
         ]);
     }
@@ -361,7 +366,9 @@ class Product extends Controller
         $data = json_decode(json_encode($products_array), true);
 
         return Inertia::render('Products/Box/Form', [
-            'data' => $data
+            'data' => $data,
+            'products' => $this->productsGet(),
+            'filters' => request()->all(['s', 'orderby', 'ordertype'])
         ]);
     }
 
@@ -386,7 +393,9 @@ class Product extends Controller
         $data = \App\Models\Product::find($id);
 
         return Inertia::render('Products/Box/Form', [
-            'data' => $data
+            'data' => $data,
+            'products' => $this->productsGet(),
+            'filters' => request()->all(['s', 'orderby', 'ordertype'])
         ]);
     }
 
