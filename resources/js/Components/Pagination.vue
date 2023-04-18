@@ -5,6 +5,7 @@ import {__} from "@/extComponents/Translations";
 
 defineProps({
     links: Array,
+    preserveState: Boolean
 })
 
 </script>
@@ -26,7 +27,8 @@ defineProps({
                     :class="{ 'bg-sky-100 text-sky-400 border-sky-200 hover:border-sky-500': link.active }"
                     :href="link.url"
                     v-html="__(link.label)"
-                    preserve-scroll />
+                    preserve-scroll
+                    :preserveState="preserveState" />
 
             </template>
         </div>

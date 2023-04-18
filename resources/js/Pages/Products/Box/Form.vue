@@ -55,7 +55,7 @@ const form = useForm(dataForm);
 
                             <label for="cod" class="form-label">Cerca il prodotto da inserire nalla box</label>
                             <Search placeholder="Cerca..."
-                                    :route-search="form.id ? 'products.box.edit' : 'products.box.create'"
+                                    :route-search="form.id ? route('products.box.edit', form.id) : 'products.box.create'"
                                     :filters="filters" />
 
                             <br>
@@ -63,7 +63,8 @@ const form = useForm(dataForm);
                             <Table class="table-striped"
                                    :data="{
                                         filters: filters,
-                                        routeSearch: form.id ? 'products.box.edit' : 'products.box.create',
+                                        routeSearch: form.id ? route('products.box.edit', form.id) : 'products.box.create',
+                                        preserveState: true,
                                         data: products.data,
                                         structure: [{
                                             class: 'text-left w-[5%]',
@@ -85,7 +86,8 @@ const form = useForm(dataForm);
                                     }" />
 
                             <Pagination class="mt-6"
-                                        :links="products.links" />
+                                        :links="products.links"
+                                        :preserveState="true" />
 
                         </div>
 

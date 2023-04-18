@@ -75,11 +75,11 @@ export default {
         params: {
             handler() {
                 this.$inertia.get(
-                    this.route(this.data.routeSearch),
+                    this.data.routeSearch.includes('/') === true ? this.data.routeSearch : this.route(this.data.routeSearch),
                     this.params,
                     {
                         replace: true,
-                        preserveState: false,
+                        preserveState: this.data.preserveState,
                         preserveScroll: true,
                     }
                 );

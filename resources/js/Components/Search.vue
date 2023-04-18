@@ -51,7 +51,7 @@ export default {
                 })
 
                 this.$inertia.get(
-                    this.route(this.routeSearch),
+                    this.routeSearch.includes('/') === true ? this.routeSearch : this.route(this.routeSearch),
                     params,
                     {
                         replace: true,
