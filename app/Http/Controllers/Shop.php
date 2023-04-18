@@ -49,8 +49,16 @@ class Shop extends Controller
 
         // Aggiunta prodotto al carrello
         if ($s_product) {
+
+            $product = \App\Models\Product::with('category')
+                ->where('cod', $s_product)
+                ->first();
+
             for ($i = 0; $i < $s_product_amount; $i++) {
-                $product = $this->add($request, $s_product);
+
+                $error_limit = $this->error_limit($request, $product);
+
+                $this->add($request, $product);
             }
         }
 
@@ -91,7 +99,7 @@ class Shop extends Controller
                 'products_fead' => $products_fead,
                 'products_feadno' => $products_feadno,
                 'products_more_moved' => $products_more_moved,
-                'error_limit' => isset($product) ? $this->error_limit($request, $product) : false,
+                'error_limit' => isset($product) ? $error_limit : false,
             ],
             'create_url' => route('shop.index', [
                 's_customer' => $request->input('s_customer'),
@@ -112,8 +120,13 @@ class Shop extends Controller
 
         // Al primo inserimento del cliente inserire la borsa frutta / verdura -----------------
         if ($request->session()->get('shopProducts') == null) {
-            $this->add($request, 'P000093');
-            $this->add($request, 'P000093');
+
+            $product = \App\Models\Product::with('category')
+                ->where('cod', 'P000093')
+                ->first();
+
+            $this->add($request, $product);
+            $this->add($request, $product);
         }
         // -------------------------------------------------------------------------------------
 
@@ -154,12 +167,8 @@ class Shop extends Controller
      *
      * @return void
      */
-    public function add(Request $request, $product_cod)
+    public function add(Request $request, $product)
     {
-        $product = \App\Models\Product::with('category')
-            ->where('cod', $product_cod)
-            ->first();
-
         if (isset($product->id) && !$this->error_limit($request, $product)) {
             $product->index = $request->session()->get('shopProducts') ? array_key_last($request->session()->get('shopProducts')) + 1 : 0;
             $request->session()->push('shopProducts', $product);
