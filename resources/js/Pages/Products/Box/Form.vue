@@ -1,6 +1,6 @@
 <script setup xmlns="http://www.w3.org/1999/html">
 
-import {Head} from "@inertiajs/vue3";
+import {Head, usePage} from "@inertiajs/vue3";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import ApplicationHeader from "@/Components/ApplicationHeader.vue";
 import ApplicationContainer from "@/Components/ApplicationContainer.vue";
@@ -82,6 +82,21 @@ const form = useForm(dataForm);
                                             class: 'text-center w-[10%]',
                                             label: 'Punti',
                                             field: 'points',
+                                        }, {
+                                            class: 'w-[1%]',
+                                            btnCustom: true,
+                                            //route: form.id ? route('products.box.edit', form.id) : 'products.box.create',
+                                            route: 'products.box.addToBox',
+                                            fnc: function (d) {
+
+                                                let html = '';
+
+                                                html += '<div class=\'btn btn-primary\'>';
+                                                html += '<svg class=\'w-3 h-3\' xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 24 24\' stroke-width=\'1.5\' stroke=\'currentColor\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' d=\'M12 4.5v15m7.5-7.5h-15\' /></svg>';
+                                                html += '</div>';
+
+                                                return html;
+                                            }
                                         }],
                                     }" />
 
@@ -124,6 +139,10 @@ const form = useForm(dataForm);
 
                                 </div>
                             </div>
+
+                            <br>
+
+                            box {{ usePage().props.boxProducts }}
 
                         </div>
 

@@ -41,8 +41,9 @@ defineProps({
                     <template v-if="struct.btnCustom === true">
 
                         <Link class="btn btn-sm"
-                              :href="route(struct.route, d.id)"
-                              :data="data.filters">
+                              :href="struct.route.includes('/') === true ? struct.route : route(struct.route, d.id)"
+                              :data="struct.filters ? struct.filters : data.filters"
+                              :preserveState="data.preserveState">
 
                             <template v-if="typeof struct.fnc !== 'function'">
                                 {{ show(d, struct) }}

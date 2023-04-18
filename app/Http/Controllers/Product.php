@@ -6,6 +6,7 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
 use Inertia\Inertia;
+use function GuzzleHttp\Promise\all;
 
 class Product extends Controller
 {
@@ -348,8 +349,10 @@ class Product extends Controller
         ]);
     }
 
-    public function box_create()
+    public function box_create(Request $request)
     {
+        $request->session()->forget('boxProducts');
+
         // Creo un oggetto di dati vuoto
         $columns = Schema::getColumnListing('products');
 
@@ -420,5 +423,17 @@ class Product extends Controller
         \App\Models\Product::destroy($id);
 
         return to_route('products.box.index');
+    }
+
+    public function add_to_box(Request $request, $id)
+    {
+        $product = \App\Models\Product::find($id);
+
+        $request->session()->push('boxProducts', $product);
+
+        Inertia::share('boxProducts', $request->session()->get('boxProducts'));
+
+//        dd($request->session()->get('boxProducts'));
+//        return Inertia::location($request->header()['referer'][0]);
     }
 }
