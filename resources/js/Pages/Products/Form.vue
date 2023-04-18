@@ -254,7 +254,7 @@ const form = useForm(dataForm);
                                             '!bg-red-300 !text-red-900': d.amount <= 0,
                                             '!bg-green-300 !text-green-900': d.amount > 0
                                         }">
-                                        {{ d.order_id === null ? '' : d.order.reference }}
+                                        {{ d.order === null ? '' : d.order.reference }}
                                     </td>
                                     <td class="text-center !pt-2 !pb-2"
                                         :class="{
