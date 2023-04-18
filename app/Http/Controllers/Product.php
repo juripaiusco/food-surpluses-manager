@@ -55,6 +55,7 @@ class Product extends Controller
         }
 
         $data = $data->with('category');
+        $data = $data->where('json_box', '=', null);
         $data = $data->select();
         $data = $data->paginate(env('VIEWS_PAGINATE'))->withQueryString();
 
