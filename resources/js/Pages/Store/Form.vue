@@ -6,6 +6,7 @@ import ApplicationHeader from "@/Components/ApplicationHeader.vue";
 import ApplicationContainer from "@/Components/ApplicationContainer.vue";
 import {Link} from "@inertiajs/vue3";
 import {useForm} from "@inertiajs/vue3";
+import {__} from "@/extComponents/Translations";
 
 const props = defineProps({
 
@@ -101,6 +102,7 @@ const formStore = useForm({
                                        ref="kg"
                                        id="kg"
                                        name="kg"
+                                       :disabled="product.type === 'fead no'"
                                        v-model="formStore.kg" />
 
                             </div>
@@ -110,8 +112,11 @@ const formStore = useForm({
                                 <input type="text"
                                        class="form-control text-center mt-2"
                                        placeholder="q.tà prodotto"
+                                       ref="amount"
                                        name="amount"
                                        v-model="formStore.amount" />
+                                <div class="text-red-500"
+                                     v-if="formStore.errors.amount">{{ __(formStore.errors.amount) }}</div>
 
                             </div>
                         </div>
@@ -152,7 +157,12 @@ export default {
             this.$refs.s.focus();
         }
         if (this.product && this.product.cod) {
-            this.$refs.kg.focus();
+
+            if (this.product.type === 'fead no') {
+                this.$refs.amount.focus();
+            } else {
+                this.$refs.kg.focus();
+            }
         }
     }
 }

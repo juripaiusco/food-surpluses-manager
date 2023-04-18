@@ -153,6 +153,7 @@ const form = useForm(dataForm);
                                            type="text"
                                            class="form-control text-center"
                                            placeholder="es. 0.5"
+                                           :disabled="form.type === 'fead no'"
                                            v-model="form.kg" />
                                 </div>
                                 <div class="text-red-500"

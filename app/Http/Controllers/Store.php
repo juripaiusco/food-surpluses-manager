@@ -34,6 +34,10 @@ class Store extends Controller
 
     public function store(Request $request, $id)
     {
+        $request->validate([
+            'amount'    => ['required'],
+        ]);
+
         $store = new \App\Models\Store();
 
         $store->kg = $request->input('kg');
