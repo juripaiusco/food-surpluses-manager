@@ -91,6 +91,7 @@ class Shop extends Controller
                 'products_fead' => $products_fead,
                 'products_feadno' => $products_feadno,
                 'products_more_moved' => $products_more_moved,
+                'error_limit' => isset($product) ? $this->error_limit($request, $product) : false,
             ],
             'create_url' => route('shop.index', [
                 's_customer' => $request->input('s_customer'),
@@ -159,18 +160,12 @@ class Shop extends Controller
             ->where('cod', $product_cod)
             ->first();
 
-        $error_limit = $this->error_limit($request, $product);
-
-        if ($error_limit) {
-            return 'error.limit';
-        }
-
-        if (isset($product->id) && !$error_limit) {
+        if (isset($product->id) && !$this->error_limit($request, $product)) {
             $product->index = $request->session()->get('shopProducts') ? array_key_last($request->session()->get('shopProducts')) + 1 : 0;
             $request->session()->push('shopProducts', $product);
-
-            return $product;
         }
+
+        return $product;
     }
 
     /**

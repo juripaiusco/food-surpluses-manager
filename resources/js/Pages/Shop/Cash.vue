@@ -80,6 +80,17 @@ const formConfirm = useForm({
 
             <div v-if="data.customer.id && data.customer.active === 1">
 
+                <div v-if="data.error_limit"
+                     class="alert alert-danger text-3xl text-center !border-8 !border-dashed">
+                    Non possono essere passati più di
+                    <span class="font-semibold">
+                        {{ data.product.category.limit }}
+                    </span> pezzi di
+                    <span class="font-semibold">
+                        {{ data.product.category.name }}
+                    </span>
+                </div>
+
                 <div class="row">
                     <div class="col-8">
 
@@ -430,7 +441,7 @@ export default {
             this.$refs.s_product.focus();
         }
 
-        if (this.data.s_customer && this.data.s_product) {
+        if (this.data.s_customer && this.data.s_product && this.data.error_limit !== true) {
             window.location.href = this.create_url;
         }
 
