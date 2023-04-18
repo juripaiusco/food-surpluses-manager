@@ -194,4 +194,10 @@ class Customer extends Controller
 
         return to_route('customers.index', $request->all());
     }
+
+    public function active_reset()
+    {
+        $customers = \App\Models\Customer::query();
+        $customers->update(['active' => 0]);
+    }
 }
