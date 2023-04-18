@@ -21,13 +21,13 @@ defineProps({
 
 <template>
 
-    <Head title="Categorie Prodotto" />
+    <Head title="Box Prodotto" />
 
     <AuthenticatedLayout>
 
         <template #header>
 
-            <ApplicationHeader :breadcrumb-array="['Categorie Prodotto', 'Lista']" />
+            <ApplicationHeader :breadcrumb-array="['Box Prodotto', 'Lista']" />
 
         </template>
 
@@ -37,9 +37,9 @@ defineProps({
 
                 <div class="w-3/4">
 
-                    <Link :href="route('products.categories.create')"
+                    <Link :href="route('products.box.create')"
                           class="btn btn-outline-primary">
-                        Nuova Categoria
+                        Nuova Scatola
                     </Link>
 
                     <Link :href="route('products.index')"
@@ -51,7 +51,7 @@ defineProps({
                 <div class="w-1/4">
 
                     <Search placeholder="Cerca..."
-                            route-search="products.categories.index"
+                            route-search="products.box.index"
                             :filters="filters" />
 
                 </div>
@@ -61,24 +61,20 @@ defineProps({
             <Table class="table-striped"
                    :data="{
                         filters: filters,
-                        routeSearch: 'products.categories.index',
+                        routeSearch: 'products.box.index',
                         data: data.data,
                         structure: [{
                             class: 'text-left',
                             label: 'Nome',
                             field: 'name',
                         }, {
-                            class: 'text-center w-[10%]',
-                            label: 'Limite',
-                            field: 'limit',
-                        }, {
                             class: 'w-[1%]',
                             btnEdit: true,
-                            route: 'products.categories.edit'
+                            route: 'products.box.edit'
                         }, {
                             class: 'w-[1%]',
                             btnDel: true,
-                            route: 'products.categories.destroy'
+                            route: 'products.box.destroy'
                         }],
                     }"
                    @openModal="(data, route) => {
@@ -97,9 +93,9 @@ defineProps({
                              :confirm="modalConfirm"
                              @closeModal="modalShow = false">
 
-                    <template #title>Elimina Categoria</template>
+                    <template #title>Elimina Box</template>
                     <template #body>
-                        Vuoi eliminare la categoria <span class="font-semibold">{{ modalData.name }}</span> ?
+                        Vuoi eliminare la box <span class="font-semibold">{{ modalData.name }}</span> ?
                     </template>
 
                 </ModalSimple>

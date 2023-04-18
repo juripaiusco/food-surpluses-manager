@@ -237,17 +237,17 @@ class Product extends Controller
         // Creo un oggetto di dati vuoto
         $columns = Schema::getColumnListing('categories');
 
-        $products_array = array();
-        foreach ($columns as $products_field) {
-            $products_array[$products_field] = null;
+        $categories_array = array();
+        foreach ($columns as $categories_field) {
+            $categories_array[$categories_field] = null;
         }
 
-        unset($products_array['id']);
-        unset($products_array['deleted_at']);
-        unset($products_array['created_at']);
-        unset($products_array['updated_at']);
+        unset($categories_array['id']);
+        unset($categories_array['deleted_at']);
+        unset($categories_array['created_at']);
+        unset($categories_array['updated_at']);
 
-        $data = json_decode(json_encode($products_array), true);
+        $data = json_decode(json_encode($categories_array), true);
 
         return Inertia::render('Products/Categories/Form', [
             'data' => $data
@@ -298,5 +298,117 @@ class Product extends Controller
         \App\Models\Category::destroy($id);
 
         return to_route('products.categories.index');
+    }
+
+    public function box_index()
+    {
+        $request_validate_array = [
+            'name',
+            'limit',
+        ];
+
+        // Query data
+        $data = \App\Models\Product::query();
+
+        // Request validate
+        request()->validate([
+            'orderby' => ['in:' . implode(',', $request_validate_array)],
+            'ordertype' => ['in:asc,desc']
+        ]);
+
+        // Filtro RICERCA
+        if (request('s')) {
+            $data->where(function ($q) use ($request_validate_array) {
+
+                foreach ($request_validate_array as $field) {
+                    $q->orWhere($field, 'like', '%' . request('s') . '%');
+                }
+
+            });
+        }
+
+        // Filtro ORDINAMENTO
+        if (request('orderby') && request('ordertype')) {
+            $data->orderby(request('orderby'), strtoupper(request('ordertype')));
+        }
+
+        $data = $data->where('json_box', '!=', '');
+        $data = $data->select();
+        $data = $data->paginate(env('VIEWS_PAGINATE'))->withQueryString();
+
+        return Inertia::render('Products/Box/List', [
+            'data' => $data,
+            'filters' => request()->all(['s', 'orderby', 'ordertype'])
+        ]);
+    }
+
+    public function box_create()
+    {
+        // Creo un oggetto di dati vuoto
+        $columns = Schema::getColumnListing('products');
+
+        $products_array = array();
+        foreach ($columns as $products_field) {
+            $products_array[$products_field] = null;
+        }
+
+        unset($products_array['id']);
+        unset($products_array['deleted_at']);
+        unset($products_array['created_at']);
+        unset($products_array['updated_at']);
+
+        $data = json_decode(json_encode($products_array), true);
+
+        return Inertia::render('Products/Box/Form', [
+            'data' => $data
+        ]);
+    }
+
+    public function box_store(Request $request)
+    {
+        $request->validate([
+            'cod'       => ['required', 'unique:products', 'min:7'],
+            'name'      => ['required'],
+        ]);
+
+        $product = new \App\Models\Product();
+
+        $product->fill($request->all());
+
+        $product->save();
+
+        return to_route('products.box.index');
+    }
+
+    public function box_edit($id)
+    {
+        $data = \App\Models\Product::find($id);
+
+        return Inertia::render('Products/Box/Form', [
+            'data' => $data
+        ]);
+    }
+
+    public function box_update(Request $request, $id)
+    {
+        $request->validate([
+            'cod'       => ['required', 'unique:products,cod,' . $id, 'min:7'],
+            'name'      => ['required'],
+        ]);
+
+        $product = \App\Models\Product::find($id);
+
+        $product->fill($request->all());
+
+        $product->save();
+
+        return to_route('products.box.index');
+    }
+
+    public function box_destroy($id)
+    {
+        \App\Models\Product::destroy($id);
+
+        return to_route('products.box.index');
     }
 }

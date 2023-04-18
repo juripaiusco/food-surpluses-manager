@@ -47,6 +47,13 @@ defineProps({
                         Categorie Prodotto
                     </Link>
 
+                    <Link :href="route('products.box.index')"
+                          class="ml-3 btn btn-outline-primary">
+
+                        Box Prodotto
+
+                    </Link>
+
                 </div>
                 <div class="w-1/4">
 

@@ -70,6 +70,13 @@ Route::middleware('auth')->group(function () {
     Route::post('/products/categories/update/{id}', [Product::class, 'category_update'])->name('products.categories.update');
     Route::get('/products/categories/destroy/{id}', [Product::class, 'category_destroy'])->name('products.categories.destroy');
 
+    Route::get('/products/box', [Product::class, 'box_index'])->name('products.box.index');
+    Route::get('/products/box/create', [Product::class, 'box_create'])->name('products.box.create');
+    Route::post('/products/box/store', [Product::class, 'box_store'])->name('products.box.store');
+    Route::get('/products/box/edit/{id}', [Product::class, 'box_edit'])->name('products.box.edit');
+    Route::post('/products/box/update/{id}', [Product::class, 'box_update'])->name('products.box.update');
+    Route::get('/products/box/destroy/{id}', [Product::class, 'box_destroy'])->name('products.box.destroy');
+
     Route::get('/customers', [Customer::class, 'index'])->name('customers.index');
     Route::get('/customers/create', [Customer::class, 'create'])->name('customers.create');
     Route::post('/customers/store', [Customer::class, 'store'])->name('customers.store');
