@@ -215,12 +215,12 @@ const form = useForm(dataForm);
                                 <thead>
 
                                 <tr>
-                                    <th>Data</th>
-                                    <th>Utente</th>
-                                    <th>Cliente</th>
-                                    <th>Ordine</th>
-                                    <th>Kg.</th>
-                                    <th>Q.tà</th>
+                                    <th class="!pt-[5px] !pb-[5px]">Data</th>
+                                    <th class="!pt-[5px] !pb-[5px]">Utente</th>
+                                    <th class="!pt-[5px] !pb-[5px]">Cliente</th>
+                                    <th class="!pt-[5px] !pb-[5px]">Ordine</th>
+                                    <th class="!pt-[5px] !pb-[5px]">Kg.</th>
+                                    <th class="!pt-[5px] !pb-[5px]">Q.tà</th>
                                 </tr>
 
                                 </thead>
