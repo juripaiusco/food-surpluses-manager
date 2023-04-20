@@ -425,7 +425,10 @@ export default {
                 s_customer: this.$props.data.s_customer
             });
 
-            form.get(route);
+            form.get(route, {
+                preserveScroll: true,
+                preserveState: true,
+            });
 
         }
     },
