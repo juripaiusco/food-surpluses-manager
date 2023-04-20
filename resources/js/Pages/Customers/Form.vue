@@ -12,6 +12,7 @@ import {__} from "@/extComponents/Translations";
 const props = defineProps({
 
     data: Object,
+    saveRedirect: String,
 
 });
 
@@ -392,8 +393,9 @@ const form = useForm(dataForm);
 
                 <div class="text-right mt-8">
 
-                    <Link :href="route('customers.index')"
-                          class="btn btn-secondary w-[100px]">Annulla</Link>
+                    <a href="#"
+                       onclick="window.history.back(); return false;"
+                       class="btn btn-secondary w-[100px]">Annulla</a>
 
                     <button type="submit"
                             class="btn btn-success ml-2 w-[100px]">Salva</button>

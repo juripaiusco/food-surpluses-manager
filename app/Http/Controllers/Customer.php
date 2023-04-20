@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Schema;
 use Inertia\Inertia;
 
@@ -94,6 +95,8 @@ class Customer extends Controller
         unset($customers_array['created_at']);
         unset($customers_array['updated_at']);
 
+        $customers_array['saveRedirect'] = Redirect::back()->getTargetUrl();
+
         $data = json_decode(json_encode($customers_array), true);
 
         return Inertia::render('Customers/Form', [
@@ -116,13 +119,17 @@ class Customer extends Controller
             'points_renew'  => ['required'],
         ]);
 
+        $saveRedirect = $request['saveRedirect'];
+
+        unset($request['saveRedirect']);
+
         $customer = new \App\Models\Customer();
 
         $customer->fill($request->all());
 
         $customer->save();
-
-        return to_route('customers.index');
+        
+        return Redirect::to($saveRedirect);
     }
 
     /**
@@ -141,8 +148,10 @@ class Customer extends Controller
         $data = \App\Models\Customer::with('order')
             ->find($id);
 
+        $data->saveRedirect = Redirect::back()->getTargetUrl();
+
         return Inertia::render('Customers/Form', [
-            'data' => $data
+            'data' => $data,
         ]);
     }
 
@@ -161,9 +170,12 @@ class Customer extends Controller
             'points_renew'  => ['required'],
         ]);
 
+        $saveRedirect = $request['saveRedirect'];
+
         unset($request['order']);
         unset($request['created_at']);
         unset($request['updated_at']);
+        unset($request['saveRedirect']);
 
         $customer = \App\Models\Customer::find($id);
 
@@ -171,7 +183,7 @@ class Customer extends Controller
 
         $customer->save();
 
-        return to_route('customers.index');
+        return Redirect::to($saveRedirect);
     }
 
     /**
