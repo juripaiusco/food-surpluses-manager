@@ -128,7 +128,7 @@ class Customer extends Controller
         $customer->fill($request->all());
 
         $customer->save();
-        
+
         return Redirect::to($saveRedirect);
     }
 
