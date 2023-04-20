@@ -12,3 +12,7 @@
 .breadcrumb-item.active {
     color: unset !important;
 }
+
+#nprogress .bar {
+    display: none;
+}
