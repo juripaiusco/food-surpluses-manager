@@ -405,8 +405,9 @@ const formConfirm = useForm({
 
 <script>
 import {useForm} from "@inertiajs/vue3";
-import beep from '@/../mp3/beep.mp3';
-import error from '@/../mp3/error.mp3';
+import soundBeep from '@/../mp3/beep.mp3';
+import soundError from '@/../mp3/error.mp3';
+import soundAlert from '@/../mp3/alert.mp3';
 
 export default {
     data () {
@@ -457,11 +458,15 @@ export default {
 
         if (this.data.s_customer && this.data.s_product && this.data.error_limit !== true) {
             // window.location.href = this.create_url;
-            this.playSound(beep);
+            this.playSound(soundBeep);
         }
 
         if (this.data.error_limit === true) {
-            this.playSound(error);
+            this.playSound(soundError);
+        }
+
+        if (this.data.product.monitoring_buy === 1) {
+            this.playSound(soundAlert);
         }
 
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
