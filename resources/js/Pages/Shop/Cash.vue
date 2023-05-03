@@ -405,6 +405,7 @@ const formConfirm = useForm({
 
 <script>
 import {useForm} from "@inertiajs/vue3";
+import beep from '@/../mp3/beep.mp3';
 
 export default {
     data () {
@@ -430,9 +431,13 @@ export default {
                 preserveState: true,
             });
 
+        },
+        playSound (sound) {
+            const audio = new Audio(sound);
+            audio.play();
         }
     },
-    mounted() {
+    mounted () {
 
         if (this.data.s_customer === null ||
             (this.data.s_customer && !this.data.customer.id) ||
@@ -445,7 +450,8 @@ export default {
         }
 
         if (this.data.s_customer && this.data.s_product && this.data.error_limit !== true) {
-            window.location.href = this.create_url;
+            // window.location.href = this.create_url;
+            this.playSound(beep);
         }
 
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
