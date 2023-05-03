@@ -428,7 +428,7 @@ export default {
 
             form.get(route, {
                 preserveScroll: true,
-                preserveState: true,
+                preserveState: false,
             });
 
         },
