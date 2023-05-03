@@ -406,6 +406,7 @@ const formConfirm = useForm({
 <script>
 import {useForm} from "@inertiajs/vue3";
 import beep from '@/../mp3/beep.mp3';
+import error from '@/../mp3/error.mp3';
 
 export default {
     data () {
@@ -457,6 +458,10 @@ export default {
         if (this.data.s_customer && this.data.s_product && this.data.error_limit !== true) {
             // window.location.href = this.create_url;
             this.playSound(beep);
+        }
+
+        if (this.data.error_limit === true) {
+            this.playSound(error);
         }
 
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
