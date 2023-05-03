@@ -129,7 +129,9 @@ const formConfirm = useForm({
                                     </div>
                                     <div class="col-1 !p-0 !pt-1 !pr-1">
 
-                                        <button class="btn btn-danger !w-full">
+                                        <button @click="changeAmount('s_product_fead_amount', -1)"
+                                                type="button"
+                                                class="btn btn-danger !w-full">
 
                                             <svg class="w-4 h-4 m-auto"
                                                  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -141,7 +143,9 @@ const formConfirm = useForm({
                                     </div>
                                     <div class="col-1 !p-0 !pt-1 !pl-1">
 
-                                        <button class="btn btn-success !w-full">
+                                        <button @click="changeAmount('s_product_fead_amount', 1)"
+                                                type="button"
+                                                class="btn btn-success !w-full">
 
                                             <svg class="w-4 h-4 m-auto"
                                                  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -196,7 +200,9 @@ const formConfirm = useForm({
                                     </div>
                                     <div class="col-1 !p-0 !pt-1 !pr-1">
 
-                                        <button class="btn btn-danger !w-full">
+                                        <button @click="changeAmount('s_product_feadno_amount', -1)"
+                                                type="button"
+                                                class="btn btn-danger !w-full">
 
                                             <svg class="w-4 h-4 m-auto"
                                                  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -208,7 +214,9 @@ const formConfirm = useForm({
                                     </div>
                                     <div class="col-1 !p-0 !pt-1 !pl-1">
 
-                                        <button class="btn btn-success !w-full">
+                                        <button @click="changeAmount('s_product_feadno_amount', 1)"
+                                                type="button"
+                                                class="btn btn-success !w-full">
 
                                             <svg class="w-4 h-4 m-auto"
                                                  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -465,7 +473,7 @@ export default {
         }
     },
     methods: {
-        routeTo(route, data) {
+        routeTo (route, data) {
 
             let form = useForm({
                 product: data,
@@ -481,6 +489,15 @@ export default {
         playSound (sound) {
             const audio = new Audio(sound);
             audio.play();
+        },
+        changeAmount (ref, addAmount) {
+
+            let refAmount = parseInt(this.$refs[ref].value);
+
+            if (refAmount >= 1 && (refAmount + addAmount) > 0) {
+                this.$refs[ref].value = refAmount + addAmount;
+            }
+
         }
     },
     mounted () {
