@@ -404,7 +404,7 @@ const formConfirm = useForm({
 </template>
 
 <script>
-import {useForm} from "@inertiajs/vue3";
+import {router, useForm} from "@inertiajs/vue3";
 import soundBeep from '@/../mp3/beep.mp3';
 import soundError from '@/../mp3/error.mp3';
 import soundAlert from '@/../mp3/alert.mp3';
@@ -441,11 +441,6 @@ export default {
     },
     mounted () {
 
-        window.onbeforeunload = function(event)
-        {
-            return confirm("Confirm refresh");
-        };
-
         if (this.data.s_customer === null ||
             (this.data.s_customer && !this.data.customer.id) ||
             (this.data.s_customer && this.data.customer.active === 0)) {
@@ -457,8 +452,8 @@ export default {
         }
 
         if (this.data.s_customer && this.data.s_product && this.data.error_limit !== true) {
-            // window.location.href = this.create_url;
             this.playSound(soundBeep);
+            router.get(this.create_url);
         }
 
         if (this.data.error_limit === true) {
