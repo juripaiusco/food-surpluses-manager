@@ -439,6 +439,11 @@ export default {
     },
     mounted () {
 
+        window.onbeforeunload = function(event)
+        {
+            return confirm("Confirm refresh");
+        };
+
         if (this.data.s_customer === null ||
             (this.data.s_customer && !this.data.customer.id) ||
             (this.data.s_customer && this.data.customer.active === 0)) {
