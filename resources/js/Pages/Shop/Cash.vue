@@ -43,7 +43,7 @@ const formConfirm = useForm({
 
         </template>
 
-        <ApplicationContainer>
+        <ApplicationContainer class="!max-w-[calc(100%-60px)]">
 
             <form v-if="!data.customer.id || data.customer.active === 0">
 
