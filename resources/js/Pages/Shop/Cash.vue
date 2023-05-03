@@ -111,6 +111,7 @@ const formConfirm = useForm({
                             <form @submit.prevent="form.get(route('shop.index'))">
 
                                 <div class="row">
+                                    <div class="col-1 !w-[40px] !pl-4 pt-2">F</div>
                                     <div class="col">
 
                                         <select ref="s_product_fead"
@@ -118,12 +119,36 @@ const formConfirm = useForm({
                                                 v-model="form.s_product_fead"
                                                 class="form-select">
                                             <option value=""
-                                                    selected>Prodotti FEAD</option>
+                                                    selected></option>
                                             <option v-for="product in data.products_fead"
                                                     :value="product.cod">
                                                 {{ product.name }}
                                             </option>
                                         </select>
+
+                                    </div>
+                                    <div class="col-1 !p-0 !pt-1 !pr-1">
+
+                                        <button class="btn btn-danger !w-full">
+
+                                            <svg class="w-4 h-4 m-auto"
+                                                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15" />
+                                            </svg>
+
+                                        </button>
+
+                                    </div>
+                                    <div class="col-1 !p-0 !pt-1 !pl-1">
+
+                                        <button class="btn btn-success !w-full">
+
+                                            <svg class="w-4 h-4 m-auto"
+                                                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                            </svg>
+
+                                        </button>
 
                                     </div>
                                     <div class="col-2">
@@ -136,15 +161,12 @@ const formConfirm = useForm({
                                                v-model="form.s_product_fead_amount" />
 
                                     </div>
-                                    <div class="col-1">
+                                    <div class="col-2">
 
                                         <button type="submit"
                                                 class="btn btn-primary w-full h-full">
 
-                                            <svg class="w-4 h-4 m-auto"
-                                                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                                            </svg>
+                                            Aggiungi
 
                                         </button>
 
@@ -156,6 +178,7 @@ const formConfirm = useForm({
                             <form @submit.prevent="form.get(route('shop.index'))">
 
                                 <div class="row !mt-4">
+                                    <div class="col-1 !w-[40px] !pl-4 pt-2">FN</div>
                                     <div class="col">
 
                                         <select ref="s_product_feadno"
@@ -163,12 +186,36 @@ const formConfirm = useForm({
                                                 v-model="form.s_product_feadno"
                                                 class="form-select">
                                             <option selected
-                                                    value="">Prodotti NO FEAD</option>
+                                                    value=""></option>
                                             <option v-for="product in data.products_feadno"
                                                     :value="product.cod">
                                                 {{ product.name }}
                                             </option>
                                         </select>
+
+                                    </div>
+                                    <div class="col-1 !p-0 !pt-1 !pr-1">
+
+                                        <button class="btn btn-danger !w-full">
+
+                                            <svg class="w-4 h-4 m-auto"
+                                                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15" />
+                                            </svg>
+
+                                        </button>
+
+                                    </div>
+                                    <div class="col-1 !p-0 !pt-1 !pl-1">
+
+                                        <button class="btn btn-success !w-full">
+
+                                            <svg class="w-4 h-4 m-auto"
+                                                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                            </svg>
+
+                                        </button>
 
                                     </div>
                                     <div class="col-2">
@@ -181,15 +228,12 @@ const formConfirm = useForm({
                                                v-model="form.s_product_feadno_amount" />
 
                                     </div>
-                                    <div class="col-1">
+                                    <div class="col-2">
 
                                         <button type="submit"
                                                 class="btn btn-primary w-full h-full">
 
-                                            <svg class="w-4 h-4 m-auto"
-                                                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                                            </svg>
+                                            Aggiungi
 
                                         </button>
 
