@@ -144,6 +144,10 @@ class Order extends Controller
             ->with('user')
             ->find($id);
 
+        if (!isset($data)) {
+            return to_route('orders.index');
+        }
+
         $customer = json_decode($data->json_customer);
         $products = json_decode($data->json_products);
 
@@ -189,8 +193,48 @@ class Order extends Controller
      */
     public function destroy(string $id)
     {
-        /*\App\Models\Order::destroy($id);
+        $order = \App\Models\Order::find($id);
 
-        return to_route('orders.list');*/
+        // Ripristino le giacenze prodotti
+        foreach (json_decode($order->json_products) as $product) {
+
+            $store = \App\Models\Store::where('customer_id', $order->customer_id)
+                ->where('order_id', $id)
+                ->where('product_id', $product->id);
+
+            $store_get = $store->first();
+
+            if (isset($store_get)) {
+
+                $product_edit = \App\Models\Product::find($product->id);
+                $product_edit->kg_total += $store_get->kg ? $store_get->kg * (-1) : 0;
+                $product_edit->amount_total += $store_get->amount ? $store_get->amount * (-1) : 0;
+                $product_edit->save();
+
+                $store->delete();
+
+            }
+        }
+        // END - Ripristino le giacenze prodotti
+
+        // Riemetto i punti al cliente
+        $orders_count_this_month = \App\Models\Order::where('customer_id', $order->customer_id)
+            ->where('date', 'LIKE', date('Y-m-d') . '%')
+            ->count();
+
+        $customer = \App\Models\Customer::find($order->customer_id);
+
+        if ($orders_count_this_month == 1) {
+            $customer->points = $customer->points_renew;
+        } else {
+            $customer->points += $order->points;
+        }
+
+        $customer->save();
+        // END - Riemetto i punti al cliente
+
+        \App\Models\Order::destroy($id);
+
+        return to_route('orders.index');
     }
 }

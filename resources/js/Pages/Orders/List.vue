@@ -78,9 +78,13 @@ defineProps({
                             field: 'points',
                         }, {
                             class: 'w-[1%]',
+                            btnDel: true,
+                            route: 'orders.destroy'
+                        }, {
+                            class: 'w-[1%]',
                             btnShow: true,
                             route: 'orders.show'
-                        }],
+                        }]
                     }"
                    @openModal="(data, route) => {
                        modalData = data;
@@ -100,7 +104,7 @@ defineProps({
 
                     <template #title>Elimina Ordine</template>
                     <template #body>
-                        Vuoi eliminare il l'ordine <span class="font-semibold">{{ modalData.name }}</span> ?
+                        Vuoi eliminare il l'ordine <span class="font-semibold">{{ modalData.reference }}</span> ?
                     </template>
 
                 </ModalSimple>
