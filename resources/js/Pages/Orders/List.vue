@@ -78,6 +78,11 @@ defineProps({
                             field: 'points',
                         }, {
                             class: 'w-[1%]',
+                            btnEdit: true,
+                            route: 'orders.edit'
+                        }
+                        , {
+                            class: 'w-[1%]',
                             btnDel: true,
                             route: 'orders.destroy'
                         }, {

@@ -50,7 +50,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/orders/show/{id}', [Order::class, 'show'])->name('orders.show');
 //    Route::get('/orders/create', [Order::class, 'create'])->name('orders.create');
 //    Route::post('/orders/store', [Order::class, 'store'])->name('orders.store');
-//    Route::get('/orders/edit/{id}', [Order::class, 'edit'])->name('orders.edit');
+    Route::get('/orders/edit/{id}', [Order::class, 'edit'])->name('orders.edit');
 //    Route::post('/orders/update/{id}', [Order::class, 'update'])->name('orders.update');
     Route::get('/orders/destroy/{id}', [Order::class, 'destroy'])->name('orders.destroy');
 
