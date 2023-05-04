@@ -367,34 +367,47 @@ function productSelectReset (refToReset) {
                     </div>
                     <div class="col">
 
-                        <div class="text-right">
-                            Cod. Cliente: <span class="text-2xl font-semibold">{{ data.customer.cod }}</span>
-                        </div>
+                        <div class="alert alert-success">
 
-                        <div class="alert alert-success mt-4">
+                            <table class="w-full">
+                                <tr>
+                                    <td class="align-middle">Cod. Cliente</td>
+                                    <td class="align-middle text-right">
+                                        <span class="text-2xl font-semibold">{{ data.customer.cod }}</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-top">Nome</td>
+                                    <td class="align-middle text-right">
+                                        <span class="text-2xl font-semibold">
+                                            {{ data.customer.name }} {{ data.customer.surname }}
+                                        </span>
+                                        <br>
+                                        Componenti {{ data.customer.family_number }}
+                                    </td>
+                                </tr>
+                            </table>
 
-                            <div class="row">
-                                <div class="col-8 align-middle">
+                            <hr class="mt-4 mb-4 border-green-800">
 
-                                    <span class="text-2xl font-semibold">
-                                        {{ data.customer.name }} {{ data.customer.surname }}
+                            <table class="w-full">
+                                <tr>
+                                    <td class="align-center">Punti totali</td>
+                                    <td class="align-middle text-right">
+                                        <span class="text-3xl font-semibold">
+                                        {{ data.customer.points_total }}
                                     </span>
-                                    <br>
-                                    Componenti {{ data.customer.family_number }}
-
-                                </div>
-                                <div class="col align-middle text-right">
-
-                                    Punti
-
-                                    <br>
-
-                                    <span class="text-3xl font-semibold">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-center">Punti utilizzabili oggi</td>
+                                    <td class="align-middle text-right">
+                                        <span class="text-3xl font-semibold">
                                         {{ data.customer.points }}
                                     </span>
-
-                                </div>
-                            </div>
+                                    </td>
+                                </tr>
+                            </table>
 
                         </div>
 

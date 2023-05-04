@@ -135,6 +135,8 @@ class Shop extends Controller
         }
         // -------------------------------------------------------------------------------------
 
+        $customer->points_total = $customer->points;
+
         // Verifico che sia la prima spesa del mese --------------------------------------------
         if ($this->is_first_order($customer)) {
 
