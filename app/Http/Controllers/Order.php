@@ -188,10 +188,7 @@ class Order extends Controller
         return to_route('orders.list');*/
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function restore(string $id)
     {
         $order = \App\Models\Order::find($id);
 
@@ -232,6 +229,14 @@ class Order extends Controller
 
         $customer->save();
         // END - Riemetto i punti al cliente
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        $this->restore($id);
 
         \App\Models\Order::destroy($id);
 
