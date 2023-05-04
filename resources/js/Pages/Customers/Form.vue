@@ -71,7 +71,10 @@ const form = useForm(dataForm);
                                 role="tab"
                                 aria-controls="note-tab"
                                 aria-selected="false">
-                            Note
+                            <span :class="{'!text-red-500': form.note_alert}">
+                                Note
+                                <span v-if="form.note_alert">*</span>
+                            </span>
                         </button>
 
                     </li>
