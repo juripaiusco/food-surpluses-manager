@@ -29,6 +29,24 @@ const formConfirm = useForm({
     products: usePage().props.shopProducts
 });
 
+function changeAmount (ref, addAmount) {
+
+    let refAmount = parseInt(form[ref]);
+
+    if (refAmount >= 1 && (refAmount + addAmount) > 0) {
+        form[ref] = refAmount + addAmount;
+    }
+
+}
+
+function productSelectReset (refToReset) {
+
+    form[refToReset] = '';
+    form.s_product_fead_amount = 1;
+    form.s_product_feadno_amount = 1;
+
+}
+
 </script>
 
 <template>
@@ -111,61 +129,126 @@ const formConfirm = useForm({
                             <form @submit.prevent="form.get(route('shop.index'))">
 
                                 <div class="row">
-                                    <div class="col-1 !w-[40px] !pl-4 pt-2">F</div>
                                     <div class="col">
 
-                                        <select ref="s_product_fead"
-                                                name="s_product_fead"
-                                                v-model="form.s_product_fead"
-                                                class="form-select">
-                                            <option value=""
-                                                    selected></option>
-                                            <option v-for="product in data.products_fead"
-                                                    :value="product.cod">
-                                                {{ product.name }}
-                                            </option>
-                                        </select>
+                                        <div class="row">
+                                            <div class="col-1 !w-[40px] !pl-4 pt-2">F</div>
+                                            <div class="col">
+
+                                                <select ref="s_product_fead"
+                                                        name="s_product_fead"
+                                                        v-model="form.s_product_fead"
+                                                        @change="productSelectReset('s_product_feadno')"
+                                                        class="form-select">
+                                                    <option value=""
+                                                            selected></option>
+                                                    <option v-for="product in data.products_fead"
+                                                            :value="product.cod">
+                                                        {{ product.name }}
+                                                    </option>
+                                                </select>
+
+                                            </div>
+                                            <div class="col-1 !p-0 !pr-1">
+
+                                                <button @click="changeAmount('s_product_fead_amount', -1)"
+                                                        type="button"
+                                                        class="btn btn-danger !w-full !h-full">
+
+                                                    <svg class="w-5 h-5 m-auto"
+                                                         xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15" />
+                                                    </svg>
+
+                                                </button>
+
+                                            </div>
+                                            <div class="col-1 !p-0 !pl-1">
+
+                                                <button @click="changeAmount('s_product_fead_amount', 1)"
+                                                        type="button"
+                                                        class="btn btn-success !w-full !h-full">
+
+                                                    <svg class="w-5 h-5 m-auto"
+                                                         xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                                    </svg>
+
+                                                </button>
+
+                                            </div>
+                                            <div class="col-2">
+
+                                                <input class="form-control text-center"
+                                                       type="text"
+                                                       placeholder="1"
+                                                       ref="s_product_fead_amount"
+                                                       name="s_product_fead_amount"
+                                                       v-model="form.s_product_fead_amount" />
+
+                                            </div>
+                                        </div>
+
+                                        <div class="row !mt-4">
+                                            <div class="col-1 !w-[40px] !pl-4 pt-2">FN</div>
+                                            <div class="col">
+
+                                                <select ref="s_product_feadno"
+                                                        name="s_product_feadno"
+                                                        v-model="form.s_product_feadno"
+                                                        @change="productSelectReset('s_product_fead')"
+                                                        class="form-select">
+                                                    <option selected
+                                                            value=""></option>
+                                                    <option v-for="product in data.products_feadno"
+                                                            :value="product.cod">
+                                                        {{ product.name }}
+                                                    </option>
+                                                </select>
+
+                                            </div>
+                                            <div class="col-1 !p-0 !pr-1">
+
+                                                <button @click="changeAmount('s_product_feadno_amount', -1)"
+                                                        type="button"
+                                                        class="btn btn-danger !w-full !h-full">
+
+                                                    <svg class="w-5 h-5 m-auto"
+                                                         xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15" />
+                                                    </svg>
+
+                                                </button>
+
+                                            </div>
+                                            <div class="col-1 !p-0 !pl-1">
+
+                                                <button @click="changeAmount('s_product_feadno_amount', 1)"
+                                                        type="button"
+                                                        class="btn btn-success !w-full !h-full">
+
+                                                    <svg class="w-5 h-5 m-auto"
+                                                         xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                                    </svg>
+
+                                                </button>
+
+                                            </div>
+                                            <div class="col-2">
+
+                                                <input class="form-control text-center"
+                                                       type="text"
+                                                       placeholder="1"
+                                                       ref="s_product_feadno_amount"
+                                                       name="s_product_feadno_amount"
+                                                       v-model="form.s_product_feadno_amount" />
+
+                                            </div>
+                                        </div>
 
                                     </div>
-                                    <div class="col-1 !p-0 !pt-1 !pr-1">
-
-                                        <button @click="changeAmount('s_product_fead_amount', -1)"
-                                                type="button"
-                                                class="btn btn-danger !w-full">
-
-                                            <svg class="w-4 h-4 m-auto"
-                                                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15" />
-                                            </svg>
-
-                                        </button>
-
-                                    </div>
-                                    <div class="col-1 !p-0 !pt-1 !pl-1">
-
-                                        <button @click="changeAmount('s_product_fead_amount', 1)"
-                                                type="button"
-                                                class="btn btn-success !w-full">
-
-                                            <svg class="w-4 h-4 m-auto"
-                                                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                                            </svg>
-
-                                        </button>
-
-                                    </div>
-                                    <div class="col-2">
-
-                                        <input class="form-control text-center"
-                                               type="text"
-                                               placeholder="1"
-                                               ref="s_product_fead_amount"
-                                               name="s_product_fead_amount"
-                                               v-model="form.s_product_fead_amount" />
-
-                                    </div>
-                                    <div class="col-2">
+                                    <div class="col-2 !p-0 !pr-3">
 
                                         <button type="submit"
                                                 class="btn btn-primary w-full h-full">
@@ -177,76 +260,6 @@ const formConfirm = useForm({
                                     </div>
                                 </div>
 
-                            </form>
-
-                            <form @submit.prevent="form.get(route('shop.index'))">
-
-                                <div class="row !mt-4">
-                                    <div class="col-1 !w-[40px] !pl-4 pt-2">FN</div>
-                                    <div class="col">
-
-                                        <select ref="s_product_feadno"
-                                                name="s_product_feadno"
-                                                v-model="form.s_product_feadno"
-                                                class="form-select">
-                                            <option selected
-                                                    value=""></option>
-                                            <option v-for="product in data.products_feadno"
-                                                    :value="product.cod">
-                                                {{ product.name }}
-                                            </option>
-                                        </select>
-
-                                    </div>
-                                    <div class="col-1 !p-0 !pt-1 !pr-1">
-
-                                        <button @click="changeAmount('s_product_feadno_amount', -1)"
-                                                type="button"
-                                                class="btn btn-danger !w-full">
-
-                                            <svg class="w-4 h-4 m-auto"
-                                                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15" />
-                                            </svg>
-
-                                        </button>
-
-                                    </div>
-                                    <div class="col-1 !p-0 !pt-1 !pl-1">
-
-                                        <button @click="changeAmount('s_product_feadno_amount', 1)"
-                                                type="button"
-                                                class="btn btn-success !w-full">
-
-                                            <svg class="w-4 h-4 m-auto"
-                                                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                                            </svg>
-
-                                        </button>
-
-                                    </div>
-                                    <div class="col-2">
-
-                                        <input class="form-control text-center"
-                                               type="text"
-                                               placeholder="1"
-                                               ref="s_product_feadno_amount"
-                                               name="s_product_feadno_amount"
-                                               v-model="form.s_product_feadno_amount" />
-
-                                    </div>
-                                    <div class="col-2">
-
-                                        <button type="submit"
-                                                class="btn btn-primary w-full h-full">
-
-                                            Aggiungi
-
-                                        </button>
-
-                                    </div>
-                                </div>
 
                             </form>
 
@@ -489,15 +502,6 @@ export default {
         playSound (sound) {
             const audio = new Audio(sound);
             audio.play();
-        },
-        changeAmount (ref, addAmount) {
-
-            let refAmount = parseInt(this.$refs[ref].value);
-
-            if (refAmount >= 1 && (refAmount + addAmount) > 0) {
-                this.$refs[ref].value = refAmount + addAmount;
-            }
-
         }
     },
     mounted () {
