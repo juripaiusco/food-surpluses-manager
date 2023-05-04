@@ -80,7 +80,8 @@ class Order extends Controller
 
         return Inertia::render('Orders/List', [
             'data' => $data,
-            'filters' => request()->all(['s', 'orderby', 'ordertype'])
+            'filters' => request()->all(['s', 'orderby', 'ordertype']),
+            'today' => date('Ymd')
         ]);
     }
 
