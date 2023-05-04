@@ -530,8 +530,12 @@ export default {
         }
 
         if (this.data.s_customer && this.data.s_product && this.data.error_limit !== true) {
-            this.playSound(soundBeep);
             router.get(this.create_url);
+        }
+
+        if (this.data.s_customer && this.data.product.id && this.data.error_limit !== true) {
+            console.log(this.data.product.id);
+            this.playSound(soundBeep);
         }
 
         if (this.data.error_limit === true) {
