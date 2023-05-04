@@ -50,6 +50,10 @@ class User extends Controller
         'users' => [
             'title' => 'Volontari',
             'single' => 'volontario'
+        ],
+
+        'settings' => [
+            'title' => 'Impostazioni'
         ]
     );
 

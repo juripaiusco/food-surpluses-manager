@@ -9,6 +9,7 @@ use App\Http\Controllers\Order;
 use App\Http\Controllers\Product;
 use App\Http\Controllers\Customer;
 use App\Http\Controllers\Retail;
+use App\Http\Controllers\Setting;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -99,6 +100,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/users/edit/{id}', [User::class, 'edit'])->name('users.edit');
     Route::post('/users/update/{id}', [User::class, 'update'])->name('users.update');
     Route::get('/users/destroy/{id}', [User::class, 'destroy'])->name('users.destroy');
+
+    Route::get('/settings', [Setting::class, 'index'])->name('settings.index');
+    Route::post('/settings/update/{id}', [Setting::class, 'update'])->name('settings.update');
 });
 
 require __DIR__.'/auth.php';

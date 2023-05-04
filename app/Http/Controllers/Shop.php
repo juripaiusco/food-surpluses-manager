@@ -74,7 +74,7 @@ class Shop extends Controller
             ->orderby('name')
             ->get();
 
-        $products_more_moved = DB::table('stores')
+        /*$products_more_moved = DB::table('stores')
             ->select([
                 'stores.product_id',
                 'stores.cod',
@@ -86,6 +86,11 @@ class Shop extends Controller
             ->groupBy('product_id')
             ->orderBy('count', 'DESC')
             ->limit(16)
+            ->get();*/
+
+        $settings = \App\Models\Setting::first();
+        $cod_products_more_moved = explode(',', str_replace(' ', '', $settings->shop_btn));
+        $products_more_moved = \App\Models\Product::whereIn('cod', $cod_products_more_moved)
             ->get();
         // -----------------------------------------------------------------------------------
 

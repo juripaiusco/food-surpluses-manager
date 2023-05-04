@@ -9,4 +9,5 @@ return [
     'customers'     => 'Assistiti',
     'retails'       => 'Negozi',
     'users'         => 'Volontari',
+    'settings'      => 'Impostazioni',
 ];
