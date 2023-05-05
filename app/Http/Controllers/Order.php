@@ -281,6 +281,9 @@ class Order extends Controller
 
         \App\Models\Order::destroy($id);
 
-        return to_route('orders.index');
+        return to_route('orders.index', [
+            'orderby' => 'date',
+            'ordertype' => 'desc',
+        ]);
     }
 }
