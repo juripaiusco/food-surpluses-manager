@@ -14,6 +14,13 @@ class Shop extends Controller
         $this->middleware('auth');
     }
 
+    public function get_settings()
+    {
+        $settings = new Setting();
+
+        return $settings->get();
+    }
+
     /**
      * Mostra la cassa
      *
@@ -22,6 +29,8 @@ class Shop extends Controller
      */
     public function index(Request $request)
     {
+        $settings_value = $this->get_settings();
+
         // Ricerco il cliente
         if ($request->input('s_customer')) {
 
@@ -88,9 +97,6 @@ class Shop extends Controller
             ->limit(16)
             ->get();*/
 
-        $settings = new Setting();
-        $settings_value = $settings->get();
-
         $cod_products_more_moved = explode(',', str_replace(' ', '', $settings_value['shop_btn']));
         $products_more_moved = \App\Models\Product::whereIn('cod', $cod_products_more_moved)
             ->get();
@@ -125,27 +131,31 @@ class Shop extends Controller
             ->where('cod', $request->input('s_customer'))
             ->first();
 
-        // Al primo inserimento del cliente inserire la borsa frutta / verdura -----------------
-        if ($request->session()->get('shopProducts') == null) {
+        if (isset($customer)) {
 
-            $product = \App\Models\Product::with('category')
-                ->where('cod', 'P000093')
-                ->first();
+            // Al primo inserimento del cliente inserire la borsa frutta / verdura -----------------
+            if ($request->session()->get('shopProducts') == null) {
 
-            $this->add($request, $product);
-            $this->add($request, $product);
+                $product = \App\Models\Product::with('category')
+                    ->where('cod', 'P000093')
+                    ->first();
+
+                $this->add($request, $product);
+                $this->add($request, $product);
+            }
+            // -------------------------------------------------------------------------------------
+
+            $customer->points_total = $customer->points;
+
+            // Verifico che sia la prima spesa del mese --------------------------------------------
+            if ($this->is_first_order($customer)) {
+
+                $customer->points = $customer->points / 2;
+
+            }
+            // -------------------------------------------------------------------------------------
+
         }
-        // -------------------------------------------------------------------------------------
-
-        $customer->points_total = $customer->points;
-
-        // Verifico che sia la prima spesa del mese --------------------------------------------
-        if ($this->is_first_order($customer)) {
-
-            $customer->points = $customer->points / 2;
-
-        }
-        // -------------------------------------------------------------------------------------
 
         return $customer;
     }
@@ -158,14 +168,20 @@ class Shop extends Controller
     {
         $out = false;
 
-        if (isset($customer->order) &&
-            (
-                count($customer->order) <= 0 ||
-                (date('n', strtotime($customer->order[0]->date)) < date('n'))
-            )) {
+        $settings_value = $this->get_settings();
 
-            $out = true;
+        if ($settings_value['shop_ctrl_points'] == 1) {
 
+            if (isset($customer->order) &&
+                (
+                    count($customer->order) <= 0 ||
+                    (date('n', strtotime($customer->order[0]->date)) < date('n'))
+                )) {
+
+                $out = true;
+
+            }
+            
         }
 
         return $out;
