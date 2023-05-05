@@ -242,9 +242,12 @@ class Order extends Controller
             if (isset($store_get)) {
 
                 $product_edit = \App\Models\Product::find($product->id);
-                $product_edit->kg_total += ($store_get->kg && $product_edit->kg_total) ? $store_get->kg * (-1) : null;
-                $product_edit->amount_total += $store_get->amount ? $store_get->amount * (-1) : 0;
-                $product_edit->save();
+
+                if (isset($product_edit)) {
+                    $product_edit->kg_total += $store_get->kg ? $store_get->kg * (-1) : 0;
+                    $product_edit->amount_total += $store_get->amount ? $store_get->amount * (-1) : 0;
+                    $product_edit->save();
+                }
 
                 $store->delete();
 
