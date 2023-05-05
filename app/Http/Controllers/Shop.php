@@ -181,7 +181,7 @@ class Shop extends Controller
                 $out = true;
 
             }
-            
+
         }
 
         return $out;
