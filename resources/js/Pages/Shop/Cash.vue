@@ -534,7 +534,6 @@ export default {
         }
 
         if (this.data.s_customer && this.data.product.id && this.data.error_limit !== true) {
-            console.log(this.data.product.id);
             this.playSound(soundBeep);
         }
 

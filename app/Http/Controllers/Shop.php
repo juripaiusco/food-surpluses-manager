@@ -88,8 +88,10 @@ class Shop extends Controller
             ->limit(16)
             ->get();*/
 
-        $settings = \App\Models\Setting::first();
-        $cod_products_more_moved = explode(',', str_replace(' ', '', $settings->shop_btn));
+        $settings = new Setting();
+        $settings_value = $settings->get();
+
+        $cod_products_more_moved = explode(',', str_replace(' ', '', $settings_value['shop_btn']));
         $products_more_moved = \App\Models\Product::whereIn('cod', $cod_products_more_moved)
             ->get();
         // -----------------------------------------------------------------------------------
