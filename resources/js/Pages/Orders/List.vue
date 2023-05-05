@@ -8,6 +8,7 @@ import ApplicationContainer from "@/Components/ApplicationContainer.vue";
 import {Link} from "@inertiajs/vue3";
 import ModalSimple from "@/Components/ModalSimple.vue";
 import Pagination from "@/Components/Pagination.vue";
+import {__date} from "@/extComponents/Date";
 
 defineProps({
     data: Object,
@@ -60,6 +61,9 @@ defineProps({
                             class: 'text-center w-[180px]',
                             label: 'Data',
                             field: 'date',
+                            fnc: function (d) {
+                                return __date(d.date);
+                            }
                         }, {
                             class: 'text-center w-[5%]',
                             label: 'Riferimento',

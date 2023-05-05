@@ -7,6 +7,7 @@ import Search from "@/Components/Search.vue";
 import Pagination from "@/Components/Pagination.vue";
 import ApplicationHeader from "@/Components/ApplicationHeader.vue";
 import ApplicationContainer from "@/Components/ApplicationContainer.vue";
+import {__date} from "@/extComponents/Date";
 
 defineProps({
     orders_count: Number,
@@ -136,19 +137,24 @@ defineProps({
                                     class: 'text-center w-[15%]',
                                     label: 'Data',
                                     field: 'date',
+                                    fnc: function (d) {
+
+                                        return __date(d.date);
+
+                                    }
                                 }, {
                                     class: 'text-center w-[10%]',
                                     label: 'Rif.',
-                                    field: 'reference',
+                                    field: 'reference'
                                 }, {
                                     class: 'text-left hidden lg:table-cell',
                                     label: 'Cliente',
-                                    field: 'customer_name',
+                                    field: 'customer_name'
                                 }, {
                                     class: 'text-right w-[10%]',
                                     label: 'Punti',
-                                    field: 'points',
-                                }],
+                                    field: 'points'
+                                }]
                             }" />
 
                         <Pagination class="mt-6"
