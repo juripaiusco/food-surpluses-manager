@@ -159,6 +159,15 @@ class Order extends Controller
         ]);
     }
 
+    public function edit_alert(Request $request, string $id)
+    {
+        $order = \App\Models\Order::find($id);
+
+        return Inertia::render('Orders/EditAlert', [
+            'data' => $order
+        ]);
+    }
+
     /**
      * Show the form for editing the specified resource.
      */

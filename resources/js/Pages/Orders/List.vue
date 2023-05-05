@@ -80,7 +80,7 @@ defineProps({
                         }, {
                             class: 'w-[1%]',
                             btnCustom: true,
-                            route: 'orders.edit',
+                            route: 'orders.edit_alert',
                             fnc: function (d) {
 
                                 let html = '';
