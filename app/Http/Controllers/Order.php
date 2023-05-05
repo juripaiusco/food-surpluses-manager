@@ -254,7 +254,7 @@ class Order extends Controller
 
         // Riemetto i punti al cliente
         $orders_count_this_month = \App\Models\Order::where('customer_id', $order->customer_id)
-            ->where('date', 'LIKE', date('Y-m-') . '01%')
+            ->where('date', 'LIKE', date('Y-m-') . '%')
             ->count();
 
         $customer = \App\Models\Customer::find($order->customer_id);
