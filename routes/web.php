@@ -103,7 +103,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/users/destroy/{id}', [User::class, 'destroy'])->name('users.destroy');
 
     Route::get('/settings', [Setting::class, 'index'])->name('settings.index');
-    Route::post('/settings/update/{id}', [Setting::class, 'update'])->name('settings.update');
+    Route::post('/settings/update', [Setting::class, 'update'])->name('settings.update');
 });
 
 require __DIR__.'/auth.php';

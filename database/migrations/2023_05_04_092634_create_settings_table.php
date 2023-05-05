@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('settings', function (Blueprint $table) {
             $table->id();
 
-            $table->longText('shop_btn');
+            $table->char('name', 255);
+            $table->longText('value')->nullable();
 
             $table->timestamps();
         });
