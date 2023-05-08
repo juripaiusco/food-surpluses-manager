@@ -10,4 +10,5 @@ return [
     'retails'       => 'Negozi',
     'users'         => 'Volontari',
     'settings'      => 'Impostazioni',
+    'report'        => 'Report',
 ];

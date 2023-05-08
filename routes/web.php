@@ -10,6 +10,7 @@ use App\Http\Controllers\Product;
 use App\Http\Controllers\Customer;
 use App\Http\Controllers\Retail;
 use App\Http\Controllers\Setting;
+use App\Http\Controllers\Report;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -104,6 +105,9 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/settings', [Setting::class, 'index'])->name('settings.index');
     Route::post('/settings/update', [Setting::class, 'update'])->name('settings.update');
+
+    Route::get('/report', [Report::class, 'index'])->name('report.index');
+    Route::get('/report/send', [Report::class, 'mailSendWeb'])->name('report.sendmail');
 });
 
 require __DIR__.'/auth.php';
