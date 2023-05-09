@@ -354,6 +354,8 @@ class Product extends Controller
 
     public function box_create(Request $request)
     {
+        $this->boxAction($request);
+
         // Creo un oggetto di dati vuoto
         $columns = Schema::getColumnListing('products');
 
@@ -373,7 +375,6 @@ class Product extends Controller
             'data' => $data,
             'products' => $this->productsGet(),
             'filters' => request()->all(['s', 'orderby', 'ordertype']),
-            'boxAdded' => $this->boxActionAdd($request),
             'create_url' => $request->input('currentUrl')
         ]);
     }
@@ -398,12 +399,13 @@ class Product extends Controller
     {
         $data = \App\Models\Product::find($id);
 
+        $this->boxAction($request);
+
         return Inertia::render('Products/Box/Form', [
             'data' => $data,
             'products' => $this->productsGet(),
             'filters' => request()->all(['s', 'orderby', 'ordertype']),
-            'boxAdded' => $this->boxActionAdd($request),
-            'create_url' => $request->input('currentUrl')
+            'create_url' => $request->input('currentUrl') ? $request->input('currentUrl') : null
         ]);
     }
 
@@ -435,11 +437,18 @@ class Product extends Controller
         $request->session()->forget('boxProducts');
     }
 
+    public function boxAction(Request $request)
+    {
+        $this->boxActionDel($request);
+        $this->boxActionAdd($request);
+    }
+
     public function boxActionAdd(Request $request)
     {
         if ($request->input('boxAddTo') == true) {
 
             $product = \App\Models\Product::find($request->input('product_id'));
+            $product->index = $request->session()->get('boxProducts') ? array_key_last($request->session()->get('boxProducts')) + 1 : 0;
 
             $request->session()->push('boxProducts', $product);
 
@@ -455,6 +464,22 @@ class Product extends Controller
 
     function boxActionDel(Request $request)
     {
-//        dd($request->all());
+        if ($request->input('boxRemove') == true) {
+
+            $boxProducts_array = $request->session()->get('boxProducts');
+
+            unset($boxProducts_array[$request->input('product_index')]);
+
+            $boxProducts_array = array_values($boxProducts_array);
+
+            foreach ($boxProducts_array as $k => $product) {
+                $boxProducts_array[$k]->index = $k;
+            }
+
+            $request->session()->put('boxProducts', $boxProducts_array);
+
+            Inertia::share('boxProducts', $request->session()->get('boxProducts'));
+
+        }
     }
 }

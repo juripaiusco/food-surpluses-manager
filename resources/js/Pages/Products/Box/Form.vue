@@ -16,7 +16,6 @@ const props = defineProps({
     data: Object,
     products: Object,
     filters: Object,
-    boxAdded: Boolean,
     create_url: String
 
 });
@@ -97,7 +96,7 @@ const form = useForm(dataForm);
                                 }"
                                @boxAddTo="(data, route) => {
 
-                                    routeTo(route, data, 'add');
+                                    boxActionRoute(route, data, 'add');
 
                           }"/>
 
@@ -190,7 +189,7 @@ const form = useForm(dataForm);
                                 }"
                                @boxRemove="(data, route) => {
 
-                                    routeTo(route, data, 'remove');
+                                    boxActionRoute(route, data, 'remove');
 
                                 }" />
 
@@ -225,13 +224,14 @@ export default {
         return {}
     },
     methods: {
-        routeTo (route, data, action) {
+        boxActionRoute (route, data, action) {
 
             let form = useForm({
                 product_id: data.id,
+                product_index: action === 'remove' ? data.index : null,
                 currentUrl: window.location.href,
-                boxAddTo: action === 'add' ? true : '',
-                boxRemove: action === 'remove' ? true : ''
+                boxAddTo: action === 'add' ? true : null,
+                boxRemove: action === 'remove' ? true : null
             });
 
             form.get(route, {
@@ -243,7 +243,7 @@ export default {
     },
     mounted () {
 
-        if (this.boxAdded === true) {
+        if (this.create_url !== null) {
             router.get(this.create_url);
         }
 
