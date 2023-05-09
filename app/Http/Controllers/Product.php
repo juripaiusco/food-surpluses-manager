@@ -391,8 +391,10 @@ class Product extends Controller
         return to_route('products.box.index');
     }
 
-    public function box_edit($id)
+    public function box_edit(Request $request, $id)
     {
+//        $this->boxActionInit($request);
+
         $data = \App\Models\Product::find($id);
 
         return Inertia::render('Products/Box/Form', [
@@ -425,7 +427,12 @@ class Product extends Controller
         return to_route('products.box.index');
     }
 
-    public function add_to_box(Request $request, $id)
+    public function boxActionInit(Request $request)
+    {
+        $request->session()->forget('boxProducts');
+    }
+
+    public function boxActionAdd(Request $request, $id)
     {
         $product = \App\Models\Product::find($id);
 

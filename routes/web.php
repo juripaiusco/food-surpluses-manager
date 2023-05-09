@@ -79,7 +79,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/products/box/edit/{id}', [Product::class, 'box_edit'])->name('products.box.edit');
     Route::post('/products/box/update/{id}', [Product::class, 'box_update'])->name('products.box.update');
     Route::get('/products/box/destroy/{id}', [Product::class, 'box_destroy'])->name('products.box.destroy');
-    Route::get('/products/box/add_to_box/{id}', [Product::class, 'add_to_box'])->name('products.box.addToBox');
+
+    Route::get('/products/box/add_to/{id}', [Product::class, 'boxActionAdd'])->name('products.box.addToBox');
 
     Route::get('/customers', [Customer::class, 'index'])->name('customers.index');
     Route::get('/customers/create', [Customer::class, 'create'])->name('customers.create');
