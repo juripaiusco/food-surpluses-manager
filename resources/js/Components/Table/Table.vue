@@ -41,6 +41,7 @@ defineProps({
                     <template v-if="struct.btnCustom === true">
 
                         <Link class="btn btn-sm"
+                              v-if="struct.emit === undefined"
                               :href="struct.route.includes('/') === true ? struct.route : route(struct.route, d.id)"
                               :data="struct.filters ? struct.filters : data.filters"
                               :preserveState="data.preserveState">
@@ -52,6 +53,19 @@ defineProps({
                             <div v-if="typeof struct.fnc === 'function'" v-html="show(d, struct)" />
 
                         </Link>
+
+                        <!-- IF il pulsante Custom prenseta un emit -->
+                        <button v-if="struct.emit !== undefined"
+                                class="btn btn-sm"
+                                @click="$emit(struct.emit, d, route(struct.route, d.id))">
+
+                            <template v-if="typeof struct.fnc !== 'function'">
+                                {{ show(d, struct) }}
+                            </template>
+
+                            <div v-if="typeof struct.fnc === 'function'" v-html="show(d, struct)" />
+
+                        </button>
 
                     </template>
 
