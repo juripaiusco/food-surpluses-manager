@@ -236,7 +236,7 @@ export default {
 
             form.get(window.location.href, {
                 preserveScroll: true,
-                preserveState: false,
+                preserveState: true,
             });
 
         }

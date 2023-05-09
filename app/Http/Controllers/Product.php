@@ -389,6 +389,7 @@ class Product extends Controller
         $product = new \App\Models\Product();
 
         $product->fill($request->all());
+        $product->json_box = json_encode($request->session()->get('boxProducts'));
 
         $product->save();
 
@@ -399,7 +400,7 @@ class Product extends Controller
     {
         $data = \App\Models\Product::find($id);
 
-        $this->boxAction($request);
+        $this->boxAction($request, json_decode($data->json_box));
 
         return Inertia::render('Products/Box/Form', [
             'data' => $data,
@@ -419,6 +420,7 @@ class Product extends Controller
         $product = \App\Models\Product::find($id);
 
         $product->fill($request->all());
+        $product->json_box = json_encode($request->session()->get('boxProducts'));
 
         $product->save();
 
@@ -437,8 +439,14 @@ class Product extends Controller
         $request->session()->forget('boxProducts');
     }
 
-    public function boxAction(Request $request)
+    public function boxAction(Request $request, $data = array())
     {
+        if (count($data) > 0) {
+
+            $request->session()->put('boxProducts', $data);
+
+        }
+
         $this->boxActionDel($request);
         $this->boxActionAdd($request);
     }
