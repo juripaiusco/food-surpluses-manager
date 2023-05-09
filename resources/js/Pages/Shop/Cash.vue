@@ -345,7 +345,7 @@ function productSelectReset (refToReset) {
                                                 return html;
 
                                             }
-                                        }],
+                                        }]
                                     }"
                                     @openModal="(data, route) => {
 
