@@ -56,6 +56,7 @@ defineProps({
 
                         <!-- IF il pulsante Custom prenseta un emit -->
                         <button v-if="struct.emit !== undefined"
+                                type="button"
                                 class="btn btn-sm"
                                 @click="$emit(
                                     struct.emit,
