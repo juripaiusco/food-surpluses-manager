@@ -212,6 +212,7 @@ class Report extends Controller
             // Invio email con i file CSV come allegato
             $mail_return = Mail::to(env('MAIL_TO'))
                 ->send(new \App\Mail\Report(array(
+                    'date_send' => $date_send,
                     'host' => $host,
                     'attach_path' => $this->path_report_csv . 'queue/'
                 )));

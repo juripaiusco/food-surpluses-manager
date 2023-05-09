@@ -25,6 +25,7 @@ class Report extends Mailable
     {
         $this->attach_path = $args['attach_path'];
         $this->host = $args['host'];
+        $this->date_send = $args['date_send'];
     }
 
     /**
@@ -34,7 +35,7 @@ class Report extends Mailable
     {
         return new Envelope(
             from: new Address('emporioapp@emporiosd.it', 'EmporioApp'),
-            subject: '[EmporioApp ' . strtoupper($this->host) . '] - Report prodotti FEAD'
+            subject: '[EmporioApp ' . strtoupper($this->host) . '] - Report prodotti FEAD del ' . $this->date_send
         );
     }
 
@@ -55,17 +56,17 @@ class Report extends Mailable
      */
     public function attachments(): array
     {
-        /*$array_attachments = array();
+        $array_attachments = array();
         $files = Storage::disk('public')->files($this->attach_path);
 
         foreach ($files as $file) {
 
             if (substr($file, -3, 3) == 'csv') {
 
-                $array_attachments[] = Attachment::fromStorageDisk('public', $this->attach_path . $file);
+                $array_attachments[] = Attachment::fromStorageDisk('public', $file);
             }
-        }*/
+        }
 
-        return [];
+        return $array_attachments;
     }
 }
