@@ -57,7 +57,12 @@ defineProps({
                         <!-- IF il pulsante Custom prenseta un emit -->
                         <button v-if="struct.emit !== undefined"
                                 class="btn btn-sm"
-                                @click="$emit(struct.emit, d, route(struct.route, d.id))">
+                                @click="$emit(
+                                    struct.emit,
+                                    d,
+                                    struct.route.includes('/') === true ? struct.route : route(struct.route, d.id)
+                                )"
+                        >
 
                             <template v-if="typeof struct.fnc !== 'function'">
                                 {{ show(d, struct) }}
