@@ -307,8 +307,11 @@ class Product extends Controller
         return to_route('products.categories.index');
     }
 
-    public function box_index()
+    public function box_index(Request $request)
     {
+        // Resetto la sessione per il contenuto della scatola
+        $this->boxActionInit($request);
+
         $request_validate_array = [
             'name',
             'limit',
@@ -351,8 +354,6 @@ class Product extends Controller
 
     public function box_create(Request $request)
     {
-        $request->session()->forget('boxProducts');
-
         // Creo un oggetto di dati vuoto
         $columns = Schema::getColumnListing('products');
 
@@ -371,7 +372,9 @@ class Product extends Controller
         return Inertia::render('Products/Box/Form', [
             'data' => $data,
             'products' => $this->productsGet(),
-            'filters' => request()->all(['s', 'orderby', 'ordertype'])
+            'filters' => request()->all(['s', 'orderby', 'ordertype']),
+            'boxAdded' => $this->boxActionAdd($request),
+            'create_url' => $request->input('currentUrl')
         ]);
     }
 
@@ -393,14 +396,14 @@ class Product extends Controller
 
     public function box_edit(Request $request, $id)
     {
-//        $this->boxActionInit($request);
-
         $data = \App\Models\Product::find($id);
 
         return Inertia::render('Products/Box/Form', [
             'data' => $data,
             'products' => $this->productsGet(),
-            'filters' => request()->all(['s', 'orderby', 'ordertype'])
+            'filters' => request()->all(['s', 'orderby', 'ordertype']),
+            'boxAdded' => $this->boxActionAdd($request),
+            'create_url' => $request->input('currentUrl')
         ]);
     }
 
@@ -432,15 +435,26 @@ class Product extends Controller
         $request->session()->forget('boxProducts');
     }
 
-    public function boxActionAdd(Request $request, $id)
+    public function boxActionAdd(Request $request)
     {
-        $product = \App\Models\Product::find($id);
+        if ($request->input('boxAddTo') == true) {
 
-        $request->session()->push('boxProducts', $product);
+            $product = \App\Models\Product::find($request->input('product_id'));
+
+            $request->session()->push('boxProducts', $product);
+
+            Inertia::share('boxProducts', $request->session()->get('boxProducts'));
+
+            return true;
+        }
 
         Inertia::share('boxProducts', $request->session()->get('boxProducts'));
 
-//        dd($request->session()->get('boxProducts'));
-//        return Inertia::location($request->header()['referer'][0]);
+        return false;
+    }
+
+    function boxActionDel(Request $request)
+    {
+//        dd($request->all());
     }
 }

@@ -16,6 +16,8 @@ const props = defineProps({
     data: Object,
     products: Object,
     filters: Object,
+    boxAdded: Boolean,
+    create_url: String
 
 });
 
@@ -59,7 +61,6 @@ const form = useForm(dataForm);
                                :data="{
                                     filters: filters,
                                     routeSearch: form.id ? route('products.box.edit', form.id) : 'products.box.create',
-                                    preserveState: true,
                                     data: products.data,
                                     structure: [{
                                         class: 'text-left w-[5%]',
@@ -80,8 +81,7 @@ const form = useForm(dataForm);
                                     }, {
                                         class: 'w-[1%]',
                                         btnCustom: true,
-                                        //route: form.id ? route('products.box.edit', form.id) : 'products.box.create',
-                                        route: 'products.box.addToBox',
+                                        route: form.id ? route('products.box.edit', form.id) : route('products.box.create'),
                                         emit: 'boxAddTo',
                                         fnc: function (d) {
 
@@ -97,13 +97,12 @@ const form = useForm(dataForm);
                                 }"
                                @boxAddTo="(data, route) => {
 
-                                    routeTo(route, data);
+                                    routeTo(route, data, 'add');
 
                           }"/>
 
                         <Pagination class="mt-6"
-                                    :links="products.links"
-                                    :preserveState="true" />
+                                    :links="products.links" />
 
                     </div>
 
@@ -148,7 +147,52 @@ const form = useForm(dataForm);
 
                             <br>
 
-                            box {{ usePage().props.boxProducts }}
+                            <Table class="table-striped"
+                                   :data="{
+                                    filters: filters,
+                                    data: usePage().props.boxProducts,
+                                    structure: [{
+                                        class: 'w-[1%]',
+                                        btnCustom: true,
+                                        route: form.id ? route('products.box.edit', form.id) : route('products.box.create'),
+                                        emit: 'boxRemove',
+                                        fnc: function (d) {
+
+                                            let html = '';
+
+                                            html += '<div class=\'btn btn-danger\'>';
+                                            html += '<svg  class=\'w-3 h-3\' xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 24 24\' stroke-width=\'1.5\' stroke=\'currentColor\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' d=\'M19.5 12h-15\' /></svg>';
+                                            html += '</div>';
+
+                                            return html;
+                                        }
+                                    }, {
+                                        class: 'text-left w-[5%]',
+                                        label: 'Codice',
+                                        field: 'cod',
+                                        order: false
+                                    }, {
+                                        class: 'text-left w-[80px]',
+                                        label: 'Tipo',
+                                        field: 'type',
+                                        order: false
+                                    }, {
+                                        class: 'text-left',
+                                        label: 'Nome',
+                                        field: 'name',
+                                        order: false
+                                    }, {
+                                        class: 'text-center w-[10%]',
+                                        label: 'Punti',
+                                        field: 'points',
+                                        order: false
+                                    }],
+                                }"
+                               @boxRemove="(data, route) => {
+
+                                    routeTo(route, data, 'remove');
+
+                                }" />
 
                         </div>
 
@@ -174,18 +218,20 @@ const form = useForm(dataForm);
 </template>
 
 <script>
-import {useForm} from "@inertiajs/vue3";
+import {router, useForm} from "@inertiajs/vue3";
 
 export default {
     data () {
         return {}
     },
     methods: {
-        routeTo (route, data) {
+        routeTo (route, data, action) {
 
             let form = useForm({
-                product: data,
-                boxAddTo: true
+                product_id: data.id,
+                currentUrl: window.location.href,
+                boxAddTo: action === 'add' ? true : '',
+                boxRemove: action === 'remove' ? true : ''
             });
 
             form.get(route, {
@@ -194,6 +240,13 @@ export default {
             });
 
         }
+    },
+    mounted () {
+
+        if (this.boxAdded === true) {
+            router.get(this.create_url);
+        }
+
     }
 }
 </script>

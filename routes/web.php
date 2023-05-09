@@ -80,8 +80,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/products/box/update/{id}', [Product::class, 'box_update'])->name('products.box.update');
     Route::get('/products/box/destroy/{id}', [Product::class, 'box_destroy'])->name('products.box.destroy');
 
-    Route::get('/products/box/add_to/{id}', [Product::class, 'boxActionAdd'])->name('products.box.addToBox');
-
     Route::get('/customers', [Customer::class, 'index'])->name('customers.index');
     Route::get('/customers/create', [Customer::class, 'create'])->name('customers.create');
     Route::post('/customers/store', [Customer::class, 'store'])->name('customers.store');
