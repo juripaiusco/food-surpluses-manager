@@ -390,6 +390,7 @@ class Product extends Controller
 
         $product->fill($request->all());
         $product->json_box = json_encode($request->session()->get('boxProducts'));
+        $product->type = 'box';
 
         $product->save();
 
@@ -421,6 +422,8 @@ class Product extends Controller
 
         $product->fill($request->all());
         $product->json_box = json_encode($request->session()->get('boxProducts'));
+        $product->type = 'box';
+        $product->points = $this->boxAction_getPoints($request->session()->get('boxProducts'));
 
         $product->save();
 
@@ -470,7 +473,7 @@ class Product extends Controller
         return false;
     }
 
-    function boxActionDel(Request $request)
+    public function boxActionDel(Request $request)
     {
         if ($request->input('boxRemove') == true) {
 
@@ -489,5 +492,18 @@ class Product extends Controller
             Inertia::share('boxProducts', $request->session()->get('boxProducts'));
 
         }
+    }
+
+    public function boxAction_getPoints($box_data)
+    {
+        $points = 0;
+
+        foreach ($box_data as $d) {
+
+            $points += $d->points;
+
+        }
+
+        return $points;
     }
 }

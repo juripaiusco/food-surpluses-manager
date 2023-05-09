@@ -270,6 +270,7 @@ function productSelectReset (refToReset) {
 
                                     <Link class="btn w-full !text-sm"
                                           :class="{
+                                                'btn-warning': product.type === 'box',
                                                 'btn-outline-primary': product.type === 'fead no',
                                                 'btn-info !text-sky-900': product.type === 'fead',
                                           }"
