@@ -234,7 +234,7 @@ export default {
                 currentUrl: window.location.href,
             });
 
-            form.get(route, {
+            form.get(window.location.href, {
                 preserveScroll: true,
                 preserveState: false,
             });
