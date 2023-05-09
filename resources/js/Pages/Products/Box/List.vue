@@ -64,6 +64,10 @@ defineProps({
                         routeSearch: 'products.box.index',
                         data: data.data,
                         structure: [{
+                            class: 'text-left w-[10%]',
+                            label: 'Cod',
+                            field: 'cod',
+                        }, {
                             class: 'text-left',
                             label: 'Nome',
                             field: 'name',
