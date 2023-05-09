@@ -229,9 +229,9 @@ export default {
             let form = useForm({
                 product_id: data.id,
                 product_index: action === 'remove' ? data.index : null,
-                currentUrl: window.location.href,
                 boxAddTo: action === 'add' ? true : null,
-                boxRemove: action === 'remove' ? true : null
+                boxRemove: action === 'remove' ? true : null,
+                currentUrl: window.location.href,
             });
 
             form.get(route, {
