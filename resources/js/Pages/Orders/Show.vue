@@ -141,25 +141,67 @@ const form = useForm(dataForm);
                             routeSearch: '',
                             data: products,
                             structure: [{
-                                class: 'text-left',
+                                class: 'text-left !align-top w-[5%]',
                                 label: 'Codice',
                                 field: 'cod',
                                 order: false
                             }, {
-                                class: 'text-left',
+                                class: 'text-left !align-top w-[80px]',
                                 label: 'Tipo',
                                 field: 'type',
                                 order: false
                             }, {
-                                class: 'text-left',
+                                class: 'text-left !align-top',
                                 label: 'Nome',
                                 field: 'name',
-                                order: false
+                                order: false,
+                                fnc: function (d) {
+
+                                    let data = d.name;
+
+                                    if(d.json_box !== null) {
+
+                                        json_box = JSON.parse(d.json_box);
+
+                                        data += '<small>';
+
+                                        json_box.forEach(function (d){
+                                            data += '<br>' + d.cod + ' - ' + d.name;
+                                        });
+
+                                        data += '</small>';
+
+                                    }
+
+                                    return data;
+
+                                }
                             }, {
-                                class: 'text-right',
+                                class: 'text-right !align-top',
                                 label: 'Punti',
                                 field: 'points',
-                                order: false
+                                order: false,
+                                fnc: function (d) {
+
+                                    let data = d.points;
+
+                                    if(d.json_box !== null) {
+
+                                        json_box = JSON.parse(d.json_box);
+
+                                        data += '<small>';
+
+                                        json_box.forEach(function (d){
+                                            data += '<br>' + d.points;
+                                        });
+
+                                        data += '</small>';
+
+                                    }
+
+                                    return data;
+
+                                }
                             }],
                         }" />
 
