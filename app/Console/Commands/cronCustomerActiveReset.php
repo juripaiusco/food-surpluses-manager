@@ -5,14 +5,14 @@ namespace App\Console\Commands;
 use App\Http\Controllers\Customer;
 use Illuminate\Console\Command;
 
-class customersActiveReset extends Command
+class cronCustomerActiveReset extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'app:customers-active-reset';
+    protected $signature = 'cron:customer:active-reset';
 
     /**
      * The console command description.
