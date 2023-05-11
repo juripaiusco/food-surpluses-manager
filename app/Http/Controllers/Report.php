@@ -56,10 +56,11 @@ class Report extends Controller
             // Oltre ai prodotti singoli, inserisco i prodotti della BOX -----------------
             $array_to_merge = array();
 
-            foreach ($products_obj as $product) {
+            foreach ($products_obj as $k => $product) {
 
                 if ($product->json_box !== null) {
                     $array_to_merge[] = json_decode($product->json_box);
+                    unset($products_obj[$k]);
                 }
 
             }
@@ -69,7 +70,8 @@ class Report extends Controller
                     $products_obj[] = $product;
                 }
             }
-//            dd($products_obj);
+
+            $products_obj = array_values($products_obj);
             // END - Oltre ai prodotti singoli, inserisco i prodotti della BOX -----------
 
             // Report clienti
