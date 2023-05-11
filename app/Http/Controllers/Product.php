@@ -444,7 +444,7 @@ class Product extends Controller
 
     public function boxAction(Request $request, $data = array())
     {
-        if (count($data) > 0) {
+        if (count($data) > 0 && $request->session()->get('boxProducts') == null) {
 
             $request->session()->put('boxProducts', $data);
 
