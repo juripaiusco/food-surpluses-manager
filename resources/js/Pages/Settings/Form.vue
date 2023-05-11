@@ -37,11 +37,11 @@ const form = useForm(dataForm);
 
         <ApplicationContainer>
 
-            <h2 class="text-3xl mb-2">Cassa</h2>
-
             <div v-if="msg" class="alert alert-success">
                 {{ msg }}
             </div>
+
+            <h2 class="text-3xl mb-2">Cassa</h2>
 
             <form @submit.prevent="form.post(route('settings.update'))">
 
