@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
@@ -27,7 +28,8 @@ class Report extends Controller
             'data_reports_customers' => $this->get_reports($request->input('s'), 'customers'),
             'data_reports_procuts' => $this->get_reports($request->input('s'), 'products'),
             'date_today' => date('d/m/Y'),
-            'filters' => request()->all(['s', 'orderby', 'ordertype'])
+            'filters' => request()->all(['s', 'orderby', 'ordertype']),
+            'msg' => Session::get('msg')
         ]);
     }
 
@@ -203,7 +205,7 @@ class Report extends Controller
     {
         $this->mailSend($request->input('s'));
 
-//        return redirect()->route('report');
+        return to_route('report.index')->with('msg', 'Il report è stato inviato via mail');
     }
 
     public function mailSend($date_send = '')

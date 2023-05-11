@@ -15,6 +15,7 @@ defineProps({
     data_reports_procuts: Object,
     date_today: String,
     filters: Object,
+    msg: String,
 })
 
 </script>
@@ -32,6 +33,10 @@ defineProps({
         </template>
 
         <ApplicationContainer>
+
+            <div v-if="msg" class="alert alert-success">
+                {{ msg }}
+            </div>
 
             <div class="inline-flex w-full mb-6">
 
