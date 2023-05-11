@@ -57,7 +57,7 @@ class Report extends Controller
 
             foreach ($products_obj as $k => $product) {
 
-                if ($product->json_box !== null) {
+                if (isset($product->json_box) && $product->json_box !== null) {
                     $array_to_merge[] = json_decode($product->json_box);
                     unset($products_obj[$k]);
                 }
