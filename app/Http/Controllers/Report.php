@@ -52,7 +52,6 @@ class Report extends Controller
             $products_obj = json_decode($order->json_products);
             $customer_obj = json_decode($order->json_customer);
 
-
             // Oltre ai prodotti singoli, inserisco i prodotti della BOX -----------------
             $array_to_merge = array();
 
@@ -96,7 +95,7 @@ class Report extends Controller
                         $reports[$product->cod]['kg'] += $product->kg;
                         $reports[$product->cod]['amount'] += $product->amount;
 
-                        $reports[$product->cod]['kg'] = number_format($reports[$product->cod]['kg'], 2);
+                        $reports[$product->cod]['kg'] = number_format($reports[$product->cod]['kg'], 2, '.', '');
 
                         // Se voglio contare tutte le volte che ogni cliente ha acquistato il prodotto
                         /*$reports[$product->cod]['customers'][] = $customer_obj;
