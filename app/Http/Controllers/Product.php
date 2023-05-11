@@ -313,8 +313,9 @@ class Product extends Controller
         $this->boxActionInit($request);
 
         $request_validate_array = [
+            'cod',
             'name',
-            'limit',
+            'points',
         ];
 
         // Query data

@@ -72,6 +72,10 @@ defineProps({
                             label: 'Nome',
                             field: 'name',
                         }, {
+                            class: 'text-center w-[10%]',
+                            label: 'Punti',
+                            field: 'points',
+                        }, {
                             class: 'w-[1%]',
                             btnEdit: true,
                             route: 'products.box.edit'
