@@ -177,7 +177,61 @@ const form = useForm(dataForm);
 
                                 }
                             }, {
-                                class: 'text-right !align-top',
+                                class: 'text-right !align-top w-[8%]',
+                                label: 'Kg',
+                                field: 'kg',
+                                order: false,
+                                fnc: function (d) {
+
+                                    let data = d.kg === null ? '' : d.kg;
+
+                                    if(d.json_box !== null) {
+
+                                        json_box = JSON.parse(d.json_box);
+
+                                        data += '<small>';
+
+                                        json_box.forEach(function (d){
+                                            data += '<br>';
+                                            data += d.kg === null ? '' : d.kg;
+                                        });
+
+                                        data += '</small>';
+
+                                    }
+
+                                    return data;
+
+                                }
+                            }, {
+                                class: 'text-right !align-top w-[8%]',
+                                label: 'Q.tà',
+                                field: 'amount',
+                                order: false,
+                                fnc: function (d) {
+
+                                    let data = d.amount === null ? '' : d.amount;
+
+                                    if(d.json_box !== null) {
+
+                                        json_box = JSON.parse(d.json_box);
+
+                                        data += '<small>';
+
+                                        json_box.forEach(function (d){
+                                            data += '<br>';
+                                            data += d.amount === null ? '' : d.amount;
+                                        });
+
+                                        data += '</small>';
+
+                                    }
+
+                                    return data;
+
+                                }
+                            }, {
+                                class: 'text-right !align-top w-[8%]',
                                 label: 'Punti',
                                 field: 'points',
                                 order: false,
