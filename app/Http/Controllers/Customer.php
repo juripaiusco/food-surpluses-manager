@@ -212,4 +212,11 @@ class Customer extends Controller
         $customers = \App\Models\Customer::query();
         $customers->update(['active' => 0]);
     }
+
+    public function points_renew()
+    {
+        DB::table('customers')->update([
+            'points' => DB::raw('points_renew')
+        ]);
+    }
 }
