@@ -104,22 +104,27 @@ defineProps({
                             class: 'text-center w-[10%]',
                             label: 'Cod',
                             field: 'product.cod',
+                            order: false,
                         }, {
                             class: 'text-left',
                             label: 'Prodotto',
                             field: 'product.name',
+                            order: false,
                         }, {
                             class: 'text-center w-[10%]',
                             label: 'Punti',
                             field: 'product.points',
+                            order: false,
                         }, {
                             class: 'text-center w-[10%]',
                             label: 'Kg.',
                             field: 'kg',
+                            order: false,
                         }, {
                             class: 'text-center w-[10%]',
                             label: 'Q.tà',
                             field: 'amount',
+                            order: false,
                         }],
                     }" />
 
