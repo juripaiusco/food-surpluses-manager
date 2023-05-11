@@ -52,6 +52,26 @@ class Report extends Controller
             $products_obj = json_decode($order->json_products);
             $customer_obj = json_decode($order->json_customer);
 
+
+            // Oltre ai prodotti singoli, inserisco i prodotti della BOX -----------------
+            $array_to_merge = array();
+
+            foreach ($products_obj as $product) {
+
+                if ($product->json_box !== null) {
+                    $array_to_merge[] = json_decode($product->json_box);
+                }
+
+            }
+
+            foreach ($array_to_merge as $products) {
+                foreach ($products as $product) {
+                    $products_obj[] = $product;
+                }
+            }
+//            dd($products_obj);
+            // END - Oltre ai prodotti singoli, inserisco i prodotti della BOX -----------
+
             // Report clienti
             if ($type == 'products') {
 
