@@ -17,4 +17,10 @@ class Cron extends Controller
         $customer = new Customer();
         $customer->points_renew();
     }
+
+    public function db2Exel()
+    {
+        $setting = new Setting();
+        $setting->db2Excel();
+    }
 }

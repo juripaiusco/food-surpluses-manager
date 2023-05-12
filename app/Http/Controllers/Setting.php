@@ -72,4 +72,9 @@ class Setting extends Controller
 
         return to_route('settings.index')->with('msg', 'Impostazioni salvate');
     }
+
+    public function db2Excel()
+    {
+        shell_exec(base_path('python/_emporioApp-python.sh'));
+    }
 }
