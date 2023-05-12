@@ -19,7 +19,7 @@ class cronCustomerActiveReset extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Deattiva tutti i clienti';
 
     /**
      * Execute the console command.
