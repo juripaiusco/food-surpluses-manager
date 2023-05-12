@@ -11,6 +11,7 @@ class Setting extends Controller
     var $array_settings_var_name = array(
         'shop_btn' => '',
         'shop_ctrl_points' => '',
+        'report_email' => '',
     );
     /**
      * Display a listing of the resource.

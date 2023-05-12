@@ -210,6 +210,10 @@ class Report extends Controller
 
     public function mailSend($date_send = '')
     {
+        $settings = \App\Models\Setting::where('name', 'report_email')
+            ->first();
+        $email_to_send = $settings->value;
+
         if ($date_send == '') {
 
             $date_send = date('d/m/Y');
@@ -233,7 +237,7 @@ class Report extends Controller
         if (count($files) > 0) {
 
             // Invio email con i file CSV come allegato
-            $mail_return = Mail::to(env('MAIL_TO'))
+            $mail_return = Mail::to($email_to_send)
                 ->send(new \App\Mail\Report(array(
                     'date_send' => $date_send,
                     'host' => $host,
