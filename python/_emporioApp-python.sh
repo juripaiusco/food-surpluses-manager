@@ -4,7 +4,7 @@ SCRIPTPATH=$(dirname "$0")"/";
 
 cd ${SCRIPTPATH};
 
-. "_emporioApp-conf.sh"
+. ${SCRIPTPATH}"_emporioApp-conf.sh"
 
 $EXE_PY emporiosd.py
 
