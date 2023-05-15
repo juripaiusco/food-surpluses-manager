@@ -5,8 +5,6 @@ import pandas as pd
 from dotenv import load_dotenv
 from pathlib import Path
 import smtplib, ssl
-from email import encoders
-from email.mime.base import MIMEBase
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.application import MIMEApplication
