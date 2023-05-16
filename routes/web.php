@@ -87,6 +87,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/customers/update/{id}', [Customer::class, 'update'])->name('customers.update');
     Route::get('/customers/destroy/{id}', [Customer::class, 'destroy'])->name('customers.destroy');
     Route::get('/customers/active/{id}', [Customer::class, 'active'])->name('customers.active');
+    Route::get('/customers/view_reception/{id}', [Customer::class, 'view_reception'])->name('customers.view_reception');
 
     Route::get('/retails', [Retail::class, 'index'])->name('retails.index');
     Route::get('/retails/create', [Retail::class, 'create'])->name('retails.create');

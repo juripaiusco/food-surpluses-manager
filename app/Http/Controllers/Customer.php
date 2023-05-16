@@ -196,6 +196,17 @@ class Customer extends Controller
         return to_route('customers.index');
     }
 
+    public function view_reception(Request $request, string $id)
+    {
+        $customer = \App\Models\Customer::find($id);
+
+        $customer->view_reception = $customer->view_reception == 1 ? 0 : 1;
+
+        $customer->save();
+
+        return to_route('customers.index', $request->all());
+    }
+
     public function active(Request $request, string $id)
     {
         $customer = \App\Models\Customer::find($id);
@@ -207,10 +218,10 @@ class Customer extends Controller
         return to_route('customers.index', $request->all());
     }
 
-    public function active_reset()
+    public function view_reception_reset()
     {
         $customers = \App\Models\Customer::query();
-        $customers->update(['active' => 0]);
+        $customers->update(['view_reception' => 0]);
     }
 
     public function points_renew()

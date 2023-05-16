@@ -222,15 +222,30 @@ const form = useForm(dataForm);
                             </div>
                         </div>
 
-                        <div class="form-check">
-                            <input class="form-check-input"
-                                   type="checkbox"
-                                   name="active"
-                                   id="active"
-                                   true-value="1"
-                                   false-value="0"
-                                   v-model="form.active">
-                            <label class="form-check-label" for="active">Visto Reception</label>
+                        <div class="inline-flex">
+
+                            <div class="form-check mr-10">
+                                <input class="form-check-input"
+                                       type="checkbox"
+                                       name="view_reception"
+                                       id="view_reception"
+                                       true-value="1"
+                                       false-value="0"
+                                       v-model="form.view_reception">
+                                <label class="form-check-label" for="view_reception">Visto Reception</label>
+                            </div>
+
+                            <div class="form-check">
+                                <input class="form-check-input"
+                                       type="checkbox"
+                                       name="active"
+                                       id="active"
+                                       true-value="1"
+                                       false-value="0"
+                                       v-model="form.active">
+                                <label class="form-check-label" for="active">Attivo</label>
+                            </div>
+
                         </div>
 
                         <!-- END - ANAGRAFICA -->

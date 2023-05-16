@@ -27,6 +27,6 @@ class cronCustomerActiveReset extends Command
     public function handle()
     {
         $customers = new Customer();
-        $customers->active_reset();
+        $customers->view_reception_reset();
     }
 }
