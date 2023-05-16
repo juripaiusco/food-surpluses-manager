@@ -77,4 +77,15 @@ class Setting extends Controller
     {
         shell_exec(base_path('python/_emporioApp-python.sh'));
     }
+
+    public function db2Excel_web()
+    {
+        $this->db2Excel();
+
+        return to_route('settings.index')
+            ->with(
+                'msg',
+                'Esportazione eseguita. Il DB ti arriverà nella mail indicata nelle impostazioni.'
+            );
+    }
 }

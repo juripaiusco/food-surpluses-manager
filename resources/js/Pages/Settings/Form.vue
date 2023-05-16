@@ -76,6 +76,13 @@ const form = useForm(dataForm);
                 <div class="text-red-500"
                      v-if="form.errors.report_email">{{ __(form.errors.report_email) }}</div>
 
+                <h2 class="text-3xl mt-8 mb-2">Export DB2Excel</h2>
+
+                <Link class="btn btn-info btn-lg"
+                      :href="route('settings.db2excel')">
+                    Export DB
+                </Link>
+
                 <div class="text-right mt-8">
 
                     <button type="submit"

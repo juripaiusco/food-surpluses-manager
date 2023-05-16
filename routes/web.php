@@ -104,6 +104,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/settings', [Setting::class, 'index'])->name('settings.index');
     Route::post('/settings/update', [Setting::class, 'update'])->name('settings.update');
+    Route::get('/settings/db2excel', [Setting::class, 'db2Excel_web'])->name('settings.db2excel');
 
     Route::get('/report', [Report::class, 'index'])->name('report.index');
     Route::get('/report/send', [Report::class, 'mailSendWeb'])->name('report.sendmail');
