@@ -63,7 +63,7 @@ function productSelectReset (refToReset) {
 
         <ApplicationContainer class="!max-w-[calc(100%-60px)]">
 
-            <form v-if="!data.customer.id || data.customer.active === 0">
+            <form v-if="!data.customer.id || data.customer.active !== 1 || data.customer.view_reception !== 1">
 
                 <div class="w-1/2 m-auto">
 
@@ -78,14 +78,21 @@ function productSelectReset (refToReset) {
                     <div v-if="data.s_customer"
                          class="mt-8 text-center text-red-500">
 
-                        <div v-if="data.customer && data.customer.active !== 0"
+                        <div v-if="!data.customer.id"
                              class="alert alert-danger">
                             Assistito non trovato
                         </div>
 
-                        <div v-if="data.customer && data.customer.active === 0"
+                        <div v-if="data.customer.id && data.customer.active !== 1"
                              class="alert alert-danger">
                             <span class="font-semibold">Assistito NON ATTIVO</span>
+                            <br>
+                            L'assistito deve passare in accettazione ed essere attivato
+                        </div>
+
+                        <div v-if="data.customer.id && data.customer.active === 1 && data.customer.view_reception !== 1"
+                             class="alert alert-danger">
+                            <span class="font-semibold">Assistito NON VISTO IN RECEPTION</span>
                             <br>
                             L'assistito deve passare in accettazione ed essere attivato
                         </div>
@@ -96,7 +103,7 @@ function productSelectReset (refToReset) {
 
             </form>
 
-            <div v-if="data.customer.id && data.customer.active === 1">
+            <div v-if="data.customer.id && data.customer.active === 1 && data.customer.view_reception === 1">
 
                 <div v-if="data.error_limit"
                      class="alert alert-danger text-3xl text-center !border-8 !border-dashed">
@@ -520,13 +527,22 @@ export default {
     },
     mounted () {
 
-        if (this.data.s_customer === null ||
+        /*if (this.data.s_customer === null ||
             (this.data.s_customer && !this.data.customer.id) ||
-            (this.data.s_customer && this.data.customer.active === 0)) {
+            (this.data.s_customer && this.data.customer.active !== 0 && this.data.customer.view_reception !== 0)) {
+            this.$refs.s_customer.focus();
+        }*/
+
+        if (this.data.s_customer === null ||
+            !this.data.customer.id ||
+            this.data.customer.active !== 1 ||
+            this.data.customer.view_reception !== 1) {
             this.$refs.s_customer.focus();
         }
 
-        if (this.data.customer.id && this.data.customer.active === 1) {
+        if (this.data.customer.id &&
+            this.data.customer.active === 1 &&
+            this.data.customer.view_reception === 1) {
             this.$refs.s_product.focus();
         }
 
