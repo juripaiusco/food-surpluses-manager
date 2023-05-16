@@ -86,7 +86,7 @@ try:
     """ ------------------------- """
     email = getData('SELECT value FROM settings WHERE name="report_email"', conn)[0][0]
     subject = '[EmporioApp ' + os.getenv('APP_DOMAIN') + '] - '
-    subject += 'DB2Excel del ' + datetime.today().strftime('%d/%m/%Y - %H:%I:%S')
+    subject += 'DB2Excel del ' + datetime.today().strftime('%d/%m/%Y - %H:%M:%S')
 
     message = MIMEMultipart()
     message['Subject'] = subject
