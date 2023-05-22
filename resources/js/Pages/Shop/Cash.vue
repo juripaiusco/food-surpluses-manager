@@ -527,12 +527,6 @@ export default {
     },
     mounted () {
 
-        /*if (this.data.s_customer === null ||
-            (this.data.s_customer && !this.data.customer.id) ||
-            (this.data.s_customer && this.data.customer.active !== 0 && this.data.customer.view_reception !== 0)) {
-            this.$refs.s_customer.focus();
-        }*/
-
         if (this.data.s_customer === null ||
             !this.data.customer.id ||
             this.data.customer.active !== 1 ||
