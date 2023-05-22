@@ -127,13 +127,17 @@ function productSelectReset (refToReset) {
                                    ref="s_product"
                                    name="s_product"
                                    v-model="form.s_product"
-                                   @input="form.get(route('shop.index'))" />
+                                   @input="form.get(route('shop.index', {
+                                       scrollY: windowTop
+                                   }))" />
 
                         </form>
 
                         <div class="alert alert-secondary !bg-gray-50 mt-4">
 
-                            <form @submit.prevent="form.get(route('shop.index'))">
+                            <form @submit.prevent="form.get(route('shop.index', {
+                                       scrollY: windowTop
+                                   }))">
 
                                 <div class="row">
                                     <div class="col">
@@ -284,6 +288,7 @@ function productSelectReset (refToReset) {
                                           :href="route('shop.index', {
                                               s_customer: form.s_customer,
                                               s_product: product.cod,
+                                              scrollY: windowTop
                                           })">
                                         {{ product.name.length > 18 ? product.name.substring(0, 18) + ' ...' : product.name }}
                                     </Link>
@@ -503,7 +508,8 @@ export default {
                 points_products: 0,
                 points_count: this.data.customer.points,
             },
-            btn_shopStore_disabled: false
+            btn_shopStore_disabled: false,
+            windowTop: 0
         }
     },
     methods: {
@@ -523,9 +529,17 @@ export default {
         playSound (sound) {
             const audio = new Audio(sound);
             audio.play();
+        },
+        onScroll(e) {
+            this.windowTop = window.top.scrollY
         }
     },
+    beforeDestroy() {
+        window.removeEventListener("scroll", this.onScroll)
+    },
     mounted () {
+
+        window.addEventListener("scroll", this.onScroll);
 
         if (this.data.s_customer === null ||
             !this.data.customer.id ||
@@ -541,7 +555,13 @@ export default {
         }
 
         if (this.data.s_customer && this.data.s_product && this.data.error_limit !== true) {
-            router.get(this.create_url);
+            router.get(this.create_url, { scrollY: this.data.scrollY }, {
+                onSuccess: () => {
+
+                    window.scroll(0, this.data.scrollY);
+
+                }
+            });
         }
 
         if (this.data.s_customer && this.data.product.id && this.data.error_limit !== true) {
