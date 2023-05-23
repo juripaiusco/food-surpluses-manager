@@ -119,7 +119,7 @@ function productSelectReset (refToReset) {
                 <div class="row">
                     <div class="col-8">
 
-                        <form>
+                        <form @submit.prevent="noSubmit">
 
                             <input class="form-control form-control-lg"
                                    type="text"
@@ -129,7 +129,8 @@ function productSelectReset (refToReset) {
                                    v-model="form.s_product"
                                    @input="form.get(route('shop.index', {
                                        scrollY: windowTop
-                                   }))" />
+                                   }))"
+                                   @keyup.enter.prevent="noSubmit" />
 
                         </form>
 
@@ -530,8 +531,11 @@ export default {
             const audio = new Audio(sound);
             audio.play();
         },
-        onScroll(e) {
+        onScroll (e) {
             this.windowTop = window.top.scrollY
+        },
+        noSubmit () {
+            return false;
         }
     },
     beforeDestroy() {
