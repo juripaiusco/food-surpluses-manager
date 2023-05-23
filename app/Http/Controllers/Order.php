@@ -233,25 +233,35 @@ class Order extends Controller
         // Ripristino le giacenze prodotti
         foreach (json_decode($order->json_products) as $product) {
 
+            // Ripristino le giacenze BOX
+            if ($product->json_box) {
+
+                $box_products = json_decode($product->json_box);
+
+                foreach ($box_products as $box_product) {
+
+                    $store = \App\Models\Store::where('customer_id', $order->customer_id)
+                        ->where('order_id', $id)
+                        ->where('product_id', $box_product->id);
+
+                    $store_get = $store->first();
+
+                    $this->restoreProduct($store, $store_get, $box_product);
+
+                }
+
+            }
+            // END - Ripristino le giacenze BOX
+
+            // Ripristino le giacenze prodotti
             $store = \App\Models\Store::where('customer_id', $order->customer_id)
                 ->where('order_id', $id)
                 ->where('product_id', $product->id);
 
             $store_get = $store->first();
 
-            if (isset($store_get)) {
-
-                $product_edit = \App\Models\Product::find($product->id);
-
-                if (isset($product_edit)) {
-                    $product_edit->kg_total += $store_get->kg ? $store_get->kg * (-1) : 0;
-                    $product_edit->amount_total += $store_get->amount ? $store_get->amount * (-1) : 0;
-                    $product_edit->save();
-                }
-
-                $store->delete();
-
-            }
+            $this->restoreProduct($store, $store_get, $product);
+            // END - Ripristino le giacenze prodotti
         }
         // END - Ripristino le giacenze prodotti
 
@@ -270,6 +280,31 @@ class Order extends Controller
 
         $customer->save();
         // END - Riemetto i punti al cliente
+    }
+
+    /**
+     * Ripristino le giacenze del singolo prodotto
+     *
+     * @param $store
+     * @param $store_get
+     * @param $product
+     * @return void
+     */
+    public function restoreProduct($store, $store_get, $product)
+    {
+        if (isset($store_get)) {
+
+            $product_edit = \App\Models\Product::find($product->id);
+
+            if (isset($product_edit)) {
+                $product_edit->kg_total += $store_get->kg ? $store_get->kg * (-1) : 0;
+                $product_edit->amount_total += $store_get->amount ? $store_get->amount * (-1) : 0;
+                $product_edit->save();
+            }
+
+            $store->delete();
+
+        }
     }
 
     /**
