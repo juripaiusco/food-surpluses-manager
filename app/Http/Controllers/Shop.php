@@ -286,6 +286,12 @@ class Shop extends Controller
         ]);
     }
 
+    /**
+     * Salvataggio ordine
+     *
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function store(Request $request)
     {
         // Raggruppo i prodotti, così da scalare in una sola volta
