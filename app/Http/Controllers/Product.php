@@ -392,6 +392,7 @@ class Product extends Controller
         $product->fill($request->all());
         $product->json_box = json_encode($request->session()->get('boxProducts'));
         $product->type = 'box';
+        $product->points = $this->boxAction_getPoints($request->session()->get('boxProducts'));
 
         $product->save();
 
