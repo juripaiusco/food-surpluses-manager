@@ -88,30 +88,63 @@ class Store extends Controller
 
             }
 
+            // Verifico che il prodotto sia una box ed estraggo i prodotti
+            if (isset($product->id) && $product->type == 'box') {
+
+                $box_products = json_decode($product->json_box, true);
+
+                foreach ($box_products as $box_product) {
+
+                    $box_product_db = \App\Models\Product::find($box_product['id']);
+
+                    $box_args = $args;
+                    $box_args['storeArrayData']['id'] = $box_product['id'];
+                    $box_args['storeArrayData']['kg'] = $args['storeArrayData']['products_count'] * $box_product_db->kg * (-1);
+                    $box_args['storeArrayData']['amount'] = $args['storeArrayData']['products_count'] * $box_product_db->amount * (-1);
+
+                    $this->setStoreProduct($box_product_db, $box_args);
+
+                }
+
+            }
+            // END - Verifico che il prodotto sia una box ed estraggo i prodotti
+
             // Modifico i dati PRODOTTO
             if (isset($product->id)) {
 
-                // Inserimento movimento magazzino
-                $store = new \App\Models\Store();
-
-                $store->product_id = $args['storeArrayData']['id'];
-                $store->user_id = Auth::id();
-                $store->order_id = isset($args['storeArrayData']['order_id']) ? $args['storeArrayData']['order_id'] : null;
-                $store->customer_id = isset($args['storeArrayData']['customer_id']) ? $args['storeArrayData']['customer_id'] : null;
-                $store->cod = $product->cod;
-                $store->kg = isset($args['storeArrayData']['kg']) ? $args['storeArrayData']['kg'] : null;
-                $store->amount = $args['storeArrayData']['amount'];
-                $store->date = $args['storeArrayData']['date'];
-
-                $store->save();
-
-                // Modifica quantità totale prodotto
-                $product->type == 'fead no' ? $product->kg_total = null : $product->kg_total += $args['storeArrayData']['kg'];
-                $product->amount_total += $args['storeArrayData']['amount'];
-
-                $product->save();
+                $this->setStoreProduct($product, $args);
 
             }
         }
+    }
+
+    /**
+     * Imposto il movimento per il singolo prodotto
+     *
+     * @param $product
+     * @param $args
+     * @return void
+     */
+    public function setStoreProduct($product, $args)
+    {
+        // Inserimento movimento magazzino
+        $store = new \App\Models\Store();
+
+        $store->product_id = $args['storeArrayData']['id'];
+        $store->user_id = Auth::id();
+        $store->order_id = isset($args['storeArrayData']['order_id']) ? $args['storeArrayData']['order_id'] : null;
+        $store->customer_id = isset($args['storeArrayData']['customer_id']) ? $args['storeArrayData']['customer_id'] : null;
+        $store->cod = $product->cod;
+        $store->kg = isset($args['storeArrayData']['kg']) ? $args['storeArrayData']['kg'] : null;
+        $store->amount = $args['storeArrayData']['amount'];
+        $store->date = $args['storeArrayData']['date'];
+
+        $store->save();
+
+        // Modifica quantità totale prodotto
+        $product->type == 'fead no' ? $product->kg_total = null : $product->kg_total += $args['storeArrayData']['kg'];
+        $product->amount_total += $args['storeArrayData']['amount'];
+
+        $product->save();
     }
 }

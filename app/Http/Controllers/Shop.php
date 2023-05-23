@@ -300,23 +300,6 @@ class Shop extends Controller
 
         foreach ($request->input('products') as $product) {
 
-            // Verifico che il prodotto sia una box ed estraggo i prodotti
-            if ($product['type'] == 'box') {
-
-                $box_products = json_decode($product['json_box'], true);
-
-                foreach ($box_products as $box_product) {
-
-                    if (!isset($array_group[$box_product['id']])) {
-                        $array_group[$box_product['id']] = 0;
-                    }
-
-                    $array_group[$box_product['id']] += 1;
-
-                }
-            }
-            // END - Verifico che il prodotto sia una box ed estraggo i prodotti
-
             if (!isset($array_group[$product['id']])) {
                 $array_group[$product['id']] = 0;
             }
