@@ -303,7 +303,7 @@ function productSelectReset (refToReset) {
                         <div v-if="usePage().props.shopProducts && usePage().props.shopProducts.length > 0"
                              class="alert alert-success mt-4">
 
-                            <Table class="table-striped text-sm"
+                            <Table class="table-striped text-sm table-success"
                                    :data="{
                                         filters: '',
                                         routeSearch: '',
