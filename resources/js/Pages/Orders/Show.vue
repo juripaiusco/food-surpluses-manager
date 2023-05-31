@@ -159,7 +159,7 @@ const form = useForm(dataForm);
 
                                     let data = d.name;
 
-                                    if(d.json_box !== null) {
+                                    if(d.json_box !== undefined && d.json_box !== null) {
 
                                         json_box = JSON.parse(d.json_box);
 
@@ -185,7 +185,7 @@ const form = useForm(dataForm);
 
                                     let data = d.kg === null ? '' : d.kg;
 
-                                    if(d.json_box !== null) {
+                                    if(d.json_box !== undefined && d.json_box !== null) {
 
                                         json_box = JSON.parse(d.json_box);
 
@@ -212,7 +212,7 @@ const form = useForm(dataForm);
 
                                     let data = d.amount === null ? '' : d.amount;
 
-                                    if(d.json_box !== null) {
+                                    if(d.json_box !== undefined && d.json_box !== null) {
 
                                         json_box = JSON.parse(d.json_box);
 
@@ -239,7 +239,7 @@ const form = useForm(dataForm);
 
                                     let data = d.points;
 
-                                    if(d.json_box !== null) {
+                                    if(d.json_box !== undefined && d.json_box !== null) {
 
                                         json_box = JSON.parse(d.json_box);
 
