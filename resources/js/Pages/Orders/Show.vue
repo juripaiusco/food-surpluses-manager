@@ -45,7 +45,7 @@ const form = useForm(dataForm);
 
                         <h2 class="text-2xl mb-2">Intestazione Ordine</h2>
 
-                        <Table class="table-striped"
+                        <Table class="table-striped table-warning"
                                :data="{
                                     filters: '',
                                     routeSearch: '',
@@ -79,7 +79,7 @@ const form = useForm(dataForm);
 
                         <h2 class="text-2xl mb-2">Dati cliente</h2>
 
-                        <Table class="table-striped"
+                        <Table class="table-striped table-info"
                                :data="{
                                     filters: '',
                                     routeSearch: '',
@@ -135,7 +135,7 @@ const form = useForm(dataForm);
 
                 <h2 class="text-3xl mb-2">Prodotti consegnati</h2>
 
-                <Table class="table-striped"
+                <Table class="table-striped table-success"
                        :data="{
                             filters: '',
                             routeSearch: '',
