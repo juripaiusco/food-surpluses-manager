@@ -51,11 +51,11 @@ function productSelectReset (refToReset) {
 
 <template>
 
-    <Head title="Ordini" />
+    <Head title="Cassa" />
 
     <AuthenticatedLayout>
 
-        <template #header>
+        <template #header v-if="!data.customer.id || data.customer.active !== 1 || data.customer.view_reception !== 1">
 
             <ApplicationHeader :breadcrumb-array="['Cassa']" />
 
@@ -127,18 +127,18 @@ function productSelectReset (refToReset) {
                                    ref="s_product"
                                    name="s_product"
                                    v-model="form.s_product"
-                                   @input="form.get(route('shop.index', {
+                                   @input="form.get(route('shop.index'/*, {
                                        scrollY: windowTop
-                                   }))"
+                                   }*/))"
                                    @keyup.enter.prevent="noSubmit" />
 
                         </form>
 
                         <div class="alert alert-secondary !bg-gray-50 mt-4">
 
-                            <form @submit.prevent="form.get(route('shop.index', {
+                            <form @submit.prevent="form.get(route('shop.index'/*, {
                                        scrollY: windowTop
-                                   }))">
+                                   }*/))">
 
                                 <div class="row">
                                     <div class="col">
@@ -289,7 +289,7 @@ function productSelectReset (refToReset) {
                                           :href="route('shop.index', {
                                               s_customer: form.s_customer,
                                               s_product: product.cod,
-                                              scrollY: windowTop
+                                              /*scrollY: windowTop*/
                                           })">
                                         {{ product.name.length > 18 ? product.name.substring(0, 18) + ' ...' : product.name }}
                                     </Link>
@@ -531,19 +531,27 @@ export default {
             const audio = new Audio(sound);
             audio.play();
         },
-        onScroll (e) {
+        /*onScroll (e) {
             this.windowTop = window.top.scrollY
-        },
+        },*/
         noSubmit () {
             return false;
         }
     },
-    beforeDestroy() {
+    /*beforeDestroy() {
         window.removeEventListener("scroll", this.onScroll)
+    },*/
+    created() {
+        window.addEventListener('beforeunload', (e) => {
+            let out = 1;
+            e.returnValue = out;
+            return out;
+
+        });
     },
     mounted () {
 
-        window.addEventListener("scroll", this.onScroll);
+        // window.addEventListener("scroll", this.onScroll);
 
         if (this.data.s_customer === null ||
             !this.data.customer.id ||
@@ -559,13 +567,13 @@ export default {
         }
 
         if (this.data.s_customer && this.data.s_product && this.data.error_limit !== true) {
-            router.get(this.create_url, { scrollY: this.data.scrollY }, {
+            /*router.get(this.create_url, { scrollY: this.data.scrollY }, {
                 onSuccess: () => {
 
                     window.scroll(0, this.data.scrollY);
 
                 }
-            });
+            });*/
         }
 
         if (this.data.s_customer && this.data.product.id && this.data.error_limit !== true) {
