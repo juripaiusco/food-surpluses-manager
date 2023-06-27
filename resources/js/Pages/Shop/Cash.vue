@@ -401,7 +401,7 @@ function productSelectReset (refToReset) {
                                         <span class="text-2xl font-semibold">{{ data.customer.cod }}</span>
                                     </td>
                                 </tr>
-                                <tr>
+                                <!-- <tr>
                                     <td class="align-top">Nome</td>
                                     <td class="align-middle text-right">
                                         <span class="text-2xl font-semibold">
@@ -410,8 +410,12 @@ function productSelectReset (refToReset) {
                                         <br>
                                         Componenti {{ data.customer.family_number }}
                                     </td>
-                                </tr>
+                                </tr> -->
                             </table>
+
+                            <div class="text-right">
+                                Componenti {{ data.customer.family_number }}
+                            </div>
 
                             <hr class="mt-4 mb-4 border-green-800">
 
