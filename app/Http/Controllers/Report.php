@@ -212,7 +212,7 @@ class Report extends Controller
     {
         $settings = \App\Models\Setting::where('name', 'report_email')
             ->first();
-        $email_to_send = $settings->value;
+        $email_to_send_array = explode(',', str_replace(' ', '', $settings->value));
 
         if ($date_send == '') {
 
@@ -236,16 +236,26 @@ class Report extends Controller
         // Verifico se esistono file da inviare
         if (count($files) > 0) {
 
-            // Invio email con i file CSV come allegato
-            $mail_return = Mail::to($email_to_send)
-                ->send(new \App\Mail\Report(array(
-                    'date_send' => $date_send,
-                    'host' => $host,
-                    'attach_path' => $this->path_report_csv . 'queue/'
-                )));
+            $error = 1;
 
-            // Se la mail è andata a buon fine sposto i file CSV nella directory send
-            if ($mail_return) {
+            foreach ($email_to_send_array as $email_to_send) {
+
+                // Invio email con i file CSV come allegato
+                $mail_return = Mail::to($email_to_send)
+                    ->send(new \App\Mail\Report(array(
+                        'date_send' => $date_send,
+                        'host' => $host,
+                        'attach_path' => $this->path_report_csv . 'queue/'
+                    )));
+
+                // Se la mail è andata a buon fine sposto i file CSV nella directory send
+                if ($mail_return) {
+                    $error = 0;
+                }
+
+            }
+
+            if (!$error) {
 
                 $files = Storage::disk('public')->files($this->path_report_csv . 'queue/');
 
@@ -259,7 +269,9 @@ class Report extends Controller
                         $this->path_report_csv . 'send/' . basename($file)
                     );
                 }
+
             }
+
         }
     }
 }

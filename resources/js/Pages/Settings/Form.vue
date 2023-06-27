@@ -47,7 +47,7 @@ const form = useForm(dataForm);
             <form @submit.prevent="form.post(route('settings.update'))">
 
                 <label for="shop_btn" class="form-label">
-                    Inserisci il codice prodotto, separato da virgola "," (senza doppi apici)
+                    Inserisci il codice prodotto, separato da virgola "," (senza doppi apici).
                 </label>
                 <textarea id="shop_btn"
                           name="shop_btn"
@@ -67,7 +67,9 @@ const form = useForm(dataForm);
 
                 <h2 class="text-3xl mt-8 mb-2">Report</h2>
 
-                <label for="report_email" class="form-label">Email invio Report</label>
+                <label for="report_email" class="form-label">
+                    Email invio Report, inserisci le email separato da virgola "," (senza doppi apici).
+                </label>
                 <input id="report_email"
                        name="report_email"
                        type="text"
