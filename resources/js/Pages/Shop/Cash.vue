@@ -130,7 +130,8 @@ function productSelectReset (refToReset) {
                                    @input="form.get(route('shop.index'/*, {
                                        scrollY: windowTop
                                    }*/))"
-                                   @keyup.enter.prevent="noSubmit" />
+                                   @keyup.enter.prevent="noSubmit"
+                                   :disabled="btn_shopStore_disabled" />
 
                         </form>
 
@@ -151,7 +152,8 @@ function productSelectReset (refToReset) {
                                                         name="s_product_fead"
                                                         v-model="form.s_product_fead"
                                                         @change="productSelectReset('s_product_feadno')"
-                                                        class="form-select">
+                                                        class="form-select"
+                                                        :disabled="btn_shopStore_disabled" >
                                                     <option value=""
                                                             selected></option>
                                                     <option v-for="product in data.products_fead"
@@ -165,7 +167,8 @@ function productSelectReset (refToReset) {
 
                                                 <button @click="changeAmount('s_product_fead_amount', -1)"
                                                         type="button"
-                                                        class="btn btn-danger !w-full !h-full">
+                                                        class="btn btn-danger !w-full !h-full"
+                                                        :disabled="btn_shopStore_disabled" >
 
                                                     <svg class="w-5 h-5 m-auto"
                                                          xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -179,7 +182,8 @@ function productSelectReset (refToReset) {
 
                                                 <button @click="changeAmount('s_product_fead_amount', 1)"
                                                         type="button"
-                                                        class="btn btn-success !w-full !h-full">
+                                                        class="btn btn-success !w-full !h-full"
+                                                        :disabled="btn_shopStore_disabled" >
 
                                                     <svg class="w-5 h-5 m-auto"
                                                          xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -196,7 +200,8 @@ function productSelectReset (refToReset) {
                                                        placeholder="1"
                                                        ref="s_product_fead_amount"
                                                        name="s_product_fead_amount"
-                                                       v-model="form.s_product_fead_amount" />
+                                                       v-model="form.s_product_fead_amount"
+                                                       :disabled="btn_shopStore_disabled" />
 
                                             </div>
                                         </div>
@@ -209,7 +214,8 @@ function productSelectReset (refToReset) {
                                                         name="s_product_feadno"
                                                         v-model="form.s_product_feadno"
                                                         @change="productSelectReset('s_product_fead')"
-                                                        class="form-select">
+                                                        class="form-select"
+                                                        :disabled="btn_shopStore_disabled" >
                                                     <option selected
                                                             value=""></option>
                                                     <option v-for="product in data.products_feadno"
@@ -223,7 +229,8 @@ function productSelectReset (refToReset) {
 
                                                 <button @click="changeAmount('s_product_feadno_amount', -1)"
                                                         type="button"
-                                                        class="btn btn-danger !w-full !h-full">
+                                                        class="btn btn-danger !w-full !h-full"
+                                                        :disabled="btn_shopStore_disabled" >
 
                                                     <svg class="w-5 h-5 m-auto"
                                                          xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -237,7 +244,8 @@ function productSelectReset (refToReset) {
 
                                                 <button @click="changeAmount('s_product_feadno_amount', 1)"
                                                         type="button"
-                                                        class="btn btn-success !w-full !h-full">
+                                                        class="btn btn-success !w-full !h-full"
+                                                        :disabled="btn_shopStore_disabled" >
 
                                                     <svg class="w-5 h-5 m-auto"
                                                          xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -254,7 +262,8 @@ function productSelectReset (refToReset) {
                                                        placeholder="1"
                                                        ref="s_product_feadno_amount"
                                                        name="s_product_feadno_amount"
-                                                       v-model="form.s_product_feadno_amount" />
+                                                       v-model="form.s_product_feadno_amount"
+                                                       :disabled="btn_shopStore_disabled" />
 
                                             </div>
                                         </div>
@@ -263,7 +272,8 @@ function productSelectReset (refToReset) {
                                     <div class="col-2 !p-0 !pr-3">
 
                                         <button type="submit"
-                                                class="btn btn-primary w-full h-full">
+                                                class="btn btn-primary w-full h-full"
+                                                :disabled="btn_shopStore_disabled" >
 
                                             Aggiungi
 
@@ -285,6 +295,7 @@ function productSelectReset (refToReset) {
                                                 'btn-warning': product.type === 'box',
                                                 'btn-outline-primary': product.type === 'fead no',
                                                 'btn-info !text-sky-900': product.type === 'fead',
+                                                'disabled': params.points_count < 0
                                           }"
                                           :href="route('shop.index', {
                                               s_customer: form.s_customer,
@@ -499,6 +510,7 @@ function productSelectReset (refToReset) {
 import {router, useForm} from "@inertiajs/vue3";
 import soundBeep from '@/../mp3/beep.mp3';
 import soundError from '@/../mp3/error.mp3';
+import soundError2 from '@/../mp3/error2.mp3';
 import soundAlert from '@/../mp3/alert.mp3';
 
 export default {
@@ -605,6 +617,7 @@ export default {
             if (this.params.points_count < 0) {
 
                 this.btn_shopStore_disabled = true;
+                this.playSound(soundError);
 
             }
 
