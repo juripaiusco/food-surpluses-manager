@@ -558,12 +558,12 @@ export default {
         window.removeEventListener("scroll", this.onScroll)
     },*/
     created() {
-        window.addEventListener('beforeunload', (e) => {
+        /*window.addEventListener('beforeunload', (e) => {
             let out = 1;
             e.returnValue = out;
             return out;
 
-        });
+        });*/
     },
     mounted () {
 
