@@ -24,6 +24,16 @@ const form = useForm({
     s_product_feadno_amount: 1,
 });
 
+function submitCustomer (e) {
+
+    if (e.target.value.length >= 8) {
+        form.get(route('shop.index'));
+    }
+
+    return false;
+
+}
+
 const formConfirm = useForm({
     customer_id: props.data ? props.data.customer.id : null,
     products: usePage().props.shopProducts
@@ -73,7 +83,7 @@ function productSelectReset (refToReset) {
                            ref="s_customer"
                            name="s_customer"
                            v-model="form.s_customer"
-                           @input="form.get(route('shop.index'))" />
+                           @input="submitCustomer" />
 
                     <div v-if="data.s_customer"
                          class="mt-8 text-center text-red-500">
