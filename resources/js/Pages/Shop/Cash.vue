@@ -24,7 +24,7 @@ const form = useForm({
     s_product_feadno_amount: 1,
 });
 
-function submitCustomer (e) {
+function searchCustomer (e) {
 
     if (e.target.value.length >= 8) {
         form.get(route('shop.index'));
@@ -83,7 +83,7 @@ function productSelectReset (refToReset) {
                            ref="s_customer"
                            name="s_customer"
                            v-model="form.s_customer"
-                           @input="submitCustomer" />
+                           @input="searchCustomer" />
 
                     <div v-if="data.s_customer"
                          class="mt-8 text-center text-red-500">
