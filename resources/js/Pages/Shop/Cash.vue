@@ -34,6 +34,16 @@ function searchCustomer (e) {
 
 }
 
+function searchProduct (e) {
+
+    if (e.target.value.length >= 7) {
+        form.get(route('shop.index'));
+    }
+
+    return false;
+
+}
+
 const formConfirm = useForm({
     customer_id: props.data ? props.data.customer.id : null,
     products: usePage().props.shopProducts
@@ -137,9 +147,7 @@ function productSelectReset (refToReset) {
                                    ref="s_product"
                                    name="s_product"
                                    v-model="form.s_product"
-                                   @input="form.get(route('shop.index'/*, {
-                                       scrollY: windowTop
-                                   }*/))"
+                                   @input="searchProduct"
                                    @keyup.enter.prevent="noSubmit"
                                    :disabled="btn_shopStore_disabled" />
 
