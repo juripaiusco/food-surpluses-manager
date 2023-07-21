@@ -97,8 +97,12 @@ class Shop extends Controller
             ->limit(16)
             ->get();*/
 
-        $cod_products_more_moved = explode(',', str_replace(' ', '', $settings_value['shop_btn']));
-        $products_more_moved = \App\Models\Product::whereIn('cod', $cod_products_more_moved)
+        $cod_products_more_moved_str = str_replace(' ', '', $settings_value['shop_btn']);
+        $cod_products_more_moved_array = explode(',', $cod_products_more_moved_str);
+        $cod_products_more_moved_str_order = '\'' . implode('\',\'', $cod_products_more_moved_array) . '\'';
+
+        $products_more_moved = \App\Models\Product::whereIn('cod', $cod_products_more_moved_array)
+            ->orderByRaw('FIELD(cod, ' . $cod_products_more_moved_str_order . ')')
             ->get();
         // -----------------------------------------------------------------------------------
 
