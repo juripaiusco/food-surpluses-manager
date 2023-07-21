@@ -308,7 +308,7 @@ function productSelectReset (refToReset) {
                                 <div v-for="product in data.products_more_moved"
                                      class="w-1/4 p-1 inline-flex">
 
-                                    <Link class="btn w-full !text-sm"
+                                    <Link class="btn w-full !text-sm !pt-4 !pb-4"
                                           :class="{
                                                 'btn-warning': product.type === 'box',
                                                 'btn-outline-primary': product.type === 'fead no',
