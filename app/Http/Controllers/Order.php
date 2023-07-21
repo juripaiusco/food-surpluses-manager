@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
@@ -14,10 +15,7 @@ class Order extends Controller
         $this->middleware('auth');
     }
 
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function orderGet()
     {
         $request_validate_array = [
             'date',
@@ -76,12 +74,21 @@ class Order extends Controller
             ) as customer_name'
         ));
 
+        return $data;
+    }
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        $data = $this->orderGet();
         $data = $data->paginate(env('VIEWS_PAGINATE'))->withQueryString();
 
         return Inertia::render('Orders/List', [
             'data' => $data,
             'filters' => request()->all(['s', 'orderby', 'ordertype']),
-            'today' => date('Ymd')
+            'today' => date('Ymd'),
+            'date_today' => date('d/m/Y'),
         ]);
     }
 
@@ -320,5 +327,59 @@ class Order extends Controller
             'orderby' => 'date',
             'ordertype' => 'desc',
         ]);
+    }
+
+    public function download()
+    {
+        // Ultimo ordine
+        $order_latest = \App\Models\Order::all()->last();
+
+        // Formatto la data dell'ultimo ordine
+        $orders_latest_date = Carbon::parse($order_latest->date)->format('Y-m-d');
+        $orders_latest_date_string = Carbon::parse($order_latest->date)->format('d/m/Y');
+
+        $orders = $this->orderGet();
+        $orders = $orders->where('date', 'LIKE', $orders_latest_date . '%');
+        $orders = $orders->orderBy('date', 'DESC');
+        $orders = $orders->get();
+
+        $rows = array();
+
+        $rows[] = array(
+            'data',
+            'riferimento',
+            'cliente',
+            'punti',
+        );
+
+        foreach ($orders as $order) {
+
+            $rows[] = array(
+                $order->date,
+                $order->reference,
+                $order->customer_name,
+                $order->points
+            );
+
+        }
+
+        $row_csv = array();
+
+        foreach ($rows as $row) {
+
+            $row_csv[] = implode(';', $row);
+
+        }
+
+        $content = implode("\n", $row_csv);
+
+        $file_name_path = 'report_spesa/';
+        $file_name = 'spesa-' . $orders_latest_date . '.csv';
+        \Storage::disk('public')->put($file_name_path . $file_name, $content);
+        $file_path = \Storage::disk('public')->path($file_name_path . $file_name);
+
+        $download = \Response::download($file_path, $file_name, ['Content-Type: application/excel']);
+
+        return $download;
     }
 }

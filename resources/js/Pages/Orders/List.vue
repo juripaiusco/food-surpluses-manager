@@ -1,5 +1,5 @@
 <script setup>
-import {Head} from "@inertiajs/vue3";
+import {Head, router} from "@inertiajs/vue3";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import ApplicationHeader from "@/Components/ApplicationHeader.vue";
 import Table from "@/Components/Table/Table.vue";
@@ -14,6 +14,7 @@ defineProps({
     data: Object,
     filters: Object,
     today: String,
+    date_today: String,
     modalShow: false,
     modalData: Object,
     modalConfirm: Object,
@@ -37,9 +38,18 @@ defineProps({
 
             <div class="inline-flex w-full mb-6">
 
-                <div class="w-3/4">
+                <div class="w-1/2">
 
 
+
+                </div>
+                <div class="w-1/4 mr-4">
+
+                    <a class="btn btn-primary w-full"
+                       :href="route('orders.download')"
+                       target="_blank">
+                        Download ultima spesa
+                    </a>
 
                 </div>
                 <div class="w-1/4">

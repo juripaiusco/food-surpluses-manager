@@ -55,6 +55,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/orders/edit/{id}', [Order::class, 'edit'])->name('orders.edit');
 //    Route::post('/orders/update/{id}', [Order::class, 'update'])->name('orders.update');
     Route::get('/orders/destroy/{id}', [Order::class, 'destroy'])->name('orders.destroy');
+    Route::get('/orders/download', [Order::class, 'download'])->name('orders.download');
 
     Route::get('/store', [Store::class, 'index'])->name('store.index');
     Route::post('/store/store/{id}', [Store::class, 'store'])->name('store.store');
