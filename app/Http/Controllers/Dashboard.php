@@ -20,7 +20,9 @@ class Dashboard extends Controller
     public function index()
     {
         // Ultimo ordine
-        $order_latest = Order::all()->last();
+        $order_latest = Order::select('date')
+            ->orderBy('date', 'DESC')
+            ->first();
 
         // Formatto la data dell'ultimo ordine
         $orders_latest_date = Carbon::parse($order_latest->date)->format('Y-m-d');
