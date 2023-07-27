@@ -125,6 +125,44 @@ function productSelectReset (refToReset) {
 
             <div v-if="data.customer.id && data.customer.active === 1 && data.customer.view_reception === 1">
 
+                <div class="alert alert-info text-sm">
+
+                    <div class="inline-flex w-full">
+
+                        <div class="w-1/2">
+                            Cod. Cliente <span class="font-semibold">{{ data.customer.cod }}</span>
+                            |
+                            Componenti <span class="font-semibold">{{ data.customer.family_number }}</span>
+                        </div>
+
+                        <div class="w-1/2">
+
+                            <div class="row">
+                                <div class="col text-right">
+                                    Punti cliente <span class="font-semibold">{{ params.points_customer }}</span>
+                                </div>
+                                <div class="col text-right">
+                                    Punti rimanenti <span class="font-semibold">{{ params.points_count }}</span>
+                                </div>
+                                <div class="col text-right">
+                                    Punti ordine
+
+                                    <span class="font-semibold">
+                                        <!-- <span v-if="data.is_first_order && (params.points_products < (data.customer.points * 80/100))"
+                                              class="text-sm">
+                                            ( almeno {{ data.customer.points * 80/100 }} )
+                                        </span> -->
+                                        {{ params.points_products }}
+                                    </span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
                 <div v-if="data.error_limit"
                      class="alert alert-danger text-3xl text-center !border-8 !border-dashed">
                     Non possono essere passati più di
@@ -137,7 +175,7 @@ function productSelectReset (refToReset) {
                 </div>
 
                 <div class="row">
-                    <div class="col-8">
+                    <div class="col-6">
 
                         <form @submit.prevent="noSubmit">
 
@@ -185,7 +223,7 @@ function productSelectReset (refToReset) {
 
                                                 <button @click="changeAmount('s_product_fead_amount', -1)"
                                                         type="button"
-                                                        class="btn btn-danger !w-full !h-full"
+                                                        class="btn btn-danger !w-full !h-full !p-0"
                                                         :disabled="btn_shopStore_disabled" >
 
                                                     <svg class="w-5 h-5 m-auto"
@@ -200,7 +238,7 @@ function productSelectReset (refToReset) {
 
                                                 <button @click="changeAmount('s_product_fead_amount', 1)"
                                                         type="button"
-                                                        class="btn btn-success !w-full !h-full"
+                                                        class="btn btn-success !w-full !h-full !p-0"
                                                         :disabled="btn_shopStore_disabled" >
 
                                                     <svg class="w-5 h-5 m-auto"
@@ -247,7 +285,7 @@ function productSelectReset (refToReset) {
 
                                                 <button @click="changeAmount('s_product_feadno_amount', -1)"
                                                         type="button"
-                                                        class="btn btn-danger !w-full !h-full"
+                                                        class="btn btn-danger !w-full !h-full !p-0"
                                                         :disabled="btn_shopStore_disabled" >
 
                                                     <svg class="w-5 h-5 m-auto"
@@ -262,7 +300,7 @@ function productSelectReset (refToReset) {
 
                                                 <button @click="changeAmount('s_product_feadno_amount', 1)"
                                                         type="button"
-                                                        class="btn btn-success !w-full !h-full"
+                                                        class="btn btn-success !w-full !h-full !p-0"
                                                         :disabled="btn_shopStore_disabled" >
 
                                                     <svg class="w-5 h-5 m-auto"
@@ -306,7 +344,7 @@ function productSelectReset (refToReset) {
                             <div class="mt-4">
 
                                 <div v-for="product in data.products_more_moved"
-                                     class="w-1/4 p-1 inline-flex">
+                                     class="w-1/3 p-1 inline-flex">
 
                                     <Link class="btn w-full !text-sm !pt-4 !pb-4"
                                           :class="{
@@ -320,7 +358,7 @@ function productSelectReset (refToReset) {
                                               s_product: product.cod,
                                               /*scrollY: windowTop*/
                                           })">
-                                        {{ product.name.length > 18 ? product.name.substring(0, 18) + ' ...' : product.name }}
+                                        {{ product.name.length > 16 ? product.name.substring(0, 16) + ' ...' : product.name }}
                                     </Link>
 
                                 </div>
@@ -329,8 +367,47 @@ function productSelectReset (refToReset) {
 
                         </div>
 
+                        <form @submit.prevent="formConfirm.post(route('shop.store'))">
+
+                            <button type="submit"
+                                    class="btn btn-success btn-lg w-full !text-3xl !p-4"
+                                    :disabled="btn_shopStore_disabled"
+                                    ref="submitShopStore" >Termina Ordine</button>
+
+                        </form>
+
+                    </div>
+                    <div class="col">
+
+                        <div v-if="data.is_first_order && (params.points_products < (data.customer.points * 80/100))"
+                             class="alert alert-info animate-pulse !border-4 !border-sky-400 !border-dashed">
+                            Primo ordine del mese,
+                            verranno scalati un minimo di
+                            <span class="font-semibold text-xl">
+                                {{ data.customer.points * 80/100 }}
+                            </span>
+                            punti.
+                        </div>
+
+                        <div v-if="data.customer.note_alert ||
+                                   data.customer.b1 ||
+                                   data.customer.b2 ||
+                                   data.customer.b3"
+                             class="alert alert-danger whitespace-break-spaces !p-[11px]">
+                            {{ data.customer.note_alert }}
+
+                            <hr v-if="data.customer.note_alert &&
+                            (data.customer.b1 || data.customer.b2 || data.customer.b3)"
+                                class="mt-4 mb-4 border-spacing-0.5 border-red-300">
+
+                            {{ data.customer.b1 ? 'B1' : '' }}
+                            {{ data.customer.b2 ? 'B2' : '' }}
+                            {{ data.customer.b3 ? 'B3' : '' }}
+
+                        </div>
+
                         <div v-if="usePage().props.shopProducts && usePage().props.shopProducts.length > 0"
-                             class="alert alert-success mt-4">
+                             class="alert alert-success">
 
                             <Table class="table-striped text-sm table-success"
                                    :data="{
@@ -390,7 +467,7 @@ function productSelectReset (refToReset) {
                                             }
                                         }]
                                     }"
-                                    @openModal="(data, route) => {
+                                   @openModal="(data, route) => {
 
                                         routeTo(route, data);
 
@@ -406,116 +483,6 @@ function productSelectReset (refToReset) {
                             </div>
 
                         </div>
-
-                    </div>
-                    <div class="col">
-
-                        <div class="alert alert-success">
-
-                            <table class="w-full">
-                                <tr>
-                                    <td class="align-middle">Cod. Cliente</td>
-                                    <td class="align-middle text-right">
-                                        <span class="text-2xl font-semibold">{{ data.customer.cod }}</span>
-                                    </td>
-                                </tr>
-                                <!-- <tr>
-                                    <td class="align-top">Nome</td>
-                                    <td class="align-middle text-right">
-                                        <span class="text-2xl font-semibold">
-                                            {{ data.customer.name }} {{ data.customer.surname }}
-                                        </span>
-                                        <br>
-                                        Componenti {{ data.customer.family_number }}
-                                    </td>
-                                </tr> -->
-                            </table>
-
-                            <div class="text-right">
-                                Componenti {{ data.customer.family_number }}
-                            </div>
-
-                            <hr class="mt-4 mb-4 border-green-800">
-
-                            <table class="w-full">
-                                <tr>
-                                    <td class="align-center">Punti totali</td>
-                                    <td class="align-middle text-right">
-                                        <span class="text-3xl font-semibold">
-                                        {{ data.customer.points_total }}
-                                    </span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="align-center">Punti utilizzabili oggi</td>
-                                    <td class="align-middle text-right">
-                                        <span class="text-3xl font-semibold">
-                                        {{ data.customer.points }}
-                                    </span>
-                                    </td>
-                                </tr>
-                            </table>
-
-                        </div>
-
-                        <div v-if="data.customer.note_alert ||
-                                   data.customer.b1 ||
-                                   data.customer.b2 ||
-                                   data.customer.b3"
-                             class="alert alert-danger whitespace-break-spaces">
-                            {{ data.customer.note_alert }}
-
-                            <hr v-if="data.customer.note_alert &&
-                            (data.customer.b1 || data.customer.b2 || data.customer.b3)"
-                                class="mt-4 mb-4 border-spacing-0.5 border-red-300">
-
-                            {{ data.customer.b1 ? 'B1' : '' }}
-                            {{ data.customer.b2 ? 'B2' : '' }}
-                            {{ data.customer.b3 ? 'B3' : '' }}
-
-                        </div>
-
-                        <div class="row pt-2 pb-2">
-                            <div class="col">Punti cliente</div>
-                            <div class="col text-right">
-                                {{ params.points_customer }}
-                            </div>
-                        </div>
-                        <div class="row border-t border-t-black pt-2 pb-2">
-                            <div class="col">Punti prodotto</div>
-                            <div class="col text-right">
-                                <span v-if="data.is_first_order && (params.points_products < (data.customer.points * 80/100))"
-                                      class="text-sm">
-                                    ( almeno {{ data.customer.points * 80/100 }} )
-                                </span>
-                                {{ params.points_products }}
-                            </div>
-                        </div>
-                        <div class="row border-t border-t-black pt-2 pb-2">
-                            <div class="col">Punti rimanenti</div>
-                            <div class="col text-right text-3xl font-semibold">
-                                {{ params.points_count }}
-                            </div>
-                        </div>
-
-                        <div v-if="data.is_first_order && (params.points_products < (data.customer.points * 80/100))"
-                             class="alert alert-info mt-6 animate-pulse !border-4 !border-sky-400 !border-dashed">
-                            Primo ordine del mese,
-                            verranno scalati un minimo di
-                            <span class="font-semibold text-xl">
-                                {{ data.customer.points * 80/100 }}
-                            </span>
-                            punti.
-                        </div>
-
-                        <form @submit.prevent="formConfirm.post(route('shop.store'))">
-
-                            <button type="submit"
-                                    class="btn btn-success btn-lg w-full mt-6"
-                                    :disabled="btn_shopStore_disabled"
-                                    ref="submitShopStore" >Termina Ordine</button>
-
-                        </form>
 
                     </div>
                 </div>
