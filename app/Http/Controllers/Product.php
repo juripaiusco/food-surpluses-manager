@@ -146,7 +146,17 @@ class Product extends Controller
         $data = \App\Models\Product::with('store')
             ->with('store.user')
             ->with('store.customer')
-            ->with('store.order')
+            ->with(['store.order' => function ($q) {
+                $q->select([
+                    'id',
+                    'reference',
+                    'user_id',
+                    'customer_id',
+                    'retail_id',
+                    'points',
+                    'date',
+                ]);
+            }])
             ->find($id);
 
         $categories = Category::orderBy('name')
