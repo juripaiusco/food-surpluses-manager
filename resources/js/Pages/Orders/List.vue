@@ -78,12 +78,12 @@ defineProps({
                             class: 'text-center w-[5%]',
                             label: 'Riferimento',
                             field: 'reference',
-                        }, {
+                        }, /*{
                             class: 'text-center w-[12%]',
                             label: 'Negozio',
                             field: 'retail.name',
                             order: false
-                        }, {
+                        }, */{
                             class: 'text-left',
                             label: 'Cliente',
                             field: 'customer_name',

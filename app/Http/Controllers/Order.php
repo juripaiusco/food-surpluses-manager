@@ -60,7 +60,12 @@ class Order extends Controller
             $data->orderby(request('orderby'), strtoupper(request('ordertype')));
         }
 
-        $data = $data->select();
+        $data = $data->select([
+            'id',
+            'date',
+            'reference',
+            'points',
+        ]);
 
         $data->addSelect(DB::raw(
             'CONCAT(
