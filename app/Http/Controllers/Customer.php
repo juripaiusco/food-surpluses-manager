@@ -64,7 +64,7 @@ class Customer extends Controller
             $data->orderby(request('orderby'), strtoupper(request('ordertype')));
         }
 
-        $data = $data->with('order');
+//        $data = $data->with('order');
         $data = $data->select();
         $data = $data->addSelect(DB::raw('
             CONCAT(surname, \' \', name) AS customer_name
@@ -145,7 +145,17 @@ class Customer extends Controller
      */
     public function edit(string $id)
     {
-        $data = \App\Models\Customer::with('order')
+        $data = \App\Models\Customer::with(['order' => function ($q) {
+            $q->select([
+                'id',
+                'reference',
+                'user_id',
+                'customer_id',
+                'retail_id',
+                'points',
+                'date',
+            ]);
+        }])
             ->find($id);
 
         $data->saveRedirect = Redirect::back()->getTargetUrl();
