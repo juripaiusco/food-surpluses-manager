@@ -35,6 +35,8 @@ class Report extends Controller
 
     public function get_reports($date_search = '', $type = 'products')
     {
+        ini_set('memory_limit', '1024M');
+
         if ($date_search == '') {
 
             $date_search = date('Y-m-d');
@@ -104,7 +106,7 @@ class Report extends Controller
                         $n_family_total[$product->cod][] = $customer_obj->family_number;*/
 
                         // Se voglio contare da quale singola famiglia è stato acquistato il prodotto
-                        $reports[$product->cod]['customers'][$customer_obj->cod] = $customer_obj;
+                        $reports[$product->cod]['customers'][$customer_obj->cod] = $customer_obj->id;
                         $n_family_total[$product->cod][$customer_obj->cod] = $customer_obj->family_number;
 
                         $reports[$product->cod]['customers_count'] = array(
