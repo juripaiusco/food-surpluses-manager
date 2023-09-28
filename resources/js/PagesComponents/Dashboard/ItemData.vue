@@ -15,7 +15,7 @@ const props = defineProps({
             <div class="text-center align-middle w-1/2">
 
                 <span class="text-3xl">
-                    {{ data.count }}
+                    {{ data.count == 0 ? '-' : data.count }}
                 </span>
                 <br>
                 {{ data.label }}
