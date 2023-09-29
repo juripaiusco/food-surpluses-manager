@@ -52,6 +52,7 @@ defineProps({
                     <Search :placeholder="'Cerca es.: ' + date_today"
                             class="text-center"
                             route-search="report.index"
+                            type="date"
                             :filters="filters" />
 
                     <div v-if="filters.s !== null">
