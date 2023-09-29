@@ -64,7 +64,7 @@ class Customer extends Controller
             $data->orderby(request('orderby'), strtoupper(request('ordertype')));
         }
 
-//        $data = $data->with('order');
+        $data = $data->with('order');
         $data = $data->select();
         $data = $data->addSelect(DB::raw('
             CONCAT(surname, \' \', name) AS customer_name
