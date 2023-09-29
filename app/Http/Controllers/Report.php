@@ -35,7 +35,7 @@ class Report extends Controller
 
     public function get_reports($date_search = '', $type = 'products')
     {
-        ini_set('memory_limit', '1024M');
+//        ini_set('memory_limit', '1024M');
 
         if ($date_search == '') {
 
