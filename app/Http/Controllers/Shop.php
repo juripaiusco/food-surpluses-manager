@@ -132,7 +132,17 @@ class Shop extends Controller
      */
     public function init(Request $request)
     {
-        $customer = \App\Models\Customer::with('order')
+        $customer = \App\Models\Customer::with(['order' => function ($q) {
+            $q->select([
+                'id',
+                'reference',
+                'user_id',
+                'customer_id',
+                'retail_id',
+                'points',
+                'date',
+            ]);
+        }])
             ->where('cod', $request->input('s_customer'))
             ->first();
 
@@ -322,8 +332,17 @@ class Shop extends Controller
 
         // Recupero i dati del cliente
         $customer_id = $request->input('customer_id');
-        $customer = \App\Models\Customer::with('order')
-            ->find($customer_id);
+        $customer = \App\Models\Customer::with(['order' => function ($q) {
+            $q->select([
+                'id',
+                'reference',
+                'user_id',
+                'customer_id',
+                'retail_id',
+                'points',
+                'date',
+            ]);
+        }])->find($customer_id);
 
         // Verifico che sia il primo ordine del mese
         $is_first_order = $this->is_first_order($customer);
@@ -343,7 +362,7 @@ class Shop extends Controller
                 'user_id' => $user_id,
                 'customer_id' => $customer_id,
                 'retail_id' => $retail_id,
-                'json_customer' => json_encode($customer),
+                'json_customer' => json_encode(\App\Models\Customer::find($customer_id)),
                 'date' => $oder_data
             )
         ));
