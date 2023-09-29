@@ -19,6 +19,23 @@ class Dashboard extends Controller
 
     public function index()
     {
+        /*ini_set('memory_limit', '1024M');
+
+        // FIX Saved Order
+        $orders = Order::orderBy('id', 'DESC')
+            ->get();
+
+        foreach ($orders as $order) {
+
+            $json_customer = json_decode($order->json_customer);
+            unset($json_customer->order);
+
+            $order_save = Order::find($order->id);
+            $order_save->date = $order->date;
+            $order_save->json_customer = json_encode($json_customer);
+            $order_save->save();
+        }*/
+
         // Ultimo ordine
         $order_latest = Order::select('date')
             ->orderBy('date', 'DESC')
@@ -37,11 +54,7 @@ class Dashboard extends Controller
         // Prendo i dati degli ordini dell'ultimo giorno di vendita
         $order_last_day = Order::with('customer')
             ->where('date', 'LIKE', $orders_latest_date . '%')
-            ->select([
-                'date',
-                'reference',
-                'points',
-            ])
+            ->select()
             ->addSelect('json_customer->name AS customer_firstname')
             ->addSelect('json_customer->surname AS customer_lastname')
             ->addSelect(DB::raw(
@@ -75,9 +88,9 @@ class Dashboard extends Controller
 
         // Conto i PRODOTTI venduti l'ultimo giorno di vendita
         $products_count = 0;
-//        foreach ($order_last_day_data as $order) {
-//            $products_count += count(json_decode($order->json_products));
-//        }
+        foreach ($order_last_day_data as $order) {
+            $products_count += count(json_decode($order->json_products));
+        }
 
         // Conto quanti PUNTI usati l'ultimo giorno di vendita
         $points_count = 0;
@@ -88,12 +101,12 @@ class Dashboard extends Controller
         // Conto i CLIENTI dell'ultimo giorno di vendita
         $people_count = 0;
         $people_count_array = array();
-        /*foreach ($order_last_day_data as $order) {
+        foreach ($order_last_day_data as $order) {
             if (!isset($people_count_array[$order->customer->id])) {
                 $people_count_array[$order->customer->id] = $order->customer->family_number;
                 $people_count += $people_count_array[$order->customer->id];
             }
-        }*/
+        }
 
         // Prendo i dati impaginati degli ordini dell'ultimo giorno
         $order_last_day = $order_last_day->select([
