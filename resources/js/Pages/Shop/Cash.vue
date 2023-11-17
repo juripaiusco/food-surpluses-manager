@@ -126,7 +126,7 @@ function productSelectReset (refToReset) {
             <div v-if="data.customer.id && data.customer.active === 1 && data.customer.view_reception === 1">
 
                 <div v-if="params.points_count <= 100">
-                    
+
                     <div class="alert alert-warning text-center text-3xl !p-6 animate-bounce !border-[10px]">
 
                         L'assistito dispone ancora di <span class="font-bold">{{ params.points_count }}</span> punti
