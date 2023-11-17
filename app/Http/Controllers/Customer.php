@@ -65,7 +65,67 @@ class Customer extends Controller
         }
 
         $data = $data->with('order');
-        $data = $data->select();
+
+        if (request('filters') == 'no-order-3-months') {
+
+            $data = $data->leftJoin(
+                'orders', 'customers.id', '=', 'orders.customer_id'
+            );
+
+            $data = $data->select([
+                'customers.id',
+                'customers.active',
+                'customers.view_reception',
+                'customers.cod',
+                'customers.number',
+                'customers.name',
+                'customers.surname',
+                'customers.name_delegato',
+                'customers.address',
+                'customers.city',
+                'customers.provincia',
+                'customers.phone',
+                'customers.family_number',
+                'customers.points',
+                'customers.points_renew',
+                'customers.note',
+                'customers.note_alert',
+                'customers.b1',
+                'customers.b2',
+                'customers.b3',
+                'customers.char1',
+                'customers.char2',
+                'customers.char3',
+                'customers.c_group',
+                'customers.channel',
+                'customers.created_at',
+                'customers.updated_at',
+                'orders.reference AS order_reference',
+                'orders.date AS order_date',
+            ]);
+
+            $data = $data->where(
+                'orders.date',
+                '>=',
+                date('Y-m-d 00:00:00', strtotime('-3 months'))
+            );
+
+            $data = $data->groupBy('customers.id');
+
+            $array_id_not = array();
+            foreach ($data->get() as $d) {
+                $array_id_not[] = $d->id;
+            }
+
+            $data = \App\Models\Customer::query();
+            $data = $data->whereNotIn('id', $array_id_not);
+            $data = $data->select();
+
+        } else {
+
+            $data = $data->select();
+        }
+
         $data = $data->addSelect(DB::raw('
             CONCAT(surname, \' \', name) AS customer_name
         '));
@@ -73,7 +133,7 @@ class Customer extends Controller
 
         return Inertia::render('Customers/List', [
             'data' => $data,
-            'filters' => request()->all(['number', 's', 'orderby', 'ordertype'])
+            'filters' => request()->all(['number', 's', 'orderby', 'ordertype', 'filters'])
         ]);
     }
 

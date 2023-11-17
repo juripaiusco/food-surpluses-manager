@@ -35,11 +35,26 @@ defineProps({
 
             <div class="inline-flex w-full mb-6">
 
-                <div class="w-2/4">
+                <div class="w-1/4">
 
                     <Link :href="route('customers.create')"
                           class="btn btn-outline-primary">
                         Nuovo Assistito
+                    </Link>
+
+                </div>
+                <div class="w-1/4 text-right pr-3">
+
+                    <Link :href="route('customers.index',
+                            {
+                                'filters': filters.filters === 'no-order-3-months' ? '' : 'no-order-3-months'
+                            }
+                          )"
+                          class="btn btn-outline-info"
+                          :class="{
+                            'btn-info !text-white': filters.filters === 'no-order-3-months'
+                          }" >
+                        filtra no ordini +3 mesi
                     </Link>
 
                 </div>
