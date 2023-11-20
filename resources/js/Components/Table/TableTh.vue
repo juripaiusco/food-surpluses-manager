@@ -51,6 +51,7 @@ export default {
             params: {
                 orderby: this.data.filters.orderby,
                 ordertype: this.data.filters.ordertype,
+                filters: this.data.filters.filters,
             }
         }
     },
