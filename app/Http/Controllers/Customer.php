@@ -104,6 +104,10 @@ class Customer extends Controller
                 'orders.date AS order_date',
             ]);
 
+            $data = $data->addSelect(DB::raw('
+                CONCAT(surname, \' \', name) AS customer_name
+            '));
+
             $data = $data->where(
                 'orders.date',
                 '>=',
@@ -120,6 +124,11 @@ class Customer extends Controller
             $data = \App\Models\Customer::query();
             $data = $data->whereNotIn('id', $array_id_not);
             $data = $data->select();
+
+            // Filtro ORDINAMENTO
+            if (request('orderby') && request('ordertype')) {
+                $data->orderby(request('orderby'), strtoupper(request('ordertype')));
+            }
 
         } else {
 
