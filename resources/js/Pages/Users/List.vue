@@ -8,14 +8,19 @@ import ApplicationContainer from "@/Components/ApplicationContainer.vue";
 import {Link} from "@inertiajs/vue3";
 import ModalSimple from "@/Components/ModalSimple.vue";
 import Pagination from "@/Components/Pagination.vue";
+import {ref} from "vue";
 
-defineProps({
+const props = defineProps({
     users: Object,
     filters: Object,
     modalShow: false,
     modalData: Object,
     modalConfirm: Object,
 })
+
+let modalShow = ref(props.modalShow);
+let modalData = ref(props.modalData);
+let modalConfirm = ref(props.modalConfirm);
 
 </script>
 
