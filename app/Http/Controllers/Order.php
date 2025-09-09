@@ -337,7 +337,7 @@ class Order extends Controller
     public function download()
     {
         // Ultimo ordine
-        $order_latest = \App\Models\Order::all()->last();
+        $order_latest = \App\Models\Order::orderBy('date', 'desc')->first();
 
         // Formatto la data dell'ultimo ordine
         $orders_latest_date = Carbon::parse($order_latest->date)->format('Y-m-d');
