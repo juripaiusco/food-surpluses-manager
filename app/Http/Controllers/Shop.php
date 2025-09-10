@@ -117,7 +117,7 @@ class Shop extends Controller
                 'products_feadno' => $products_feadno,
                 'products_more_moved' => $products_more_moved,
                 'error_limit' => isset($product) ? $error_limit : false,
-//                'scrollY' => $request->input('scrollY')
+                'scrollY' => $request->input('scrollY')
             ],
             'create_url' => route('shop.index', [
                 's_customer' => $request->input('s_customer'),

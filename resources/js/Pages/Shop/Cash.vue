@@ -356,7 +356,7 @@ function productSelectReset (refToReset) {
                                 <div v-for="product in data.products_more_moved"
                                      class="w-1/3 p-1 inline-flex">
 
-                                    <Link class="btn w-full !text-sm !pt-4 !pb-4"
+                                     <Link class="btn w-full !text-sm !pt-4 !pb-4"
                                           :class="{
                                                 'btn-warning': product.type === 'box',
                                                 'btn-outline-primary': product.type === 'fead no',
@@ -366,7 +366,7 @@ function productSelectReset (refToReset) {
                                           :href="route('shop.index', {
                                               s_customer: form.s_customer,
                                               s_product: product.cod,
-                                              /*scrollY: windowTop*/
+                                              scrollY: windowTop
                                           })">
                                         {{ product.name.length > 16 ? product.name.substring(0, 16) + ' ...' : product.name }}
                                     </Link>
@@ -543,16 +543,38 @@ export default {
             const audio = new Audio(sound);
             audio.play();
         },
-        /*onScroll (e) {
-            this.windowTop = window.top.scrollY
-        },*/
+        onScroll (e) {
+            this.windowTop = window.scrollY
+            console.log(this.windowTop)
+        },
+        scrollCtrl() {
+            if (this.data.s_customer && this.data.s_product && this.data.error_limit !== true) {
+                /*router.get(this.create_url, { scrollY: this.data.scrollY }, {
+                    onSuccess: () => {
+
+                        console.log('dopo reload', this.data.scrollY)
+                        setTimeout(() => {
+                            window.scroll(0, this.data.scrollY)
+                        }, 200);
+
+                    }
+                });*/
+
+                console.log('dopo reload', this.data.scrollY)
+                setTimeout(() => {
+                    window.scroll(0, this.data.scrollY)
+                }, 100);
+
+                return this.data.scrollY
+            }
+        },
         noSubmit () {
             return false;
-        }
+        },
     },
-    /*beforeDestroy() {
+    beforeDestroy() {
         window.removeEventListener("scroll", this.onScroll)
-    },*/
+    },
     created() {
         /*window.addEventListener('beforeunload', (e) => {
             let out = 1;
@@ -563,7 +585,7 @@ export default {
     },
     mounted () {
 
-        // window.addEventListener("scroll", this.onScroll);
+        window.addEventListener("scroll", this.onScroll);
 
         if (this.data.s_customer === null ||
             !this.data.customer.id ||
@@ -578,15 +600,7 @@ export default {
             this.$refs.s_product.focus();
         }
 
-        if (this.data.s_customer && this.data.s_product && this.data.error_limit !== true) {
-            /*router.get(this.create_url, { scrollY: this.data.scrollY }, {
-                onSuccess: () => {
-
-                    window.scroll(0, this.data.scrollY);
-
-                }
-            });*/
-        }
+        this.scrollCtrl();
 
         if (this.data.s_customer && this.data.product.id && this.data.error_limit !== true) {
             this.playSound(soundBeep);
