@@ -13,6 +13,7 @@ from datetime import datetime
 """ VAR - SET VARIABLES """
 pathExcel = './excel'
 load_dotenv(Path('./.laravel-env'))
+today = datetime.now()
 
 """ FNC - GET DATA FROM DB """
 def getData(query, conn):
@@ -30,8 +31,7 @@ try:
         user=os.getenv('DB_USERNAME'),
         password=os.getenv('DB_PASSWORD'),
         database=os.getenv('DB_DATABASE'),
-        host='host.docker.internal',
-#         host=os.getenv('DB_HOST'),
+        host='host.docker.internal' if os.getenv('DB_HOST') == 'db' else '127.0.0.1',
         port=os.getenv('DB_PORT')
     )
 except mariadb.errors as e:
@@ -49,7 +49,16 @@ for dataTable in dataTables:
     dataTableColumns = getData('SHOW COLUMNS FROM ' + tbl, conn)
 
     """ Select Table Data - DataFrame """
-    df_dataTable = pd.DataFrame(getData('SELECT * FROM ' + tbl, conn))
+    if (tbl == 'orders'):
+        df_dataTable = pd.DataFrame(
+            getData('SELECT * FROM ' + tbl + ' WHERE date LIKE \'' + today.strftime("%Y-%m") + '%\'', conn)
+        )
+    elif (tbl == 'stores'):
+        df_dataTable = pd.DataFrame(
+            getData('SELECT * FROM ' + tbl + ' WHERE date LIKE \'' + today.strftime("%Y-%m") + '%\'', conn)
+        )
+    else:
+        df_dataTable = pd.DataFrame(getData('SELECT * FROM ' + tbl, conn))
 
     """ Eseguo l'esportazione in Excel """
     row = [[]]
@@ -73,22 +82,6 @@ for file in os.listdir(pathExcel):
     os.remove(pathExcel + '/' + file)
 
 """ ------------------------------------------------------------ """
-
-quit()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 """ EMAIL - INVIO MAIL CON ALLEGATO """
 # Try to log in to server and send email

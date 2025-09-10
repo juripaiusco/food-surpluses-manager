@@ -75,7 +75,8 @@ class Setting extends Controller
 
     public function db2Excel()
     {
-        shell_exec(base_path('python/_emporioApp-python.sh'));
+        $path = base_path('python/.db2excel_create');
+        file_put_contents($path, "");
     }
 
     public function db2Excel_web()
