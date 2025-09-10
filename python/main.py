@@ -12,7 +12,7 @@ from datetime import datetime
 
 """ VAR - SET VARIABLES """
 pathExcel = './excel'
-load_dotenv(Path('../.env'))
+load_dotenv(Path('./.laravel-env'))
 
 """ FNC - GET DATA FROM DB """
 def getData(query, conn):
@@ -30,7 +30,8 @@ try:
         user=os.getenv('DB_USERNAME'),
         password=os.getenv('DB_PASSWORD'),
         database=os.getenv('DB_DATABASE'),
-        host=os.getenv('DB_HOST'),
+        host='host.docker.internal',
+#         host=os.getenv('DB_HOST'),
         port=os.getenv('DB_PORT')
     )
 except mariadb.errors as e:
@@ -72,6 +73,22 @@ for file in os.listdir(pathExcel):
     os.remove(pathExcel + '/' + file)
 
 """ ------------------------------------------------------------ """
+
+quit()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 """ EMAIL - INVIO MAIL CON ALLEGATO """
 # Try to log in to server and send email
