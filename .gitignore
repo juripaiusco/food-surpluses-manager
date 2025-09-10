@@ -38,3 +38,4 @@ yarn-error.log
 *_emporioApp-conf.sh*
 python/.docker_image_built
 python/.laravel-env
+python/excel*
