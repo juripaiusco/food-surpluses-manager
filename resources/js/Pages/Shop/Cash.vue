@@ -381,7 +381,8 @@ function productSelectReset (refToReset) {
 
                             <button type="submit"
                                     class="btn btn-success btn-lg w-full !text-3xl !p-4"
-                                    :disabled="btn_shopStore_disabled"
+                                    @click="formConfirm.post(route('shop.store')); btn_shopStore_disabled = true;"
+                                    :disabled="btn_shopStore_disabled || formConfirm.processing"
                                     ref="submitShopStore" >Termina Ordine</button>
 
                         </form>
