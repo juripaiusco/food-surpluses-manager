@@ -36,3 +36,4 @@ yarn-error.log
 *.DS_Store*
 *.env*
 *_emporioApp-conf.sh*
+python/.docker_image_built
