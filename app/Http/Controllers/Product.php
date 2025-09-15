@@ -157,6 +157,7 @@ class Product extends Controller
                     'user_id',
                     'customer_id',
                     'retail_id',
+                    'price',
                     'points',
                     'date',
                 ]);
@@ -412,6 +413,7 @@ class Product extends Controller
         $product->fill($request->all());
         $product->json_box = json_encode($request->session()->get('boxProducts'));
         $product->type = 'box';
+        $product->price = $this->boxAction_getPrice($request->session()->get('boxProducts'));
         $product->points = $this->boxAction_getPoints($request->session()->get('boxProducts'));
 
         $product->save();
@@ -445,6 +447,7 @@ class Product extends Controller
         $product->fill($request->all());
         $product->json_box = json_encode($request->session()->get('boxProducts'));
         $product->type = 'box';
+        $product->price = $this->boxAction_getPrice($request->session()->get('boxProducts'));
         $product->points = $this->boxAction_getPoints($request->session()->get('boxProducts'));
 
         $product->save();
@@ -527,5 +530,18 @@ class Product extends Controller
         }
 
         return $points;
+    }
+
+    public function boxAction_getPrice($box_data)
+    {
+        $price = 0;
+
+        foreach ($box_data as $d) {
+
+            $price += $d->price;
+
+        }
+
+        return $price;
     }
 }

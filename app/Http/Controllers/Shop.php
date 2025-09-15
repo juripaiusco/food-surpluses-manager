@@ -139,6 +139,7 @@ class Shop extends Controller
                 'user_id',
                 'customer_id',
                 'retail_id',
+                'price',
                 'points',
                 'date',
             ]);
@@ -339,6 +340,7 @@ class Shop extends Controller
                 'user_id',
                 'customer_id',
                 'retail_id',
+                'price',
                 'points',
                 'date',
             ]);
@@ -368,6 +370,7 @@ class Shop extends Controller
         ));
 
         // Scarico i prodotti da magazzino -----------------------------------------
+        $price = 0;
         $points = 0;
         $product_array = array();
 
@@ -386,12 +389,14 @@ class Shop extends Controller
                         'customer_id' => $customer_id,
                         'kg' => isset($product->kg) ? $product->kg * $count * (-1) : null,
                         'amount' => $product->amount * $count * (-1),
+                        'price' => $product->price * $count,
                         'products_count' => $count,
                         'date' => $oder_data,
                     )
                 ));
 
                 $points += $count * $product->points;
+                $price += $count * $product->price;
 
                 for ($i = 0; $i < $count; $i++) {
                     $product_array[] = $product;
@@ -406,6 +411,7 @@ class Shop extends Controller
         $order->store(array(
             'id' => $order_id,
             'data' => array(
+                'price' => $price,
                 'points' => $points,
                 'json_products' => json_encode($product_array)
             )

@@ -259,6 +259,7 @@ form.store = null;
                                     <th class="!pt-[5px] !pb-[5px]">Ordine</th>
                                     <th class="!pt-[5px] !pb-[5px]">Kg.</th>
                                     <th class="!pt-[5px] !pb-[5px]">Q.tà</th>
+                                    <th class="!pt-[5px] !pb-[5px]">Prezzo</th>
                                 </tr>
 
                                 </thead>
@@ -307,6 +308,15 @@ form.store = null;
                                             '!bg-green-300 !text-green-900': d.amount > 0
                                         }">
                                         {{ d.amount }}
+                                    </td>
+                                    <td class="text-center !pt-2 !pb-2"
+                                        :class="{
+                                            '!bg-red-300 !text-red-900': d.amount <= 0,
+                                            '!bg-green-300 !text-green-900': d.amount > 0
+                                        }">
+                                        {{ d.price === null ? '-' : '&euro; ' + parseFloat(d.price)
+                                                                                .toFixed(2)
+                                                                                .replace('.', ',') }}
                                     </td>
                                 </tr>
 

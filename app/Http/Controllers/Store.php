@@ -101,6 +101,7 @@ class Store extends Controller
                     $box_args['storeArrayData']['id'] = $box_product['id'];
                     $box_args['storeArrayData']['kg'] = $args['storeArrayData']['products_count'] * $box_product_db->kg * (-1);
                     $box_args['storeArrayData']['amount'] = $args['storeArrayData']['products_count'] * $box_product_db->amount * (-1);
+                    $box_args['storeArrayData']['price'] = $args['storeArrayData']['products_count'] * $box_product_db->price;
 
                     $this->setStoreProduct($box_product_db, $box_args);
 
@@ -137,6 +138,7 @@ class Store extends Controller
         $store->cod = $product->cod;
         $store->kg = isset($args['storeArrayData']['kg']) ? $args['storeArrayData']['kg'] : null;
         $store->amount = $args['storeArrayData']['amount'];
+        $store->price = $args['storeArrayData']['price'];
         $store->date = $args['storeArrayData']['date'];
 
         $store->save();
