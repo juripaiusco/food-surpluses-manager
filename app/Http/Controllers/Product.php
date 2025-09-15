@@ -203,6 +203,40 @@ class Product extends Controller
 
         $product->save();
 
+        // START - Aggiorno i prodotti nelle scatole che contengono questo prodotto -----------------------------
+        $boxes = \App\Models\Product::where('json_box', 'like', '%"id":' . $id . ',%')
+            ->get();
+
+        if (count($boxes) > 0) {
+
+            $price_total = 0;
+            $points_total = 0;
+
+            foreach ($boxes as $box) {
+                $produtcs_array = json_decode($box->json_box, true);
+
+                foreach ($produtcs_array as $k => $box_product) {
+
+                    if ($produtcs_array[$k]['id'] == $id) {
+                        $produtcs_array[$k]['price'] = $product->price;
+                        $produtcs_array[$k]['points'] = $product->points;
+                        $price_total += $produtcs_array[$k]['price'];
+                        $points_total += $produtcs_array[$k]['points'];
+                    } else {
+                        $price_total += $produtcs_array[$k]['price'] == null ? 0 : $produtcs_array[$k]['price'];
+                        $points_total += $produtcs_array[$k]['points'] == null ? 0 : $produtcs_array[$k]['points'];
+                    }
+                }
+
+                $box->json_box = json_encode($produtcs_array);
+                $box->price = $price_total;
+                $box->points = $points_total;
+                $box->save();
+            }
+
+        }
+        // END - Aggiorno i prodotti nelle scatole che contengono questo prodotto -------------------------------
+
         return to_route('products.index', [
             'orderby' => 'cod',
             'ordertype' => 'asc'
