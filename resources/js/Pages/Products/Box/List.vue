@@ -77,6 +77,19 @@ let modalConfirm = ref(props.modalConfirm);
                             label: 'Nome',
                             field: 'name',
                         }, {
+                            class: 'text-center w-[8%]',
+                            label: 'Prezzo',
+                            field: 'price',
+                            fnc: function (d) {
+                                if (d.price === null) {
+                                    return '-';
+                                }
+
+                                return '<small>€</small> ' + parseFloat(d.price)
+                                        .toFixed(2)
+                                        .replace('.', ',');
+                            }
+                        }, {
                             class: 'text-center w-[10%]',
                             label: 'Punti',
                             field: 'points',
