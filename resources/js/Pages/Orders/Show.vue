@@ -232,6 +232,36 @@ const form = useForm(dataForm);
                                 }
                             }, {
                                 class: 'text-right !align-top w-[8%]',
+                                label: 'Prezzo',
+                                field: 'price',
+                                order: false,
+                                fnc: function (d) {
+
+                                    let data = d.price === null ? '-' : ('<small>€</small> ' + parseFloat(d.price)
+                                                                        .toFixed(2)
+                                                                        .replace('.', ','));
+
+                                    if(d.json_box !== undefined && d.json_box !== null) {
+
+                                        json_box = JSON.parse(d.json_box);
+
+                                        data += '<small>';
+
+                                        json_box.forEach(function (d){
+                                            data += '<br>' + (d.price === null ? '-' : '<small>€</small> ' + parseFloat(d.price)
+                                                                                        .toFixed(2)
+                                                                                        .replace('.', ','));
+                                        });
+
+                                        data += '</small>';
+
+                                    }
+
+                                    return data;
+
+                                }
+                            }, {
+                                class: 'text-right !align-top w-[8%]',
                                 label: 'Punti',
                                 field: 'points',
                                 order: false,
