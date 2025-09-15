@@ -76,8 +76,8 @@ let modalConfirm = ref(props.modalConfirm);
                         routeSearch: 'products.index',
                         data: data.data,
                         structure: [{
-                            class: 'text-center w-[5%]',
-                            label: 'Control.',
+                            class: 'text-center w-[1%]',
+                            label: '',
                             field: 'monitoring_buy',
                             fnc: function (d) {
 
@@ -110,15 +110,28 @@ let modalConfirm = ref(props.modalConfirm);
                             label: 'Nome',
                             field: 'name',
                         }, {
-                            class: 'text-center w-[10%]',
+                            class: 'text-center w-[8%]',
                             label: 'Kg.',
                             field: 'kg_total',
                         }, {
-                            class: 'text-center w-[10%]',
+                            class: 'text-center w-[8%]',
                             label: 'Q.tà',
                             field: 'amount_total',
                         }, {
-                            class: 'text-center w-[10%]',
+                            class: 'text-center w-[8%]',
+                            label: 'Prezzo',
+                            field: 'price',
+                            fnc: function (d) {
+                                if (d.price === null) {
+                                    return '-';
+                                }
+
+                                return '<small>€</small> ' + parseFloat(d.price)
+                                        .toFixed(2)
+                                        .replace('.', ',');
+                            }
+                        }, {
+                            class: 'text-center w-[8%]',
                             label: 'Punti',
                             field: 'points',
                         }, {

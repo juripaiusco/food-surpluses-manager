@@ -94,7 +94,7 @@ form.store = null;
                         </div>
 
                         <div class="row mb-4">
-                            <div class="col-8">
+                            <div class="col-6">
 
                                 <label for="name" class="form-label">Nome</label>
                                 <input id="name"
@@ -104,6 +104,22 @@ form.store = null;
                                        v-model="form.name" />
                                 <div class="text-red-500"
                                      v-if="form.errors.name">{{ __(form.errors.name) }}</div>
+
+                            </div>
+                            <div class="col text-center">
+
+                                <label for="points" class="form-label text-center">Prezzo</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">&euro;</span>
+                                    <input id="price"
+                                           name="price"
+                                           type="text"
+                                           class="form-control text-center"
+                                           placeholder="es. 2,55"
+                                           v-model="form.price" />
+                                </div>
+                                <div class="text-red-500"
+                                     v-if="form.errors.price">{{ __(form.errors.price) }}</div>
 
                             </div>
                             <div class="col text-center">
@@ -185,8 +201,10 @@ form.store = null;
 
                         <div class="text-right mt-8">
 
-                            <Link :href="route('products.index')"
-                                  class="btn btn-secondary w-[100px]">Annulla</Link>
+                            <!-- <Link :href="route('products.index')"
+                                  class="btn btn-secondary w-[100px]">Annulla</Link> -->
+                            <a href="javascript: history.back();"
+                                  class="btn btn-secondary w-[100px]">Annulla</a>
 
                             <button type="submit"
                                     class="btn btn-success ml-2 w-[100px]">Salva</button>

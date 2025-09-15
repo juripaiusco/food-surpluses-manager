@@ -121,13 +121,17 @@ class Product extends Controller
         $product->monitoring_buy = $request->input('monitoring_buy');
         $product->name = $request->input('name');
         $product->description = $request->input('description');
+        $product->price = str_replace(',', '.', $request->input('price'));
         $product->points = $request->input('points');
         $product->kg = $request->input('kg');
         $product->amount = $request->input('amount');
 
         $product->save();
 
-        return to_route('products.index');
+        return to_route('products.index', [
+            'orderby' => 'cod',
+            'ordertype' => 'asc'
+        ]);
     }
 
     /**
@@ -189,13 +193,17 @@ class Product extends Controller
         $product->monitoring_buy = $request->input('monitoring_buy');
         $product->name = $request->input('name');
         $product->description = $request->input('description');
+        $product->price = str_replace(',', '.', $request->input('price'));
         $product->points = $request->input('points');
         $product->kg = $request->input('kg');
         $product->amount = $request->input('amount');
 
         $product->save();
 
-        return to_route('products.index');
+        return to_route('products.index', [
+            'orderby' => 'cod',
+            'ordertype' => 'asc'
+        ]);
     }
 
     /**
