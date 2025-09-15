@@ -116,6 +116,7 @@ form.store = null;
                                            type="text"
                                            class="form-control text-center"
                                            placeholder="es. 2,55"
+                                           @input="form.price = form.price.replace('.', ',')"
                                            v-model="form.price" />
                                 </div>
                                 <div class="text-red-500"

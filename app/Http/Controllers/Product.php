@@ -166,6 +166,8 @@ class Product extends Controller
         $categories = Category::orderBy('name')
             ->get();
 
+        $data['price'] = number_format($data['price'], 2, ',', '.');
+        
         return Inertia::render('Products/Form', [
             'data' => $data,
             'categories' => $categories,
