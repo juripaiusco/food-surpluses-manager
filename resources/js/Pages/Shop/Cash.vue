@@ -572,7 +572,7 @@ export default {
             return false;
         },
     },
-    beforeDestroy() {
+    beforeUnmount() {
         window.removeEventListener("scroll", this.onScroll)
     },
     created() {
@@ -585,7 +585,7 @@ export default {
     },
     mounted () {
 
-        window.addEventListener("scroll", this.onScroll);
+        window.addEventListener("scroll", this.onScroll)
 
         if (this.data.s_customer === null ||
             !this.data.customer.id ||
