@@ -18,4 +18,9 @@ class Customer extends Model
             ->orderBy('date', 'DESC')
             ->take(10);
     }
+
+    public function modJob()
+    {
+        return $this->hasOne(CustomerModJob::class);
+    }
 }
