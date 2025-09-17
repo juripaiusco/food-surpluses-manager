@@ -7,6 +7,7 @@ return [
     'products'      => 'Prodotti',
     'store'         => 'Magazzino',
     'customers'     => 'Assistiti',
+    'jobs'          => 'M. Lavoro',
     'retails'       => 'Negozi',
     'users'         => 'Volontari',
     'settings'      => 'Impostazioni',

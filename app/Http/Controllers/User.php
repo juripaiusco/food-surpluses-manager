@@ -38,6 +38,11 @@ class User extends Controller
             'single' => 'assistito'
         ],
 
+        'jobs' => [
+            'title' => 'Modulo lavoro',
+            'single' => 'modulo lavoro'
+        ],
+
         'retails' => [
             'title' => 'Negozi',
             'single' => 'negozio'

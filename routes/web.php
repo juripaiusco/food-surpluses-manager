@@ -90,6 +90,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/customers/active/{id}', [Customer::class, 'active'])->name('customers.active');
     Route::get('/customers/view_reception/{id}', [Customer::class, 'view_reception'])->name('customers.view_reception');
 
+    Route::get('/jobs', [\App\Http\Controllers\Job::class, 'index'])->name('jobs.index');
+
     Route::get('/retails', [Retail::class, 'index'])->name('retails.index');
     Route::get('/retails/create', [Retail::class, 'create'])->name('retails.create');
     Route::post('/retails/store', [Retail::class, 'store'])->name('retails.store');
