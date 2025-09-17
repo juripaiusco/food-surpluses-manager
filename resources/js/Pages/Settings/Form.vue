@@ -132,7 +132,7 @@ const form = useForm(dataForm);
                         <h2 class="text-3xl mb-2">Modulo Lavoro - Impostazione campi</h2>
 
                         <br>
-                        
+
                         nuovo campo
 
                     </div>
