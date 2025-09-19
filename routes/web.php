@@ -8,6 +8,7 @@ use App\Http\Controllers\User;
 use App\Http\Controllers\Order;
 use App\Http\Controllers\Product;
 use App\Http\Controllers\Customer;
+use App\Http\Controllers\Job;
 use App\Http\Controllers\Retail;
 use App\Http\Controllers\Setting;
 use App\Http\Controllers\Report;
@@ -90,7 +91,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/customers/active/{id}', [Customer::class, 'active'])->name('customers.active');
     Route::get('/customers/view_reception/{id}', [Customer::class, 'view_reception'])->name('customers.view_reception');
 
-    Route::get('/jobs', [\App\Http\Controllers\Job::class, 'index'])->name('jobs.index');
+    Route::get('/jobs', [Job::class, 'index'])->name('jobs.index');
+    Route::get('/jobs/create', [Job::class, 'create'])->name('jobs.create');
+    Route::post('/jobs/store', [Job::class, 'store'])->name('jobs.store');
+    Route::get('/jobs/edit/{id}', [Job::class, 'edit'])->name('jobs.edit');
+    Route::post('/jobs/update/{id}', [Job::class, 'update'])->name('jobs.update');
+    Route::get('/jobs/destroy/{id}', [Job::class, 'destroy'])->name('jobs.destroy');
 
     Route::get('/retails', [Retail::class, 'index'])->name('retails.index');
     Route::get('/retails/create', [Retail::class, 'create'])->name('retails.create');

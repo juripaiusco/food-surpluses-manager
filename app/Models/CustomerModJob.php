@@ -9,6 +9,7 @@ class CustomerModJob extends Model
 {
     use HasFactory;
 
+    protected $table = 'customers_mod_jobs';
     protected $fillable = ['customer_id', 'schema', 'values'];
 
     protected $casts = [
