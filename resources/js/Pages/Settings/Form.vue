@@ -25,7 +25,7 @@ const dataForm = Object.fromEntries(Object.entries(props.data).map((v) => {
 
 const form = useForm(dataForm);
 
-form.schemaString = `[
+/*form.mod_jobs_schema_json = `[
     {
         "$el": "div",
         "attrs": {
@@ -53,7 +53,7 @@ form.schemaString = `[
             }
         ]
     }
-]`;
+]`;*/
 
 const parsedSchema = ref([])
 const jsonError = ref(null)
@@ -70,7 +70,7 @@ function parseAndSyncSchema(str) {
 }
 
 // watch sulla stringa del form per parsare in realtime
-watch(() => form.schemaString, (v) => parseAndSyncSchema(v), { immediate: true })
+watch(() => form.mod_jobs_schema_json, (v) => parseAndSyncSchema(v), { immediate: true })
 
 </script>
 
@@ -192,14 +192,14 @@ watch(() => form.schemaString, (v) => parseAndSyncSchema(v), { immediate: true }
 
                                 <Codemirror
                                     :extensions="[json()]"
-                                    v-model="form.schemaString"
+                                    v-model="form.mod_jobs_schema_json"
                                     class="w-full !min-h-[200px]"
                                 />
 
                                 <!-- <textarea name="json_form_code"
                                           id="json_form_code"
                                           class="form-control w-full !min-h-[200px]"
-                                          v-model="form.schemaString"></textarea> -->
+                                          v-model="form.mod_jobs_schema_json"></textarea> -->
 
                             </div>
                             <div class="col">
