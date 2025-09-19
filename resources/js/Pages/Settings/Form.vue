@@ -191,6 +191,7 @@ watch(() => form.schemaString, (v) => parseAndSyncSchema(v), { immediate: true }
                                 <br>
 
                                 <Codemirror
+                                    :extensions="[json()]"
                                     v-model="form.schemaString"
                                     class="w-full !min-h-[200px]"
                                 />
