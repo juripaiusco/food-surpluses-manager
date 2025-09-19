@@ -8,6 +8,9 @@ import {Link} from "@inertiajs/vue3";
 import {useForm} from "@inertiajs/vue3";
 import Form from "@/Pages/Customers/Form.vue";
 import {__} from "@/extComponents/Translations";
+import { plugin, defaultConfig } from '@formkit/vue'
+import { FormKitSchema } from '@formkit/vue'
+import {ref, watch} from "vue";
 
 const props = defineProps({
 
@@ -21,6 +24,43 @@ const dataForm = Object.fromEntries(Object.entries(props.data).map((v) => {
 }));
 
 const form = useForm(dataForm);
+
+form.schemaString = `[
+    {
+        "$formkit": "text",
+        "name": "email",
+        "label": "Email",
+        "classes": {
+            "input": "form-control mb-4",
+            "label": "form-label"
+        }
+    }, {
+        "$formkit": "password",
+        "name": "password",
+        "label": "Password",
+        "classes": {
+            "input": "form-control mb-4",
+            "label": "form-label"
+        }
+    }
+]`;
+
+const parsedSchema = ref([])
+const jsonError = ref(null)
+
+// funzione che prova a parsare e, se ok, assicura che form.values abbia le chiavi
+function parseAndSyncSchema(str) {
+    try {
+        parsedSchema.value = JSON.parse(str);
+        jsonError.value = null;
+    } catch (e) {
+        parsedSchema.value = [];
+        jsonError.value = e.message;
+    }
+}
+
+// watch sulla stringa del form per parsare in realtime
+watch(() => form.schemaString, (v) => parseAndSyncSchema(v), { immediate: true })
 
 </script>
 
@@ -133,11 +173,35 @@ const form = useForm(dataForm);
 
                         <br>
 
-                        nuovo campo
+                        <div class="row">
+                            <div class="col">
+
+                                <h2 class="text-xl">Codice</h2>
+
+                                <br>
+
+                                <textarea name="json_form_code"
+                                          id="json_form_code"
+                                          class="form-control w-full !min-h-[200px]"
+                                          v-model="form.schemaString"></textarea>
+
+                            </div>
+                            <div class="col">
+
+                                <h2 class="text-xl">Anteprima</h2>
+
+                                <br>
+
+                                <FormKitSchema :schema="parsedSchema" />
+
+                            </div>
+                        </div>
 
                     </div>
 
                 </div>
+
+                <br>
 
                 <div class="text-right mt-8">
 
