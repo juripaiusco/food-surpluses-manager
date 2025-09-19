@@ -6,9 +6,7 @@ import ApplicationHeader from "@/Components/ApplicationHeader.vue";
 import ApplicationContainer from "@/Components/ApplicationContainer.vue";
 import {Link} from "@inertiajs/vue3";
 import {useForm} from "@inertiajs/vue3";
-import Form from "@/Pages/Customers/Form.vue";
 import {__} from "@/extComponents/Translations";
-import { plugin, defaultConfig } from '@formkit/vue'
 import { FormKitSchema } from '@formkit/vue'
 import {ref, watch} from "vue";
 
