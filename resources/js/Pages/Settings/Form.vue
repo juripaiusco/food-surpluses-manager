@@ -9,6 +9,8 @@ import {useForm} from "@inertiajs/vue3";
 import {__} from "@/extComponents/Translations";
 import { FormKitSchema } from '@formkit/vue'
 import {ref, watch} from "vue";
+import { Codemirror } from 'vue-codemirror'
+import { json } from '@codemirror/lang-json'
 
 const props = defineProps({
 
@@ -25,21 +27,31 @@ const form = useForm(dataForm);
 
 form.schemaString = `[
     {
-        "$formkit": "text",
-        "name": "email",
-        "label": "Email",
-        "classes": {
-            "input": "form-control mb-4",
-            "label": "form-label"
-        }
-    }, {
-        "$formkit": "password",
-        "name": "password",
-        "label": "Password",
-        "classes": {
-            "input": "form-control mb-4",
-            "label": "form-label"
-        }
+        "$el": "div",
+        "attrs": {
+          "class": "row"
+        },
+        "children": [
+            {
+                "$formkit": "text",
+                "name": "email",
+                "label": "Email",
+                "classes": {
+                    "input": "form-control mb-4",
+                    "label": "form-label"
+                },
+                "outerClass": "col"
+            }, {
+                "$formkit": "password",
+                "name": "password",
+                "label": "Password",
+                "classes": {
+                    "input": "form-control mb-4",
+                    "label": "form-label"
+                },
+                "outerClass": "col"
+            }
+        ]
     }
 ]`;
 
@@ -178,10 +190,15 @@ watch(() => form.schemaString, (v) => parseAndSyncSchema(v), { immediate: true }
 
                                 <br>
 
-                                <textarea name="json_form_code"
+                                <Codemirror
+                                    v-model="form.schemaString"
+                                    class="w-full !min-h-[200px]"
+                                />
+
+                                <!-- <textarea name="json_form_code"
                                           id="json_form_code"
                                           class="form-control w-full !min-h-[200px]"
-                                          v-model="form.schemaString"></textarea>
+                                          v-model="form.schemaString"></textarea> -->
 
                             </div>
                             <div class="col">

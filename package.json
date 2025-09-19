@@ -18,8 +18,11 @@
         "vue": "^3.2.41"
     },
     "dependencies": {
+        "@codemirror/lang-json": "^6.0.2",
         "@formkit/vue": "^1.6.9",
         "bootstrap": "^5.2.3",
-        "es-toolkit": "^1.39.10"
+        "codemirror": "^6.0.2",
+        "es-toolkit": "^1.39.10",
+        "vue-codemirror": "^6.1.1"
     }
 }
