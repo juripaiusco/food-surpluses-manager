@@ -215,7 +215,7 @@ onBeforeUnmount(() => {
                         <div class="row">
                             <div class="col" ref="editorWrapper">
 
-                                <h2 class="text-xl">Codice</h2>
+                                <h2 class="text-xl text-center">Codice</h2>
 
                                 <br>
 
@@ -234,7 +234,7 @@ onBeforeUnmount(() => {
                             </div>
                             <div class="col" ref="previewWrapper">
 
-                                <h2 class="text-xl">Anteprima</h2>
+                                <h2 class="text-xl text-center">Anteprima</h2>
 
                                 <br>
 
