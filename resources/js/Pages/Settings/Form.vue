@@ -25,36 +25,6 @@ const dataForm = Object.fromEntries(Object.entries(props.data).map((v) => {
 
 const form = useForm(dataForm);
 
-/*form.mod_jobs_schema_json = `[
-    {
-        "$el": "div",
-        "attrs": {
-          "class": "row"
-        },
-        "children": [
-            {
-                "$formkit": "text",
-                "name": "email",
-                "label": "Email",
-                "classes": {
-                    "input": "form-control mb-4",
-                    "label": "form-label"
-                },
-                "outerClass": "col"
-            }, {
-                "$formkit": "password",
-                "name": "password",
-                "label": "Password",
-                "classes": {
-                    "input": "form-control mb-4",
-                    "label": "form-label"
-                },
-                "outerClass": "col"
-            }
-        ]
-    }
-]`;*/
-
 const parsedSchema = ref([])
 const jsonError = ref(null)
 
@@ -193,13 +163,8 @@ watch(() => form.mod_jobs_schema_json, (v) => parseAndSyncSchema(v), { immediate
                                 <Codemirror
                                     :extensions="[json()]"
                                     v-model="form.mod_jobs_schema_json"
-                                    class="w-full !min-h-[200px]"
+                                    class="w-full"
                                 />
-
-                                <!-- <textarea name="json_form_code"
-                                          id="json_form_code"
-                                          class="form-control w-full !min-h-[200px]"
-                                          v-model="form.mod_jobs_schema_json"></textarea> -->
 
                             </div>
                             <div class="col">
