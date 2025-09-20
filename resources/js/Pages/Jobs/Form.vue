@@ -250,7 +250,7 @@ const form = useForm(dataForm);
 
                         <hr class="my-10">
 
-                        <h2 class="text-3xl mb-2">Mod. Lavoro Assistito</h2>
+                        <h2 class="text-3xl mb-2">Mod. Lavoro</h2>
                         <br>
 
                         <FormKit
