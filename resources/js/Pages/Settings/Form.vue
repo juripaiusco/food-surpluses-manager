@@ -42,6 +42,57 @@ function parseAndSyncSchema(str) {
 // watch sulla stringa del form per parsare in realtime
 watch(() => form.mod_jobs_schema_json, (v) => parseAndSyncSchema(v), { immediate: true })
 
+// START - Gestione Anteprima FormKit --------------------------------------------------
+import { EditorView } from '@codemirror/view'
+
+const cmExtensions = [
+    json(),
+    EditorView.theme({
+        /*"&": {
+            width: "100px",
+            height: "100px"
+        },*/
+        ".cm-scroller": { overflow: "auto" }
+    })
+]
+
+
+import { onMounted, onBeforeUnmount, nextTick } from "vue"
+
+let observer
+
+const editorWrapper = ref(null)
+const editorWrapperW = ref(null)
+const editorWrapperH = ref(null)
+const previewWrapper = ref(null)
+
+onMounted(() => {
+    if (previewWrapper.value) {
+        observer = new ResizeObserver(entries => {
+            let width = 0;
+            let height = 0;
+            for (const entry of entries) {
+                width = entry.contentRect.width
+                height = entry.contentRect.height
+            }
+
+            console.log('Nuova larghezza:', width)
+            console.log('Nuova altezza:', height)
+
+            editorWrapperW.value = width
+            editorWrapperH.value = height
+        })
+        observer.observe(previewWrapper.value)
+    }
+})
+
+onBeforeUnmount(() => {
+    if (observer && previewWrapper.value) {
+        observer.unobserve(previewWrapper.value)
+    }
+})
+// END - Gestione Anteprima FormKit ----------------------------------------------------
+
 </script>
 
 <template>
@@ -154,20 +205,26 @@ watch(() => form.mod_jobs_schema_json, (v) => parseAndSyncSchema(v), { immediate
                         <br>
 
                         <div class="row">
-                            <div class="col">
+                            <div class="col" ref="editorWrapper">
 
                                 <h2 class="text-xl">Codice</h2>
 
                                 <br>
 
                                 <Codemirror
-                                    :extensions="[json()]"
+                                    :extensions="cmExtensions"
                                     v-model="form.mod_jobs_schema_json"
+                                    id="mod_jobs_schema_json"
                                     class="w-full"
+                                    :style="[
+                                        'width: ' + editorWrapperW + 'px',
+                                        'height: ' + (editorWrapperH - 68) + 'px',
+                                        'border: 1px solid #dee2e6; border-radius: 4px'
+                                    ]"
                                 />
 
                             </div>
-                            <div class="col">
+                            <div class="col" ref="previewWrapper">
 
                                 <h2 class="text-xl">Anteprima</h2>
 
