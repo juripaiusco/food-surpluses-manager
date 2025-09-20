@@ -85,7 +85,7 @@ onMounted(() => {
             }
 
             // console.log('Nuova larghezza:', width)
-            console.log('Nuova altezza:', height)
+            // console.log('Nuova altezza:', height)
 
             editorWrapperW.value = width
             editorWrapperH.value = height
