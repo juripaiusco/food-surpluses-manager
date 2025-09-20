@@ -163,7 +163,7 @@ class Job extends Controller
         $customers_array['saveRedirect'] = Redirect::back()->getTargetUrl();
 
         $settings = \App\Models\Setting::where('name', 'mod_jobs_schema_json')->first();
-        $customers_array['mod_jobs_schema_json'] = $settings->value;
+        $customers_array['customers_mod_jobs_schema'] = $settings->value;
 
         $data = json_decode(json_encode($customers_array), true);
 
