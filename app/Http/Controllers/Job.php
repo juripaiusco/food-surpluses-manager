@@ -230,9 +230,13 @@ class Job extends Controller
         $customer_mod_jobs = CustomerModJob::query()->where('customer_id', $id)->first();
         $settings = \App\Models\Setting::where('name', 'mod_jobs_schema_json')->first();
         $data->customers_mod_jobs_schema = $settings->value;
-        $data->customers_mod_jobs_values = $customer_mod_jobs->values ? json_decode($customer_mod_jobs->values, true) : $this->extractNames(
-            json_decode($data->customers_mod_jobs_schema, true)
-        );
+
+        $data->customers_mod_jobs_values = [];
+        if ($customer_mod_jobs != null) {
+            $data->customers_mod_jobs_values = $customer_mod_jobs->values ? json_decode($customer_mod_jobs->values, true) : $this->extractNames(
+                json_decode($data->customers_mod_jobs_schema, true)
+            );
+        }
 
         return Inertia::render('Jobs/Form', [
             'data' => $data,
