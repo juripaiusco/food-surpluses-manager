@@ -31,11 +31,12 @@ const jsonError = ref(null)
 // funzione che prova a parsare e, se ok, assicura che form.values abbia le chiavi
 function parseAndSyncSchema(str) {
     try {
-        parsedSchema.value = JSON.parse(str);
-        jsonError.value = null;
+        parsedSchema.value = JSON.parse(str)
+        jsonError.value = null
     } catch (e) {
-        parsedSchema.value = [];
-        jsonError.value = e.message;
+        // non azzerare del tutto
+        parsedSchema.value = [{ $el: 'div', children: 'Errore JSON' }]
+        jsonError.value = e.message
     }
 }
 
@@ -56,11 +57,11 @@ const cmExtensions = [
     })
 ]
 
-
-import { onMounted, onBeforeUnmount, nextTick } from "vue"
+import { onMounted, onBeforeUnmount } from "vue"
 
 let observer
-
+let lastValidWidth = 400
+let lastValidHeight = 400
 const editorWrapper = ref(null)
 const editorWrapperW = ref(null)
 const editorWrapperH = ref(null)
@@ -72,11 +73,18 @@ onMounted(() => {
             let width = 0;
             let height = 0;
             for (const entry of entries) {
-                width = entry.contentRect.width
-                height = entry.contentRect.height
+                if (!jsonError.value) { // aggiorna solo se JSON valido
+                    width = entry.contentRect.width
+                    height = entry.contentRect.height
+                    lastValidWidth = width
+                    lastValidHeight = height
+                } else {
+                    width = lastValidWidth
+                    height = lastValidHeight
+                }
             }
 
-            console.log('Nuova larghezza:', width)
+            // console.log('Nuova larghezza:', width)
             console.log('Nuova altezza:', height)
 
             editorWrapperW.value = width
@@ -215,12 +223,12 @@ onBeforeUnmount(() => {
                                     :extensions="cmExtensions"
                                     v-model="form.mod_jobs_schema_json"
                                     id="mod_jobs_schema_json"
-                                    class="w-full"
-                                    :style="[
-                                        'width: ' + editorWrapperW + 'px',
-                                        'height: ' + (editorWrapperH - 68) + 'px',
-                                        'border: 1px solid #dee2e6; border-radius: 4px'
-                                    ]"
+                                    :style="{
+                                        width: editorWrapperW + 'px',
+                                        height: (editorWrapperH - 68) + 'px',
+                                        border: '1px solid #dee2e6;',
+                                        borderRadius: '4px'
+                                    }"
                                 />
 
                             </div>
