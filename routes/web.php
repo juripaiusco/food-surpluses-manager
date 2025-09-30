@@ -42,6 +42,7 @@ Route::middleware('auth')->group(function () {
 
     Route::any('/shop', [Shop::class, 'index'])->name('shop.index');
     Route::get('/shop/remove/{id}', [Shop::class, 'remove'])->name('shop.remove');
+    Route::get('/shop/points-half/{id}', [Shop::class, 'points_half'])->name('shop.points_half');
     Route::post('/shop/store', [Shop::class, 'store'])->name('shop.store');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

@@ -434,7 +434,12 @@ function productSelectReset (refToReset) {
                                             label: 'Codice',
                                             field: 'cod',
                                             order: false
-                                        }, {
+                                        }, /*{
+                                            class: 'text-left',
+                                            label: 'index',
+                                            field: 'index',
+                                            order: false
+                                        }, */{
                                             class: 'text-left',
                                             label: 'Tipo',
                                             field: 'type',
@@ -476,13 +481,33 @@ function productSelectReset (refToReset) {
                                                 return html;
 
                                             }
+                                        }, {
+                                            class: 'w-[1%]',
+                                            btnCustom: true,
+                                            route: 'shop.points_half',
+                                            emit: 'points_half',
+                                            fnc: function (d) {
+
+                                                let html = '';
+
+                                                html += '<div class=\'btn btn-primary btn-sm\'>';
+                                                html += '½';
+                                                html += '</div>';
+
+                                                return html;
+                                            }
                                         }]
                                     }"
                                    @openModal="(data, route) => {
 
                                         routeTo(route, data);
 
-                                    }" />
+                                    }"
+                                   @points_half="(data, route) => {
+
+                                       routeTo(route, data);
+
+                                   }" />
 
                             <hr class="border-spacing-0.5 border-green-900">
 

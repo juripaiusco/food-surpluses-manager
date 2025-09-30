@@ -438,4 +438,32 @@ class Shop extends Controller
 
         return Inertia::location(to_route('shop.index')->getTargetUrl());
     }
+
+    public function points_half(Request $request, $id)
+    {
+        // Recupero Sessione Dati
+        $shopProducts_array = $request->session()->get('shopProducts');
+
+        // Dimezzo i punti del prodotto selezionato
+        $shopProducts_array[$request->input('product.index')]->points =
+            ceil($shopProducts_array[$request->input('product.index')]->points / 2);
+
+        // Ricreo l'indice
+        $shopProducts_array = array_values($shopProducts_array);
+
+        // Importo il valore index
+        foreach ($shopProducts_array as $k => $product) {
+            $shopProducts_array[$k]->index = $k;
+        }
+
+        // Imposto il valore sessione
+        $request->session()->put('shopProducts', $shopProducts_array);
+
+        // Salvo la sessione prodotti tramite inertia
+        Inertia::share('shopProducts', $request->session()->get('shopProducts'));
+
+        return to_route('shop.index', [
+            's_customer' => $request->input('s_customer')
+        ]);
+    }
 }
