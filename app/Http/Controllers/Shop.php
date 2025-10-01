@@ -316,10 +316,13 @@ class Shop extends Controller
         foreach ($request->input('products') as $product) {
 
             if (!isset($array_group[$product['id']])) {
-                $array_group[$product['id']] = 0;
+                $array_group[$product['id']] = array(
+                    'count' => 0,
+                    'points' => $product['points'],
+                );
             }
 
-            $array_group[$product['id']] += 1;
+            $array_group[$product['id']]['count'] += 1;
 
         }
 
@@ -374,7 +377,7 @@ class Shop extends Controller
         $points = 0;
         $product_array = array();
 
-        foreach ($array_group as $product_id => $count) {
+        foreach ($array_group as $product_id => $d) {
 
             $product = \App\Models\Product::find($product_id);
 
@@ -387,18 +390,20 @@ class Shop extends Controller
                         'order_reference' => $order_reference,
                         'order_id' => $order_id,
                         'customer_id' => $customer_id,
-                        'kg' => isset($product->kg) ? $product->kg * $count * (-1) : null,
-                        'amount' => $product->amount * $count * (-1),
-                        'price' => $product->price * $count,
-                        'products_count' => $count,
+                        'kg' => isset($product->kg) ? $product->kg * $d['count'] * (-1) : null,
+                        'amount' => $product->amount * $d['count'] * (-1),
+                        'points' => $d['points'],
+                        'price' => $product->price * $d['count'],
+                        'products_count' => $d['count'],
                         'date' => $oder_data,
                     )
                 ));
 
-                $points += $count * $product->points;
-                $price += $count * $product->price;
+                $points += $d['count'] * $d['points'];
+                $price += $d['count'] * $product->price;
 
-                for ($i = 0; $i < $count; $i++) {
+                for ($i = 0; $i < $d['count']; $i++) {
+                    $product->points = $d['points'];
                     $product_array[] = $product;
                 }
 
