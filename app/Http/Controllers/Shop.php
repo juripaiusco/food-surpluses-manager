@@ -319,6 +319,7 @@ class Shop extends Controller
                 $array_group[$product['id']] = array(
                     'count' => 0,
                     'points' => $product['points'],
+                    'points_half' => $product['points_half'] ?? false,
                 );
             }
 
@@ -404,6 +405,7 @@ class Shop extends Controller
 
                 for ($i = 0; $i < $d['count']; $i++) {
                     $product->points = $d['points'];
+                    $product['points_half'] = $d['points_half'];
                     $product_array[] = $product;
                 }
 
@@ -452,6 +454,8 @@ class Shop extends Controller
         // Dimezzo i punti del prodotto selezionato
         $shopProducts_array[$request->input('product.index')]->points =
             ceil($shopProducts_array[$request->input('product.index')]->points / 2);
+
+        $shopProducts_array[$request->input('product.index')]->points_half = true;
 
         // Ricreo l'indice
         $shopProducts_array = array_values($shopProducts_array);

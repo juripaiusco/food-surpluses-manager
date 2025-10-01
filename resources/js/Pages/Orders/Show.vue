@@ -261,6 +261,22 @@ const form = useForm(dataForm);
 
                                 }
                             }, {
+                                class: 'text-center !align-top w-[1%]',
+                                label: '50%',
+                                field: 'points',
+                                order: false,
+                                fnc: function (d) {
+
+                                    let data = '';
+
+                                    if (d.points_half === true) {
+                                        data = 'Sì';
+                                    }
+
+                                    return data;
+
+                                }
+                            }, {
                                 class: 'text-right !align-top w-[8%]',
                                 label: 'Punti',
                                 field: 'points',
