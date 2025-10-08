@@ -8,6 +8,7 @@ return [
     'store'         => 'Magazzino',
     'customers'     => 'Assistiti',
     'jobs'          => 'M. Lavoro',
+    'jobs_settings' => 'M.L. 🛠️',
     'retails'       => 'Negozi',
     'users'         => 'Volontari',
     'settings'      => 'Impostazioni',

@@ -12,6 +12,7 @@ use App\Http\Controllers\Job;
 use App\Http\Controllers\Retail;
 use App\Http\Controllers\Setting;
 use App\Http\Controllers\Report;
+use \App\Http\Controllers\ModJobsSettings;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -98,6 +99,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/jobs/edit/{id}', [Job::class, 'edit'])->name('jobs.edit');
     Route::post('/jobs/update/{id}', [Job::class, 'update'])->name('jobs.update');
     Route::get('/jobs/destroy/{id}', [Job::class, 'destroy'])->name('jobs.destroy');
+
+
+    Route::get('/jobs-settings', [ModJobsSettings::class, 'index'])->name('jobs_settings.index');
+    Route::get('/jobs-settings/create', [ModJobsSettings::class, 'create'])->name('jobs_settings.create');
+    Route::post('/jobs-settings/store', [ModJobsSettings::class, 'store'])->name('jobs_settings.store');
+    Route::get('/jobs-settings/edit/{id}', [ModJobsSettings::class, 'edit'])->name('jobs_settings.edit');
+    Route::post('/jobs-settings/update/{id}', [ModJobsSettings::class, 'update'])->name('jobs_settings.update');
+    Route::get('/jobs-settings/destroy/{id}', [ModJobsSettings::class, 'destroy'])->name('jobs_settings.destroy');
+
 
     Route::get('/retails', [Retail::class, 'index'])->name('retails.index');
     Route::get('/retails/create', [Retail::class, 'create'])->name('retails.create');

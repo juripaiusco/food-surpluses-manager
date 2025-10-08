@@ -25,6 +25,7 @@ const dataForm = Object.fromEntries(Object.entries(props.data).map((v) => {
 
 const form = useForm(dataForm);
 
+// START - Gestione Anteprima FormKit --------------------------------------------------
 const parsedSchema = ref([])
 const jsonError = ref(null)
 
@@ -43,7 +44,6 @@ function parseAndSyncSchema(str) {
 // watch sulla stringa del form per parsare in realtime
 watch(() => form.mod_jobs_schema_json, (v) => parseAndSyncSchema(v), { immediate: true })
 
-// START - Gestione Anteprima FormKit --------------------------------------------------
 import { EditorView } from '@codemirror/view'
 
 const cmExtensions = [

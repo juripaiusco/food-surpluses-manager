@@ -43,6 +43,11 @@ class User extends Controller
             'single' => 'modulo lavoro'
         ],
 
+        'jobs_settings' => [
+            'title' => 'M. Lav. Impostazioni',
+            'single' => 'modulo lavoro impostazioni'
+        ],
+
         'retails' => [
             'title' => 'Negozi',
             'single' => 'negozio'
