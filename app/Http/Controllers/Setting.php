@@ -12,7 +12,7 @@ class Setting extends Controller
         'shop_btn' => '',
         'shop_ctrl_points' => '',
         'report_email' => '',
-        'mod_jobs_schema_json' => '',
+//        'mod_jobs_schema_json' => '',
     );
     /**
      * Display a listing of the resource.

@@ -137,7 +137,7 @@ onBeforeUnmount(() => {
                             Generale
                         </button>
 
-                        <button class="nav-link"
+                        <!--<button class="nav-link"
                                 id="nav-customers_mod_jobs-tab"
                                 data-bs-toggle="tab"
                                 data-bs-target="#nav-customers_mod_jobs"
@@ -146,7 +146,7 @@ onBeforeUnmount(() => {
                                 aria-controls="nav-customers_mod_jobs"
                                 aria-selected="true">
                             Modulo Lavoro
-                        </button>
+                        </button>-->
 
                     </div>
                 </nav>
