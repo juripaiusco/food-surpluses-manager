@@ -8,6 +8,7 @@ import {useForm} from "@inertiajs/vue3";
 import Table from "@/Components/Table/Table.vue";
 import {__} from "@/extComponents/Translations";
 import {FormKitSchema} from "@formkit/vue";
+import FormModJobs from "@/Pages/Jobs/FormModJobs.vue";
 
 const props = defineProps({
 
@@ -250,15 +251,22 @@ const form = useForm(dataForm);
 
                         <hr class="my-10">
 
-                        <h2 class="text-3xl mb-2">Mod. Lavoro</h2>
+                        <FormModJobs :form="form" />
+
+                        <!-- <h2 class="text-3xl mb-2">Mod. Lavoro</h2>
                         <br>
 
-                        <FormKit
-                            type="form"
-                            v-model="form.customers_mod_jobs_values"
-                            :actions="false">
-                            <FormKitSchema :schema="JSON.parse(data.customers_mod_jobs_schema)" />
-                        </FormKit>
+                        <div v-for="(data, index) in form.job_settings">
+
+                            <h2 class="text-3xl mb-2">{{ data.title }}</h2>
+                            <FormKit
+                                type="form"
+                                v-model="form.customers_mod_jobs_values"
+                                :actions="false">
+                                <FormKitSchema :schema="JSON.parse(data.schema)" />
+                            </FormKit>
+
+                        </div>-->
 
                         <!-- END - ANAGRAFICA -->
 

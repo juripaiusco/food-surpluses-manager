@@ -162,8 +162,8 @@ class Job extends Controller
 
         $customers_array['saveRedirect'] = Redirect::back()->getTargetUrl();
 
-        $settings = \App\Models\Setting::where('name', 'mod_jobs_schema_json')->first();
-        $customers_array['customers_mod_jobs_schema'] = $settings->value;
+        $job_settings = \App\Models\JobSettings::query()->get();
+        $customers_array['job_settings'] = $job_settings;
 
         $data = json_decode(json_encode($customers_array), true);
 
@@ -227,14 +227,14 @@ class Job extends Controller
 
         $data->saveRedirect = Redirect::back()->getTargetUrl();
 
-        $customer_mod_jobs = CustomerModJob::query()->where('customer_id', $id)->first();
-        $settings = \App\Models\Setting::where('name', 'mod_jobs_schema_json')->first();
-        $data->customers_mod_jobs_schema = $settings->value;
+        $job_settings = \App\Models\JobSettings::query()->get();
+        $data->job_settings = $job_settings;
 
+        $customer_mod_jobs = CustomerModJob::query()->where('customer_id', $id)->first();
         $data->customers_mod_jobs_values = [];
         if ($customer_mod_jobs != null) {
             $data->customers_mod_jobs_values = $customer_mod_jobs->values ? json_decode($customer_mod_jobs->values, true) : $this->extractNames(
-                json_decode($data->customers_mod_jobs_schema, true)
+                json_decode($data->job_settings, true)
             );
         }
 
@@ -286,11 +286,11 @@ class Job extends Controller
         }
 
         $customer_mod_jobs->customer_id = $id;
-        $customer_mod_jobs->schema = json_encode(json_decode($request['customers_mod_jobs_schema']));
+        $customer_mod_jobs->schema = json_encode($request['job_settings']);
         $customer_mod_jobs->values = json_encode($request['customers_mod_jobs_values']);
         $customer_mod_jobs->save();
 
-        unset($request['customers_mod_jobs_schema']);
+        unset($request['job_settings']);
         unset($request['customers_mod_jobs_values']);
 
         $customer = \App\Models\Customer::find($id);
