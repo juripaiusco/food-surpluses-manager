@@ -162,7 +162,7 @@ class Job extends Controller
 
         $customers_array['saveRedirect'] = Redirect::back()->getTargetUrl();
 
-        $job_settings = \App\Models\JobSettings::query()->get();
+        $job_settings = \App\Models\JobSettings::query()->orderBy('title')->get();
         $customers_array['job_settings'] = $job_settings;
 
         $data = json_decode(json_encode($customers_array), true);
@@ -227,7 +227,7 @@ class Job extends Controller
 
         $data->saveRedirect = Redirect::back()->getTargetUrl();
 
-        $job_settings = \App\Models\JobSettings::query()->get();
+        $job_settings = \App\Models\JobSettings::query()->orderBy('title')->get();
         $data->job_settings = $job_settings;
 
         $customer_mod_jobs = CustomerModJob::query()->where('customer_id', $id)->first();
