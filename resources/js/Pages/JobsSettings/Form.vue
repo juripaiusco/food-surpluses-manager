@@ -57,8 +57,8 @@ import {onMounted, onBeforeUnmount, ref, watch} from "vue"
 import {json} from "@codemirror/lang-json";
 
 let observer
-let lastValidWidth = 400
-let lastValidHeight = 400
+let lastValidWidth = '100%'
+let lastValidHeight = 600
 const editorWrapper = ref(null)
 const editorWrapperW = ref(null)
 const editorWrapperH = ref(null)
@@ -85,7 +85,7 @@ onMounted(() => {
             // console.log('Nuova altezza:', height)
 
             editorWrapperW.value = width
-            editorWrapperH.value = height
+            editorWrapperH.value = height < 600 ? 600 : height
         })
         observer.observe(previewWrapper.value)
     }
