@@ -7,7 +7,6 @@ import ApplicationContainer from "@/Components/ApplicationContainer.vue";
 import {useForm} from "@inertiajs/vue3";
 import Table from "@/Components/Table/Table.vue";
 import {__} from "@/extComponents/Translations";
-import {FormKitSchema} from "@formkit/vue";
 import FormModJobs from "@/Pages/Jobs/FormModJobs.vue";
 
 const props = defineProps({
