@@ -21,6 +21,8 @@ const dataForm = Object.fromEntries(Object.entries(props.data).map((v) => {
 
 const form = useForm(dataForm);
 
+let save_redirect = ref(true);
+
 // START - Gestione Anteprima FormKit --------------------------------------------------
 const parsedSchema = ref([])
 const jsonError = ref(null)
@@ -118,8 +120,13 @@ onBeforeUnmount(() => {
 
             <form @submit.prevent="form.post(route(
                 form.id ? 'jobs_settings.update' : 'jobs_settings.store',
-                form.id ? form.id : ''
-                ))">
+                [
+                    form.id ? form.id : '',
+                    { 'redirect': save_redirect }
+                ]
+                ), {
+                    preserveScroll: true
+                })">
 
                 <label for="title" class="form-label">Titolo</label>
 
@@ -171,6 +178,11 @@ onBeforeUnmount(() => {
                           class="btn btn-secondary w-[100px]">Annulla</Link>
 
                     <button type="submit"
+                            @click="save_redirect = false"
+                            class="btn btn-primary ml-2 w-[100px]">Aggiorna</button>
+
+                    <button type="submit"
+                            @click="save_redirect = true"
                             class="btn btn-success ml-2 w-[100px]">Salva</button>
 
                 </div>

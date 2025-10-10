@@ -117,13 +117,20 @@ class ModJobsSettings extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $redirect = $request->input('redirect');
+
         $data = \App\Models\JobSettings::find($id);
 
         $data->fill($request->all());
 
         $data->save();
 
-        return to_route('jobs_settings.index');
+        if ($redirect) {
+            return to_route('jobs_settings.index');
+        } else {
+            return Inertia::location(to_route('jobs_settings.edit', $id)->getTargetUrl());
+        }
+
     }
 
     /**
