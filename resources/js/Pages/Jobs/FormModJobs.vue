@@ -24,17 +24,23 @@ const dynamicSchemas = ref([]);
 
 // inizializza un array vuoto per ogni tab
 onMounted(() => {
-    dynamicSchemas.value = props.form.customers_mod_jobs_schema.map(data => [
-        JSON.parse(data.schema)
-    ]);
+    dynamicSchemas.value = props.form.customers_mod_jobs_schema.map(data => {
+        const schema = JSON.parse(data.schema);
+        // se il JSON è un array di array (vecchia versione), lo appiattiamo
+        return Array.isArray(schema[0]) ? schema.flat() : schema;
+    });
 });
 
 function addSchema(index, schemaJson) {
     try {
         const schema = JSON.parse(schemaJson);
+
+        // aggiungi lo schema in modo "piatto"
         dynamicSchemas.value[index].push(schema);
 
-        // forza ridimensionamento se ci sono textarea
+        // salva in formato array
+        props.form.customers_mod_jobs_schema[index].schema = JSON.stringify(dynamicSchemas.value[index]);
+
         nextTick(() => resizeTextareas());
     } catch (err) {
         console.error("Errore parsing schema:", err);
@@ -159,7 +165,9 @@ onBeforeUnmount(() => {
                                 :actions="false"
                             >
 
+
 <!--                                <FormKitSchema :schema="JSON.parse(data.schema)" />-->
+
                                 <FormKitSchema v-for="(schema, sIndex) in dynamicSchemas[index]"
                                                :key="sIndex"
                                                :schema="schema" />
