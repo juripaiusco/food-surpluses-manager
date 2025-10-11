@@ -1,6 +1,7 @@
 <script setup>
 import {defaultConfig, FormKitSchema} from "@formkit/vue";
 import { createAutoHeightTextareaPlugin } from '@formkit/addons'
+import {nextTick, onBeforeUnmount, onMounted} from "vue";
 
 const config = defaultConfig({
     plugins: [
@@ -10,6 +11,61 @@ const config = defaultConfig({
 
 const props = defineProps({
     form: Object,
+});
+
+// funzione che forza il resize dei textarea presenti nel container (o nell'intero documento)
+function resizeTextareas(container = document) {
+    const areas = (container || document).querySelectorAll('textarea');
+    areas.forEach(el => {
+        // skip elementi non visibili (display:none o simili)
+        if (!(el.offsetWidth || el.offsetHeight || el.getClientRects().length)) return;
+
+        // reset dell'altezza per permettere il corretto calcolo di scrollHeight
+        el.style.height = 'auto';
+        el.style.overflow = 'hidden';
+
+        // imposta l'altezza sullo scrollHeight
+        const h = el.scrollHeight;
+        // if (h) el.style.height = h + 'px';
+
+        // dispatch input in modo che eventuali listener (plugin) reagiscano
+        el.dispatchEvent(new Event('input', { bubbles: true }));
+    });
+}
+
+let shownHandler = null;
+
+onMounted(async () => {
+    await nextTick();
+
+    // piccolo delay per lasciare FormKit inizializzare gli input
+    setTimeout(() => {
+        // ridimensiona solo i textarea nelle tab attive (se usi tab bootstrap)
+        document.querySelectorAll('.tab-pane.show.active, .tab-pane.active').forEach(p => resizeTextareas(p));
+        // e ridimensiona anche eventuali textarea fuori dalle tab
+        resizeTextareas(document);
+    }, 60);
+
+    // gestore per quando si apre una tab (Bootstrap fires 'shown.bs.tab')
+    shownHandler = (e) => {
+        // e.target è il button/tab; recupera il selector della pane target (data-bs-target)
+        const selector = e?.target?.getAttribute && e.target.getAttribute('data-bs-target');
+        const pane = selector ? document.querySelector(selector) : null;
+        // lascia il tempo a Bootstrap di mostrare la pane, poi ridimensiona
+        setTimeout(() => { resizeTextareas(pane || document); }, 60);
+    };
+
+    // attacca il listener a tutti i trigger di tab/pill (pieno supporto per data-bs-toggle="pill" o "tab")
+    document.querySelectorAll('[data-bs-toggle="pill"], [data-bs-toggle="tab"]').forEach(btn => {
+        btn.addEventListener('shown.bs.tab', shownHandler);
+    });
+});
+
+onBeforeUnmount(() => {
+    // pulizia listener
+    document.querySelectorAll('[data-bs-toggle="pill"], [data-bs-toggle="tab"]').forEach(btn => {
+        if (shownHandler) btn.removeEventListener('shown.bs.tab', shownHandler);
+    });
 });
 </script>
 
