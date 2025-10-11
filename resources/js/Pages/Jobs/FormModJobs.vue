@@ -1,7 +1,7 @@
 <script setup>
 import {defaultConfig, FormKitSchema} from "@formkit/vue";
 import { createAutoHeightTextareaPlugin } from '@formkit/addons'
-import {nextTick, onBeforeUnmount, onMounted} from "vue";
+import {nextTick, onBeforeUnmount, onMounted, ref} from "vue";
 
 const config = defaultConfig({
     plugins: [
@@ -12,6 +12,42 @@ const config = defaultConfig({
 const props = defineProps({
     form: Object,
 });
+
+/**
+ * Array reattivo che contiene gli schemi JSON per ogni tab.
+ * Ogni elemento è un array di schemi (per supportare l'aggiunta dinamica).
+ * @type {Ref<UnwrapRef<*[]>, UnwrapRef<*[]> | *[]>}
+ * -------------------------------------------------------------------------------
+ */
+
+const dynamicSchemas = ref([]);
+
+// inizializza un array vuoto per ogni tab
+onMounted(() => {
+    dynamicSchemas.value = props.form.customers_mod_jobs_schema.map(data => [
+        JSON.parse(data.schema)
+    ]);
+});
+
+function addSchema(index, schemaJson) {
+    try {
+        const schema = JSON.parse(schemaJson);
+        dynamicSchemas.value[index].push(schema);
+
+        // forza ridimensionamento se ci sono textarea
+        nextTick(() => resizeTextareas());
+    } catch (err) {
+        console.error("Errore parsing schema:", err);
+    }
+}
+
+/** ------------------------------------------------------------------------------- **/
+
+/**
+ * Ridimensiona i textarea presenti nel container specificato (o nell'intero documento se non specificato).
+ * @param container
+ * -------------------------------------------------------------------------------
+ */
 
 // funzione che forza il resize dei textarea presenti nel container (o nell'intero documento)
 function resizeTextareas(container = document) {
@@ -67,6 +103,9 @@ onBeforeUnmount(() => {
         if (shownHandler) btn.removeEventListener('shown.bs.tab', shownHandler);
     });
 });
+
+/** ------------------------------------------------------------------------------- **/
+
 </script>
 
 <template>
@@ -83,7 +122,7 @@ onBeforeUnmount(() => {
                     aria-orientation="vertical"
                 >
                     <button
-                        v-for="(data, index) in form.job_settings"
+                        v-for="(data, index) in form.customers_mod_jobs_schema"
                         :key="index"
                         class="nav-link w-full dark:!bg-gray-800"
                         :class="{ active: index === 0 }"
@@ -104,7 +143,7 @@ onBeforeUnmount(() => {
             <div class="col !p-0">
                 <div class="tab-content" id="v-tabs-content">
                     <div
-                        v-for="(data, index) in form.job_settings"
+                        v-for="(data, index) in form.customers_mod_jobs_schema"
                         :key="index"
                         class="tab-pane fade dark:!bg-gray-800 !min-h-[400px]"
                         :class="{ 'show active': index === 0 }"
@@ -119,14 +158,18 @@ onBeforeUnmount(() => {
                                 :config="config"
                                 :actions="false"
                             >
-                                <FormKitSchema :schema="JSON.parse(data.schema)" />
+
+<!--                                <FormKitSchema :schema="JSON.parse(data.schema)" />-->
+                                <FormKitSchema v-for="(schema, sIndex) in dynamicSchemas[index]"
+                                               :key="sIndex"
+                                               :schema="schema" />
                             </FormKit>
 
                             <div v-if="data.dynamic === '1'"
                                  class="text-right">
                                 <button type="button"
                                         class="btn btn-primary"
-                                        @click="">
+                                        @click="addSchema(index, data.schema)">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                                     </svg>

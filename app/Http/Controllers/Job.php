@@ -163,7 +163,7 @@ class Job extends Controller
         $customers_array['saveRedirect'] = Redirect::back()->getTargetUrl();
 
         $job_settings = \App\Models\JobSettings::query()->orderBy('title')->get();
-        $customers_array['job_settings'] = $job_settings;
+        $customers_array['customers_mod_jobs_schema'] = $job_settings;
 
         $data = json_decode(json_encode($customers_array), true);
 
@@ -228,14 +228,21 @@ class Job extends Controller
         $data->saveRedirect = Redirect::back()->getTargetUrl();
 
         $job_settings = \App\Models\JobSettings::query()->orderBy('title')->get();
-        $data->job_settings = $job_settings;
+        $data->customers_mod_jobs_schema = $job_settings;
 
         $customer_mod_jobs = CustomerModJob::query()->where('customer_id', $id)->first();
         $data->customers_mod_jobs_values = [];
         if ($customer_mod_jobs != null) {
-            $data->customers_mod_jobs_values = $customer_mod_jobs->values ? json_decode($customer_mod_jobs->values, true) : $this->extractNames(
-                json_decode($data->job_settings, true)
-            );
+
+            $data->customers_mod_jobs_schema = json_decode($customer_mod_jobs->schema, true);
+
+            if ($customer_mod_jobs->values) {
+                $data->customers_mod_jobs_values = json_decode($customer_mod_jobs->values, true);
+            } else {
+                $data->customers_mod_jobs_values = $this->extractNames(
+                    json_decode($data->customers_mod_jobs_schema, true)
+                );
+            }
         }
 
         return Inertia::render('Jobs/Form', [
@@ -286,11 +293,11 @@ class Job extends Controller
         }
 
         $customer_mod_jobs->customer_id = $id;
-        $customer_mod_jobs->schema = json_encode($request['job_settings']);
+        $customer_mod_jobs->schema = json_encode($request['customers_mod_jobs_schema']);
         $customer_mod_jobs->values = json_encode($request['customers_mod_jobs_values']);
         $customer_mod_jobs->save();
 
-        unset($request['job_settings']);
+        unset($request['customers_mod_jobs_schema']);
         unset($request['customers_mod_jobs_values']);
 
         $customer = \App\Models\Customer::find($id);
