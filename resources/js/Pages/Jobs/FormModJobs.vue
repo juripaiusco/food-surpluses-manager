@@ -1,5 +1,12 @@
 <script setup>
-import { FormKitSchema } from "@formkit/vue";
+import {defaultConfig, FormKitSchema} from "@formkit/vue";
+import { createAutoHeightTextareaPlugin } from '@formkit/addons'
+
+const config = defaultConfig({
+    plugins: [
+        createAutoHeightTextareaPlugin(),
+    ],
+})
 
 const props = defineProps({
     form: Object,
@@ -43,7 +50,7 @@ const props = defineProps({
                     <div
                         v-for="(data, index) in form.job_settings"
                         :key="index"
-                        class="tab-pane fade dark:!bg-gray-800"
+                        class="tab-pane fade dark:!bg-gray-800 !min-h-[400px]"
                         :class="{ 'show active': index === 0 }"
                         :id="`v-pane-${index}`"
                         role="tabpanel"
@@ -53,10 +60,23 @@ const props = defineProps({
                             <FormKit
                                 type="form"
                                 v-model="form.customers_mod_jobs_values"
+                                :config="config"
                                 :actions="false"
                             >
                                 <FormKitSchema :schema="JSON.parse(data.schema)" />
                             </FormKit>
+
+                            <div v-if="data.dynamic === '1'"
+                                 class="text-right">
+                                <button type="button"
+                                        class="btn btn-primary"
+                                        @click="">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                    </svg>
+                                </button>
+                            </div>
+
                         </div>
                     </div>
                 </div>

@@ -10,5 +10,9 @@ class JobSettings extends Model
     use HasFactory;
 
     protected $table = 'mod_jobs_settings';
-    protected $fillable = ['title', 'schema'];
+    protected $fillable = [
+        'title',
+        'schema',
+        'dynamic',
+    ];
 }

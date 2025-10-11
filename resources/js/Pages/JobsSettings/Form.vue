@@ -135,6 +135,20 @@ onBeforeUnmount(() => {
                        class="form-control mb-4"
                        v-model="form.title" />
 
+                <div class="form-check">
+                    <input class="form-check-input"
+                           type="checkbox"
+                           name="dynamic"
+                           id="dynamic"
+                           true-value="1"
+                           false-value="0"
+                           v-model="form.dynamic">
+                    <label class="form-check-label"
+                           for="dynamic">
+                        Sezione dinamica
+                    </label>
+                </div>
+
                 <br>
 
                 <h2 class="text-3xl mb-2">Modulo Lavoro - Impostazione campi</h2>

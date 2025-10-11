@@ -16,6 +16,7 @@ return new class extends Migration
 
             $table->char('title', 255);
             $table->json('schema')->nullable();
+            $table->char('dynamic', 1)->nullable();
 
             $table->timestamps();
         });
