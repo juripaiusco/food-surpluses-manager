@@ -197,7 +197,7 @@ onBeforeUnmount(() => {
                     <div
                         v-for="(data, index) in form.customers_mod_jobs_schema"
                         :key="index"
-                        class="tab-pane fade dark:!bg-gray-800 !min-h-[400px]"
+                        class="tab-pane fade dark:!bg-gray-800 !min-h-[550px]"
                         :class="{ 'show active': index === 0 }"
                         :id="`v-pane-${index}`"
                         role="tabpanel"
