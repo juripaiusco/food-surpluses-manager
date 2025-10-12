@@ -1,8 +1,8 @@
 <script setup>
 import {defaultConfig, FormKitSchema} from "@formkit/vue";
-import { createAutoHeightTextareaPlugin } from '@formkit/addons'
+import {createAutoHeightTextareaPlugin} from '@formkit/addons'
 import {nextTick, onBeforeUnmount, onMounted, ref} from "vue";
-import { v4 as uuidv4 } from 'uuid'
+import {v4 as uuidv4} from 'uuid'
 
 const config = defaultConfig({
     plugins: [
@@ -21,14 +21,63 @@ const props = defineProps({
  * -------------------------------------------------------------------------------
  */
 
+import { watch } from "vue";
+
+/**
+ * Normalizza i group vuoti:
+ * se un campo è un array vuoto, lo converte in oggetto
+ */
+function normalizeEmptyGroups(obj) {
+    if (!obj || typeof obj !== 'object') return obj;
+
+    for (const key in obj) {
+        if (Array.isArray(obj[key]) && obj[key].length === 0) {
+            // conterrà sempre un oggetto vuoto, non array
+            obj[key] = {};
+        } else if (typeof obj[key] === 'object') {
+            normalizeEmptyGroups(obj[key]);
+        }
+    }
+
+    return obj;
+}
+
+// Osserva i valori del form e corregge in automatico
+watch(
+    () => props.form.customers_mod_jobs_values,
+    (newVal) => {
+        normalizeEmptyGroups(newVal);
+    },
+    { deep: true }
+);
+
 const dynamicSchemas = ref([]);
 
 // inizializza un array vuoto per ogni tab
+/*onMounted(() => {
+    dynamicSchemas.value = props.form.customers_mod_jobs_schema.map(data => {
+        const schema = JSON.parse(data.schema)
+        // appiattisci vecchie versioni
+        const flatSchema = Array.isArray(schema[0]) ? schema.flat() : schema
+
+        // inizializza i valori vuoti
+        flatSchema.forEach(field => {
+            if (field.$formkit === 'group') {
+                field.children.forEach(child => {
+                    if (!(child.name in props.form.customers_mod_jobs_values)) {
+                        props.form.customers_mod_jobs_values[child.name] = ''
+                    }
+                })
+            }
+        })
+        return flatSchema
+    })
+
+    console.log(props.form.customers_mod_jobs_values)
+})*/
 onMounted(() => {
     dynamicSchemas.value = props.form.customers_mod_jobs_schema.map(data => {
-        const schema = JSON.parse(data.schema);
-        // se il JSON è un array di array (vecchia versione), lo appiattiamo
-        return Array.isArray(schema[0]) ? schema.flat() : schema;
+        return JSON.parse(data.schema);
     });
 });
 
