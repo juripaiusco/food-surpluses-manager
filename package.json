@@ -29,6 +29,7 @@
         "bootstrap": "^5.2.3",
         "codemirror": "^6.0.2",
         "es-toolkit": "^1.39.10",
+        "uuid": "^13.0.0",
         "vue-codemirror": "^6.1.1"
     }
 }

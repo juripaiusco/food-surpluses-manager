@@ -292,6 +292,8 @@ class Job extends Controller
             $customer_mod_jobs = new CustomerModJob();
         }
 
+//        dd($request['customers_mod_jobs_values']);
+
         $customer_mod_jobs->customer_id = $id;
         $customer_mod_jobs->schema = json_encode($request['customers_mod_jobs_schema']);
         $customer_mod_jobs->values = json_encode($request['customers_mod_jobs_values']);
