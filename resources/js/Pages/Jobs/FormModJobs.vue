@@ -211,11 +211,11 @@ onBeforeUnmount(() => {
 
 <template>
 
-    <div class="container-fluid">
-        <div class="row flex-nowrap">
+    <div class="container-fluid min-vh-100">
+        <div class="row flex-nowrap align-items-stretch h-100">
 
             <!-- Nav verticale -->
-            <div class="col-auto !p-0 border-end vertical-tabs">
+            <div class="col-auto !p-0 border-end vertical-tabs h-100">
                 <div
                     class="nav flex-column nav-pills w-full"
                     id="v-tabs"
@@ -241,18 +241,18 @@ onBeforeUnmount(() => {
             </div>
 
             <!-- Contenuto -->
-            <div class="col !p-0">
-                <div class="tab-content" id="v-tabs-content">
+            <div class="col !p-0 h-100">
+                <div class="tab-content h-100" id="v-tabs-content">
                     <div
                         v-for="(data, index) in form.customers_mod_jobs_schema"
                         :key="index"
-                        class="tab-pane fade dark:!bg-gray-800 !min-h-[550px]"
+                        class="tab-pane fade dark:!bg-gray-800"
                         :class="{ 'show active': index === 0 }"
                         :id="`v-pane-${index}`"
                         role="tabpanel"
                         :aria-labelledby="`v-tab-${index}`"
                     >
-                        <div class="p-4">
+                        <div class="p-4 tab-pane-inner">
                             <FormKit
                                 type="form"
                                 v-model="form.customers_mod_jobs_values"
@@ -327,6 +327,20 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped>
+/* Force full height for nav column and content */
+.vertical-tabs,
+.nav.flex-column,
+.tab-content,
+.tab-pane {
+    height: 100%;
+}
+
+/* Il contenuto vero e proprio scrolla singolarmente */
+.tab-pane .tab-pane-inner {
+    height: 100%;
+    overflow-y: auto;      /* scroll interno per il contenuto della singola tab */
+    -webkit-overflow-scrolling: touch;
+}
 .vertical-tabs {
     min-height: 100%;
     width: 220px;
