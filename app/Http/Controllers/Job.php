@@ -189,13 +189,24 @@ class Job extends Controller
 
         $saveRedirect = $request['saveRedirect'];
 
+        $customers_mod_jobs_schema = $request['customers_mod_jobs_schema'];
+        $customers_mod_jobs_values = $request['customers_mod_jobs_values'];
+
         unset($request['saveRedirect']);
+        unset($request['customers_mod_jobs_schema']);
+        unset($request['customers_mod_jobs_values']);
 
         $customer = new \App\Models\Customer();
 
         $customer->fill($request->all());
 
         $customer->save();
+
+        $customer_mod_jobs = new CustomerModJob();
+        $customer_mod_jobs->customer_id = $customer->id;
+        $customer_mod_jobs->schema = json_encode($customers_mod_jobs_schema);
+        $customer_mod_jobs->values = json_encode($customers_mod_jobs_values);
+        $customer_mod_jobs->save();
 
         return Redirect::to($saveRedirect);
     }
