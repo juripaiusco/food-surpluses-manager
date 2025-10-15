@@ -247,8 +247,11 @@ class Job extends Controller
         if ($customer_mod_jobs != null) {
 
             $mod_jobs_schema_customer = json_decode($customer_mod_jobs->schema, true);
-//            $data->customers_mod_jobs_schema = $mod_jobs_schema_customer;
+//            dd($mod_jobs_schema_customer);
             $data->customers_mod_jobs_schema = mergeFormSchema($mod_jobs_schema_model, $mod_jobs_schema_customer);
+//            $data->customers_mod_jobs_schema = $mod_jobs_schema_customer;
+
+//            dd($mod_jobs_schema_customer, $data->customers_mod_jobs_schema);
 
             // Controllo che le sezioni nuove vengano aggiunte
             /*dd($data->customers_mod_jobs_schema);
