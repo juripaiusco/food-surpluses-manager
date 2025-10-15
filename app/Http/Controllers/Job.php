@@ -239,13 +239,20 @@ class Job extends Controller
         $data->saveRedirect = Redirect::back()->getTargetUrl();
 
         $job_settings = \App\Models\JobSettings::query()->orderBy('title')->get();
-        $data->customers_mod_jobs_schema = $job_settings;
+        $mod_jobs_schema_model = json_decode(json_encode($job_settings), true);
+        $data->customers_mod_jobs_schema = $mod_jobs_schema_model;
 
         $customer_mod_jobs = CustomerModJob::query()->where('customer_id', $id)->first();
         $data->customers_mod_jobs_values = [];
         if ($customer_mod_jobs != null) {
 
-            $data->customers_mod_jobs_schema = json_decode($customer_mod_jobs->schema, true);
+            $mod_jobs_schema_customer = json_decode($customer_mod_jobs->schema, true);
+//            $data->customers_mod_jobs_schema = $mod_jobs_schema_customer;
+            $data->customers_mod_jobs_schema = mergeFormSchema($mod_jobs_schema_model, $mod_jobs_schema_customer);
+
+            // Controllo che le sezioni nuove vengano aggiunte
+            /*dd($data->customers_mod_jobs_schema);
+            dd(json_decode(json_encode($job_settings), true));*/
 
             if ($customer_mod_jobs->values) {
                 $data->customers_mod_jobs_values = json_decode($customer_mod_jobs->values, true);
