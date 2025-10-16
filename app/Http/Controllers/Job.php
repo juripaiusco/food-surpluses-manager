@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CustomerModJob;
+use App\Services\JsonFormMerger;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
@@ -247,15 +248,24 @@ class Job extends Controller
         if ($customer_mod_jobs != null) {
 
             $mod_jobs_schema_customer = json_decode($customer_mod_jobs->schema, true);
-//            dd($mod_jobs_schema_customer);
-            $data->customers_mod_jobs_schema = mergeFormSchema($mod_jobs_schema_model, $mod_jobs_schema_customer);
-//            $data->customers_mod_jobs_schema = $mod_jobs_schema_customer;
 
-//            dd($mod_jobs_schema_customer, $data->customers_mod_jobs_schema);
+            $arrayMergeSchema = [];
+            foreach ($mod_jobs_schema_model as $k => $d) {
+                $arrayMergeSchema[$k]['id'] = $d['id'];
+                $arrayMergeSchema[$k]['title'] = $d['title'];
+                $arrayMergeSchema[$k]['schema'] = json_encode(mergeFormSchema(
+                    json_decode($mod_jobs_schema_model[$k]['schema'], true),
+                    json_decode($mod_jobs_schema_customer[$k]['schema'], true)
+                ));
+                $arrayMergeSchema[$k]['dynamic'] = $d['dynamic'];
+                $arrayMergeSchema[$k]['created_at'] = $d['created_at'];
+                $arrayMergeSchema[$k]['updated_at'] = $d['updated_at'];
+            }
 
-            // Controllo che le sezioni nuove vengano aggiunte
-            /*dd($data->customers_mod_jobs_schema);
-            dd(json_decode(json_encode($job_settings), true));*/
+            $data->customers_mod_jobs_schema = $arrayMergeSchema;
+
+//            dd($mod_jobs_schema_model, $mod_jobs_schema_customer);
+//            dd($arrayMergeSchema);
 
             if ($customer_mod_jobs->values) {
                 $data->customers_mod_jobs_values = json_decode($customer_mod_jobs->values, true);
