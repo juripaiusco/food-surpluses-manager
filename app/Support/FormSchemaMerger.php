@@ -1,91 +1,97 @@
 <?php
 
-if (!function_exists('mergeFormSchema')) {
-    function mergeFormSchema(array $modelSchema, array $clientSchema): array
-    {
-        $result = [];
+function mergeFormSchema(array $modelSchema, array $clientSchema): array
+{
+    $merged = $clientSchema;
 
-        foreach ($modelSchema as $modelEl) {
-            // Caso: campo formKit
-            if (isset($modelEl['$formkit'])) {
-                $clientEl = findByName($clientSchema, $modelEl['name']);
+    foreach ($modelSchema as $mGroup) {
+        if (($mGroup['$formkit'] ?? '') !== 'group') continue;
 
-                if ($clientEl) {
-                    // Merge intelligente
-                    $merged = array_merge($clientEl, $modelEl);
-                    $merged['classes'] = array_merge(
-                        $clientEl['classes'] ?? [],
-                        $modelEl['classes'] ?? []
-                    );
+        $groupName = $mGroup['name'] ?? null;
+        if (!$groupName) continue;
 
-                    $result[] = $merged;
-                } else {
-                    // Campo nuovo: aggiungilo
-                    $result[] = $modelEl;
-                }
-            }
+        // Trova tutti i gruppi cliente che corrispondono (anche con suffissi _1, _2, ecc.)
+        $matchingGroups = array_filter($clientSchema, function ($cGroup) use ($groupName) {
+            return isset($cGroup['name']) && str_starts_with($cGroup['name'], $groupName);
+        });
 
-            // Caso: wrapper (es. div con children)
-            elseif (isset($modelEl['children'])) {
-                $clientEl = findByClass($clientSchema, $modelEl['attrs']['class'] ?? null);
-
-                $mergedChildren = mergeFormSchema(
-                    $modelEl['children'],
-                    $clientEl['children'] ?? []
-                );
-
-                $merged = $modelEl;
-                $merged['children'] = $mergedChildren;
-                $result[] = $merged;
-            } else {
-                // Nodo generico
-                $result[] = $modelEl;
-            }
+        // Se il cliente non ha ancora nessun gruppo simile → aggiungiamo quello base del modello
+        if (empty($matchingGroups)) {
+            $merged[] = $mGroup;
+            continue;
         }
 
-        // Campi extra del cliente non presenti nel modello
-        $extraFields = collect(flattenChildren($clientSchema))
-            ->filter(fn($el) => isset($el['$formkit']) && !findByName($modelSchema, $el['name']))
-            ->values()
-            ->toArray();
-
-        return array_merge($result, $extraFields);
-    }
-
-    // Helpers
-    function findByName(array $schema, string $name = null): ?array
-    {
-        foreach ($schema as $el) {
-            if (($el['$formkit'] ?? null) && ($el['name'] ?? null) === $name) {
-                return $el;
-            }
-            if (isset($el['children'])) {
-                $found = findByName($el['children'], $name);
-                if ($found) return $found;
+        // Altrimenti mergiamo ogni gruppo cliente simile con il modello
+        foreach ($merged as &$cGroup) {
+            if (
+                isset($cGroup['$formkit']) &&
+                $cGroup['$formkit'] === 'group' &&
+                isset($cGroup['name']) &&
+                str_starts_with($cGroup['name'], $groupName)
+            ) {
+                $cGroup = mergeSingleGroup($mGroup, $cGroup);
             }
         }
-        return null;
     }
 
-    function findByClass(array $schema, ?string $class): ?array
-    {
-        foreach ($schema as $el) {
-            if (($el['attrs']['class'] ?? null) === $class) {
-                return $el;
-            }
-        }
-        return null;
+    return $merged;
+}
+
+function mergeSingleGroup(array $modelGroup, array $clientGroup): array
+{
+    $merged = $clientGroup;
+
+    // Prende i figli reali del modello e del cliente
+    $modelChildren = flattenChildren($modelGroup['children'] ?? []);
+    $clientChildren = flattenChildren($clientGroup['children'] ?? []);
+
+    // Verifica che esista almeno un div.row
+    if (!isset($merged['children'][0]['children'])) {
+        $merged['children'][0]['children'] = [];
     }
 
-    function flattenChildren(array $schema): array
-    {
-        $flat = [];
-        foreach ($schema as $el) {
-            $flat[] = $el;
-            if (isset($el['children'])) {
-                $flat = array_merge($flat, flattenChildren($el['children']));
-            }
+    foreach ($modelChildren as $mChild) {
+        if (!isset($mChild['name'])) continue;
+
+        $exists = findByName($clientChildren, $mChild['name']);
+
+        // Aggiungi solo se non esiste già
+        if (!$exists) {
+            $merged['children'][0]['children'][] = $mChild;
         }
-        return $flat;
     }
+
+    // Rimuove eventuali duplicati per nome
+    $merged['children'][0]['children'] = collect($merged['children'][0]['children'])
+        ->unique('name')
+        ->values()
+        ->toArray();
+
+    return $merged;
+}
+
+// --- funzioni helper ---
+
+function flattenChildren(array $children): array
+{
+    $result = [];
+    foreach ($children as $child) {
+        if (isset($child['$formkit'])) {
+            $result[] = $child;
+        }
+        if (isset($child['children']) && is_array($child['children'])) {
+            $result = array_merge($result, flattenChildren($child['children']));
+        }
+    }
+    return $result;
+}
+
+function findByName(array $elements, string $name): ?array
+{
+    foreach ($elements as $el) {
+        if (($el['name'] ?? null) === $name) {
+            return $el;
+        }
+    }
+    return null;
 }
