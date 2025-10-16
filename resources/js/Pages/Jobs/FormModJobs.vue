@@ -54,27 +54,6 @@ watch(
 const dynamicSchemas = ref([]);
 
 // inizializza un array vuoto per ogni tab
-/*onMounted(() => {
-    dynamicSchemas.value = props.form.customers_mod_jobs_schema.map(data => {
-        const schema = JSON.parse(data.schema)
-        // appiattisci vecchie versioni
-        const flatSchema = Array.isArray(schema[0]) ? schema.flat() : schema
-
-        // inizializza i valori vuoti
-        flatSchema.forEach(field => {
-            if (field.$formkit === 'group') {
-                field.children.forEach(child => {
-                    if (!(child.name in props.form.customers_mod_jobs_values)) {
-                        props.form.customers_mod_jobs_values[child.name] = ''
-                    }
-                })
-            }
-        })
-        return flatSchema
-    })
-
-    console.log(props.form.customers_mod_jobs_values)
-})*/
 onMounted(() => {
     dynamicSchemas.value = props.form.customers_mod_jobs_schema.map(data => {
         return JSON.parse(data.schema);
@@ -123,24 +102,6 @@ function removeSchema(index, id) {
         console.error("Errore parsing schema:", err);
     }
 }
-
-/*
-function addSchema(index, schemaJson) {
-    try {
-        const schema = JSON.parse(schemaJson);
-
-        // aggiungi lo schema in modo "piatto"
-        dynamicSchemas.value[index].push(schema);
-
-        // salva in formato array
-        props.form.customers_mod_jobs_schema[index].schema = JSON.stringify(dynamicSchemas.value[index]);
-
-        nextTick(() => resizeTextareas());
-    } catch (err) {
-        console.error("Errore parsing schema:", err);
-    }
-}
-*/
 
 /** ------------------------------------------------------------------------------- **/
 
@@ -260,9 +221,6 @@ onBeforeUnmount(() => {
                                 :actions="false"
                             >
 
-
-<!--                                <FormKitSchema :schema="JSON.parse(data.schema)" />-->
-
                                 <div v-for="(schema, sIndex) in dynamicSchemas[index]"
                                      :key="schema._id">
 
@@ -302,20 +260,6 @@ onBeforeUnmount(() => {
                                 </div>
 
                             </FormKit>
-
-                            <!-- <div v-if="data.dynamic === '1'"
-                                 class="text-right">
-
-                                <button type="button"
-                                        class="btn btn-primary"
-                                        @click="addSchema(index, data.schema)">
-                                    <div class="d-inline-flex align-items-center justify-content-center gap-2">
-                                        <span>
-                                            Aggiungi campi
-                                        </span>
-                                    </div>
-                                </button>
-                            </div> -->
 
                         </div>
                     </div>
