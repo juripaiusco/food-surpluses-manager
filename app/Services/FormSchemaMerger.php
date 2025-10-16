@@ -28,6 +28,7 @@ class FormSchemaMerger
      * Merge ricorsivo tra due schemi di form.
      * - Mette insieme i campi in base al "name"
      * - Se sono group, mergia anche i children
+     * - Aggiorna label e metadati base
      * - Evita duplicati
      *
      * @param array $model
@@ -39,24 +40,19 @@ class FormSchemaMerger
         $merged = $customer;
 
         foreach ($model as $modelField) {
-            // 1️⃣ Se è un gruppo (campo dinamico)
+            // 1️⃣ Se è un gruppo dinamico ($formkit = group)
             if (isset($modelField['$formkit']) && $modelField['$formkit'] === 'group') {
                 $existingGroup = collect($merged)->firstWhere('name', $modelField['name']);
 
                 if ($existingGroup) {
-                    // Merge ricorsivo dei children
+                    // Merge dei children
                     $existingGroup['children'] = self::deepMerge(
                         $modelField['children'] ?? [],
                         $existingGroup['children'] ?? []
                     );
 
-                    // Aggiorna nel risultato finale
-                    foreach ($merged as $k => $field) {
-                        if (isset($field['name']) && $field['name'] === $modelField['name']) {
-                            $merged[$k] = array_merge($modelField, $existingGroup);
-                            break;
-                        }
-                    }
+                    // Aggiorna metadati di gruppo
+                    $merged = self::replaceField($merged, $modelField['name'], array_merge($modelField, $existingGroup));
                 } else {
                     $merged[] = $modelField;
                 }
@@ -64,7 +60,7 @@ class FormSchemaMerger
                 continue;
             }
 
-            // 2️⃣ Se è un wrapper (es. div.row con children)
+            // 2️⃣ Wrapper tipo <div class="row"> con children
             if (!isset($modelField['$formkit']) && isset($modelField['children'])) {
                 $existingWrapper = collect($merged)->first(function ($f) use ($modelField) {
                     return !isset($f['$formkit']) &&
@@ -73,19 +69,11 @@ class FormSchemaMerger
                 });
 
                 if ($existingWrapper) {
-                    foreach ($merged as $k => $field) {
-                        if (
-                            !isset($field['$formkit']) &&
-                            isset($field['attrs']['class'], $modelField['attrs']['class']) &&
-                            $field['attrs']['class'] === $modelField['attrs']['class']
-                        ) {
-                            $merged[$k]['children'] = self::deepMerge(
-                                $modelField['children'] ?? [],
-                                $field['children'] ?? []
-                            );
-                            break;
-                        }
-                    }
+                    $existingWrapper['children'] = self::deepMerge(
+                        $modelField['children'] ?? [],
+                        $existingWrapper['children'] ?? []
+                    );
+                    $merged = self::replaceWrapper($merged, $modelField, $existingWrapper);
                 } else {
                     $merged[] = $modelField;
                 }
@@ -93,21 +81,81 @@ class FormSchemaMerger
                 continue;
             }
 
-            // 3️⃣ Campi normali
+            // 3️⃣ Campo normale
             if (isset($modelField['name'])) {
-                $exists = collect($merged)->contains(fn($f) => ($f['name'] ?? null) === $modelField['name']);
+                $existingFieldIndex = collect($merged)->search(fn($f) => ($f['name'] ?? null) === $modelField['name']);
 
-                if (!$exists) {
+                if ($existingFieldIndex !== false) {
+                    // Aggiorna i metadati del campo
+                    $merged[$existingFieldIndex] = self::updateFieldAttributes($merged[$existingFieldIndex], $modelField);
+                } else {
                     $merged[] = $modelField;
                 }
             }
         }
 
-        // Evita duplicati esatti
+        // Evita duplicati
         $merged = collect($merged)->unique(function ($item) {
             return $item['name'] ?? json_encode($item);
         })->values()->toArray();
 
+        return $merged;
+    }
+
+    /**
+     * Aggiorna gli attributi descrittivi di un campo (label, placeholder, classi, ecc.)
+     */
+    protected static function updateFieldAttributes(array $customerField, array $modelField): array
+    {
+        $keysToUpdate = ['label', 'placeholder', 'outerClass', 'help', 'hint'];
+
+        foreach ($keysToUpdate as $key) {
+            if (isset($modelField[$key])) {
+                $customerField[$key] = $modelField[$key];
+            }
+        }
+
+        // Aggiorna anche le classi e i config se presenti nel modello
+        if (isset($modelField['classes'])) {
+            $customerField['classes'] = array_merge($customerField['classes'] ?? [], $modelField['classes']);
+        }
+
+        if (isset($modelField['config'])) {
+            $customerField['config'] = array_merge($customerField['config'] ?? [], $modelField['config']);
+        }
+
+        return $customerField;
+    }
+
+    /**
+     * Sostituisce un campo esistente in base al name
+     */
+    protected static function replaceField(array $merged, string $name, array $newField): array
+    {
+        foreach ($merged as $i => $f) {
+            if (($f['name'] ?? null) === $name) {
+                $merged[$i] = $newField;
+                break;
+            }
+        }
+        return $merged;
+    }
+
+    /**
+     * Sostituisce un wrapper (div.row)
+     */
+    protected static function replaceWrapper(array $merged, array $modelField, array $newField): array
+    {
+        foreach ($merged as $i => $f) {
+            if (
+                !isset($f['$formkit']) &&
+                isset($f['attrs']['class'], $modelField['attrs']['class']) &&
+                $f['attrs']['class'] === $modelField['attrs']['class']
+            ) {
+                $merged[$i] = $newField;
+                break;
+            }
+        }
         return $merged;
     }
 }
