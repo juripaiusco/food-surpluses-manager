@@ -196,7 +196,9 @@ onBeforeUnmount(() => {
                         :aria-controls="`v-pane-${index}`"
                         :aria-selected="index === 0"
                     >
-                        {{ data.title }}
+                        <span :class="{ '!text-red-500 !font-bold': data.error === true }">
+                            {{ data.title }}
+                        </span>
                     </button>
                 </div>
             </div>

@@ -22,6 +22,117 @@ const dataForm = Object.fromEntries(Object.entries(props.data).map((v) => {
 
 const form = useForm(dataForm);
 
+async function validateAndSubmit(form) {
+    try {
+        const schemaArray = form.customers_mod_jobs_schema || [];
+        const values = form.customers_mod_jobs_values || {};
+
+        let sectionErrors = {}; // es: { "04 Risorse": true }
+        let errors = {};        // es: { "mod_jobs_nomecampo": "errore" }
+
+        for (const item of schemaArray) {
+            if (!item.schema) continue;
+
+            let schema;
+            try {
+                schema = JSON.parse(item.schema);
+            } catch (e) {
+                console.error('Errore parsing schema:', e);
+                continue;
+            }
+
+            let hasError = false;
+
+            schema.forEach(field => {
+                if (field.validation && field.validation.includes('required')) {
+                    const fieldName = field.name;
+                    const fieldLabel = field.label || fieldName;
+                    const fieldValue = values[fieldName];
+
+                    if (
+                        fieldValue === undefined ||
+                        fieldValue === null ||
+                        (typeof fieldValue === 'string' && fieldValue.trim() === '') ||
+                        (Array.isArray(fieldValue) && fieldValue.length === 0)
+                    ) {
+                        errors[fieldName] = `Il campo "${fieldLabel}" è obbligatorio.`;
+                        hasError = true;
+                    }
+                }
+            });
+
+            // Se la sezione ha errori, segna il title
+            sectionErrors[item.id] = {
+                id: item.id,
+                title: item.title,
+                title_alert: item.title + ' *'
+            }
+
+            if (hasError) {
+                // sectionErrors[item.title] = true;
+                sectionErrors[item.id].error = true
+            } else {
+                // sectionErrors[item.title] = false;
+                sectionErrors[item.id].error = false
+            }
+        }
+
+        // Mostra un riepilogo (opzionale)
+        if (Object.keys(errors).length > 0) {
+            // console.warn("Errori di validazione:", errors);
+            // alert("Alcune sezioni contengono errori. Controlla le icone ⚠️.");
+            return { valid: false, sectionErrors, errors };
+        }
+
+        console.log("Tutti i campi required sono compilati correttamente.");
+        return { valid: true, sectionErrors, errors };
+    } catch (error) {
+        console.error('Errore in validateAndSubmit:', error);
+        return { valid: false, sectionErrors: {}, errors: {} };
+    }
+}
+
+async function validateAndSubmitWrapper() {
+    let validation = await validateAndSubmit(form)
+
+    if (validation.valid === true) {
+
+        await form.post(route(
+            form.id ? 'jobs.update' : 'jobs.store',
+            form.id ? form.id : ''
+        ))
+
+    } else {
+
+        form.customers_mod_jobs_schema.forEach((section, index) => {
+            // Parsiamo lo schema JSON
+            const schema = JSON.parse(section.schema)
+
+            // Controlliamo se ci sono errori required non compilati
+            const hasError = schema.some(field =>
+                field.validation === 'required' &&
+                (
+                    !form.customers_mod_jobs_values[field.name] ||
+                    form.customers_mod_jobs_values[field.name].trim() === ''
+                )
+            )
+
+            // Aggiorna il titolo direttamente nel form reattivo
+            if (hasError) {
+                // Evita di aggiungere più volte l’icona o asterisco
+                if (!section.title.includes('*')) {
+                    section.title = `${validation.sectionErrors[section.id].title_alert}`
+                    section.error = validation.sectionErrors[section.id].error
+                }
+            } else {
+                // Se non ci sono errori, ripristina il titolo originale
+                section.title = section.title.replace(/\s\*$/, '')
+                section.error = validation.sectionErrors[section.id].error
+            }
+        })
+    }
+}
+
 </script>
 
 <template>
@@ -41,10 +152,7 @@ const form = useForm(dataForm);
             <h2 class="text-3xl mb-2">Dati Assistito</h2>
             <br>
 
-            <form @submit.prevent="form.post(route(
-                form.id ? 'jobs.update' : 'jobs.store',
-                form.id ? form.id : ''
-                ))">
+            <form @submit.prevent="validateAndSubmitWrapper">
 
                 <ul class="nav nav-tabs" id="customerTab" role="tablist">
                     <li class="nav-item" role="presentation">
