@@ -219,6 +219,7 @@ onBeforeUnmount(() => {
                                 v-model="form.customers_mod_jobs_values"
                                 :config="config"
                                 :actions="false"
+                                :id="`formkit-tab-${index}`"
                             >
 
                                 <div v-for="(schema, sIndex) in dynamicSchemas[index]"
