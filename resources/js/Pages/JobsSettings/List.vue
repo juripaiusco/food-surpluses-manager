@@ -68,6 +68,16 @@ let modalConfirm = ref(props.modalConfirm);
                             label: 'Sezione',
                             field: 'title',
                         }, {
+                            class: 'text-center w-[5%]',
+                            label: 'Dinamico',
+                            field: 'dynamic',
+                            fnc: (d) => {
+
+                                if (d.dynamic === '1') {
+                                    return '<span class=\'badge badge-success\'>Sì</span>';
+                                }
+                            }
+                        }, {
                             class: 'w-[1%]',
                             btnEdit: true,
                             route: 'jobs_settings.edit'
