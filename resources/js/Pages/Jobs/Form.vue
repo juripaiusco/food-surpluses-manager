@@ -96,39 +96,51 @@ async function validateAndSubmitWrapper() {
     let validation = await validateAndSubmit(form)
 
     if (validation.valid === true) {
-
         await form.post(route(
             form.id ? 'jobs.update' : 'jobs.store',
             form.id ? form.id : ''
         ))
-
     } else {
+        form.customers_mod_jobs_schema.forEach((section) => {
+            let schema = JSON.parse(section.schema)
+            let hasError = false
 
-        form.customers_mod_jobs_schema.forEach((section, index) => {
-            // Parsiamo lo schema JSON
-            const schema = JSON.parse(section.schema)
+            schema.forEach(field => {
+                const isRequired = field.validation === 'required'
+                const value = form.customers_mod_jobs_values[field.name]
 
-            // Controlliamo se ci sono errori required non compilati
-            const hasError = schema.some(field =>
-                field.validation === 'required' &&
-                (
-                    !form.customers_mod_jobs_values[field.name] ||
-                    form.customers_mod_jobs_values[field.name].trim() === ''
-                )
-            )
+                if (isRequired) {
+                    const currentInputClass = field.classes?.input || ''
+                    const errorClass = '!border !border-red-500'
 
-            // Aggiorna il titolo direttamente nel form reattivo
+                    // Campo richiesto ma non compilato
+                    if (!value || value.trim() === '') {
+                        hasError = true
+
+                        // Se non c'è già la classe errore, la aggiunge
+                        if (!currentInputClass.includes(errorClass)) {
+                            field.classes.input = `${currentInputClass} ${errorClass}`.trim()
+                        }
+                    } else {
+                        // Se il campo è compilato, rimuove eventuale classe errore
+                        field.classes.input = currentInputClass.replace(errorClass, '').trim()
+                    }
+                }
+            })
+
+            // Aggiorna il titolo della sezione se ci sono errori
             if (hasError) {
-                // Evita di aggiungere più volte l’icona o asterisco
                 if (!section.title.includes('*')) {
                     section.title = `${validation.sectionErrors[section.id].title_alert}`
-                    section.error = validation.sectionErrors[section.id].error
                 }
-            } else {
-                // Se non ci sono errori, ripristina il titolo originale
-                section.title = section.title.replace(/\s\*$/, '')
                 section.error = validation.sectionErrors[section.id].error
+            } else {
+                section.title = section.title.replace(/\s\*$/, '')
+                section.error = ''
             }
+
+            // Aggiorna lo schema JSON nel form reattivo
+            section.schema = JSON.stringify(schema)
         })
     }
 }

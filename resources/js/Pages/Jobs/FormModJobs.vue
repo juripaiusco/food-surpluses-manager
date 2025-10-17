@@ -1,7 +1,7 @@
 <script setup>
 import {defaultConfig, FormKitSchema} from "@formkit/vue";
 import {createAutoHeightTextareaPlugin} from '@formkit/addons'
-import {nextTick, onBeforeUnmount, onMounted, ref} from "vue";
+import {watch, nextTick, onBeforeUnmount, onMounted, ref} from "vue";
 import {v4 as uuidv4} from 'uuid'
 
 const config = defaultConfig({
@@ -20,8 +20,6 @@ const props = defineProps({
  * @type {Ref<UnwrapRef<*[]>, UnwrapRef<*[]> | *[]>}
  * -------------------------------------------------------------------------------
  */
-
-import { watch } from "vue";
 
 /**
  * Normalizza i group vuoti:
@@ -42,8 +40,14 @@ function normalizeEmptyGroups(obj) {
     return obj;
 }
 
+const dynamicSchemas = ref([]);
+
 // Osserva i valori del form e corregge in automatico
 watch(
+    () => props.form.customers_mod_jobs_schema.map(d => d.schema), // watch sulle stringhe schema
+    (newSchemas) => {
+        dynamicSchemas.value = props.form.customers_mod_jobs_schema.map(d => JSON.parse(d.schema))
+    },
     () => props.form.customers_mod_jobs_values,
     (newVal) => {
         normalizeEmptyGroups(newVal);
@@ -51,7 +55,6 @@ watch(
     { deep: true }
 );
 
-const dynamicSchemas = ref([]);
 
 // inizializza un array vuoto per ogni tab
 onMounted(() => {
