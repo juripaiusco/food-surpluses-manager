@@ -8,6 +8,7 @@ import {useForm} from "@inertiajs/vue3";
 import Table from "@/Components/Table/Table.vue";
 import {__} from "@/extComponents/Translations";
 import FormModJobs from "@/Pages/Jobs/FormModJobs.vue";
+import {watch} from "vue";
 
 const props = defineProps({
 
@@ -21,6 +22,14 @@ const dataForm = Object.fromEntries(Object.entries(props.data).map((v) => {
 }));
 
 const form = useForm(dataForm);
+
+watch(
+    () => form.customers_mod_jobs_values,
+    (newVal) => {
+        validateHasError()
+    },
+    { deep: true }
+);
 
 function markRequiredFields(nodeArray, values) {
     let sectionHasError = false;
@@ -54,7 +63,7 @@ function markRequiredFields(nodeArray, values) {
     return sectionHasError;
 }
 
-async function validateAndSubmitWrapper() {
+async function validateHasError() {
 
     let hasErrorGlobal = false;
 
@@ -80,7 +89,11 @@ async function validateAndSubmitWrapper() {
         section.schema = JSON.stringify(schema);
     });
 
-    if (!hasErrorGlobal) {
+    return hasErrorGlobal;
+}
+
+async function submit() {
+    if (!await validateHasError()) {
 
         await form.post(route(
             form.id ? 'jobs.update' : 'jobs.store',
@@ -109,7 +122,7 @@ async function validateAndSubmitWrapper() {
             <h2 class="text-3xl mb-2">Dati Assistito</h2>
             <br>
 
-            <form @submit.prevent="validateAndSubmitWrapper">
+            <form @submit.prevent="submit">
 
                 <ul class="nav nav-tabs" id="customerTab" role="tablist">
                     <li class="nav-item" role="presentation">
