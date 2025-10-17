@@ -149,20 +149,32 @@ function productSelectReset (refToReset) {
 
                             <div class="row">
                                 <div class="col text-right">
-                                    Punti cliente <span class="font-semibold">{{ params.points_customer }}</span>
+                                    Punti cliente
+                                    <br>
+                                    <span class="font-semibold">{{ params.points_customer }}</span>
                                 </div>
                                 <div class="col text-right">
-                                    Punti rimanenti <span class="font-semibold">{{ params.points_count }}</span>
+                                    Punti rimanenti
+                                    <br>
+                                    <span class="font-semibold">{{ params.points_count }}</span>
                                 </div>
                                 <div class="col text-right">
                                     Punti ordine
-
+                                    <br>
                                     <span class="font-semibold">
                                         <!-- <span v-if="data.is_first_order && (params.points_products < (data.customer.points * 80/100))"
                                               class="text-sm">
                                             ( almeno {{ data.customer.points * 80/100 }} )
                                         </span> -->
                                         {{ params.points_products }}
+                                    </span>
+                                </div>
+                                <div class="col text-right">
+                                    Costo ordine
+                                    <br>
+                                    <span class="font-semibold">
+                                        <small>€</small>
+                                        {{ parseFloat(params.price_products).toFixed(2).replace('.', ',') }}
                                     </span>
                                 </div>
                             </div>
@@ -430,6 +442,21 @@ function productSelectReset (refToReset) {
                                             btnDel: true,
                                             route: 'shop.remove'
                                         }, {
+                                            class: 'w-[1%]',
+                                            btnCustom: true,
+                                            route: 'shop.points_half',
+                                            emit: 'points_half',
+                                            fnc: function (d) {
+
+                                                let html = '';
+
+                                                html += '<div class=\'btn btn-primary btn-sm\'>';
+                                                html += '½';
+                                                html += '</div>';
+
+                                                return html;
+                                            }
+                                        }, {
                                             class: 'text-left',
                                             label: 'Codice',
                                             field: 'cod',
@@ -466,7 +493,22 @@ function productSelectReset (refToReset) {
                                             field: 'points',
                                             order: false
                                         }, {
-                                            class: 'text-left',
+                                            class: 'text-right',
+                                            classData: '',
+                                            label: 'Euro',
+                                            field: 'price',
+                                            order: false,
+                                            fnc: function (d) {
+                                                if (d.price === null) {
+                                                    return '-';
+                                                }
+
+                                                return '<small>€</small>&nbsp;' + parseFloat(d.price)
+                                                        .toFixed(2)
+                                                        .replace('.', ',');
+                                            }
+                                        }, {
+                                            class: 'text-left w-[26px]',
                                             label: '',
                                             field: 'monitoring_buy',
                                             order: false,
@@ -480,21 +522,6 @@ function productSelectReset (refToReset) {
 
                                                 return html;
 
-                                            }
-                                        }, {
-                                            class: 'w-[1%]',
-                                            btnCustom: true,
-                                            route: 'shop.points_half',
-                                            emit: 'points_half',
-                                            fnc: function (d) {
-
-                                                let html = '';
-
-                                                html += '<div class=\'btn btn-primary btn-sm\'>';
-                                                html += '½';
-                                                html += '</div>';
-
-                                                return html;
                                             }
                                         }]
                                     }"
@@ -515,6 +542,10 @@ function productSelectReset (refToReset) {
                                 Totale
                                 <span class="text-3xl font-bold ml-4">
                                     {{ params.points_products }}
+                                </span>
+                                <span class="text-sm ml-4">
+                                    <small>€</small>
+                                    {{ parseFloat(params.price_products).toFixed(2).replace('.', ',') }}
                                 </span>
                             </div>
 
@@ -545,6 +576,7 @@ export default {
                 points_customer: this.data.customer.points,
                 points_products: 0,
                 points_count: this.data.customer.points,
+                price_products: 0,
             },
             btn_shopStore_disabled: false,
             windowTop: 0
@@ -648,6 +680,7 @@ export default {
 
             shopProducts.forEach((d) => {
                 this.params.points_products += d.points;
+                this.params.price_products += d.price;
             });
 
             this.params.points_count = this.params.points_customer - this.params.points_products;
