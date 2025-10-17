@@ -200,6 +200,7 @@ class Order extends Controller
         // Attivo il cliente, altrimenti non si può aprire l'ordine
         $customer = \App\Models\Customer::find($order->customer_id);
         $customer->active = 1;
+        $customer->view_reception = 1;
         $customer->save();
         // END - Attivo il cliente, altrimenti non si può aprire l'ordine
 

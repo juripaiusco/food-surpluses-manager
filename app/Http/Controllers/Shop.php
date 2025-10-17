@@ -443,6 +443,11 @@ class Shop extends Controller
 
         }
 
+        // Cambio stato visualizzazione reception
+        $customer = \App\Models\Customer::find($customer->id);
+        $customer->view_reception = 0;
+        $customer->save();
+
         return Inertia::location(to_route('shop.index')->getTargetUrl());
     }
 
