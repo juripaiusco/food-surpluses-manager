@@ -20,7 +20,16 @@ createInertiaApp({
             .use(plugin)
             .use(ZiggyVue, Ziggy)
             .use(formkitPlugin, defaultConfig({
-                plugins: [createAutoHeightTextareaPlugin()]
+                plugins: [createAutoHeightTextareaPlugin()],
+                locales: ['it'],
+                locale: 'it',
+                messages: {
+                    it: {
+                        validation: {
+                            required: ({ name }) => `Il campo ${name} è obbligatorio.`,
+                        },
+                    },
+                },
             }))
             .mount(el);
     },
