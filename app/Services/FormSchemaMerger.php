@@ -107,7 +107,7 @@ class FormSchemaMerger
      */
     protected static function updateFieldAttributes(array $customerField, array $modelField): array
     {
-        $keysToUpdate = ['label', 'placeholder', 'outerClass', 'help', 'hint'];
+        $keysToUpdate = ['label', 'placeholder', 'outerClass', 'help', 'hint', 'validation'];
 
         foreach ($keysToUpdate as $key) {
             if (isset($modelField[$key])) {
