@@ -117,12 +117,22 @@ const form = useForm(dataForm);
                 </div>
                 <div class="col">
 
-                    <div class="border-[12px] border-sky-400 bg-sky-200 rounded-md !pt-[68px] h-[calc(100%-16px)]">
+                    <div class="border-[12px] border-sky-400 bg-sky-200 rounded-md !pt-[28px] h-[calc(100%-16px)]">
 
                         <div class="text-[120px] text-center font-bold text-sky-400">
 
                             {{ data.points }}
-                            <div class="text-sm mt-[-10px]">punti consumati</div>
+                            <div class="text-sm mt-[-20px]">
+                                punti consumati
+                                <br><br><br>
+                            </div>
+
+                            <div class="text-2xl">
+                                &euro; {{ parseFloat(data.price).toFixed(2).replace('.', ',') }}
+                            </div>
+                            <div class="text-sm mt-[10px]">
+                                costo ordine
+                            </div>
 
                         </div>
 
