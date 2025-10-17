@@ -165,6 +165,9 @@ class Job extends Controller
 
         $job_settings = \App\Models\JobSettings::query()->orderBy('title')->get();
         $customers_array['customers_mod_jobs_schema'] = $job_settings;
+        $customers_array['customers_mod_jobs_values'] = $this->extractNames(
+            json_decode($job_settings, true)
+        );
 
         $data = json_decode(json_encode($customers_array), true);
 
@@ -351,6 +354,8 @@ class Job extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        \App\Models\Customer::destroy($id);
+
+        return to_route('jobs.index');
     }
 }
