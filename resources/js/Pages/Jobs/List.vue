@@ -106,26 +106,74 @@ let modalConfirm = ref(props.modalConfirm);
                             class: 'text-center w-[5%]',
                             label: 'n.A.',
                             field: 'number',
+                            fnc: function (d) {
+
+                                if (d.active === 0) {
+                                    return '<span class=\'text-gray-400\'>' + d.number + '</span>';
+                                }
+
+                                return d.number;
+                            }
                         }, {
                             class: 'text-center w-[5%]',
                             label: 'n.T.',
                             field: 'cod',
+                            fnc: function (d) {
+
+                                if (d.active === 0) {
+                                    return '<span class=\'text-gray-400\'>' + d.cod + '</span>';
+                                }
+
+                                return d.cod;
+                            }
                         }, {
                             class: 'text-left w-[20%]',
                             label: 'Assistito',
                             field: 'customer_name',
+                            fnc: function (d) {
+
+                                if (d.active === 0) {
+                                    return '<span class=\'text-gray-400\'>' + d.customer_name + '</span>';
+                                }
+
+                                return d.customer_name;
+                            }
                         }, {
                             class: 'text-left',
                             label: 'Indirizzo',
                             field: 'address',
+                            fnc: function (d) {
+
+                                if (d.active === 0) {
+                                    return '<span class=\'text-gray-400\'>' + d.address + '</span>';
+                                }
+
+                                return d.address;
+                            }
                         }, {
                             class: 'text-left',
                             label: 'Telefono',
                             field: 'phone',
+                            fnc: function (d) {
+
+                                if (d.active === 0) {
+                                    return '<span class=\'text-gray-400\'>' + d.phone + '</span>';
+                                }
+
+                                return d.phone;
+                            }
                         }, {
                             class: 'text-center w-[10%]',
                             label: 'Componenti',
                             field: 'family_number',
+                            fnc: function (d) {
+
+                                if (d.active === 0) {
+                                    return '<span class=\'text-gray-400\'>' + d.family_number + '</span>';
+                                }
+
+                                return d.family_number;
+                            }
                         }, {
                             class: 'text-center w-[10%]',
                             classData: 'text-[11px]',
@@ -135,10 +183,17 @@ let modalConfirm = ref(props.modalConfirm);
 
                                 let html = '';
                                 let percentage = d.points / d.points_renew * 100;
+                                let classNameWrapper = '';
+                                let classNameBar = '';
+
+                                if (d.active === 0) {
+                                    classNameWrapper = '!bg-gray-200 !border-gray-400';
+                                    classNameBar = '!bg-gray-300';
+                                }
 
                                 html += d.points + ' / ' + d.points_renew;
-                                html += '<div class=\'progress mt-1 m-auto w-[65%] !bg-sky-200 border border-sky-400\' style=\'height: 6px;\'>';
-                                html += '<div class=\'progress-bar !bg-sky-400\' style=\'width: ' + percentage + '%;\'></div>';
+                                html += '<div class=\'progress mt-1 m-auto w-[65%] !bg-sky-200 border border-sky-400 ' + classNameWrapper + '\' style=\'height: 6px;\'>';
+                                html += '<div class=\'progress-bar !bg-sky-400 ' + classNameBar + '\' style=\'width: ' + percentage + '%;\'></div>';
                                 html += '</div>';
 
                                 return html;
