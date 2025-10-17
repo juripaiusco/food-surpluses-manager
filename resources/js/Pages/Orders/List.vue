@@ -91,11 +91,24 @@ let modalConfirm = ref(props.modalConfirm);
                         }, */{
                             class: 'text-left',
                             label: 'Cliente',
-                            field: 'customer_name',
+                            field: 'customer_name'
                         }, {
                             class: 'text-center w-[10%]',
                             label: 'Punti usati',
-                            field: 'points',
+                            field: 'points'
+                        }, {
+                            class: 'text-center w-[10%]',
+                            label: 'Costo',
+                            field: 'price',
+                            fnc: function (d) {
+                                if (d.price === null) {
+                                    return '-';
+                                }
+
+                                return '<small>€</small> ' + parseFloat(d.price)
+                                        .toFixed(2)
+                                        .replace('.', ',');
+                            }
                         }, {
                             class: 'w-[1%]',
                             btnCustom: true,

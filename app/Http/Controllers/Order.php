@@ -65,6 +65,7 @@ class Order extends Controller
             'date',
             'reference',
             'points',
+            'price',
         ]);
 
         $data->addSelect(DB::raw(
