@@ -42,12 +42,17 @@ function normalizeEmptyGroups(obj) {
 
 const dynamicSchemas = ref([]);
 
-// Osserva i valori del form e corregge in automatico
 watch(
-    () => props.form.customers_mod_jobs_schema.map(d => d.schema), // watch sulle stringhe schema
+    // 1️⃣ Watch per inizializzare i dynamicSchemas solo se i values sono vuoti
+    () => props.form.customers_mod_jobs_schema.map(d => d.schema),
     (newSchemas) => {
         dynamicSchemas.value = props.form.customers_mod_jobs_schema.map(d => JSON.parse(d.schema))
     },
+    { deep: true, immediate: true }
+)
+
+// Osserva i valori del form e corregge in automatico
+watch(
     () => props.form.customers_mod_jobs_values,
     (newVal) => {
         normalizeEmptyGroups(newVal);

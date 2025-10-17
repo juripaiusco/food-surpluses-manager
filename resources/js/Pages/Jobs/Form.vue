@@ -22,126 +22,71 @@ const dataForm = Object.fromEntries(Object.entries(props.data).map((v) => {
 
 const form = useForm(dataForm);
 
-async function validateAndSubmit(form) {
-    try {
-        const schemaArray = form.customers_mod_jobs_schema || [];
-        const values = form.customers_mod_jobs_values || {};
+function markRequiredFields(nodeArray, values) {
+    let sectionHasError = false;
 
-        let sectionErrors = {}; // es: { "04 Risorse": true }
-        let errors = {};        // es: { "mod_jobs_nomecampo": "errore" }
+    nodeArray.forEach(node => {
+        // Se è un campo con validation
+        if (node.validation && node.validation.includes('required')) {
+            const value = values[node.name];
+            const currentInputClass = node.classes?.input || '';
+            const errorClass = '!border !border-red-500';
 
-        for (const item of schemaArray) {
-            if (!item.schema) continue;
-
-            let schema;
-            try {
-                schema = JSON.parse(item.schema);
-            } catch (e) {
-                console.error('Errore parsing schema:', e);
-                continue;
-            }
-
-            let hasError = false;
-
-            schema.forEach(field => {
-                if (field.validation && field.validation.includes('required')) {
-                    const fieldName = field.name;
-                    const fieldLabel = field.label || fieldName;
-                    const fieldValue = values[fieldName];
-
-                    if (
-                        fieldValue === undefined ||
-                        fieldValue === null ||
-                        (typeof fieldValue === 'string' && fieldValue.trim() === '') ||
-                        (Array.isArray(fieldValue) && fieldValue.length === 0)
-                    ) {
-                        errors[fieldName] = `Il campo "${fieldLabel}" è obbligatorio.`;
-                        hasError = true;
-                    }
+            if (!value || (typeof value === 'string' && value.trim() === '') || (Array.isArray(value) && value.length === 0)) {
+                sectionHasError = true;
+                // Aggiunge la classe errore se non presente
+                if (!currentInputClass.includes(errorClass)) {
+                    node.classes.input = `${currentInputClass} ${errorClass}`.trim();
                 }
-            });
-
-            // Se la sezione ha errori, segna il title
-            sectionErrors[item.id] = {
-                id: item.id,
-                title: item.title,
-                title_alert: item.title + ' *'
-            }
-
-            if (hasError) {
-                // sectionErrors[item.title] = true;
-                sectionErrors[item.id].error = true
             } else {
-                // sectionErrors[item.title] = false;
-                sectionErrors[item.id].error = false
+                // Rimuove classe errore se il campo è compilato
+                node.classes.input = currentInputClass.replace(errorClass, '').trim();
             }
         }
 
-        // Mostra un riepilogo (opzionale)
-        if (Object.keys(errors).length > 0) {
-            // console.warn("Errori di validazione:", errors);
-            // alert("Alcune sezioni contengono errori. Controlla le icone ⚠️.");
-            return { valid: false, sectionErrors, errors };
+        // Se ha children, richiamo ricorsivamente senza sostituire l’oggetto
+        if (node.children && Array.isArray(node.children)) {
+            const childHasError = markRequiredFields(node.children, values);
+            if (childHasError) sectionHasError = true;
         }
+    });
 
-        console.log("Tutti i campi required sono compilati correttamente.");
-        return { valid: true, sectionErrors, errors };
-    } catch (error) {
-        console.error('Errore in validateAndSubmit:', error);
-        return { valid: false, sectionErrors: {}, errors: {} };
-    }
+    return sectionHasError;
 }
 
 async function validateAndSubmitWrapper() {
-    let validation = await validateAndSubmit(form)
 
-    if (validation.valid === true) {
+    let hasErrorGlobal = false;
+
+    form.customers_mod_jobs_schema.forEach(section => {
+        let schema = JSON.parse(section.schema);
+
+        // Controllo ricorsivo dei campi richiesti
+        const hasError = markRequiredFields(schema, form.customers_mod_jobs_values);
+
+        // Aggiorna titolo se ci sono errori
+        if (hasError) {
+            if (!section.title.includes('*')) {
+                section.title = `${section.title} *`;
+            }
+            section.error = hasError;
+            hasErrorGlobal = true;
+        } else {
+            section.title = section.title.replace(/\s\*$/, '');
+            section.error = '';
+        }
+
+        // Aggiorna lo schema nel form reattivo
+        section.schema = JSON.stringify(schema);
+    });
+
+    if (!hasErrorGlobal) {
+
         await form.post(route(
             form.id ? 'jobs.update' : 'jobs.store',
             form.id ? form.id : ''
         ))
-    } else {
-        form.customers_mod_jobs_schema.forEach((section) => {
-            let schema = JSON.parse(section.schema)
-            let hasError = false
 
-            schema.forEach(field => {
-                const isRequired = field.validation === 'required'
-                const value = form.customers_mod_jobs_values[field.name]
-
-                if (isRequired) {
-                    const currentInputClass = field.classes?.input || ''
-                    const errorClass = '!border !border-red-500'
-
-                    // Campo richiesto ma non compilato
-                    if (!value || value.trim() === '') {
-                        hasError = true
-
-                        // Se non c'è già la classe errore, la aggiunge
-                        if (!currentInputClass.includes(errorClass)) {
-                            field.classes.input = `${currentInputClass} ${errorClass}`.trim()
-                        }
-                    } else {
-                        // Se il campo è compilato, rimuove eventuale classe errore
-                        field.classes.input = currentInputClass.replace(errorClass, '').trim()
-                    }
-                }
-            })
-
-            // Aggiorna il titolo della sezione se ci sono errori
-            if (hasError) {
-                if (!section.title.includes('*')) {
-                    section.title = `${validation.sectionErrors[section.id].title_alert}`
-                }
-                section.error = validation.sectionErrors[section.id].error
-            } else {
-                section.title = section.title.replace(/\s\*$/, '')
-                section.error = ''
-            }
-
-            // Aggiorna lo schema JSON nel form reattivo
-            section.schema = JSON.stringify(schema)
-        })
     }
 }
 
