@@ -12,6 +12,7 @@ class Setting extends Controller
         'shop_btn' => '',
         'shop_ctrl_points' => '',
         'report_email' => '',
+        'n_max_assistiti' => '',
 //        'mod_jobs_schema_json' => '',
     );
     /**

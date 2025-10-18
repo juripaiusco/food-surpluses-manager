@@ -159,7 +159,22 @@ onBeforeUnmount(() => {
                          aria-labelledby="nav-general-tab"
                          tabindex="0">
 
-                        <h2 class="text-3xl mb-2">Cassa</h2>
+                        <h2 class="text-3xl mt-2 mb-2">Reception</h2>
+
+                        <label for="report_email" class="form-label">
+                            Numero massimo di assistiti all'interno dell'emporio
+                            <br>
+                            <small>(se non viene inserito nessun numero, non viene eseguito il controllo)</small>
+                        </label>
+                        <input id="n_max_assistiti"
+                               name="n_max_assistiti"
+                               type="text"
+                               class="form-control"
+                               v-model="form.n_max_assistiti" />
+                        <div class="text-red-500"
+                             v-if="form.errors.n_max_assistiti">{{ __(form.errors.n_max_assistiti) }}</div>
+
+                        <h2 class="text-3xl mt-8 mb-2">Cassa</h2>
 
                         <label for="shop_btn" class="form-label">
                             Inserisci il codice prodotto, separato da virgola "," (senza doppi apici).
@@ -177,7 +192,13 @@ onBeforeUnmount(() => {
                                    true-value="1"
                                    false-value="0"
                                    v-model="form.shop_ctrl_points">
-                            <label class="form-check-label" for="shop_ctrl_points">Controllo punti spesa</label>
+                            <label class="form-check-label" for="shop_ctrl_points">
+                                Controllo punti spesa
+                                <br>
+                                <small>
+                                    (tutto un ragionamento sul primo ordine del mese)
+                                </small>
+                            </label>
                         </div>
 
                         <h2 class="text-3xl mt-8 mb-2">Report</h2>
