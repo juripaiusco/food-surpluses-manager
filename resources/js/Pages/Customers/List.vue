@@ -13,6 +13,7 @@ import {ref} from "vue";
 const props = defineProps({
     data: Object,
     filters: Object,
+    msg_alert: String,
     modalShow: false,
     modalData: Object,
     modalConfirm: Object,
@@ -37,6 +38,13 @@ let modalConfirm = ref(props.modalConfirm);
         </template>
 
         <ApplicationContainer>
+
+            <div v-if="props.msg_alert === '1'" class="alert alert-danger text-center">
+                <div class="text-xl font-bold mb-2">
+                    Numero massimo di persone raggiunto!
+                </div>
+                Attendere che un assistito finisca la spesa
+            </div>
 
             <div class="inline-flex w-full mb-6">
 

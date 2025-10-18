@@ -142,7 +142,8 @@ class Customer extends Controller
 
         return Inertia::render('Customers/List', [
             'data' => $data,
-            'filters' => request()->all(['number', 's', 'orderby', 'ordertype', 'filters'])
+            'filters' => request()->all(['number', 's', 'orderby', 'ordertype', 'filters']),
+            'msg_alert' => request()->get('msg_alert'),
         ]);
     }
 
@@ -278,12 +279,40 @@ class Customer extends Controller
     public function view_reception(Request $request, string $id)
     {
         $customer = \App\Models\Customer::find($id);
+        $msg_alert = false;
+
+        // Se view_reception è 0 significa che si vuole aggiungere il customer,
+        // quindi dev'essere fatto un controllo sul numero massimo
+        if ($customer->view_reception == 0) {
+
+            $setting = new Setting();
+            $n_max_assistiti = intval($setting->get()['n_max_assistiti']);
+
+            if ($n_max_assistiti) {
+
+                $assistiti_count = \App\Models\Customer::query()
+                    ->where('view_reception', 1)
+                    ->count();
+
+                if ($assistiti_count >= $n_max_assistiti) {
+//                    dd($assistiti_count, $n_max_assistiti);
+                    $msg_alert = true;
+                    $customer->view_reception = 1;
+                }
+            }
+
+        }
 
         $customer->view_reception = $customer->view_reception == 1 ? 0 : 1;
-
         $customer->save();
 
-        return to_route('customers.index', $request->all());
+        return to_route(
+            'customers.index',
+            array_merge(
+                $request->all(),
+                ['msg_alert' => $msg_alert]
+            )
+        );
     }
 
     public function active(Request $request, string $id)
