@@ -186,14 +186,17 @@ let modalConfirm = ref(props.modalConfirm);
                                 let classNameWrapper = '';
                                 let classNameBar = '';
 
+                                classNameWrapper = '!bg-sky-200 !border-sky-400';
+                                classNameBar = '!bg-sky-400';
+
                                 if (d.active === 0) {
                                     classNameWrapper = '!bg-gray-200 !border-gray-400';
                                     classNameBar = '!bg-gray-300';
                                 }
 
                                 html += d.points + ' / ' + d.points_renew;
-                                html += '<div class=\'progress mt-1 m-auto w-[65%] !bg-sky-200 border border-sky-400 ' + classNameWrapper + '\' style=\'height: 6px;\'>';
-                                html += '<div class=\'progress-bar !bg-sky-400 ' + classNameBar + '\' style=\'width: ' + percentage + '%;\'></div>';
+                                html += '<div class=\'progress mt-1 m-auto w-[65%] border ' + classNameWrapper + '\' style=\'height: 6px;\'>';
+                                html += '<div class=\'progress-bar ' + classNameBar + '\' style=\'width: ' + percentage + '%;\'></div>';
                                 html += '</div>';
 
                                 return html;
