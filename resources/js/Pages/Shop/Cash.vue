@@ -446,6 +446,7 @@ function productSelectReset (refToReset) {
                                             btnCustom: true,
                                             route: 'shop.points_half',
                                             emit: 'points_half',
+                                            order: false,
                                             fnc: function (d) {
 
                                                 let html = '';
@@ -467,10 +468,13 @@ function productSelectReset (refToReset) {
                                             field: 'index',
                                             order: false
                                         }, */{
-                                            class: 'text-left',
+                                            class: 'text-center',
                                             label: 'Tipo',
                                             field: 'type',
-                                            order: false
+                                            order: false,
+                                            fnc: function (d) {
+                                                return d.type === 'fead no' ? '-' : d.type;
+                                            }
                                         }, {
                                             class: 'text-left',
                                             label: 'Nome',
@@ -492,7 +496,7 @@ function productSelectReset (refToReset) {
                                             label: 'Punti',
                                             field: 'points',
                                             order: false
-                                        }, {
+                                        }, /*{
                                             class: 'text-right',
                                             classData: '',
                                             label: 'Euro',
@@ -507,7 +511,7 @@ function productSelectReset (refToReset) {
                                                         .toFixed(2)
                                                         .replace('.', ',');
                                             }
-                                        }, {
+                                        }, */{
                                             class: 'text-left w-[26px]',
                                             label: '',
                                             field: 'monitoring_buy',
@@ -543,10 +547,10 @@ function productSelectReset (refToReset) {
                                 <span class="text-3xl font-bold ml-4">
                                     {{ params.points_products }}
                                 </span>
-                                <span class="text-sm ml-4">
+<!--                                <span class="text-sm ml-4">
                                     <small>€</small>
                                     {{ parseFloat(params.price_products).toFixed(2).replace('.', ',') }}
-                                </span>
+                                </span>-->
                             </div>
 
                         </div>
