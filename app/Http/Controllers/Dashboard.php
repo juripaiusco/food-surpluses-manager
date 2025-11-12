@@ -90,7 +90,9 @@ class Dashboard extends Controller
             // Conto i PRODOTTI venduti l'ultimo giorno di vendita
             $products_count = 0;
             foreach ($order_last_day_data as $order) {
-                $products_count += count(json_decode($order->json_products));
+                if (is_array(json_decode($order->json_products))) {
+                    $products_count += count(json_decode($order->json_products));
+                }
             }
 
             // Conto quanti PUNTI usati l'ultimo giorno di vendita
