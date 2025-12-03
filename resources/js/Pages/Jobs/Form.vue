@@ -13,6 +13,7 @@ import {watch} from "vue";
 const props = defineProps({
 
     data: Object,
+    error: String,
     saveRedirect: String,
 
 });
@@ -124,6 +125,10 @@ async function submit() {
         </template>
 
         <ApplicationContainer>
+
+            <div v-if="error" class="alert alert-danger">
+                {{ error }}
+            </div>
 
             <h2 class="text-3xl mb-2">Dati Assistito</h2>
             <br>

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "12672ad972c0ab733155f3ceab413e24",
+    "content-hash": "c6a908d76b6f37886e01e37800d1fa6a",
     "packages": [
         {
             "name": "brick/math",
@@ -2323,6 +2323,54 @@
                 "source": "https://github.com/nette/utils/tree/v4.0.10"
             },
             "time": "2025-12-01T17:30:42+00:00"
+        },
+        {
+            "name": "nigrosimone/codicefiscale",
+            "version": "1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nigrosimone/codice-fiscale.git",
+                "reference": "c61e539abe04e2c72b407dfc66c436f4ad85cc77"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nigrosimone/codice-fiscale/zipball/c61e539abe04e2c72b407dfc66c436f4ad85cc77",
+                "reference": "c61e539abe04e2c72b407dfc66c436f4ad85cc77",
+                "shasum": ""
+            },
+            "require-dev": {
+                "php-coveralls/php-coveralls": "^2.5",
+                "phpunit/phpunit": "^9.5",
+                "squizlabs/php_codesniffer": "^3.6"
+            },
+            "type": "project",
+            "autoload": {
+                "psr-4": {
+                    "NigroSimone\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Simone Nigro",
+                    "email": "nigro.simone@gmail.com",
+                    "homepage": "https://github.com/nigrosimone/"
+                }
+            ],
+            "description": "Libreria PHP per la validazione dei Codici Fiscali italiani a 16 caratteri con supporto per l'omocodia",
+            "homepage": "https://github.com/nigrosimone/CodiceFiscale",
+            "keywords": [
+                "codice fiscale php"
+            ],
+            "support": {
+                "email": "nigro.simone@gmail.com",
+                "issues": "https://github.com/nigrosimone/CodiceFiscale/issues",
+                "source": "https://github.com/nigrosimone/CodiceFiscale"
+            },
+            "time": "2025-06-14T06:53:42+00:00"
         },
         {
             "name": "nikic/php-parser",

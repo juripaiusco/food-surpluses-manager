@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CustomerModJob;
 use App\Services\FormSchemaMerger;
+use App\Services\JobDynamicFieldProcessor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
@@ -191,6 +192,11 @@ class Job extends Controller
             'points_renew'  => ['required'],
         ]);
 
+        if (JobDynamicFieldProcessor::exe($request)) {
+            $request->session()->flash('flash.error', JobDynamicFieldProcessor::exe($request));
+            return to_route('jobs.create');
+        }
+
         $saveRedirect = $request['saveRedirect'];
 
         $customers_mod_jobs_schema = $request['customers_mod_jobs_schema'];
@@ -285,6 +291,7 @@ class Job extends Controller
 
         return Inertia::render('Jobs/Form', [
             'data' => $data,
+            'error' => request()->session()->get('flash.error')
         ]);
     }
 
@@ -316,6 +323,11 @@ class Job extends Controller
             'points'        => ['required'],
             'points_renew'  => ['required'],
         ]);
+
+        if (JobDynamicFieldProcessor::exe($request)) {
+            $request->session()->flash('flash.error', JobDynamicFieldProcessor::exe($request));
+            return to_route('jobs.edit', ['id' => $id]);
+        }
 
         $saveRedirect = $request['saveRedirect'];
 
