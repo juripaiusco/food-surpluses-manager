@@ -10,22 +10,6 @@ use NigroSimone\CodiceFiscale;
 
 class JobDynamicFieldProcessor
 {
-    /*public static function execute($functionName, $value, $field, $request)
-    {
-        $map = [
-            'ctrl_cf' => [self::class, 'validateCF'],
-            'clean_phone' => [self::class, 'cleanPhone'],
-            'to_upper' => [self::class, 'toUpper'],
-            // in futuro qui aggiungi
-        ];
-
-        if (!isset($map[$functionName])) {
-            throw new \Exception("Funzione dinamica $functionName non trovata");
-        }
-
-        return call_user_func($map[$functionName], $value, $field, $request);
-    }*/
-
     /**
      * @param Request $request
      * @return false
@@ -129,14 +113,4 @@ class JobDynamicFieldProcessor
 
         return false;
     }
-
-    /*protected static function cleanPhone($value)
-    {
-        return preg_replace('/\D+/', '', $value);
-    }
-
-    protected static function toUpper($value)
-    {
-        return strtoupper($value);
-    }*/
 }
