@@ -93,14 +93,20 @@ async function validateHasError() {
 }
 
 async function submit() {
-    if (!await validateHasError()) {
+    // Verifico se sono stati compilati tutti i campi
+    /*if (!await validateHasError()) {
 
         await form.post(route(
             form.id ? 'jobs.update' : 'jobs.store',
             form.id ? form.id : ''
         ))
 
-    }
+    }*/
+
+    await form.post(route(
+        form.id ? 'jobs.update' : 'jobs.store',
+        form.id ? form.id : ''
+    ))
 }
 
 </script>
