@@ -256,6 +256,7 @@ class Job extends Controller
         $data->customers_mod_jobs_values = [];
         if ($customer_mod_jobs != null) {
 
+            /*
             $mod_jobs_schema_customer = json_decode($customer_mod_jobs->schema, true);
 
             $arrayMergeSchema = [];
@@ -266,19 +267,13 @@ class Job extends Controller
                     json_decode($mod_jobs_schema_model[$k]['schema'], true),
                     json_decode($mod_jobs_schema_customer[$k]['schema'], true)
                 ));
-                /*$arrayMergeSchema[$k]['schema'] = json_encode(mergeFormSchema(
-                    json_decode($mod_jobs_schema_model[$k]['schema'], true),
-                    json_decode($mod_jobs_schema_customer[$k]['schema'], true)
-                ));*/
                 $arrayMergeSchema[$k]['dynamic'] = $d['dynamic'];
                 $arrayMergeSchema[$k]['created_at'] = $d['created_at'];
                 $arrayMergeSchema[$k]['updated_at'] = $d['updated_at'];
             }
 
             $data->customers_mod_jobs_schema = $arrayMergeSchema;
-
-//            dd($mod_jobs_schema_model, $mod_jobs_schema_customer);
-//            dd($arrayMergeSchema);
+            */
 
             if ($customer_mod_jobs->values) {
                 $data->customers_mod_jobs_values = json_decode($customer_mod_jobs->values, true);
