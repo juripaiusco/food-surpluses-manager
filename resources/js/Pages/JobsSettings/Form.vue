@@ -175,7 +175,7 @@ onBeforeUnmount(() => {
                         />
 
                     </div>
-                    <div class="col" ref="previewWrapper">
+                    <div class="col-6" ref="previewWrapper">
 
                         <h2 class="text-xl text-center">Anteprima</h2>
 
