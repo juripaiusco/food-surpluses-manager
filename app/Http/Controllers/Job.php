@@ -184,7 +184,7 @@ class Job extends Controller
     {
         $request->validate([
             'number'        => ['required', 'unique:customers'],
-            'cod'           => ['required', 'unique:customers', 'min:8'],
+            'cod'           => ['required', 'unique:customers'],
             'name'          => ['required'],
             'surname'       => ['required'],
             'family_number' => ['required'],
@@ -316,7 +316,7 @@ class Job extends Controller
     {
         $request->validate([
             'number'        => ['required', 'unique:customers,number,' . $id],
-            'cod'           => ['required', 'unique:customers,cod,' . $id, 'min:8'],
+            'cod'           => ['required', 'unique:customers,cod,' . $id],
             'name'          => ['required'],
             'surname'       => ['required'],
             'family_number' => ['required'],
