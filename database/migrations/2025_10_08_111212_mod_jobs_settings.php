@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('mod_jobs_settings', function (Blueprint $table) {
             $table->id();
 
+            $table->char('type', 255);
             $table->char('title', 255);
             $table->json('schema')->nullable();
             $table->char('dynamic', 1)->nullable();
