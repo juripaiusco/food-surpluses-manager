@@ -104,7 +104,7 @@ onBeforeUnmount(() => {
 
 <template>
 
-    <Head title="Mod. Lav. Sezioni" />
+    <Head title="Mod. Lav. Settings" />
 
     <AuthenticatedLayout>
 

@@ -108,6 +108,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/jobs-settings/sections/update/{id}', [ModJobsSettings::class, 'updateSections'])->name('jobs_settings.sections.update');
     Route::get('/jobs-settings/sections/destroy/{id}', [ModJobsSettings::class, 'destroySections'])->name('jobs_settings.sections.destroy');
 
+    Route::get('/jobs-settings/reports', [ModJobsSettings::class, 'indexReports'])
+        ->name('jobs_settings.reports.index');
+
 
     Route::get('/retails', [Retail::class, 'index'])->name('retails.index');
     Route::get('/retails/create', [Retail::class, 'create'])->name('retails.create');

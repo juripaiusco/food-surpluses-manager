@@ -142,4 +142,45 @@ class ModJobsSettings extends Controller
 
         return to_route('jobs_settings.index');
     }
+
+
+    public function indexReports()
+    {
+        $request_validate_array = [
+            'title',
+        ];
+
+        // Query data
+        $data = \App\Models\JobSettings::query();
+
+        // Request validate
+        request()->validate([
+            'orderby' => ['in:' . implode(',', $request_validate_array)],
+            'ordertype' => ['in:asc,desc']
+        ]);
+
+        // Filtro RICERCA
+        if (request('s')) {
+            $data->where(function ($q) use ($request_validate_array) {
+
+                foreach ($request_validate_array as $field) {
+                    $q->orWhere($field, 'like', '%' . request('s') . '%');
+                }
+
+            });
+        }
+
+        // Filtro ORDINAMENTO
+        if (request('orderby') && request('ordertype')) {
+            $data->orderby(request('orderby'), strtoupper(request('ordertype')));
+        }
+
+        $data = $data->select();
+        $data = $data->paginate(env('VIEWS_PAGINATE'))->withQueryString();
+
+        return Inertia::render('JobsSettings/Reports/List', [
+            'data' => $data,
+            'filters' => request()->all(['s', 'orderby', 'ordertype'])
+        ]);
+    }
 }

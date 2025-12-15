@@ -32,19 +32,19 @@ let modalConfirm = ref(props.modalConfirm);
 
         <template #header>
 
-            <ApplicationHeader :breadcrumb-array="['Mod. Lav. Settings', 'Sezioni', 'Lista']" />
+            <ApplicationHeader :breadcrumb-array="['Mod. Lav. Settings', 'Report', 'Lista']" />
 
         </template>
 
         <ApplicationContainer>
 
             <Link :href="route('jobs_settings.index')"
-                  class="btn btn-primary mb-4">
+                  class="btn btn-outline-primary mb-4">
                 Sezioni
             </Link>
 
             <Link :href="route('jobs_settings.reports.index')"
-                  class="btn btn-outline-primary mb-4 ml-4">
+                  class="btn btn-primary mb-4 ml-4">
                 Report
             </Link>
 
@@ -54,14 +54,14 @@ let modalConfirm = ref(props.modalConfirm);
 
                     <Link :href="route('jobs_settings.sections.create')"
                           class="btn btn-outline-primary">
-                        Nuova Sezione
+                        Nuovo Report
                     </Link>
 
                 </div>
                 <div class="w-1/4">
 
                     <Search placeholder="Cerca..."
-                            route-search="jobs_settings.index"
+                            route-search="jobs_settings.reports.index"
                             :filters="filters" />
 
                 </div>
@@ -71,7 +71,7 @@ let modalConfirm = ref(props.modalConfirm);
             <Table class="table-striped"
                    :data="{
                         filters: filters,
-                        routeSearch: 'jobs_settings.index',
+                        routeSearch: 'jobs_settings.reports.index',
                         data: data.data,
                         structure: [{
                             class: 'text-left w-[90%]',
