@@ -11,6 +11,7 @@ class JobSettings extends Model
 
     protected $table = 'mod_jobs_settings';
     protected $fillable = [
+        'type',
         'title',
         'schema',
         'dynamic',

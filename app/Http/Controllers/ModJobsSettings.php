@@ -42,6 +42,7 @@ class ModJobsSettings extends Controller
             $data->orderby(request('orderby'), strtoupper(request('ordertype')));
         }
 
+        $data = $data->where('type', 'section');
         $data = $data->select();
         $data = $data->paginate(env('VIEWS_PAGINATE'))->withQueryString();
 
@@ -72,6 +73,7 @@ class ModJobsSettings extends Controller
         $data = json_decode(json_encode($data_array), true);
 
         $data['schema'] = '';
+        $data['type'] = 'section';
 
         return Inertia::render('JobsSettings/Sections/Form', [
             'data' => $data
@@ -175,6 +177,7 @@ class ModJobsSettings extends Controller
             $data->orderby(request('orderby'), strtoupper(request('ordertype')));
         }
 
+        $data = $data->where('type', 'report');
         $data = $data->select();
         $data = $data->paginate(env('VIEWS_PAGINATE'))->withQueryString();
 
