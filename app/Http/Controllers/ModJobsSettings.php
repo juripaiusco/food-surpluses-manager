@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\JobSettings;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
 use Inertia\Inertia;
@@ -207,6 +208,20 @@ class ModJobsSettings extends Controller
         $data['schema'] = '';
         $data['type'] = 'report';
 
+        $JobSettings = JobSettings::query()
+            ->orderBy('title')
+            ->get();
+
+        $report_fields = [];
+        foreach ($JobSettings as $JobSetting) {
+            $report_fields[] = array(
+                'name' => $JobSetting->title,
+                'fields' => $this->extractNameAndLabel(json_decode($JobSetting->schema, true)),
+            );
+        }
+
+        $data['report_fields'] = $report_fields;
+
         return Inertia::render('JobsSettings/Reports/Form', [
             'data' => $data
         ]);
@@ -230,5 +245,25 @@ class ModJobsSettings extends Controller
     public function destroyReports(string $id)
     {
 
+    }
+
+    public function extractNameAndLabel(array $array, array &$result = []): array
+    {
+        // Se l'array corrente contiene name e label, li salvo
+        if (isset($array['name'], $array['label'])) {
+            $result[] = [
+                'name'  => $array['name'],
+                'label' => $array['label'],
+            ];
+        }
+
+        // Scorro tutti i valori
+        foreach ($array as $value) {
+            if (is_array($value)) {
+                $this->extractNameAndLabel($value, $result);
+            }
+        }
+
+        return $result;
     }
 }

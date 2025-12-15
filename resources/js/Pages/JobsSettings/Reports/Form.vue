@@ -62,7 +62,55 @@ const form = useForm(dataForm);
 
                 <br>
 
-                inserire qui filtri
+                <label>Campo da filtrare</label>
+
+                <div>
+
+                    <div class="row">
+                        <div class="col">
+
+                            <select class="form-select">
+                                <option value="">Seleziona campo</option>
+
+                                <optgroup v-for="section in form.report_fields"
+                                          :label="section.name" >
+
+                                    <option v-for="field in section.fields">
+                                        {{ field.label }} ({{ field.name }})
+                                    </option>
+
+                                </optgroup>
+
+                            </select>
+
+                        </div>
+                        <div class="col-2">
+
+                            <select class="form-select">
+                                <option>Seleziona operatore</option>
+                                <option value="like">contiene</option>
+                                <option value="=">=</option>
+                                <option value=">">></option>
+                                <option value="<"><</option>
+                            </select>
+
+                        </div>
+                        <div class="col-4">
+
+                            <input class="form-control">
+
+                        </div>
+                        <div class="col-1">
+
+                            <button type="button" class="btn btn-primary">
+                                +
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
 
                 <div class="text-right mt-8">
 
