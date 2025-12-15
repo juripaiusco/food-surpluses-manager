@@ -45,7 +45,7 @@ class ModJobsSettings extends Controller
         $data = $data->select();
         $data = $data->paginate(env('VIEWS_PAGINATE'))->withQueryString();
 
-        return Inertia::render('JobsSettings/List', [
+        return Inertia::render('JobsSettings/Sections/List', [
             'data' => $data,
             'filters' => request()->all(['s', 'orderby', 'ordertype'])
         ]);
@@ -73,7 +73,7 @@ class ModJobsSettings extends Controller
 
         $data['schema'] = '';
 
-        return Inertia::render('JobsSettings/Form', [
+        return Inertia::render('JobsSettings/Sections/Form', [
             'data' => $data
         ]);
     }
@@ -107,7 +107,7 @@ class ModJobsSettings extends Controller
     {
         $data = \App\Models\JobSettings::find($id);
 
-        return Inertia::render('JobsSettings/Form', [
+        return Inertia::render('JobsSettings/Sections/Form', [
             'data' => $data
         ]);
     }
