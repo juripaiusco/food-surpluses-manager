@@ -119,7 +119,7 @@ onBeforeUnmount(() => {
             <h2 class="text-3xl mb-2">Dati Sezione</h2>
 
             <form @submit.prevent="form.post(route(
-                form.id ? 'jobs_settings.update' : 'jobs_settings.store',
+                form.id ? 'jobs_settings.sections.update' : 'jobs_settings.sections.store',
                 [
                     form.id ? form.id : '',
                     { 'redirect': save_redirect }

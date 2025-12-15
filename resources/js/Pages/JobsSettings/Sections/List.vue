@@ -42,7 +42,7 @@ let modalConfirm = ref(props.modalConfirm);
 
                 <div class="w-3/4">
 
-                    <Link :href="route('jobs_settings.create')"
+                    <Link :href="route('jobs_settings.sections.create')"
                           class="btn btn-outline-primary">
                         Nuova Sezione
                     </Link>
@@ -80,11 +80,11 @@ let modalConfirm = ref(props.modalConfirm);
                         }, {
                             class: 'w-[1%]',
                             btnEdit: true,
-                            route: 'jobs_settings.edit'
+                            route: 'jobs_settings.sections.edit'
                         }, {
                             class: 'w-[1%]',
                             btnDel: true,
-                            route: 'jobs_settings.destroy'
+                            route: 'jobs_settings.sections.destroy'
                         }],
                     }"
                    @openModal="(data, route) => {

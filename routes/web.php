@@ -101,12 +101,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/jobs/destroy/{id}', [Job::class, 'destroy'])->name('jobs.destroy');
 
 
-    Route::get('/jobs-settings', [ModJobsSettings::class, 'index'])->name('jobs_settings.index');
-    Route::get('/jobs-settings/create', [ModJobsSettings::class, 'create'])->name('jobs_settings.create');
-    Route::post('/jobs-settings/store', [ModJobsSettings::class, 'store'])->name('jobs_settings.store');
-    Route::get('/jobs-settings/edit/{id}', [ModJobsSettings::class, 'edit'])->name('jobs_settings.edit');
-    Route::post('/jobs-settings/update/{id}', [ModJobsSettings::class, 'update'])->name('jobs_settings.update');
-    Route::get('/jobs-settings/destroy/{id}', [ModJobsSettings::class, 'destroy'])->name('jobs_settings.destroy');
+    Route::get('/jobs-settings/sections', [ModJobsSettings::class, 'indexSections'])->name('jobs_settings.index');
+    Route::get('/jobs-settings/sections/create', [ModJobsSettings::class, 'createSections'])->name('jobs_settings.sections.create');
+    Route::post('/jobs-settings/sections/store', [ModJobsSettings::class, 'storeSections'])->name('jobs_settings.sections.store');
+    Route::get('/jobs-settings/sections/edit/{id}', [ModJobsSettings::class, 'editSections'])->name('jobs_settings.sections.edit');
+    Route::post('/jobs-settings/sections/update/{id}', [ModJobsSettings::class, 'updateSections'])->name('jobs_settings.sections.update');
+    Route::get('/jobs-settings/sections/destroy/{id}', [ModJobsSettings::class, 'destroySections'])->name('jobs_settings.sections.destroy');
 
 
     Route::get('/retails', [Retail::class, 'index'])->name('retails.index');

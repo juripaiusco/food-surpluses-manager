@@ -11,7 +11,7 @@ class ModJobsSettings extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function indexSections()
     {
         $request_validate_array = [
             'title',
@@ -54,7 +54,7 @@ class ModJobsSettings extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function createSections()
     {
         // Creo un oggetto di dati vuoto
         $table_columns = Schema::getColumnListing('mod_jobs_settings');
@@ -81,7 +81,7 @@ class ModJobsSettings extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function storeSections(Request $request)
     {
         $data = new \App\Models\JobSettings();
 
@@ -95,7 +95,7 @@ class ModJobsSettings extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function showSections(string $id)
     {
         //
     }
@@ -103,7 +103,7 @@ class ModJobsSettings extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function editSections(string $id)
     {
         $data = \App\Models\JobSettings::find($id);
 
@@ -115,7 +115,7 @@ class ModJobsSettings extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function updateSections(Request $request, string $id)
     {
         $redirect = $request->input('redirect');
 
@@ -128,7 +128,7 @@ class ModJobsSettings extends Controller
         if ($redirect) {
             return to_route('jobs_settings.index');
         } else {
-            return Inertia::location(to_route('jobs_settings.edit', $id)->getTargetUrl());
+            return Inertia::location(to_route('jobs_settings.sections.edit', $id)->getTargetUrl());
         }
 
     }
@@ -136,7 +136,7 @@ class ModJobsSettings extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroySections(string $id)
     {
         \App\Models\JobSettings::destroy($id);
 
