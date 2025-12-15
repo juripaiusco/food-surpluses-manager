@@ -110,7 +110,7 @@ onBeforeUnmount(() => {
 
         <template #header>
 
-            <ApplicationHeader :breadcrumb-array="['Mod. Lav. Sezioni', data.title !== null ? data.title : 'nuova Sezione']" />
+            <ApplicationHeader :breadcrumb-array="['Mod. Lav. Settings', 'Sezioni' , form.title !== null ? form.title : 'nuova Sezione']" />
 
         </template>
 

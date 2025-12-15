@@ -32,7 +32,7 @@ let modalConfirm = ref(props.modalConfirm);
 
         <template #header>
 
-            <ApplicationHeader :breadcrumb-array="['Mod. Lav. Sezioni', 'Lista']" />
+            <ApplicationHeader :breadcrumb-array="['Mod. Lav. Settings', 'Sezioni', 'Lista']" />
 
         </template>
 
