@@ -101,15 +101,31 @@ Route::middleware('auth')->group(function () {
     Route::get('/jobs/destroy/{id}', [Job::class, 'destroy'])->name('jobs.destroy');
 
 
-    Route::get('/jobs-settings/sections', [ModJobsSettings::class, 'indexSections'])->name('jobs_settings.index');
-    Route::get('/jobs-settings/sections/create', [ModJobsSettings::class, 'createSections'])->name('jobs_settings.sections.create');
-    Route::post('/jobs-settings/sections/store', [ModJobsSettings::class, 'storeSections'])->name('jobs_settings.sections.store');
-    Route::get('/jobs-settings/sections/edit/{id}', [ModJobsSettings::class, 'editSections'])->name('jobs_settings.sections.edit');
-    Route::post('/jobs-settings/sections/update/{id}', [ModJobsSettings::class, 'updateSections'])->name('jobs_settings.sections.update');
-    Route::get('/jobs-settings/sections/destroy/{id}', [ModJobsSettings::class, 'destroySections'])->name('jobs_settings.sections.destroy');
+    Route::get('/jobs-settings/sections', [ModJobsSettings::class, 'indexSections'])
+        ->name('jobs_settings.index');
+    Route::get('/jobs-settings/sections/create', [ModJobsSettings::class, 'createSections'])
+        ->name('jobs_settings.sections.create');
+    Route::post('/jobs-settings/sections/store', [ModJobsSettings::class, 'storeSections'])
+        ->name('jobs_settings.sections.store');
+    Route::get('/jobs-settings/sections/edit/{id}', [ModJobsSettings::class, 'editSections'])
+        ->name('jobs_settings.sections.edit');
+    Route::post('/jobs-settings/sections/update/{id}', [ModJobsSettings::class, 'updateSections'])
+        ->name('jobs_settings.sections.update');
+    Route::get('/jobs-settings/sections/destroy/{id}', [ModJobsSettings::class, 'destroySections'])
+        ->name('jobs_settings.sections.destroy');
 
     Route::get('/jobs-settings/reports', [ModJobsSettings::class, 'indexReports'])
         ->name('jobs_settings.reports.index');
+    Route::get('/jobs-settings/reports/create', [ModJobsSettings::class, 'createReports'])
+        ->name('jobs_settings.reports.create');
+    Route::post('/jobs-settings/reports/store', [ModJobsSettings::class, 'storeReports'])
+        ->name('jobs_settings.reports.store');
+    Route::get('/jobs-settings/reports/edit/{id}', [ModJobsSettings::class, 'editReports'])
+        ->name('jobs_settings.reports.edit');
+    Route::post('/jobs-settings/reports/update/{id}', [ModJobsSettings::class, 'updateReports'])
+        ->name('jobs_settings.reports.update');
+    Route::get('/jobs-settings/reports/destroy/{id}', [ModJobsSettings::class, 'destroyReports'])
+        ->name('jobs_settings.reports.destroy');
 
 
     Route::get('/retails', [Retail::class, 'index'])->name('retails.index');

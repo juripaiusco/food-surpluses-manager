@@ -52,7 +52,7 @@ let modalConfirm = ref(props.modalConfirm);
 
                 <div class="w-3/4">
 
-                    <Link :href="route('jobs_settings.sections.create')"
+                    <Link :href="route('jobs_settings.reports.create')"
                           class="btn btn-outline-primary">
                         Nuovo Report
                     </Link>

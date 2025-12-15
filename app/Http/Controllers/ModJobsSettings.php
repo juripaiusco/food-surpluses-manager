@@ -186,4 +186,49 @@ class ModJobsSettings extends Controller
             'filters' => request()->all(['s', 'orderby', 'ordertype'])
         ]);
     }
+
+    public function createReports()
+    {
+        // Creo un oggetto di dati vuoto
+        $table_columns = Schema::getColumnListing('mod_jobs_settings');
+
+        $data_array = array();
+        foreach ($table_columns as $data_field) {
+            $data_array[$data_field] = null;
+        }
+
+        unset($data_array['id']);
+        unset($data_array['deleted_at']);
+        unset($data_array['created_at']);
+        unset($data_array['updated_at']);
+
+        $data = json_decode(json_encode($data_array), true);
+
+        $data['schema'] = '';
+        $data['type'] = 'report';
+
+        return Inertia::render('JobsSettings/Reports/Form', [
+            'data' => $data
+        ]);
+    }
+
+    public function storeReports(Request $request)
+    {
+
+    }
+
+    public function editReports(string $id)
+    {
+
+    }
+
+    public function updateReports(Request $request, string $id)
+    {
+
+    }
+
+    public function destroyReports(string $id)
+    {
+
+    }
 }
