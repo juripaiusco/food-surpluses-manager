@@ -259,7 +259,7 @@ onBeforeUnmount(() => {
 
                                 <br>
 
-                                <FormKitSchema :schema="parsedSchema" />
+                                <!-- <FormKitSchema :schema="parsedSchema" /> -->
 
                             </div>
                         </div>
