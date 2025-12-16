@@ -6,8 +6,6 @@ import ApplicationHeader from "@/Components/ApplicationHeader.vue";
 import ApplicationContainer from "@/Components/ApplicationContainer.vue";
 import {Link} from "@inertiajs/vue3";
 import {useForm} from "@inertiajs/vue3";
-import {Codemirror} from "vue-codemirror";
-import {FormKitSchema} from "@formkit/vue";
 
 const props = defineProps({
 
@@ -20,6 +18,17 @@ const dataForm = Object.fromEntries(Object.entries(props.data).map((v) => {
 }));
 
 const form = useForm(dataForm);
+
+function schemaAdd(operator) {
+
+    form.schema.push({
+        add_operator: operator,
+        field: '',
+        operator: '',
+        value: ''
+    });
+
+}
 
 </script>
 
@@ -64,18 +73,22 @@ const form = useForm(dataForm);
 
                 <label>Campo da filtrare</label>
 
-                <div>
+                <div v-for="(schema, index) in form.schema"
+                     :key="index"
+                     class="mb-4">
 
                     <div class="row">
                         <div class="col">
 
-                            <select class="form-select">
+                            <select class="form-select"
+                                    v-model="form.schema[index]['field']">
                                 <option value="">Seleziona campo</option>
 
                                 <optgroup v-for="section in form.report_fields"
                                           :label="section.name" >
 
-                                    <option v-for="field in section.fields">
+                                    <option v-for="field in section.fields"
+                                            :value="field.name">
                                         {{ field.label }} ({{ field.name }})
                                     </option>
 
@@ -86,7 +99,8 @@ const form = useForm(dataForm);
                         </div>
                         <div class="col-2">
 
-                            <select class="form-select">
+                            <select class="form-select"
+                                    v-model="form.schema[index]['operator']">
                                 <option>Seleziona operatore</option>
                                 <option value="like">contiene</option>
                                 <option value="=">=</option>
@@ -97,13 +111,28 @@ const form = useForm(dataForm);
                         </div>
                         <div class="col-4">
 
-                            <input class="form-control">
+                            <input class="form-control"
+                                   v-model="form.schema[index]['value']">
 
                         </div>
                         <div class="col-1">
 
-                            <button type="button" class="btn btn-primary">
-                                +
+                            <button type="button"
+                                    class="btn btn-primary w-full"
+                                    v-if="index >= (form.schema.length - 1)"
+                                    @click="schemaAdd('and')">
+                                AND
+                            </button>
+
+                        </div>
+
+                        <div class="col-1">
+
+                            <button type="button"
+                                    class="btn btn-primary w-full"
+                                    v-if="index >= (form.schema.length - 1)"
+                                    @click="schemaAdd('or')">
+                                OR
                             </button>
 
                         </div>

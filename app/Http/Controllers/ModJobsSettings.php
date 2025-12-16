@@ -188,6 +188,23 @@ class ModJobsSettings extends Controller
         ]);
     }
 
+    private function fielsReports()
+    {
+        $JobSettings = JobSettings::query()
+            ->orderBy('title')
+            ->get();
+
+        $report_fields = [];
+        foreach ($JobSettings as $JobSetting) {
+            $report_fields[] = array(
+                'name' => $JobSetting->title,
+                'fields' => $this->extractNameAndLabel(json_decode($JobSetting->schema, true)),
+            );
+        }
+
+        return $report_fields;
+    }
+
     public function createReports()
     {
         // Creo un oggetto di dati vuoto
@@ -205,22 +222,13 @@ class ModJobsSettings extends Controller
 
         $data = json_decode(json_encode($data_array), true);
 
-        $data['schema'] = '';
+        $data['schema'][] = array(
+            'field' => '',
+            'operator' => '',
+            'value' => '',
+        );
         $data['type'] = 'report';
-
-        $JobSettings = JobSettings::query()
-            ->orderBy('title')
-            ->get();
-
-        $report_fields = [];
-        foreach ($JobSettings as $JobSetting) {
-            $report_fields[] = array(
-                'name' => $JobSetting->title,
-                'fields' => $this->extractNameAndLabel(json_decode($JobSetting->schema, true)),
-            );
-        }
-
-        $data['report_fields'] = $report_fields;
+        $data['report_fields'] = $this->fielsReports();
 
         return Inertia::render('JobsSettings/Reports/Form', [
             'data' => $data
@@ -229,12 +237,27 @@ class ModJobsSettings extends Controller
 
     public function storeReports(Request $request)
     {
+        $data = new \App\Models\JobSettings();
 
+        $request['schema'] = json_encode($request['schema']);
+
+        $data->fill($request->all());
+
+        $data->save();
+
+        return to_route('jobs_settings.reports.index');
     }
 
     public function editReports(string $id)
     {
+        $data = \App\Models\JobSettings::find($id);
 
+        $data['schema'] = json_decode($data['schema'], true);
+        $data['report_fields'] = $this->fielsReports();
+
+        return Inertia::render('JobsSettings/Reports/Form', [
+            'data' => $data
+        ]);
     }
 
     public function updateReports(Request $request, string $id)

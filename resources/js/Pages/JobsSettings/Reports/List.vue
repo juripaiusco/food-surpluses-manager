@@ -80,11 +80,11 @@ let modalConfirm = ref(props.modalConfirm);
                         }, {
                             class: 'w-[1%]',
                             btnEdit: true,
-                            route: 'jobs_settings.sections.edit'
+                            route: 'jobs_settings.reports.edit'
                         }, {
                             class: 'w-[1%]',
                             btnDel: true,
-                            route: 'jobs_settings.sections.destroy'
+                            route: 'jobs_settings.reports.destroy'
                         }],
                     }"
                    @openModal="(data, route) => {
