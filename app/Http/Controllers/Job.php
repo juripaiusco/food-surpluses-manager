@@ -214,8 +214,8 @@ class Job extends Controller
 
         $customer_mod_jobs = new CustomerModJob();
         $customer_mod_jobs->customer_id = $customer->id;
-        $customer_mod_jobs->schema = json_encode($customers_mod_jobs_schema);
-        $customer_mod_jobs->values = json_encode($customers_mod_jobs_values);
+        $customer_mod_jobs->schema = $customers_mod_jobs_schema;
+        $customer_mod_jobs->values = $customers_mod_jobs_values;
         $customer_mod_jobs->save();
 
         return Redirect::to($saveRedirect);
@@ -276,7 +276,7 @@ class Job extends Controller
             */
 
             if ($customer_mod_jobs->values) {
-                $data->customers_mod_jobs_values = json_decode($customer_mod_jobs->values, true);
+                $data->customers_mod_jobs_values = $customer_mod_jobs->values;
             } else {
                 $data->customers_mod_jobs_values = $this->extractNames(
                     json_decode($data->customers_mod_jobs_schema, true)
@@ -340,8 +340,8 @@ class Job extends Controller
 //        dd($request['customers_mod_jobs_values']);
 
         $customer_mod_jobs->customer_id = $id;
-        $customer_mod_jobs->schema = json_encode($request['customers_mod_jobs_schema']);
-        $customer_mod_jobs->values = json_encode($request['customers_mod_jobs_values']);
+        $customer_mod_jobs->schema = $request['customers_mod_jobs_schema'];
+        $customer_mod_jobs->values = $request['customers_mod_jobs_values'];
         $customer_mod_jobs->save();
 
         unset($request['customers_mod_jobs_schema']);
