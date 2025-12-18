@@ -46,7 +46,7 @@ let modalConfirm = ref(props.modalConfirm);
                     <Link v-for="report in reports" :href="route('jobs_reports.index', {
                         'rid': report.id
                     })"
-                          class="btn btn-outline-primary">
+                          class="btn btn-outline-primary mr-4">
                         {{ report.title }}
                     </Link>
 

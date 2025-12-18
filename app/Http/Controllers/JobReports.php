@@ -21,7 +21,8 @@ class JobReports extends Controller
 
         if (isset(request()->rid)) {
 
-            $report = $reports->where('id', request()->rid)
+            // Recupero lo schema json con il valore per generare la query corretta
+            $report = (clone $reports)->where('id', request()->rid)
                 ->first();
 
             $customers = \App\Models\Customer::query()
@@ -30,16 +31,22 @@ class JobReports extends Controller
                     'customers.id',
                     '=',
                     'customers_mod_jobs.customer_id'
-                )
-                ->whereRaw(
-                    "JSON_UNQUOTE(JSON_EXTRACT(customers_mod_jobs.values, '$.mod_jobs_anagrafica_parrocchia')) LIKE ?",
-                    ['%Antonio%']
-                )
-                ->select('customers.*')
-                ->get();
+                );
 
-            dd($customers);
-            dd(json_decode($report->schema, true));
+            // Genero la query in base al filtro impostato dallo schema json
+            foreach (json_decode($report->schema, true) as $q) {
+
+                $customers = $customers->whereRaw(
+                    "JSON_UNQUOTE(JSON_EXTRACT(
+                        customers_mod_jobs.values, '$." . $q['field'] . "'
+                    )) " . $q['operator'] . " ?",
+                    ['%' . $q['value'] . '%']
+                );
+
+            }
+
+            $data = $customers->select('customers.*')
+                ->get();
 
         }
 
