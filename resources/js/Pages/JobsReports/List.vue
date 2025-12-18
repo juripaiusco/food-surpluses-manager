@@ -12,6 +12,7 @@ import {ref} from "vue";
 
 const props = defineProps({
     data: Object,
+    reports: Object,
     filters: Object,
     modalShow: false,
     modalData: Object,
@@ -40,35 +41,14 @@ let modalConfirm = ref(props.modalConfirm);
 
             <div class="inline-flex w-full mb-6">
 
-                <div class="w-1/4">
+                <div class="w-3/4">
 
-                    <Link :href="route('jobs_listen.create')"
+                    <Link v-for="report in reports" :href="route('jobs_reports.index', {
+                        'rid': report.id
+                    })"
                           class="btn btn-outline-primary">
-                        Nuovo Assistito
+                        {{ report.title }}
                     </Link>
-
-                </div>
-                <div class="w-1/4 text-right pr-3">
-
-                    <Link :href="route('jobs_listen.index',
-                            {
-                                'filters': filters.filters === 'no-order-3-months' ? '' : 'no-order-3-months'
-                            }
-                          )"
-                          class="btn btn-outline-info"
-                          :class="{
-                            'btn-info !text-white': filters.filters === 'no-order-3-months'
-                          }" >
-                        filtra no ordini +3 mesi
-                    </Link>
-
-                </div>
-                <div class="w-1/4 pr-3">
-
-                    <Search placeholder="Cerca per numero fascicolo"
-                            route-search="jobs_listen.index"
-                            var-search="number"
-                            :filters="filters" />
 
                 </div>
                 <div class="w-1/4">
@@ -81,7 +61,7 @@ let modalConfirm = ref(props.modalConfirm);
 
             </div>
 
-            Liste report
+            {{ data }}
 
         </ApplicationContainer>
 
