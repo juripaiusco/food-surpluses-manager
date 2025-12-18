@@ -38,9 +38,14 @@ class User extends Controller
             'single' => 'assistito'
         ],
 
-        'jobs' => [
+        'jobs_listen' => [
             'title' => 'Modulo lavoro',
             'single' => 'modulo lavoro'
+        ],
+
+        'jobs_reports' => [
+            'title' => 'M. Lav. Report',
+            'single' => 'modulo lavoro report'
         ],
 
         'jobs_settings' => [

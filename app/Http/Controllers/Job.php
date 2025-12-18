@@ -194,7 +194,7 @@ class Job extends Controller
 
         if (JobDynamicFieldProcessor::exe($request)) {
             $request->session()->flash('flash.error', JobDynamicFieldProcessor::exe($request));
-            return to_route('jobs.create');
+            return to_route('jobs_listen.create');
         }
 
         $saveRedirect = $request['saveRedirect'];
@@ -321,7 +321,7 @@ class Job extends Controller
 
         if (JobDynamicFieldProcessor::exe($request)) {
             $request->session()->flash('flash.error', JobDynamicFieldProcessor::exe($request));
-            return to_route('jobs.edit', ['id' => $id]);
+            return to_route('jobs_listen.edit', ['id' => $id]);
         }
 
         $saveRedirect = $request['saveRedirect'];
@@ -363,6 +363,6 @@ class Job extends Controller
     {
         \App\Models\Customer::destroy($id);
 
-        return to_route('jobs.index');
+        return to_route('jobs_listen.index');
     }
 }

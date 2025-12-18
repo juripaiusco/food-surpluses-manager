@@ -42,7 +42,7 @@ let modalConfirm = ref(props.modalConfirm);
 
                 <div class="w-1/4">
 
-                    <Link :href="route('jobs.create')"
+                    <Link :href="route('jobs_listen.create')"
                           class="btn btn-outline-primary">
                         Nuovo Assistito
                     </Link>
@@ -50,7 +50,7 @@ let modalConfirm = ref(props.modalConfirm);
                 </div>
                 <div class="w-1/4 text-right pr-3">
 
-                    <Link :href="route('jobs.index',
+                    <Link :href="route('jobs_listen.index',
                             {
                                 'filters': filters.filters === 'no-order-3-months' ? '' : 'no-order-3-months'
                             }
@@ -66,7 +66,7 @@ let modalConfirm = ref(props.modalConfirm);
                 <div class="w-1/4 pr-3">
 
                     <Search placeholder="Cerca per numero fascicolo"
-                            route-search="jobs.index"
+                            route-search="jobs_listen.index"
                             var-search="number"
                             :filters="filters" />
 
@@ -74,7 +74,7 @@ let modalConfirm = ref(props.modalConfirm);
                 <div class="w-1/4">
 
                     <Search placeholder="Cerca..."
-                            route-search="jobs.index"
+                            route-search="jobs_listen.index"
                             :filters="filters" />
 
                 </div>
@@ -84,7 +84,7 @@ let modalConfirm = ref(props.modalConfirm);
             <Table class="table-striped"
                    :data="{
                         filters: filters,
-                        routeSearch: 'jobs.index',
+                        routeSearch: 'jobs_listen.index',
                         data: data.data,
                         structure: [{
                             class: 'w-[1%]',
@@ -204,11 +204,11 @@ let modalConfirm = ref(props.modalConfirm);
                         }, {
                             class: 'w-[1%]',
                             btnEdit: true,
-                            route: 'jobs.edit'
+                            route: 'jobs_listen.edit'
                         }, {
                             class: 'w-[1%]',
                             btnDel: true,
-                            route: 'jobs.destroy'
+                            route: 'jobs_listen.destroy'
                         }],
                     }"
                    @openModal="(data, route) => {

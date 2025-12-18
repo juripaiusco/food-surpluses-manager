@@ -9,6 +9,7 @@ use App\Http\Controllers\Order;
 use App\Http\Controllers\Product;
 use App\Http\Controllers\Customer;
 use App\Http\Controllers\Job;
+use App\Http\Controllers\JobReports;
 use App\Http\Controllers\Retail;
 use App\Http\Controllers\Setting;
 use App\Http\Controllers\Report;
@@ -93,12 +94,19 @@ Route::middleware('auth')->group(function () {
     Route::get('/customers/active/{id}', [Customer::class, 'active'])->name('customers.active');
     Route::get('/customers/view_reception/{id}', [Customer::class, 'view_reception'])->name('customers.view_reception');
 
-    Route::get('/jobs', [Job::class, 'index'])->name('jobs.index');
-    Route::get('/jobs/create', [Job::class, 'create'])->name('jobs.create');
-    Route::post('/jobs/store', [Job::class, 'store'])->name('jobs.store');
-    Route::get('/jobs/edit/{id}', [Job::class, 'edit'])->name('jobs.edit');
-    Route::post('/jobs/update/{id}', [Job::class, 'update'])->name('jobs.update');
-    Route::get('/jobs/destroy/{id}', [Job::class, 'destroy'])->name('jobs.destroy');
+    Route::get('/jobs-listen', [Job::class, 'index'])->name('jobs_listen.index');
+    Route::get('/jobs-listen/create', [Job::class, 'create'])->name('jobs_listen.create');
+    Route::post('/jobs-listen/store', [Job::class, 'store'])->name('jobs_listen.store');
+    Route::get('/jobs-listen/edit/{id}', [Job::class, 'edit'])->name('jobs_listen.edit');
+    Route::post('/jobs-listen/update/{id}', [Job::class, 'update'])->name('jobs_listen.update');
+    Route::get('/jobs-listen/destroy/{id}', [Job::class, 'destroy'])->name('jobs_listen.destroy');
+
+    Route::get('/jobs-reports', [JobReports::class, 'index'])->name('jobs_reports.index');
+    Route::get('/jobs-reports/create', [JobReports::class, 'create'])->name('jobs_reports.create');
+    Route::post('/jobs-reports/store', [JobReports::class, 'store'])->name('jobs_reports.store');
+    Route::get('/jobs-reports/edit/{id}', [JobReports::class, 'edit'])->name('jobs_reports.edit');
+    Route::post('/jobs-reports/update/{id}', [JobReports::class, 'update'])->name('jobs_reports.update');
+    Route::get('/jobs-reports/destroy/{id}', [JobReports::class, 'destroy'])->name('jobs_reports.destroy');
 
 
     Route::get('/jobs-settings/sections', [ModJobsSettings::class, 'indexSections'])

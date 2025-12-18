@@ -98,14 +98,14 @@ async function submit() {
     /*if (!await validateHasError()) {
 
         await form.post(route(
-            form.id ? 'jobs.update' : 'jobs.store',
+            form.id ? 'jobs_listen.update' : 'jobs_listen.store',
             form.id ? form.id : ''
         ))
 
     }*/
 
     await form.post(route(
-        form.id ? 'jobs.update' : 'jobs.store',
+        form.id ? 'jobs_listen.update' : 'jobs_listen.store',
         form.id ? form.id : ''
     ))
 }
@@ -284,7 +284,7 @@ async function submit() {
                                        class="form-control mb-4 !border-gray-500"
                                        v-model="form.cod" />
                                 <div class="text-red-500"
-                                     v-if="form.errors.cod">{{ __('jobs.cod.' + form.errors.cod) }}</div>
+                                     v-if="form.errors.cod">{{ __('jobs_listen.cod.' + form.errors.cod) }}</div>
 
                             </div>
                             <div class="col">
