@@ -80,7 +80,7 @@ if (props.reportSchema?.table) {
 
             </div>
 
-            <small>
+            <small v-if="report.id">
                 {{ report.description }}
 
                 <br>
@@ -107,10 +107,6 @@ if (props.reportSchema?.table) {
 
             <!-- <Pagination class="mt-6"
                         :links="data.links" /> -->
-
-            <hr>
-
-            {{ data }}
 
         </ApplicationContainer>
 

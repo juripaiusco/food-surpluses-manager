@@ -54,6 +54,20 @@ class JobReports extends Controller
 //            dd($data->toSql());
 
             $data = $data->get();
+            $data = $data->map(function ($customer) {
+
+                $values = is_array($customer->values)
+                    ? $customer->values
+                    : json_decode($customer->values ?? '{}', true);
+
+                unset($customer->values);
+
+                foreach ($values as $key => $value) {
+                    $customer->{$key} = $value;
+                }
+
+                return $customer;
+            });
 
         }
 
