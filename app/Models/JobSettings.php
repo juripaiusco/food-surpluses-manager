@@ -13,6 +13,7 @@ class JobSettings extends Model
     protected $fillable = [
         'type',
         'title',
+        'description',
         'schema',
         'dynamic',
     ];

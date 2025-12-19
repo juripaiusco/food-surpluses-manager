@@ -65,6 +65,11 @@ function schemaAdd(operator) {
                        class="form-control mb-4"
                        v-model="form.title" />
 
+                <label for="description" class="form-label">Descrizione</label>
+                <textarea name="description"
+                          class="form-control mb-4"
+                          v-model="form.description"></textarea>
+
                 <br>
 
                 <h2 class="text-3xl mb-2">Filtri</h2>

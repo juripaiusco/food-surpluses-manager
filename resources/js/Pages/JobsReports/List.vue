@@ -12,6 +12,7 @@ import {ref} from "vue";
 
 const props = defineProps({
     data: Object,
+    report: Object,
     reports: Object,
     filters: Object,
     modalShow: false,
@@ -60,6 +61,12 @@ let modalConfirm = ref(props.modalConfirm);
                 </div>
 
             </div>
+
+            <small>
+                {{ report.description }}
+            </small>
+
+            <br><br>
 
             {{ data }}
 

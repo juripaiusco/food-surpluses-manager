@@ -15,6 +15,7 @@ class JobReports extends Controller
     public function index()
     {
         $data = [];
+        $report = [];
 
         $reports = JobSettings::query()
             ->where('type', 'report');
@@ -54,6 +55,7 @@ class JobReports extends Controller
 
         return Inertia::render('JobsReports/List', [
             'data' => $data,
+            'report' => $report,
             'reports' => $reports,
             'filters' => request()->all(['number', 's', 'orderby', 'ordertype', 'filters'])
         ]);
