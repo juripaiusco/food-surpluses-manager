@@ -262,7 +262,19 @@ class ModJobsSettings extends Controller
 
     public function updateReports(Request $request, string $id)
     {
+        $redirect = $request->input('redirect');
 
+        $data = \App\Models\JobSettings::find($id);
+
+        $data->fill($request->all());
+
+        $data->save();
+
+        if ($redirect) {
+            return to_route('jobs_settings.reports.index');
+        } else {
+            return Inertia::location(to_route('jobs_settings.reports.edit', $id)->getTargetUrl());
+        }
     }
 
     public function destroyReports(string $id)
