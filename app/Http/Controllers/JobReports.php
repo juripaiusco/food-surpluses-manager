@@ -35,7 +35,7 @@ class JobReports extends Controller
                 );
 
             // Genero la query in base al filtro impostato dallo schema json
-            foreach (json_decode($report->schema, true) as $q) {
+            foreach (json_decode($report->schema, true)['filter'] as $q) {
 
                 $customers = $customers->whereRaw(
                     "JSON_UNQUOTE(JSON_EXTRACT(
@@ -46,8 +46,14 @@ class JobReports extends Controller
 
             }
 
-            $data = $customers->select('customers.*')
-                ->get();
+            $data = $customers->select([
+                'customers.*',
+                'customers_mod_jobs.values',
+            ]);
+
+//            dd($data->toSql());
+
+            $data = $data->get();
 
         }
 
@@ -56,6 +62,7 @@ class JobReports extends Controller
         return Inertia::render('JobsReports/List', [
             'data' => $data,
             'report' => $report,
+            'reportSchema' => isset($report->schema) ? json_decode($report->schema, true) : [],
             'reports' => $reports,
             'filters' => request()->all(['number', 's', 'orderby', 'ordertype', 'filters'])
         ]);

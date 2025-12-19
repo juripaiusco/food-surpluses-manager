@@ -19,13 +19,22 @@ const dataForm = Object.fromEntries(Object.entries(props.data).map((v) => {
 
 const form = useForm(dataForm);
 
-function schemaAdd(operator) {
+function schemaFilterAdd(operator) {
 
-    form.schema.push({
+    form.schema.filter.push({
         add_operator: operator,
         field: '',
         operator: '',
         value: ''
+    });
+
+}
+
+function schemaTableFieldAdd() {
+
+    form.schema.table.push({
+        field: '',
+        title: ''
     });
 
 }
@@ -78,7 +87,7 @@ function schemaAdd(operator) {
 
                 <label>Campo da filtrare</label>
 
-                <div v-for="(schema, index) in form.schema"
+                <div v-for="(schema, index) in form.schema.filter"
                      :key="index"
                      class="mb-4">
 
@@ -86,7 +95,7 @@ function schemaAdd(operator) {
                         <div class="col">
 
                             <select class="form-select"
-                                    v-model="form.schema[index]['field']">
+                                    v-model="form.schema.filter[index]['field']">
                                 <option value="">Seleziona campo</option>
 
                                 <optgroup v-for="section in form.report_fields"
@@ -105,7 +114,7 @@ function schemaAdd(operator) {
                         <div class="col-2">
 
                             <select class="form-select"
-                                    v-model="form.schema[index]['operator']">
+                                    v-model="form.schema.filter[index]['operator']">
                                 <option>Seleziona operatore</option>
                                 <option value="like">contiene</option>
                                 <option value="=">=</option>
@@ -117,15 +126,15 @@ function schemaAdd(operator) {
                         <div class="col-4">
 
                             <input class="form-control"
-                                   v-model="form.schema[index]['value']">
+                                   v-model="form.schema.filter[index]['value']">
 
                         </div>
                         <div class="col-1">
 
                             <button type="button"
                                     class="btn btn-primary w-full"
-                                    v-if="index >= (form.schema.length - 1)"
-                                    @click="schemaAdd('and')">
+                                    v-if="index >= (form.schema.filter.length - 1)"
+                                    @click="schemaFilterAdd('and')">
                                 AND
                             </button>
 
@@ -135,13 +144,63 @@ function schemaAdd(operator) {
 
                             <button type="button"
                                     class="btn btn-primary w-full"
-                                    v-if="index >= (form.schema.length - 1)"
-                                    @click="schemaAdd('or')">
+                                    v-if="index >= (form.schema.filter.length - 1)"
+                                    @click="schemaFilterAdd('or')">
                                 OR
                             </button>
 
                         </div>
 
+                    </div>
+
+                </div>
+
+                <br>
+
+                <h2 class="text-3xl mb-2">Campi da mostrare</h2>
+
+                <br>
+
+                <div v-for="(schema, index) in form.schema.table"
+                     :key="index"
+                     class="mb-4">
+
+                    <div class="row">
+                        <div class="col">
+
+                            <select class="form-select"
+                                    v-model="form.schema.table[index]['field']">
+                                <option value="">Seleziona campo</option>
+
+                                <optgroup v-for="section in form.report_fields"
+                                          :label="section.name" >
+
+                                    <option v-for="field in section.fields"
+                                            :value="field.name">
+                                        {{ field.label }} ({{ field.name }})
+                                    </option>
+
+                                </optgroup>
+
+                            </select>
+
+                        </div>
+                        <div class="col">
+
+                            <input class="form-control"
+                                   v-model="form.schema.table[index]['title']">
+
+                        </div>
+                        <div class="col-1">
+
+                            <button type="button"
+                                    class="btn btn-primary w-full"
+                                    v-if="index >= (form.schema.table.length - 1)"
+                                    @click="schemaTableFieldAdd()">
+                                +
+                            </button>
+
+                        </div>
                     </div>
 
                 </div>

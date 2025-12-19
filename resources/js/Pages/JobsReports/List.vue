@@ -13,6 +13,7 @@ import {ref} from "vue";
 const props = defineProps({
     data: Object,
     report: Object,
+    reportSchema: Object,
     reports: Object,
     filters: Object,
     modalShow: false,
@@ -66,7 +67,15 @@ let modalConfirm = ref(props.modalConfirm);
                 {{ report.description }}
             </small>
 
+            <br>
+
+            Sono stati trovati {{ data?.length }} risultat{{ (data?.length > 1 || data?.length === 0) ? 'i' : 'o' }}
+
             <br><br>
+
+            {{ reportSchema.table }}
+
+            <hr>
 
             {{ data }}
 

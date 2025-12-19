@@ -188,13 +188,36 @@ class ModJobsSettings extends Controller
         ]);
     }
 
-    private function fielsReports()
+    private function fieldsReports()
     {
+        $columns = Schema::getColumnListing('customers');
+
+        $customers_array = array();
+        foreach ($columns as $customers_field) {
+            $customers_array[$customers_field] = null;
+        }
+
+        unset($customers_array['id']);
+        unset($customers_array['deleted_at']);
+        unset($customers_array['created_at']);
+        unset($customers_array['updated_at']);
+
+        foreach ($customers_array as $k => $v) {
+            $report_fields_customer[] = array(
+                'name' => $k,
+                'label' => '',
+            );
+        }
+
         $JobSettings = JobSettings::query()
+            ->where('type', 'section')
             ->orderBy('title')
             ->get();
 
-        $report_fields = [];
+        $report_fields[] = array(
+            'name' => 'Campi default anagrafica',
+            'fields' => $report_fields_customer
+        );
         foreach ($JobSettings as $JobSetting) {
             $report_fields[] = array(
                 'name' => $JobSetting->title,
@@ -222,13 +245,17 @@ class ModJobsSettings extends Controller
 
         $data = json_decode(json_encode($data_array), true);
 
-        $data['schema'][] = array(
+        $data['schema']['filter'][] = array(
             'field' => '',
             'operator' => '',
             'value' => '',
         );
+        $data['schema']['table'][] = array(
+            'field' => '',
+            'title' => '',
+        );
         $data['type'] = 'report';
-        $data['report_fields'] = $this->fielsReports();
+        $data['report_fields'] = $this->fieldsReports();
 
         return Inertia::render('JobsSettings/Reports/Form', [
             'data' => $data
@@ -253,7 +280,7 @@ class ModJobsSettings extends Controller
         $data = \App\Models\JobSettings::find($id);
 
         $data['schema'] = json_decode($data['schema'], true);
-        $data['report_fields'] = $this->fielsReports();
+        $data['report_fields'] = $this->fieldsReports();
 
         return Inertia::render('JobsSettings/Reports/Form', [
             'data' => $data
