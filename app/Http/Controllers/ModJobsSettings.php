@@ -279,7 +279,9 @@ class ModJobsSettings extends Controller
 
     public function destroyReports(string $id)
     {
+        \App\Models\JobSettings::destroy($id);
 
+        return to_route('jobs_settings.reports.index');
     }
 
     public function extractNameAndLabel(array $array, array &$result = []): array
