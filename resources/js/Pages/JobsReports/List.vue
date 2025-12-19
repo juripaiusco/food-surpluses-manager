@@ -24,6 +24,23 @@ const props = defineProps({
 let modalShow = ref(props.modalShow);
 let modalData = ref(props.modalData);
 let modalConfirm = ref(props.modalConfirm);
+let structureTable = props.reportSchema.table;
+
+if (props.reportSchema?.table) {
+
+    for(let i = 0; i < structureTable.length; i++) {
+
+        structureTable[i].class = 'text-left';
+
+    }
+
+    structureTable[structureTable.length] = {
+        class: 'w-[1%]',
+        btnEdit: true,
+        route: 'jobs_listen.edit'
+    };
+
+}
 
 </script>
 
@@ -65,15 +82,31 @@ let modalConfirm = ref(props.modalConfirm);
 
             <small>
                 {{ report.description }}
+
+                <br>
+
+                <strong>
+                    Sono stati trovati {{ data?.length }} risultat{{ (data?.length > 1 || data?.length === 0) ? 'i' : 'o' }}
+                </strong>
             </small>
-
-            <br>
-
-            Sono stati trovati {{ data?.length }} risultat{{ (data?.length > 1 || data?.length === 0) ? 'i' : 'o' }}
 
             <br><br>
 
-            {{ reportSchema.table }}
+            <Table class="table-striped"
+                   :data="{
+                        filters: filters,
+                        routeSearch: 'jobs_settings.reports.index',
+                        data: data,
+                        structure: structureTable,
+                    }"
+                   @openModal="(data, route) => {
+                       modalData = data;
+                       modalConfirm = route;
+                       modalShow = true;
+                   }" />
+
+            <!-- <Pagination class="mt-6"
+                        :links="data.links" /> -->
 
             <hr>
 
