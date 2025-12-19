@@ -33,31 +33,39 @@ watch(
 );
 
 function markRequiredFields(nodeArray, values) {
+    if (!Array.isArray(nodeArray)) {
+        return false;
+    }
+
     let sectionHasError = false;
 
     nodeArray.forEach(node => {
-        // Se è un campo con validation
         if (node.validation && node.validation.includes('required')) {
             const value = values[node.name];
             const currentInputClass = node.classes?.input || '';
             const errorClass = '!border !border-red-500';
 
-            if (!value || (typeof value === 'string' && value.trim() === '') || (Array.isArray(value) && value.length === 0)) {
+            if (
+                value === undefined ||
+                value === null ||
+                (typeof value === 'string' && value.trim() === '') ||
+                (Array.isArray(value) && value.length === 0)
+            ) {
                 sectionHasError = true;
-                // Aggiunge la classe errore se non presente
-                if (!currentInputClass.includes(errorClass)) {
-                    node.classes.input = `${currentInputClass} ${errorClass}`.trim();
-                }
+
+                node.classes = node.classes || {};
+                node.classes.input = `${currentInputClass} ${errorClass}`.trim();
             } else {
-                // Rimuove classe errore se il campo è compilato
+                node.classes = node.classes || {};
                 node.classes.input = currentInputClass.replace(errorClass, '').trim();
             }
         }
 
-        // Se ha children, richiamo ricorsivamente senza sostituire l’oggetto
-        if (node.children && Array.isArray(node.children)) {
-            const childHasError = markRequiredFields(node.children, values);
-            if (childHasError) sectionHasError = true;
+        // Ricorsione sicura
+        if (Array.isArray(node.children)) {
+            if (markRequiredFields(node.children, values)) {
+                sectionHasError = true;
+            }
         }
     });
 
