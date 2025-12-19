@@ -34,7 +34,7 @@ function schemaTableFieldAdd() {
 
     form.schema.table.push({
         field: '',
-        title: ''
+        label: ''
     });
 
 }
@@ -188,7 +188,7 @@ function schemaTableFieldAdd() {
                         <div class="col">
 
                             <input class="form-control"
-                                   v-model="form.schema.table[index]['title']">
+                                   v-model="form.schema.table[index]['label']">
 
                         </div>
                         <div class="col-1">

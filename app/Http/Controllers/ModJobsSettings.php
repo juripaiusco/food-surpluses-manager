@@ -252,7 +252,7 @@ class ModJobsSettings extends Controller
         );
         $data['schema']['table'][] = array(
             'field' => '',
-            'title' => '',
+            'label' => '',
         );
         $data['type'] = 'report';
         $data['report_fields'] = $this->fieldsReports();
