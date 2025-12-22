@@ -146,7 +146,7 @@ async function submit() {
                 <ul class="nav nav-tabs" id="customerTab" role="tablist">
                     <li class="nav-item" role="presentation">
 
-                        <button class="nav-link active w-[140px]"
+                        <button class="nav-link active w-[240px]"
                                 id="anagrafica-tab"
                                 data-bs-toggle="tab"
                                 data-bs-target="#anagrafica"
@@ -154,13 +154,13 @@ async function submit() {
                                 role="tab"
                                 aria-controls="anagrafica-tab"
                                 aria-selected="true" >
-                            Anagrafica
+                            Anagrafica reception
                         </button>
 
                     </li>
                     <li class="nav-item" role="presentation">
 
-                        <button class="nav-link w-[140px]"
+                        <button class="nav-link w-[240px]"
                                 id="note-tab"
                                 data-bs-toggle="tab"
                                 data-bs-target="#note"
@@ -177,7 +177,7 @@ async function submit() {
                     </li>
                     <li class="nav-item" role="presentation">
 
-                        <button class="nav-link w-[140px]"
+                        <button class="nav-link w-[240px]"
                                 id="more-tab"
                                 data-bs-toggle="tab"
                                 data-bs-target="#more"
@@ -236,7 +236,7 @@ async function submit() {
                         <div class="row">
                             <div class="col-7">
 
-                                <label for="address" class="form-label">Indirizzo</label>
+                                <label for="address" class="form-label">Indirizzo residenza</label>
                                 <input name="address"
                                        type="text"
                                        class="form-control mb-4"
