@@ -248,11 +248,16 @@ class Job extends Controller
 
         $data->saveRedirect = Redirect::back()->getTargetUrl();
 
-        $job_settings = \App\Models\JobSettings::query()->orderBy('title')->get();
+        $job_settings = \App\Models\JobSettings::query()
+            ->where('type', 'section')
+            ->orderBy('title')
+            ->get();
         $mod_jobs_schema_model = json_decode(json_encode($job_settings), true);
         $data->customers_mod_jobs_schema = $mod_jobs_schema_model;
 
-        $customer_mod_jobs = CustomerModJob::query()->where('customer_id', $id)->first();
+        $customer_mod_jobs = CustomerModJob::query()
+            ->where('customer_id', $id)
+            ->first();
         $data->customers_mod_jobs_values = [];
         if ($customer_mod_jobs != null) {
 
