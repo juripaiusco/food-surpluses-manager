@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\CustomerModJob;
-use App\Services\FormSchemaMerger;
 use App\Services\JobDynamicFieldProcessor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class Job extends Controller
@@ -18,6 +18,8 @@ class Job extends Controller
      */
     public function index()
     {
+        $this->import_excel();
+
         $request_validate_array = [
             'cod',
             'number',
@@ -142,6 +144,229 @@ class Job extends Controller
             'data' => $data,
             'filters' => request()->all(['number', 's', 'orderby', 'ordertype', 'filters'])
         ]);
+    }
+
+    public function import_excel()
+    {
+        $path = Storage::disk('public')->path('assistiti.xlsx');
+        $data = \Maatwebsite\Excel\Facades\Excel::toArray([], $path);
+
+        /*
+              21 => "ALLEGATO    1"
+              22 => "HUB INCLUSIONE"
+              23 => "PRIVACY EMPORIO"
+              24 => "ASSOCIAZIONE"
+              25 => "NOTE"
+              26 => "GIORNO"
+              27 => "MESE"
+              28 => "ANNO (fiscale)"
+              29 => "ANNO NASCITA CORRETTO"
+              30 => "DATA"
+              31 => "ETA'"
+         */
+        $array_field = [
+            null,
+            [
+                'field' => 'mod_jobs_gruppo',
+                'pre' => 'Gruppo '
+            ], [
+                'field' => 'number',
+                'type' => 'database',
+            ], [
+                'field' => 'active',
+                'type' => 'database',
+            ], [
+                'field' => 'cognome_nome',
+                'type' => 'database',
+            ], [
+                'field' => 'mod_jobs_anagrafica_cf',
+            ], [
+                'field' => 'mod_jobs_anagrafica_assistente_sociale_tel',
+            ], [
+                'field' => 'mod_jobs_anagrafica_domicilio_comune',
+            ], [
+                'field' => 'family_number',
+                'type' => 'database',
+            ],
+            null,
+            [
+                'field' => 'cod',
+                'type' => 'database',
+            ],
+            null,
+            null,
+            null,
+            [
+                'field' => 'mod_jobs_altri_note_personali_note',
+                'father' => 'mod_jobs_altri_note_personali'
+            ], [
+                'field' => 'mod_jobs_isee_allegato_15',
+                'father' => 'mod_jobs_isee',
+                'field_type' => 'bool'
+            ],
+            null,
+            null,
+            null,
+            null,
+            null,
+            [
+                'field' => 'mod_jobs_doc_allegato1',
+                'field_type' => 'bool'
+            ],
+            null,
+            [
+                'field' => 'mod_jobs_doc_privacy',
+                'field_type' => 'bool'
+            ]
+        ];
+
+        /*
+         {
+            "mod_jobs_isee":[],
+            "mod_jobs_famiglia_comp":[],
+            "mod_jobs_altri_note_personali":{
+                "mod_jobs_altri_note_personali_note":"test"
+            },
+            "mod_jobs_altri_note_personali_1":{
+                "mod_jobs_altri_note_personali_note":"test2"
+            }
+            "mod_jobs_altri_segnalazioni":[]
+         }
+         */
+
+        $c = 0;
+        $array_values = [];
+
+        // Predispongo il dato
+        foreach (array_slice($data[0], 1) as $d) {
+
+            foreach ($array_field as $k => $field_options) {
+
+                if (isset($d[$k]) && isset($field_options)) {
+
+                    if (!isset($field_options['type'])) {
+
+                        $array_values[$c]['json'][$field_options['field']] = $d[$k];
+
+                        if (isset($field_options['field_type']) && $field_options['field_type'] == 'bool' && $d[$k] == 'SI') {
+                            $array_values[$c]['json'][$field_options['field']] = 'yes';
+                        }
+
+                        if (isset($field_options['pre'])) {
+                            $array_values[$c]['json'][$field_options['field']] = $field_options['pre'] . $d[$k];
+                        }
+
+                        if (isset($field_options['father'])) {
+                            unset($array_values[$c]['json'][$field_options['field']]);
+                            $array_values[$c]['json'][$field_options['father']][$field_options['field']] = $d[$k];
+
+                            if (isset($field_options['field_type']) && $field_options['field_type'] == 'bool' && $d[$k] == 'SI') {
+                                $array_values[$c]['json'][$field_options['father']][$field_options['field']] = 'yes';
+                            }
+                        }
+
+                    } else if ($field_options['type'] == 'database') {
+
+                        $array_values[$c]['db'][$field_options['field']] = $d[$k];
+                    }
+                }
+            }
+
+            $c++;
+        }
+
+        foreach ($array_values as $k => $v) {
+
+            // Inserimento capifamiglia
+            if ($k == 0 &&
+                isset($v['db']['cod']) &&
+                isset($v['db']['number'])) {
+
+                $customer = \App\Models\Customer::query();
+                $customer = $customer->where('cod', $v['db']['cod']);
+                $customer = $customer->where('number', $v['db']['number']);
+                $customer = $customer->first();
+
+                $customer_mod_jobs = CustomerModJob::query()
+                    ->where('customer_id', $customer->id)
+                    ->first();
+
+                if (!$customer_mod_jobs) {
+                    $customer_mod_jobs = new CustomerModJob();
+                    $customer_mod_jobs->customer_id = $customer->id;
+                }
+
+                $customer_mod_jobs->values = $v['json'];
+//                $customer_mod_jobs->save();
+
+            }
+
+            // Inserimento componenti
+            if (($k == 1 || $k == 2) &&
+                !isset($v['db']['cod']) &&
+                isset($v['db']['number'])) {
+
+                $customer = \App\Models\Customer::query();
+                $customer = $customer->where('number', $v['db']['number']);
+                $customer = $customer->first();
+
+                $customer_mod_jobs = CustomerModJob::query()
+                    ->where('customer_id', $customer->id)
+                    ->first();
+
+                if (!$customer_mod_jobs) {
+                    $customer_mod_jobs = new CustomerModJob();
+                    $customer_mod_jobs->customer_id = $customer->id;
+                }
+
+                // Separazione Nome e Cognome
+                $array_cognome_nome = explode(' ', $v['db']['cognome_nome']);
+                $nome = implode(array_splice($array_cognome_nome, -1));
+                $cognome = end($array_cognome_nome);
+
+                // Prendo i valori e aggiungo il componente famiglia
+                $json_values = $customer_mod_jobs->values;
+
+
+                // - - - - -
+                $baseKey = 'mod_jobs_famiglia_comp';
+
+                if (!array_key_exists($baseKey, $json_values)) {
+
+                    $json_values[$baseKey] = [
+                        'mod_jobs_famiglia_comp_nome' => $nome,
+                        'mod_jobs_famiglia_comp_cognome' => $cognome,
+                        'mod_jobs_famiglia_comp_cf' => $v['json']['mod_jobs_anagrafica_cf'],
+                    ];
+
+                } else {
+
+                    $maxIndex = 0;
+
+                    foreach ($json_values as $key => $value) {
+                        if (preg_match('/^' . $baseKey . '_(\d+)$/', $key, $matches)) {
+                            $index = (int) $matches[1];
+                            if ($index > $maxIndex) {
+                                $maxIndex = $index;
+                            }
+                        }
+                    }
+
+                    $nextIndex = $maxIndex + 1;
+
+                    $json_values["{$baseKey}_{$nextIndex}"] = [
+                        'mod_jobs_famiglia_comp_nome' => $nome,
+                        'mod_jobs_famiglia_comp_cognome' => $cognome,
+                        'mod_jobs_famiglia_comp_cf' => $v['json']['mod_jobs_anagrafica_cf'],
+                    ];
+                }
+                // - - - - -
+
+                $customer_mod_jobs->values = $json_values;
+//                $customer_mod_jobs->save();
+
+            }
+        }
     }
 
     /**
