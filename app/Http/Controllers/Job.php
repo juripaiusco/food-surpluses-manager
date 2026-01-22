@@ -329,36 +329,39 @@ class Job extends Controller
 
 
                 // - - - - -
-                $baseKey = 'mod_jobs_famiglia_comp';
+                if ($json_values) {
 
-                if (!array_key_exists($baseKey, $json_values)) {
+                    $baseKey = 'mod_jobs_famiglia_comp';
 
-                    $json_values[$baseKey] = [
-                        'mod_jobs_famiglia_comp_nome' => $nome,
-                        'mod_jobs_famiglia_comp_cognome' => $cognome,
-                        'mod_jobs_famiglia_comp_cf' => $v['json']['mod_jobs_anagrafica_cf'],
-                    ];
+                    if (!array_key_exists($baseKey, $json_values)) {
 
-                } else {
+                        $json_values[$baseKey] = [
+                            'mod_jobs_famiglia_comp_nome' => $nome,
+                            'mod_jobs_famiglia_comp_cognome' => $cognome,
+                            'mod_jobs_famiglia_comp_cf' => $v['json']['mod_jobs_anagrafica_cf'],
+                        ];
 
-                    $maxIndex = 0;
+                    } else {
 
-                    foreach ($json_values as $key => $value) {
-                        if (preg_match('/^' . $baseKey . '_(\d+)$/', $key, $matches)) {
-                            $index = (int) $matches[1];
-                            if ($index > $maxIndex) {
-                                $maxIndex = $index;
+                        $maxIndex = 0;
+
+                        foreach ($json_values as $key => $value) {
+                            if (preg_match('/^' . $baseKey . '_(\d+)$/', $key, $matches)) {
+                                $index = (int) $matches[1];
+                                if ($index > $maxIndex) {
+                                    $maxIndex = $index;
+                                }
                             }
                         }
+
+                        $nextIndex = $maxIndex + 1;
+
+                        $json_values["{$baseKey}_{$nextIndex}"] = [
+                            'mod_jobs_famiglia_comp_nome' => $nome,
+                            'mod_jobs_famiglia_comp_cognome' => $cognome,
+                            'mod_jobs_famiglia_comp_cf' => $v['json']['mod_jobs_anagrafica_cf'],
+                        ];
                     }
-
-                    $nextIndex = $maxIndex + 1;
-
-                    $json_values["{$baseKey}_{$nextIndex}"] = [
-                        'mod_jobs_famiglia_comp_nome' => $nome,
-                        'mod_jobs_famiglia_comp_cognome' => $cognome,
-                        'mod_jobs_famiglia_comp_cf' => $v['json']['mod_jobs_anagrafica_cf'],
-                    ];
                 }
                 // - - - - -
 
@@ -507,6 +510,7 @@ class Job extends Controller
 
             if ($customer_mod_jobs->values) {
                 $data->customers_mod_jobs_values = $customer_mod_jobs->values;
+//                $data->customers_mod_jobs_schema = $customer_mod_jobs->schema;
             } else {
                 $data->customers_mod_jobs_values = $this->extractNames(
                     json_decode($data->customers_mod_jobs_schema, true)
