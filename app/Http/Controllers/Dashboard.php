@@ -105,7 +105,7 @@ class Dashboard extends Controller
             $people_count = 0;
             $people_count_array = array();
             foreach ($order_last_day_data as $order) {
-                if (!isset($people_count_array[$order->customer->id])) {
+                if (isset($order->customer->id) && !isset($people_count_array[$order->customer->id])) {
                     $people_count_array[$order->customer->id] = $order->customer->family_number;
                     $people_count += $people_count_array[$order->customer->id];
                 }
