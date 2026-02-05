@@ -148,6 +148,8 @@ class Job extends Controller
 
     public function import_excel()
     {
+        $import_data = true;
+
         $path = Storage::disk('public')->path('assistiti.xlsx');
         $data = \Maatwebsite\Excel\Facades\Excel::toArray([], $path);
 
@@ -275,11 +277,12 @@ class Job extends Controller
             $c++;
         }
 
+        $jobs_schema = \App\Models\JobSettings::query()->orderBy('title')->get();
+
         foreach ($array_values as $k => $v) {
 
             // Inserimento capifamiglia
-            if ($k == 0 &&
-                isset($v['db']['cod']) &&
+            if (isset($v['db']['cod']) &&
                 isset($v['db']['number'])) {
 
                 $customer = \App\Models\Customer::query();
@@ -287,87 +290,98 @@ class Job extends Controller
                 $customer = $customer->where('number', $v['db']['number']);
                 $customer = $customer->first();
 
-                $customer_mod_jobs = CustomerModJob::query()
-                    ->where('customer_id', $customer->id)
-                    ->first();
+                if ($customer) {
 
-                if (!$customer_mod_jobs) {
-                    $customer_mod_jobs = new CustomerModJob();
-                    $customer_mod_jobs->customer_id = $customer->id;
+                    $customer_mod_jobs = CustomerModJob::query()
+                        ->where('customer_id', $customer->id)
+                        ->first();
+
+                    if (!$customer_mod_jobs) {
+                        $customer_mod_jobs = new CustomerModJob();
+                        $customer_mod_jobs->customer_id = $customer->id;
+                    }
+
+//                $customer_mod_jobs->schema = $jobs_schema;
+                    $customer_mod_jobs->values = $v['json'];
+
+                    if ($import_data) {
+                        $customer_mod_jobs->save();
+                    }
                 }
-
-                $customer_mod_jobs->values = $v['json'];
-//                $customer_mod_jobs->save();
 
             }
 
             // Inserimento componenti
-            if (($k == 1 || $k == 2) &&
-                !isset($v['db']['cod']) &&
+            if (!isset($v['db']['cod']) &&
                 isset($v['db']['number'])) {
 
                 $customer = \App\Models\Customer::query();
                 $customer = $customer->where('number', $v['db']['number']);
                 $customer = $customer->first();
 
-                $customer_mod_jobs = CustomerModJob::query()
-                    ->where('customer_id', $customer->id)
-                    ->first();
+                if ($customer) {
 
-                if (!$customer_mod_jobs) {
-                    $customer_mod_jobs = new CustomerModJob();
-                    $customer_mod_jobs->customer_id = $customer->id;
-                }
+                    $customer_mod_jobs = CustomerModJob::query()
+                        ->where('customer_id', $customer->id)
+                        ->first();
 
-                // Separazione Nome e Cognome
-                $array_cognome_nome = explode(' ', $v['db']['cognome_nome']);
-                $nome = implode(array_splice($array_cognome_nome, -1));
-                $cognome = end($array_cognome_nome);
+                    if (!$customer_mod_jobs) {
+                        $customer_mod_jobs = new CustomerModJob();
+                        $customer_mod_jobs->customer_id = $customer->id;
+                    }
 
-                // Prendo i valori e aggiungo il componente famiglia
-                $json_values = $customer_mod_jobs->values;
+                    // Separazione Nome e Cognome
+                    $array_cognome_nome = explode(' ', $v['db']['cognome_nome']);
+                    $nome = implode(array_splice($array_cognome_nome, -1));
+                    $cognome = end($array_cognome_nome);
+
+                    // Prendo i valori e aggiungo il componente famiglia
+                    $json_values = $customer_mod_jobs->values;
 
 
-                // - - - - -
-                if ($json_values) {
+                    // - - - - -
+                    if ($json_values) {
 
-                    $baseKey = 'mod_jobs_famiglia_comp';
+                        $baseKey = 'mod_jobs_famiglia_comp';
 
-                    if (!array_key_exists($baseKey, $json_values)) {
+                        if (!array_key_exists($baseKey, $json_values)) {
 
-                        $json_values[$baseKey] = [
-                            'mod_jobs_famiglia_comp_nome' => $nome,
-                            'mod_jobs_famiglia_comp_cognome' => $cognome,
-                            'mod_jobs_famiglia_comp_cf' => $v['json']['mod_jobs_anagrafica_cf'],
-                        ];
+                            $json_values[$baseKey] = [
+                                'mod_jobs_famiglia_comp_nome' => $nome,
+                                'mod_jobs_famiglia_comp_cognome' => $cognome,
+                                'mod_jobs_famiglia_comp_cf' => $v['json']['mod_jobs_anagrafica_cf'] ?? '',
+                            ];
 
-                    } else {
+                        } else {
 
-                        $maxIndex = 0;
+                            $maxIndex = 0;
 
-                        foreach ($json_values as $key => $value) {
-                            if (preg_match('/^' . $baseKey . '_(\d+)$/', $key, $matches)) {
-                                $index = (int) $matches[1];
-                                if ($index > $maxIndex) {
-                                    $maxIndex = $index;
+                            foreach ($json_values as $key => $value) {
+                                if (preg_match('/^' . $baseKey . '_(\d+)$/', $key, $matches)) {
+                                    $index = (int) $matches[1];
+                                    if ($index > $maxIndex) {
+                                        $maxIndex = $index;
+                                    }
                                 }
                             }
+
+                            $nextIndex = $maxIndex + 1;
+
+                            $json_values["{$baseKey}_{$nextIndex}"] = [
+                                'mod_jobs_famiglia_comp_nome' => $nome,
+                                'mod_jobs_famiglia_comp_cognome' => $cognome,
+                                'mod_jobs_famiglia_comp_cf' => $v['json']['mod_jobs_anagrafica_cf'] ?? '',
+                            ];
                         }
+                    }
+                    // - - - - -
 
-                        $nextIndex = $maxIndex + 1;
+                    $customer_mod_jobs->values = $json_values;
 
-                        $json_values["{$baseKey}_{$nextIndex}"] = [
-                            'mod_jobs_famiglia_comp_nome' => $nome,
-                            'mod_jobs_famiglia_comp_cognome' => $cognome,
-                            'mod_jobs_famiglia_comp_cf' => $v['json']['mod_jobs_anagrafica_cf'],
-                        ];
+                    if ($import_data) {
+                        $customer_mod_jobs->save();
                     }
                 }
-                // - - - - -
-
-                $customer_mod_jobs->values = $json_values;
-//                $customer_mod_jobs->save();
-
             }
         }
     }
@@ -510,6 +524,40 @@ class Job extends Controller
 
             if ($customer_mod_jobs->values) {
                 $data->customers_mod_jobs_values = $customer_mod_jobs->values;
+                $customers_mod_jobs_schema = $data->customers_mod_jobs_schema;
+                foreach ($data->customers_mod_jobs_schema as $schema) {
+                    if ($schema['dynamic']) {
+
+                        // Recupero il nome dei gruppi delle sezioni dinamiche
+                        $schema_id = $schema['id'];
+                        $schema_dynamic_name = json_decode($schema['schema'], true)[0]['name'];
+
+                        // Conto quanti gruppi dinamici ci sono nei dati
+                        $c = 0;
+                        foreach (array_keys($data->customers_mod_jobs_values) as $key_name) {
+                            if (substr($key_name, 0, strlen($schema_dynamic_name)) === $schema_dynamic_name) {
+                                $c++;
+                            }
+                        }
+
+                        // Creo lo schema corretto in base al numero
+                        foreach ($customers_mod_jobs_schema as $k => $schema_to_edit) {
+                            if ($schema_to_edit['id'] == $schema_id) {
+                                $schema_array = json_decode($schema_to_edit['schema'], true);
+
+                                for ($i = 1; $i < $c; $i++) {
+                                    $schema_array[$i] = $schema_array[0];
+                                    $schema_array[$i]['name'] = $schema_array[0]['name'] . '_' . $i;
+                                    $schema_array[$i]['_id'] = uniqid();
+                                }
+
+                                $customers_mod_jobs_schema[$k]['schema'] = json_encode($schema_array);
+                            }
+                        }
+                    }
+                }
+
+                $data->customers_mod_jobs_schema = $customers_mod_jobs_schema;
 //                $data->customers_mod_jobs_schema = $customer_mod_jobs->schema;
             } else {
                 $data->customers_mod_jobs_values = $this->extractNames(
