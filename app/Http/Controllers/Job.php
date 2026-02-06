@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
+use function PHPUnit\Framework\isNull;
 
 class Job extends Controller
 {
@@ -305,6 +306,11 @@ class Job extends Controller
                     $customer_mod_jobs->values = $v['json'];
 
                     if ($import_data) {
+
+                        /*if (isNull($customer_mod_jobs->values)) {
+                            dd($customer_mod_jobs->values);
+                        }*/
+
                         $customer_mod_jobs->save();
                     }
                 }
@@ -312,7 +318,8 @@ class Job extends Controller
             }
 
             // Inserimento componenti
-            if (!isset($v['db']['cod']) &&
+            if ((isset($v['db']['cognome_nome']) && $v['db']['cognome_nome'] != '') &&
+                !isset($v['db']['cod']) &&
                 isset($v['db']['number'])) {
 
                 $customer = \App\Models\Customer::query();
@@ -331,7 +338,14 @@ class Job extends Controller
                     }
 
                     // Separazione Nome e Cognome
-                    $array_cognome_nome = explode(' ', $v['db']['cognome_nome']);
+                    try {
+                        $array_cognome_nome = explode(' ', $v['db']['cognome_nome']);
+
+                    } catch (\Exception $e) {
+                        dd($v['db']);
+                        echo $e->getMessage();
+                    }
+
                     $nome = implode(array_splice($array_cognome_nome, -1));
                     $cognome = end($array_cognome_nome);
 
