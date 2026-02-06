@@ -281,8 +281,6 @@ class Job extends Controller
                 $c++;
             }
 
-            $jobs_schema = \App\Models\JobSettings::query()->orderBy('title')->get();
-
             foreach ($array_values as $k => $v) {
 
                 // Inserimento capifamiglia
@@ -305,14 +303,9 @@ class Job extends Controller
                             $customer_mod_jobs->customer_id = $customer->id;
                         }
 
-//                $customer_mod_jobs->schema = $jobs_schema;
                         $customer_mod_jobs->values = $v['json'];
 
                         if ($import_data) {
-
-                            /*if (isNull($customer_mod_jobs->values)) {
-                                dd($customer_mod_jobs->values);
-                            }*/
 
                             $customer_mod_jobs->save();
                         }
