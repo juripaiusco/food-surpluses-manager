@@ -331,72 +331,72 @@ class Job extends Controller
                         if (!$customer_mod_jobs) {
                             $customer_mod_jobs = new CustomerModJob();
                             $customer_mod_jobs->customer_id = $customer->id;
+                        }
 
-                            // Separazione Nome e Cognome
-                            try {
-                                $array_cognome_nome = explode(' ', $v['db']['cognome_nome']);
+                        // Separazione Nome e Cognome
+                        try {
+                            $array_cognome_nome = explode(' ', $v['db']['cognome_nome']);
 
-                            } catch (\Exception $e) {
-                                dd($v['db']);
-                                echo $e->getMessage();
-                            }
+                        } catch (\Exception $e) {
+                            dd($v['db']);
+                            echo $e->getMessage();
+                        }
 
-                            $nome = implode(array_splice($array_cognome_nome, -1));
+                        $nome = implode(array_splice($array_cognome_nome, -1));
 //                        $nome = $array_cognome_nome[1];
-                            $cognome = end($array_cognome_nome);
+                        $cognome = end($array_cognome_nome);
 //                        $cognome = $array_cognome_nome[0];
 
-                            /*if (count($array_cognome_nome) == 1 && $customer->id == 573) {
-    //                            dd($v['db']['cognome_nome']);
-                                $cognome = $array_cognome_nome[count($array_cognome_nome) - 2];
-                            }*/
+                        /*if (count($array_cognome_nome) == 1 && $customer->id == 573) {
+//                            dd($v['db']['cognome_nome']);
+                            $cognome = $array_cognome_nome[count($array_cognome_nome) - 2];
+                        }*/
 
-                            // Prendo i valori e aggiungo il componente famiglia
-                            $json_values = $customer_mod_jobs->values;
+                        // Prendo i valori e aggiungo il componente famiglia
+                        $json_values = $customer_mod_jobs->values;
 
 
-                            // - - - - -
-                            if ($json_values) {
+                        // - - - - -
+                        if ($json_values) {
 
-                                $baseKey = 'mod_jobs_famiglia_comp';
+                            $baseKey = 'mod_jobs_famiglia_comp';
 
-                                if (!array_key_exists($baseKey, $json_values)) {
+                            if (!array_key_exists($baseKey, $json_values)) {
 
-                                    $json_values[$baseKey] = [
-                                        'mod_jobs_famiglia_comp_nome' => $nome,
-                                        'mod_jobs_famiglia_comp_cognome' => $cognome,
-                                        'mod_jobs_famiglia_comp_cf' => $v['json']['mod_jobs_anagrafica_cf'] ?? '',
-                                    ];
+                                $json_values[$baseKey] = [
+                                    'mod_jobs_famiglia_comp_nome' => $nome,
+                                    'mod_jobs_famiglia_comp_cognome' => $cognome,
+                                    'mod_jobs_famiglia_comp_cf' => $v['json']['mod_jobs_anagrafica_cf'] ?? '',
+                                ];
 
-                                } else {
+                            } else {
 
-                                    $maxIndex = 0;
+                                $maxIndex = 0;
 
-                                    foreach ($json_values as $key => $value) {
-                                        if (preg_match('/^' . $baseKey . '_(\d+)$/', $key, $matches)) {
-                                            $index = (int) $matches[1];
-                                            if ($index > $maxIndex) {
-                                                $maxIndex = $index;
-                                            }
+                                foreach ($json_values as $key => $value) {
+                                    if (preg_match('/^' . $baseKey . '_(\d+)$/', $key, $matches)) {
+                                        $index = (int) $matches[1];
+                                        if ($index > $maxIndex) {
+                                            $maxIndex = $index;
                                         }
                                     }
-
-                                    $nextIndex = $maxIndex + 1;
-
-                                    $json_values["{$baseKey}_{$nextIndex}"] = [
-                                        'mod_jobs_famiglia_comp_nome' => $nome,
-                                        'mod_jobs_famiglia_comp_cognome' => $cognome,
-                                        'mod_jobs_famiglia_comp_cf' => $v['json']['mod_jobs_anagrafica_cf'] ?? '',
-                                    ];
                                 }
-                            }
-                            // - - - - -
 
-                            $customer_mod_jobs->values = $json_values;
+                                $nextIndex = $maxIndex + 1;
 
-                            if ($import_data) {
-                                $customer_mod_jobs->save();
+                                $json_values["{$baseKey}_{$nextIndex}"] = [
+                                    'mod_jobs_famiglia_comp_nome' => $nome,
+                                    'mod_jobs_famiglia_comp_cognome' => $cognome,
+                                    'mod_jobs_famiglia_comp_cf' => $v['json']['mod_jobs_anagrafica_cf'] ?? '',
+                                ];
                             }
+                        }
+                        // - - - - -
+
+                        $customer_mod_jobs->values = $json_values;
+
+                        if ($import_data) {
+                            $customer_mod_jobs->save();
                         }
                     }
                 }
