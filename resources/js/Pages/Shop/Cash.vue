@@ -83,6 +83,13 @@ function productSelectReset (refToReset) {
 
         <ApplicationContainer class="!max-w-[calc(100%-60px)]">
 
+            <div v-if="usePage().props.errors.points"
+                 class="alert alert-danger text-center !p-6 !border-[10px] !mb-10">
+                <span class="text-3xl font-semibold">{{ usePage().props.errors.points }}</span>
+                <br>
+                Per continuare togliere articoli dal carrello.
+            </div>
+
             <form v-if="!data.customer.id || data.customer.active !== 1 || data.customer.view_reception !== 1">
 
                 <div class="w-1/2 m-auto">
@@ -127,9 +134,18 @@ function productSelectReset (refToReset) {
 
                 <div v-if="params.points_count <= 100">
 
-                    <div class="alert alert-warning text-center text-3xl !p-6 animate-bounce !border-[10px]">
+                    <div class="alert text-center text-3xl !p-6 animate-bounce !border-[10px]"
+                         :class="{
+                            'alert-warning': params.points_count >= 0,
+                            'alert-danger': params.points_count < 0
+                         }">
 
-                        L'assistito dispone ancora di <span class="font-bold">{{ params.points_count }}</span> punti
+                        <span v-if="params.points_count >= 0">
+                            L'assistito dispone ancora di <span class="font-bold">{{ params.points_count }}</span> punti
+                        </span>
+                        <span v-else>
+                            L'assistito ha terminato i punti
+                        </span>
 
                     </div>
 

@@ -309,6 +309,10 @@ class Shop extends Controller
      */
     public function store(Request $request)
     {
+        if ($response = $this->ctrl_points($request)) {
+            return $response;
+        }
+
         // Raggruppo i prodotti, così da scalare in una sola volta
         // gli stessi prodotti
         $array_group = array();
@@ -449,6 +453,32 @@ class Shop extends Controller
         $customer->save();
 
         return Inertia::location(to_route('shop.index')->getTargetUrl());
+    }
+
+    public function ctrl_points(Request $request)
+    {
+        $customer = \App\Models\Customer::find($request->input('customer_id'));
+
+        if ($this->points_order_count($request) > $customer->points) {
+
+            return back()->withErrors([
+                'points' => 'Punti insufficienti per completare l\'ordine.'
+            ]);
+
+        }
+
+        return null;
+    }
+
+    public function points_order_count(Request $request)
+    {
+        $points = 0;
+
+        foreach ($request->input('products') as $product) {
+            $points += $product['points'] * $product['amount'];
+        }
+
+        return $points;
     }
 
     public function points_half(Request $request, $id)
