@@ -579,7 +579,7 @@ class Job extends Controller
 //                $data->customers_mod_jobs_schema = $customer_mod_jobs->schema;
             } else {
                 $data->customers_mod_jobs_values = $this->extractNames(
-                    json_decode($data->customers_mod_jobs_schema, true)
+                    $data->customers_mod_jobs_schema
                 );
             }
         }
