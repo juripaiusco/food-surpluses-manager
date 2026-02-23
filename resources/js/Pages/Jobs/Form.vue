@@ -1,6 +1,6 @@
 <script setup>
 
-import {Head} from "@inertiajs/vue3";
+import {Head, Link} from "@inertiajs/vue3";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import ApplicationHeader from "@/Components/ApplicationHeader.vue";
 import ApplicationContainer from "@/Components/ApplicationContainer.vue";
@@ -532,9 +532,13 @@ async function submit() {
 
                 <div class="text-right mt-8">
 
-                    <a href="#"
+                    <Link :href="data.saveRedirect"
+                          class="btn btn-secondary w-[100px]">
+                        Annulla
+                    </Link>
+                    <!-- <a href="#"
                        onclick="window.history.back(); return false;"
-                       class="btn btn-secondary w-[100px]">Annulla</a>
+                       class="btn btn-secondary w-[100px]">Annulla</a> -->
 
                     <button type="submit"
                             @click="save_redirect = false"
