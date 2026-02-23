@@ -492,7 +492,7 @@ class Job extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Request $request, string $id)
     {
         $data = \App\Models\Customer::with(['order' => function ($q) {
             $q->select([
@@ -507,6 +507,10 @@ class Job extends Controller
         }])->find($id);
 
         $data->saveRedirect = Redirect::back()->getTargetUrl();
+
+        if ($request['saveRedirectURL']) {
+            $data->saveRedirect = $request['saveRedirectURL'];
+        }
 
         $job_settings = \App\Models\JobSettings::query()
             ->where('type', 'section')
@@ -626,10 +630,10 @@ class Job extends Controller
 
         $saveRedirect = $request['saveRedirect'];
 
-        unset($request['order']);
+        /*unset($request['order']);
         unset($request['created_at']);
         unset($request['updated_at']);
-        unset($request['saveRedirect']);
+        unset($request['saveRedirect']);*/
 
         $customer_mod_jobs = CustomerModJob::query()->where('customer_id', $id)->first();
 
@@ -649,11 +653,31 @@ class Job extends Controller
 
         $customer = \App\Models\Customer::find($id);
 
-        $customer->fill($request->all());
+        $customer->fill($request->except([
+            'order',
+            'created_at',
+            'updated_at',
+            'saveRedirect',
+            'redirect'
+        ]));
 
         $customer->save();
 
-        return Redirect::to($saveRedirect);
+        if ($request['redirect']) {
+
+            if (to_route('jobs_listen.edit', $id)->getTargetUrl() == $saveRedirect) {
+                return Inertia::location(to_route('jobs_listen.index')->getTargetUrl());
+            }
+
+            return Redirect::to($saveRedirect);
+
+        } else {
+
+            return Inertia::location(to_route('jobs_listen.edit', [
+                'id' => $id,
+                'saveRedirectURL' => $saveRedirect
+            ])->getTargetUrl());
+        }
     }
 
     /**
