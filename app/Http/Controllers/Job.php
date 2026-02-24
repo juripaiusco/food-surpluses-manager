@@ -468,7 +468,13 @@ class Job extends Controller
 
         $customer = new \App\Models\Customer();
 
-        $customer->fill($request->all());
+        $customer->fill($request->except([
+            'order',
+            'created_at',
+            'updated_at',
+            'saveRedirect',
+            'redirect'
+        ]));
 
         $customer->save();
 
