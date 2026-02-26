@@ -245,37 +245,40 @@ class Order extends Controller
         $order = \App\Models\Order::find($id);
 
         // Ripristino le giacenze prodotti
-        foreach (json_decode($order->json_products) as $product) {
+        if (json_decode($order->json_products)) {
 
-            // Ripristino le giacenze BOX
-            if ($product->json_box) {
+            foreach (json_decode($order->json_products) as $product) {
 
-                $box_products = json_decode($product->json_box);
+                // Ripristino le giacenze BOX
+                if ($product->json_box) {
 
-                foreach ($box_products as $box_product) {
+                    $box_products = json_decode($product->json_box);
 
-                    $store = \App\Models\Store::where('customer_id', $order->customer_id)
-                        ->where('order_id', $id)
-                        ->where('product_id', $box_product->id);
+                    foreach ($box_products as $box_product) {
 
-                    $store_get = $store->first();
+                        $store = \App\Models\Store::where('customer_id', $order->customer_id)
+                            ->where('order_id', $id)
+                            ->where('product_id', $box_product->id);
 
-                    $this->restoreProduct($store, $store_get, $box_product);
+                        $store_get = $store->first();
+
+                        $this->restoreProduct($store, $store_get, $box_product);
+
+                    }
 
                 }
+                // END - Ripristino le giacenze BOX
 
+                // Ripristino le giacenze prodotti
+                $store = \App\Models\Store::where('customer_id', $order->customer_id)
+                    ->where('order_id', $id)
+                    ->where('product_id', $product->id);
+
+                $store_get = $store->first();
+
+                $this->restoreProduct($store, $store_get, $product);
+                // END - Ripristino le giacenze prodotti
             }
-            // END - Ripristino le giacenze BOX
-
-            // Ripristino le giacenze prodotti
-            $store = \App\Models\Store::where('customer_id', $order->customer_id)
-                ->where('order_id', $id)
-                ->where('product_id', $product->id);
-
-            $store_get = $store->first();
-
-            $this->restoreProduct($store, $store_get, $product);
-            // END - Ripristino le giacenze prodotti
         }
         // END - Ripristino le giacenze prodotti
 
