@@ -484,7 +484,21 @@ class Job extends Controller
         $customer_mod_jobs->values = $customers_mod_jobs_values;
         $customer_mod_jobs->save();
 
-        return Redirect::to($saveRedirect);
+        if ($request['redirect']) {
+
+            if (to_route('jobs_listen.edit', $customer->id)->getTargetUrl() == $saveRedirect) {
+                return Inertia::location(to_route('jobs_listen.index')->getTargetUrl());
+            }
+
+            return Redirect::to($saveRedirect);
+
+        } else {
+
+            return Inertia::location(to_route('jobs_listen.edit', [
+                'id' => $customer->id,
+                'saveRedirectURL' => $saveRedirect
+            ])->getTargetUrl());
+        }
     }
 
     /**
