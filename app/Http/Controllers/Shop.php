@@ -382,7 +382,8 @@ class Shop extends Controller
         ));
 
         $this->log[] = 'CREAZIONE ORDINE IN DATABASE ---------------------';
-        $this->log[] = 'Ordine - Riferimento: ' . $order_reference;
+        $this->log[] = 'Ord. - Riferimento:       ' . $order_reference;
+        $this->log[] = 'Ass. - Tessera:           ' . $customer->cod;
         $this->log[] = '//////////////////////////////////////////////////';
 
         // Scarico i prodotti da magazzino -----------------------------------------
@@ -431,7 +432,7 @@ class Shop extends Controller
                 'cod' => 'Codice',
                 'type' => 'Tipo',
                 'name' => 'Nome',
-                'amount' => 'Q.tà',
+                'amount' => 'Q.ta',
                 'points' => 'Punti',
                 'price' => 'Prezzo',
             ],
@@ -481,7 +482,7 @@ class Shop extends Controller
 
         $this->log[] = '= - = - = - = - = - = - = - = - = - = - = - = - = - = - = - = - =' . "\n";
 
-        if ($customer->points < 0) {
+        if ($customer->points > 0) {
             Log::info(implode("\n", $this->log));
         }
 
