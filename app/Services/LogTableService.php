@@ -12,7 +12,8 @@ class LogTableService
         array $columns,
         string $level = 'info',
         ?string $title = null
-    ): void {
+    ): string
+    {
 
         if ($data instanceof Collection) {
             $data = $data->values();
@@ -22,7 +23,7 @@ class LogTableService
 
         if ($data->isEmpty()) {
             Log::$level('Tabella vuota');
-            return;
+            return '';
         }
 
         // Determina se $columns è associativo (con label personalizzate)
@@ -105,6 +106,7 @@ class LogTableService
 
         $output .= $line;
 
-        Log::$level("\n" . $output);
+//        Log::$level($output);
+        return $output;
     }
 }

@@ -11,6 +11,8 @@ use Inertia\Inertia;
 
 class Shop extends Controller
 {
+    protected array $log;
+
     public function __construct()
     {
         $this->middleware('auth');
@@ -379,9 +381,9 @@ class Shop extends Controller
             )
         ));
 
-        Log::info('CREAZIONE ORDINE IN DATABASE ---------------------');
-        Log::info('Ordine - Riferimento: ' . $order_reference);
-        Log::info('//////////////////////////////////////////////////');
+        $this->log[] = 'CREAZIONE ORDINE IN DATABASE ---------------------';
+        $this->log[] = 'Ordine - Riferimento: ' . $order_reference;
+        $this->log[] = '//////////////////////////////////////////////////';
 
         // Scarico i prodotti da magazzino -----------------------------------------
         $price = 0;
@@ -423,7 +425,7 @@ class Shop extends Controller
 
         }
 
-        LogTableService::make(
+        $this->log[] = LogTableService::make(
             $product_array,
             [
                 'cod' => 'Codice',
@@ -434,9 +436,9 @@ class Shop extends Controller
                 'price' => 'Prezzo',
             ],
             'info',
-            'CASSA - SCARICO PRODOTTI E PUNTI'
+            'ORDINE - SCARICO PRODOTTI E PUNTI - Con query DB'
         );
-        Log::info('//////////////////////////////////////////////////');
+        $this->log[] = '//////////////////////////////////////////////////';
 
         // Modifica ordine appena creato, per aggiungere i dati mancanti -----------------------
         $order = new Order();
@@ -473,11 +475,15 @@ class Shop extends Controller
         $customer->view_reception = 0;
         $customer->save();
 
-        Log::info('SITUAZIONE ASSISTITO A FINE ORDINE --------------');
-        Log::info('Ass. - Punti a disposiz.: ' . '**' . $customer->points . '**');
-        Log::info('//////////////////////////////////////////////////');
+        $this->log[] = 'SITUAZIONE ASSISTITO A FINE ORDINE --------------';
+        $this->log[] = 'Ass. - Punti a disposiz.: ' . '**' . $customer->points . '**';
+        $this->log[] = '//////////////////////////////////////////////////';
 
-        Log::info('= - = - = - = - = - = - = - = - = - = - = - = - = - = - = - = - =' . "\n");
+        $this->log[] = '= - = - = - = - = - = - = - = - = - = - = - = - = - = - = - = - =' . "\n";
+
+        if ($customer->points < 0) {
+            Log::info(implode("\n", $this->log));
+        }
 
         return Inertia::location(to_route('shop.index')->getTargetUrl());
     }
@@ -486,16 +492,14 @@ class Shop extends Controller
     {
         $customer = \App\Models\Customer::find($request->input('customer_id'));
 
-        Log::info('= - = - = - = - = - = - = - = - = - = - = - = - = - = - = - = - =');
-        Log::info('CONTROLLO PUNTI BACKEND --------------------------');
-        Log::info('Ass. - Punti a disposiz.: ' . $customer->points);
-        Log::info('Ord. - Punti da togliere: ' . $this->points_order_count($request));
-        Log::info('Assistito - Punti a fine ordine:');
-        Log::info(
-            $customer->points . ' - ' . $this->points_order_count($request) . ' = ' .
-            '**' . ($customer->points - $this->points_order_count($request)) . '**'
-        );
-        Log::info('//////////////////////////////////////////////////');
+        $this->log[] = '';
+        $this->log[] = '= - = - = - = - = - = - = - = - = - = - = - = - = - = - = - = - =';
+        $this->log[] = '//////////////////////////////////////////////////';
+        $this->log[] = 'CONTROLLO PUNTI BACKEND --------------------------';
+        $this->log[] = 'Ass. - Punti a disposiz.: ' . $customer->points;
+        $this->log[] = 'Ord. - Punti da togliere: ' . $this->points_order_count($request);
+        $this->log[] = 'Ass. - Punti a fine ord.: **' . ($customer->points - $this->points_order_count($request)) . '**';
+        $this->log[] = '//////////////////////////////////////////////////';
 
         if ($this->points_order_count($request) > $customer->points) {
 
