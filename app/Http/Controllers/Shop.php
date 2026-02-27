@@ -482,7 +482,7 @@ class Shop extends Controller
 
         $this->log[] = '= - = - = - = - = - = - = - = - = - = - = - = - = - = - = - = - =' . "\n";
 
-        if ($customer->points > 0) {
+        if ($customer->points < 0) {
             Log::info(implode("\n", $this->log));
         }
 
