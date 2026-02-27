@@ -379,9 +379,9 @@ class Shop extends Controller
             )
         ));
 
-        Log::info('Creazione ordine in Database ---------------------');
+        Log::info('CREAZIONE ORDINE IN DATABASE ---------------------');
         Log::info('Ordine - Riferimento: ' . $order_reference);
-        Log::info('--------------------------------------------------');
+        Log::info('//////////////////////////////////////////////////');
 
         // Scarico i prodotti da magazzino -----------------------------------------
         $price = 0;
@@ -423,7 +423,6 @@ class Shop extends Controller
 
         }
 
-        Log::info('Scarico prodotti e punti -------------------------');
         LogTableService::make(
             $product_array,
             [
@@ -434,9 +433,10 @@ class Shop extends Controller
                 'points' => 'Punti',
                 'price' => 'Prezzo',
             ],
-            'info'
+            'info',
+            'CASSA - SCARICO PRODOTTI E PUNTI'
         );
-        Log::info('--------------------------------------------------');
+        Log::info('//////////////////////////////////////////////////');
 
         // Modifica ordine appena creato, per aggiungere i dati mancanti -----------------------
         $order = new Order();
@@ -473,9 +473,9 @@ class Shop extends Controller
         $customer->view_reception = 0;
         $customer->save();
 
-        Log::info('Sistuazione assistito a fine ordine --------------');
-        Log::info('Assistito - Punti a disposizione: ' . '**' . $customer->points . '**');
-        Log::info('--------------------------------------------------');
+        Log::info('SITUAZIONE ASSISTITO A FINE ORDINE --------------');
+        Log::info('Ass. - Punti a disposiz.: ' . '**' . $customer->points . '**');
+        Log::info('//////////////////////////////////////////////////');
 
         Log::info('= - = - = - = - = - = - = - = - = - = - = - = - = - = - = - = - =' . "\n");
 
@@ -487,15 +487,15 @@ class Shop extends Controller
         $customer = \App\Models\Customer::find($request->input('customer_id'));
 
         Log::info('= - = - = - = - = - = - = - = - = - = - = - = - = - = - = - = - =');
-        Log::info('Controllo punti backend --------------------------');
-        Log::info('Assistito - Punti a disposizione: ' . $customer->points);
-        Log::info('Ordine - Punti da togliere: ' . $this->points_order_count($request));
+        Log::info('CONTROLLO PUNTI BACKEND --------------------------');
+        Log::info('Ass. - Punti a disposiz.: ' . $customer->points);
+        Log::info('Ord. - Punti da togliere: ' . $this->points_order_count($request));
         Log::info('Assistito - Punti a fine ordine:');
         Log::info(
             $customer->points . ' - ' . $this->points_order_count($request) . ' = ' .
             '**' . ($customer->points - $this->points_order_count($request)) . '**'
         );
-        Log::info('--------------------------------------------------');
+        Log::info('//////////////////////////////////////////////////');
 
         if ($this->points_order_count($request) > $customer->points) {
 
