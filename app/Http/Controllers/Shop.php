@@ -330,6 +330,7 @@ class Shop extends Controller
 
         $points_order_count = $this->points_order_count($request);
 
+        // Prodotti del carrello, passati dalla cassa
         $this->log[] = '';
         $this->log[] = '= - = - = - = - = - = - = - = - = - = - = - = - = - = - = - = - =';
         $this->log[] = '//////////////////////////////////////////////////';
