@@ -436,14 +436,20 @@ class Shop extends Controller
         }
 
         $this->log[] = LogTableService::make(
-            $product_array,
+            array_merge($product_array, [(object) [
+                'name' => 'TOTALE',
+                'price' => $price,
+                'points' => $points,
+            ]]),
             [
                 'cod' => 'Codice',
                 'type' => 'Tipo',
                 'name' => 'Nome',
+                'kg' => 'Kg',
                 'amount' => 'Q.ta',
-                'points' => 'Punti',
                 'price' => 'Prezzo',
+                'points_half' => '1/2',
+                'points' => 'Punti',
             ],
             'info',
             'ORDINE - SCARICO PRODOTTI E PUNTI - Con query DB'
@@ -491,7 +497,7 @@ class Shop extends Controller
 
         $this->log[] = '= - = - = - = - = - = - = - = - = - = - = - = - = - = - = - = - =' . "\n";
 
-        if ($customer->points < 0) {
+        if ($customer->points < 0 || env('APP_DEBUG') == true) {
             Log::info(implode("\n", $this->log));
         }
 
@@ -518,7 +524,7 @@ class Shop extends Controller
         $points = 0;
 
         foreach ($request->input('products') as $product) {
-            $points += $product['points'] * $product['amount'];
+            $points += $product['points'];
         }
 
         return $points;

@@ -50,11 +50,7 @@ class LogTableService
 
             foreach ($data as $row) {
 
-                if (is_object($row)) {
-                    $value = $row->getAttribute($field);
-                } else {
-                    $value = $row[$field] ?? '';
-                }
+                $value = data_get($row, $field, '');
 
                 $value = (string) $value;
 
@@ -84,18 +80,20 @@ class LogTableService
         $output .= PHP_EOL . $line . PHP_EOL;
 
         // Righe
-        foreach ($data as $row) {
+        $lastIndex = $data->count() - 1;
+
+        foreach ($data as $index => $row) {
+
+            // Se è l'ultima riga (totale), stampo separatore prima
+            if ($index === $lastIndex) {
+                $output .= $line . PHP_EOL;
+            }
 
             $output .= '|';
 
             foreach ($fields as $i => $field) {
 
-                if (is_object($row)) {
-                    $value = $row->getAttribute($field);
-                } else {
-                    $value = $row[$field] ?? '';
-                }
-
+                $value = data_get($row, $field, '');
                 $value = (string) $value;
 
                 $output .= ' ' . str_pad($value, $widths[$i]) . ' |';
