@@ -313,6 +313,30 @@ class Shop extends Controller
      */
     public function store(Request $request)
     {
+        // Recupero i dati del cliente
+        $customer_id = $request->input('customer_id');
+        $customer = \App\Models\Customer::with(['order' => function ($q) {
+            $q->select([
+                'id',
+                'reference',
+                'user_id',
+                'customer_id',
+                'retail_id',
+                'price',
+                'points',
+                'date',
+            ]);
+        }])->find($customer_id);
+
+        $this->log[] = '';
+        $this->log[] = '= - = - = - = - = - = - = - = - = - = - = - = - = - = - = - = - =';
+        $this->log[] = '//////////////////////////////////////////////////';
+        $this->log[] = 'CONTROLLO PUNTI BACKEND --------------------------';
+        $this->log[] = 'Ass. - Punti a disposiz.: ' . $customer->points;
+        $this->log[] = 'Ord. - Punti da togliere: ' . $this->points_order_count($request);
+        $this->log[] = 'Ass. - Punti a fine ord.: **' . ($customer->points - $this->points_order_count($request)) . '**';
+        $this->log[] = '//////////////////////////////////////////////////';
+
         if ($response = $this->ctrl_points($request)) {
             return $response;
         }
@@ -342,21 +366,6 @@ class Shop extends Controller
 
         // Imposto la data attuale dell'ordine
         $oder_data = date('Y-m-d H:i:s');
-
-        // Recupero i dati del cliente
-        $customer_id = $request->input('customer_id');
-        $customer = \App\Models\Customer::with(['order' => function ($q) {
-            $q->select([
-                'id',
-                'reference',
-                'user_id',
-                'customer_id',
-                'retail_id',
-                'price',
-                'points',
-                'date',
-            ]);
-        }])->find($customer_id);
 
         // Verifico che sia il primo ordine del mese
         $is_first_order = $this->is_first_order($customer);
@@ -492,15 +501,6 @@ class Shop extends Controller
     public function ctrl_points(Request $request)
     {
         $customer = \App\Models\Customer::find($request->input('customer_id'));
-
-        $this->log[] = '';
-        $this->log[] = '= - = - = - = - = - = - = - = - = - = - = - = - = - = - = - = - =';
-        $this->log[] = '//////////////////////////////////////////////////';
-        $this->log[] = 'CONTROLLO PUNTI BACKEND --------------------------';
-        $this->log[] = 'Ass. - Punti a disposiz.: ' . $customer->points;
-        $this->log[] = 'Ord. - Punti da togliere: ' . $this->points_order_count($request);
-        $this->log[] = 'Ass. - Punti a fine ord.: **' . ($customer->points - $this->points_order_count($request)) . '**';
-        $this->log[] = '//////////////////////////////////////////////////';
 
         if ($this->points_order_count($request) > $customer->points) {
 
