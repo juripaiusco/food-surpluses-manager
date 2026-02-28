@@ -328,13 +328,15 @@ class Shop extends Controller
             ]);
         }])->find($customer_id);
 
+        $points_order_count = $this->points_order_count($request);
+
         $this->log[] = '';
         $this->log[] = '= - = - = - = - = - = - = - = - = - = - = - = - = - = - = - = - =';
         $this->log[] = '//////////////////////////////////////////////////';
         $this->log[] = 'CONTROLLO PUNTI BACKEND --------------------------';
         $this->log[] = 'Ass. - Punti a disposiz.: ' . $customer->points;
-        $this->log[] = 'Ord. - Punti da togliere: ' . $this->points_order_count($request);
-        $this->log[] = 'Ass. - Punti a fine ord.: **' . ($customer->points - $this->points_order_count($request)) . '**';
+        $this->log[] = 'Ord. - Punti da togliere: ' . $points_order_count;
+        $this->log[] = 'Ass. - Punti a fine ord.: **' . ($customer->points - $points_order_count) . '**';
         $this->log[] = '//////////////////////////////////////////////////';
 
         if ($response = $this->ctrl_points($request)) {
