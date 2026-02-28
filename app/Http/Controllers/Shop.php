@@ -333,6 +333,27 @@ class Shop extends Controller
         $this->log[] = '';
         $this->log[] = '= - = - = - = - = - = - = - = - = - = - = - = - = - = - = - = - =';
         $this->log[] = '//////////////////////////////////////////////////';
+
+        $this->log[] = LogTableService::make(
+            array_merge($request->input('products'), [(object) [
+                'name' => 'TOTALE',
+                'points' => $points_order_count,
+            ]]),
+            [
+                'cod' => 'Codice',
+                'type' => 'Tipo',
+                'name' => 'Nome',
+                'kg' => 'Kg',
+                'amount' => 'Q.ta',
+                'price' => 'Prezzo',
+                'points_half' => '1/2',
+                'points' => 'Punti',
+            ],
+            'info',
+            '$request->input(\'products\')'
+        );
+
+        $this->log[] = '//////////////////////////////////////////////////';
         $this->log[] = 'CONTROLLO PUNTI BACKEND --------------------------';
         $this->log[] = 'Ass. - Punti a disposiz.: ' . $customer->points;
         $this->log[] = 'Ord. - Punti da togliere: ' . $points_order_count;
