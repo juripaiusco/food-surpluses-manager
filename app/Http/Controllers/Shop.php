@@ -332,7 +332,7 @@ class Shop extends Controller
 
         // Prodotti del carrello, passati dalla cassa
         $this->log[] = '';
-        $this->log[] = '= - = - = - = - = - = - = - = - = - = - = - = - = - = - = - = - =';
+        $this->log[] = '= - = - = - = - = - = - = - = - = - = - = - = - = - = - = - = - = = - = - = - = - = - = - =';
         $this->log[] = '//////////////////////////////////////////////////';
 
         $this->log[] = LogTableService::make(
