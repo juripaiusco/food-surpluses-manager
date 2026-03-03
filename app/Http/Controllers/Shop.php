@@ -332,7 +332,7 @@ class Shop extends Controller
 
         // Prodotti del carrello, passati dalla cassa
         $this->log[] = '';
-        $this->log[] = '= - = - = - = - = - = - = - = - = - = - = - = - = - = - = - = - = = - = - = - = - = - = - =';
+        $this->log[] = '= - = | START ORDER | = - = - = - = - = - = - = - = - = - = - = - = - = - = - = - = - = = - =';
         $this->log[] = '//////////////////////////////////////////////////';
 
         $this->log[] = LogTableService::make(
@@ -519,7 +519,7 @@ class Shop extends Controller
         $this->log[] = 'Ass. - Punti a disposiz.: ' . '**' . $customer->points . '**';
         $this->log[] = '//////////////////////////////////////////////////';
 
-        $this->log[] = '= - = - = - = - = - = - = - = - = - = - = - = - = - = - = - = - =' . "\n";
+        $this->log[] = '= - = | END ORDER | = - = - = - = - = - = - = - = - = - = - = - = - = - = - = - = - = = - = -' . "\n";
 
         if ($customer->points < 0 || env('APP_DEBUG') == true) {
             Log::info(implode("\n", $this->log));
