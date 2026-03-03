@@ -82,7 +82,8 @@ class Store extends Controller
 
                 $customer = \App\Models\Customer::find($args['storeArrayData']['customer_id']);
 
-                $customer->points += $args['storeArrayData']['points'] * $args['storeArrayData']['products_count'] * (-1);
+//                $customer->points += $args['storeArrayData']['points'] * $args['storeArrayData']['products_count'] * (-1);
+                $customer->points += $args['storeArrayData']['points'] * (-1);
 
                 $customer->save();
 

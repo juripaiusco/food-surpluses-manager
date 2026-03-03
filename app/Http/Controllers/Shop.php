@@ -305,6 +305,16 @@ class Shop extends Controller
         ]);
     }
 
+    private function d_array_points_count($d_array)
+    {
+        $c = 0;
+        foreach ($d_array as $d) {
+            $c += $d['points'];
+        }
+
+        return $c;
+    }
+
     /**
      * Salvataggio ordine
      *
@@ -332,8 +342,8 @@ class Shop extends Controller
 
         // Prodotti del carrello, passati dalla cassa
         $this->log[] = '';
-        $this->log[] = '= - = | START ORDER | = - = - = - = - = - = - = - = - = - = - = - = - = - = - = - = - = = - =';
-        $this->log[] = '//////////////////////////////////////////////////';
+        $this->log[] = '//////| START ORDER |////////////////////////////////////////////////////////////////////////';
+        $this->log[] = '';
 
         $this->log[] = LogTableService::make(
             array_merge($request->input('products'), [(object) [
@@ -354,12 +364,12 @@ class Shop extends Controller
             '$request->input(\'products\')'
         );
 
-        $this->log[] = '//////////////////////////////////////////////////';
+        $this->log[] = '';
         $this->log[] = 'CONTROLLO PUNTI BACKEND --------------------------';
         $this->log[] = 'Ass. - Punti a disposiz.: ' . $customer->points;
         $this->log[] = 'Ord. - Punti da togliere: ' . $points_order_count;
         $this->log[] = 'Ass. - Punti a fine ord.: **' . ($customer->points - $points_order_count) . '**';
-        $this->log[] = '//////////////////////////////////////////////////';
+        $this->log[] = '';
 
         if ($response = $this->ctrl_points($request)) {
             return $response;
@@ -371,6 +381,7 @@ class Shop extends Controller
 
         foreach ($request->input('products') as $product) {
 
+            /*
             if (!isset($array_group[$product['id']])) {
                 $array_group[$product['id']] = array(
                     'count' => 0,
@@ -380,6 +391,19 @@ class Shop extends Controller
             }
 
             $array_group[$product['id']]['count'] += 1;
+            */
+
+            // - - - -
+
+            /*$c = 0;
+            if (isset($array_group[$product['id']])) {
+                $c = count($array_group[$product['id']]);
+            }*/
+
+            $array_group[$product['id']][] = array(
+                'points' => $product['points'],
+                'points_half' => $product['points_half'] ?? false,
+            );
 
         }
 
@@ -414,17 +438,18 @@ class Shop extends Controller
             )
         ));
 
+        $this->log[] = '';
         $this->log[] = 'CREAZIONE ORDINE IN DATABASE ---------------------';
         $this->log[] = 'Ord. - Riferimento:       ' . $order_reference;
         $this->log[] = 'Ass. - Tessera:           ' . $customer->cod;
-        $this->log[] = '//////////////////////////////////////////////////';
+        $this->log[] = '';
 
         // Scarico i prodotti da magazzino -----------------------------------------
         $price = 0;
         $points = 0;
         $product_array = array();
 
-        foreach ($array_group as $product_id => $d) {
+        foreach ($array_group as $product_id => $d_array) {
 
             $product = \App\Models\Product::find($product_id);
 
@@ -437,26 +462,27 @@ class Shop extends Controller
                         'order_reference' => $order_reference,
                         'order_id' => $order_id,
                         'customer_id' => $customer_id,
-                        'kg' => isset($product->kg) ? $product->kg * $d['count'] * (-1) : null,
-                        'amount' => $product->amount * $d['count'] * (-1),
-                        'points' => $d['points'],
-                        'price' => $product->price * $d['count'],
-                        'products_count' => $d['count'],
+                        'kg' => isset($product->kg) ? $product->kg * count($d_array) * (-1) : null,
+                        'amount' => $product->amount * count($d_array) * (-1),
+                        'points' => $this->d_array_points_count($d_array),
+                        'price' => $product->price * count($d_array),
+                        'products_count' => count($d_array),
                         'date' => $oder_data,
                     )
                 ));
 
-                $points += $d['count'] * $d['points'];
-                $price += $d['count'] * $product->price;
+                $points += $this->d_array_points_count($d_array);
+                $price += count($d_array) * $product->price;
 
-                for ($i = 0; $i < $d['count']; $i++) {
-                    $product->points = $d['points'];
-                    $product['points_half'] = $d['points_half'];
-                    $product_array[] = $product;
+//                for ($i = 0; $i < count($d_array); $i++) {
+                foreach ($d_array as $d) {
+                    $productClone = clone $product;
+
+                    $productClone->points = $d['points'];
+                    $productClone['points_half'] = $d['points_half'];
+                    $product_array[] = $productClone;
                 }
-
             }
-
         }
 
         $this->log[] = LogTableService::make(
@@ -478,7 +504,6 @@ class Shop extends Controller
             'info',
             'ORDINE - SCARICO PRODOTTI E PUNTI - Con query DB'
         );
-        $this->log[] = '//////////////////////////////////////////////////';
 
         // Modifica ordine appena creato, per aggiungere i dati mancanti -----------------------
         $order = new Order();
@@ -515,11 +540,12 @@ class Shop extends Controller
         $customer->view_reception = 0;
         $customer->save();
 
+        $this->log[] = '';
         $this->log[] = 'SITUAZIONE ASSISTITO A FINE ORDINE --------------';
         $this->log[] = 'Ass. - Punti a disposiz.: ' . '**' . $customer->points . '**';
-        $this->log[] = '//////////////////////////////////////////////////';
+        $this->log[] = '';
 
-        $this->log[] = '= - = | END ORDER | = - = - = - = - = - = - = - = - = - = - = - = - = - = - = - = - = = - = -' . "\n";
+        $this->log[] = '//////| END ORDER |//////////////////////////////////////////////////////////////////////////' . "\n";
 
         if ($customer->points < 0 || env('APP_DEBUG') == true) {
             Log::info(implode("\n", $this->log));
