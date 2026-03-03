@@ -438,7 +438,6 @@ class Shop extends Controller
             )
         ));
 
-        $this->log[] = '';
         $this->log[] = 'CREAZIONE ORDINE IN DATABASE ---------------------';
         $this->log[] = 'Ord. - Riferimento:       ' . $order_reference;
         $this->log[] = 'Ass. - Tessera:           ' . $customer->cod;
