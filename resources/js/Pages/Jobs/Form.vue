@@ -179,6 +179,14 @@ const outcomeListFiltered = computed(() => {
     return get_income_list(form)[1].list.filter(field => field.value > 0);
 });
 
+function capitalizeWords(text) {
+    if (!text) return '';
+    return text
+        .split(/\s+/)         // separa per spazi
+        .map(word => word[0]?.toUpperCase() + word.slice(1).toLowerCase())
+        .join(' ');
+}
+
 function get_income_list(data) {
 
     let income_fields = [
@@ -196,8 +204,9 @@ function get_income_list(data) {
             prefix: 'mod_jobs_famiglia_comp',
             field: 'mod_jobs_famiglia_comp_importo',
             map: (obj) => ({
-                label: `${obj.mod_jobs_famiglia_comp_nome} ${obj.mod_jobs_famiglia_comp_cognome}\n${obj.mod_jobs_famiglia_comp_tipo_entrate}`,
-                value: obj.mod_jobs_famiglia_comp_importo
+                label: capitalizeWords(`${obj.mod_jobs_famiglia_comp_tipo_entrate}`)
+                    + "\n" + capitalizeWords(`${obj.mod_jobs_famiglia_comp_nome} ${obj.mod_jobs_famiglia_comp_cognome}`),
+                value: safeNumber(obj.mod_jobs_famiglia_comp_importo)
             })
         }
     ];
@@ -210,8 +219,9 @@ function get_income_list(data) {
             prefix: 'mod_jobs_famiglia_comp',
             field: 'mod_jobs_famiglia_comp_spese',
             map: (obj) => ({
-                label: `${obj.mod_jobs_famiglia_comp_nome} ${obj.mod_jobs_famiglia_comp_cognome}\n${obj.mod_jobs_famiglia_comp_tipo_uscite}`,
-                value: obj.mod_jobs_famiglia_comp_spese
+                label: capitalizeWords(`${obj.mod_jobs_famiglia_comp_tipo_uscite}`)
+                    + "\n" + capitalizeWords(`${obj.mod_jobs_famiglia_comp_nome} ${obj.mod_jobs_famiglia_comp_cognome}`),
+                value: safeNumber(obj.mod_jobs_famiglia_comp_spese)
             })
         }
     ];
@@ -825,7 +835,7 @@ function formatCurrency(value) {
                             <table class="table table-sm text-xs mt-4">
                                 <tbody>
                                 <tr v-for="field in incomeListFiltered" :key="field.id">
-                                    <td class="text-left whitespace-break-spaces">{{ field.label }}</td>
+                                    <td class="text-left whitespace-break-spaces lowercase capitalize">{{ field.label }}</td>
                                     <td class="text-right">
                                         <span v-if="field.value > 0">
                                             &euro; {{ formatCurrency(field.value) }}
