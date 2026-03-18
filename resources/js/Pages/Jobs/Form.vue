@@ -8,7 +8,7 @@ import {useForm} from "@inertiajs/vue3";
 import Table from "@/Components/Table/Table.vue";
 import {__} from "@/extComponents/Translations";
 import FormModJobs from "@/Pages/Jobs/FormModJobs.vue";
-import {ref, watch} from "vue";
+import {computed, ref, watch} from "vue";
 import {isArray} from "es-toolkit/compat";
 import ItemData from "@/PagesComponents/Dashboard/ItemData.vue";
 import Box from "@/Components/Box.vue";
@@ -153,10 +153,10 @@ function get_last_isee(data) {
     let prefix = 'mod_jobs_isee';
     let iseeArray = [];
 
-    Object.keys(data).forEach(key => {
+    Object.keys(data.customers_mod_jobs_values).forEach(key => {
         if (key === prefix || key.startsWith(prefix + '_')) {
-            let scadenza = data[key]['mod_jobs_isee_data_scadenza'];
-            let isee = data[key]['mod_jobs_isee_isee'];
+            let scadenza = data.customers_mod_jobs_values[key]['mod_jobs_isee_data_scadenza'];
+            let isee = data.customers_mod_jobs_values[key]['mod_jobs_isee_isee'];
 
             if (scadenza) {
                 iseeArray.push({ scadenza, isee });
@@ -171,6 +171,13 @@ function get_last_isee(data) {
 
     return iseeArray[iseeArray.length - 1].isee;
 }
+
+const incomeListFiltered = computed(() => {
+    return get_income_list(form)[0].list.filter(field => field.value > 0);
+});
+const outcomeListFiltered = computed(() => {
+    return get_income_list(form)[1].list.filter(field => field.value > 0);
+});
 
 function get_income_list(data) {
 
@@ -187,7 +194,11 @@ function get_income_list(data) {
         {
             type: 'group',
             prefix: 'mod_jobs_famiglia_comp',
-            field: 'mod_jobs_famiglia_comp_importo'
+            field: 'mod_jobs_famiglia_comp_importo',
+            map: (obj) => ({
+                label: `${obj.mod_jobs_famiglia_comp_nome} ${obj.mod_jobs_famiglia_comp_cognome}\n${obj.mod_jobs_famiglia_comp_tipo_entrate}`,
+                value: obj.mod_jobs_famiglia_comp_importo
+            })
         }
     ];
 
@@ -197,29 +208,59 @@ function get_income_list(data) {
         {
             type: 'group',
             prefix: 'mod_jobs_famiglia_comp',
-            field: 'mod_jobs_famiglia_comp_spese'
+            field: 'mod_jobs_famiglia_comp_spese',
+            map: (obj) => ({
+                label: `${obj.mod_jobs_famiglia_comp_nome} ${obj.mod_jobs_famiglia_comp_cognome}\n${obj.mod_jobs_famiglia_comp_tipo_uscite}`,
+                value: obj.mod_jobs_famiglia_comp_spese
+            })
         }
     ];
 
     let income = [{
         name: 'income',
         label: 'Entrate',
-        sum: 0
+        sum: 0,
+        list: []
     }, {
         name: 'outcome',
         label: 'Uscite',
-        sum: 0
+        sum: 0,
+        list: []
     }];
 
     // ENTRATE
     income_fields.forEach(field => {
 
         if (typeof field === 'string') {
-            income[0].sum += safeNumber(data[field]);
+            income[0].sum += safeNumber(data.customers_mod_jobs_values[field]);
+
+            data.customers_mod_jobs_schema.forEach(section => {
+                income[0].list.push(...findFieldsByName(
+                    JSON.parse(section.schema),
+                    field,
+                    data.customers_mod_jobs_values[field]
+                ));
+            });
         }
 
         if (typeof field === 'object' && field.type === 'group') {
-            income[0].sum += sumByPrefix(data, field.prefix, field.field);
+            income[0].sum += sumByPrefix(data.customers_mod_jobs_values, field.prefix, field.field);
+
+            Object.keys(data.customers_mod_jobs_values).forEach(key => {
+
+                if (key === field.prefix || key.startsWith(field.prefix + '_')) {
+
+                    const obj = data.customers_mod_jobs_values[key];
+
+                    if (!obj || typeof obj !== 'object') return;
+
+                    const mapped = field.map(obj);
+
+                    if (mapped.value > 0) {
+                        income[0].list.push(mapped);
+                    }
+                }
+            });
         }
 
     });
@@ -228,16 +269,98 @@ function get_income_list(data) {
     outcome_fields.forEach(field => {
 
         if (typeof field === 'string') {
-            income[1].sum += safeNumber(data[field]);
+            income[1].sum += safeNumber(data.customers_mod_jobs_values[field]);
+
+            data.customers_mod_jobs_schema.forEach(section => {
+                income[1].list.push(...findFieldsByName(
+                    JSON.parse(section.schema),
+                    field,
+                    data.customers_mod_jobs_values[field]
+                ));
+            });
         }
 
         if (typeof field === 'object' && field.type === 'group') {
-            income[1].sum += sumByPrefix(data, field.prefix, field.field);
+            income[1].sum += sumByPrefix(data.customers_mod_jobs_values, field.prefix, field.field);
+
+            Object.keys(data.customers_mod_jobs_values).forEach(key => {
+
+                if (key === field.prefix || key.startsWith(field.prefix + '_')) {
+
+                    const obj = data.customers_mod_jobs_values[key];
+
+                    if (!obj || typeof obj !== 'object') return;
+
+                    const mapped = field.map(obj);
+
+                    if (mapped.value > 0) {
+                        income[1].list.push(mapped);
+                    }
+                }
+            });
         }
 
     });
 
     return income;
+}
+
+function getFamilyList(data, prefix) {
+    let list = [];
+
+    Object.keys(data).forEach(key => {
+
+        if (key === prefix || key.startsWith(prefix + '_')) {
+
+            const obj = data[key];
+
+            if (!obj || typeof obj !== 'object') return;
+
+            const nome = obj.mod_jobs_famiglia_comp_nome || '';
+            const cognome = obj.mod_jobs_famiglia_comp_cognome || '';
+            const lavoro = obj.mod_jobs_famiglia_comp_tipo_entrate || '';
+
+            const value = safeNumber(obj.mod_jobs_famiglia_comp_importo);
+
+            if (value > 0) {
+                list.push({
+                    name: key,
+                    label: `${nome} ${cognome}\n${lavoro}`.trim(),
+                    value: value
+                });
+            }
+        }
+    });
+
+    return list;
+}
+
+function findFieldsByName(schema, fieldName, value, results = []) {
+
+    schema.forEach(item => {
+
+        // match diretto
+        if (item.name === fieldName) {
+            results.push({
+                name: item.name,
+                label: item.label,
+                value: value,
+            });
+        }
+
+        // se ha figli (annidati)
+        if (item.children && Array.isArray(item.children)) {
+            findFieldsByName(item.children, fieldName, value, results);
+        }
+
+        // caso FormKit: nested dentro schema
+        if (item.schema && Array.isArray(item.schema)) {
+            findFieldsByName(item.schema, fieldName, value, results);
+        }
+
+    });
+
+    return results;
 }
 
 function formatCurrency(value) {
@@ -694,19 +817,33 @@ function formatCurrency(value) {
                         <div class="text-center align-middle w-full">
 
                             <span class="text-3xl font-bold">
-                                &euro; {{ formatCurrency(get_income_list(form.customers_mod_jobs_values)[0].sum * 12) }}
+                                &euro; {{ formatCurrency(get_income_list(form)[0].sum * 12) }}
                             </span>
                             <br>
                             entrate all'anno
 
-                            <hr class="mt-4 mb-4">
+<!--                            <hr class="mt-4 mb-4">
 
                             <span class="text-2xl">
 
-                                &euro; {{ formatCurrency(get_income_list(form.customers_mod_jobs_values)[0].sum) }}
+                                &euro; {{ formatCurrency(get_income_list(form)[0].sum) }}
                             </span>
                             <br>
-                            al mese
+                            al mese-->
+
+                            <table class="table table-sm text-xs mt-4">
+                                <tbody>
+                                <tr v-for="field in incomeListFiltered" :key="field.id">
+                                    <td class="text-left whitespace-break-spaces">{{ field.label }}</td>
+                                    <td class="text-right">
+                                        <span v-if="field.value > 0">
+                                            &euro; {{ formatCurrency(field.value) }}
+                                        </span>
+                                        <span v-else>-</span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
 
                         </div>
 
@@ -721,19 +858,33 @@ function formatCurrency(value) {
                         <div class="text-center align-middle w-full">
 
                             <span class="text-3xl font-bold">
-                                &euro; {{ formatCurrency(get_income_list(form.customers_mod_jobs_values)[1].sum * 12) }}
+                                &euro; {{ formatCurrency(get_income_list(form)[1].sum * 12) }}
                             </span>
                             <br>
                             uscite all'anno
 
-                            <hr class="mt-4 mb-4">
+<!--                            <hr class="mt-4 mb-4">
 
                             <span class="text-2xl">
 
-                                &euro; {{ formatCurrency(get_income_list(form.customers_mod_jobs_values)[1].sum) }}
+                                &euro; {{ formatCurrency(get_income_list(form)[1].sum) }}
                             </span>
                             <br>
-                            al mese
+                            al mese-->
+
+                            <table class="table table-sm text-xs mt-4">
+                                <tbody>
+                                <tr v-for="field in outcomeListFiltered" :key="field.id">
+                                    <td class="text-left whitespace-break-spaces">{{ field.label }}</td>
+                                    <td class="text-right">
+                                        <span v-if="field.value > 0">
+                                            &euro; {{ formatCurrency(field.value) }}
+                                        </span>
+                                        <span v-else>-</span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
 
                         </div>
 
@@ -748,8 +899,8 @@ function formatCurrency(value) {
 
                             <span class="text-3xl font-bold">
                                 &euro; {{ formatCurrency((
-                                get_income_list(form.customers_mod_jobs_values)[0].sum -
-                                get_income_list(form.customers_mod_jobs_values)[1].sum
+                                get_income_list(form)[0].sum -
+                                get_income_list(form)[1].sum
                                 ) * 12) }}
                             </span>
                             <br>
@@ -759,7 +910,7 @@ function formatCurrency(value) {
 
                             <span class="text-3xl font-bold">
 
-                                &euro; {{ formatCurrency(get_last_isee(form.customers_mod_jobs_values)) }}
+                                &euro; {{ formatCurrency(get_last_isee(form)) }}
                             </span>
                             <br>
                             ultimo ISEE
@@ -772,7 +923,7 @@ function formatCurrency(value) {
 
             </div>
 
-            <hr class="mt-6 mb-10">
+            <hr class="mt-10 mb-10">
 
             <h2 class="text-3xl mb-2">
                 Ordini eseguiti
