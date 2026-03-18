@@ -9,6 +9,9 @@ import Table from "@/Components/Table/Table.vue";
 import {__} from "@/extComponents/Translations";
 import FormModJobs from "@/Pages/Jobs/FormModJobs.vue";
 import {ref, watch} from "vue";
+import {isArray} from "es-toolkit/compat";
+import ItemData from "@/PagesComponents/Dashboard/ItemData.vue";
+import Box from "@/Components/Box.vue";
 
 const props = defineProps({
 
@@ -121,6 +124,130 @@ async function submit() {
             { 'redirect': save_redirect.value }
         ]
     ))
+}
+
+function safeNumber(value) {
+    const n = parseFloat(value);
+    return isNaN(n) ? 0 : n;
+}
+
+function sumByPrefix(data, prefix, field) {
+    let sum = 0;
+
+    Object.keys(data).forEach(key => {
+        if (key === prefix || key.startsWith(prefix + '_')) {
+
+            const obj = data[key];
+
+            if (obj && typeof obj === 'object') {
+                sum += safeNumber(obj[field]);
+            }
+        }
+    });
+
+    return sum;
+}
+
+function get_last_isee(data) {
+
+    let prefix = 'mod_jobs_isee';
+    let iseeArray = [];
+
+    Object.keys(data).forEach(key => {
+        if (key === prefix || key.startsWith(prefix + '_')) {
+            let scadenza = data[key]['mod_jobs_isee_data_scadenza'];
+            let isee = data[key]['mod_jobs_isee_isee'];
+
+            if (scadenza) {
+                iseeArray.push({ scadenza, isee });
+            }
+        }
+    });
+
+    if (iseeArray.length === 0) return null;
+
+    // Ordina per data crescente e prendi l'ultimo
+    iseeArray.sort((a, b) => new Date(a.scadenza) - new Date(b.scadenza));
+
+    return iseeArray[iseeArray.length - 1].isee;
+}
+
+function get_income_list(data) {
+
+    let income_fields = [
+        'mod_jobs_doc_stipendio_importo',
+        'mod_jobs_doc_rdi_importo',
+        'mod_jobs_doc_invalidita_importo',
+        'mod_jobs_doc_indennita_accompagnatoria_importo',
+        'mod_jobs_doc_cassa_integrazione_importo',
+        'mod_jobs_doc_naspi_importo',
+        'mod_jobs_doc_assegno_unico',
+
+        // campo speciale (familiari)
+        {
+            type: 'group',
+            prefix: 'mod_jobs_famiglia_comp',
+            field: 'mod_jobs_famiglia_comp_importo'
+        }
+    ];
+
+    let outcome_fields = [
+        'mod_jobs_famiglia_abitazione_importo',
+
+        {
+            type: 'group',
+            prefix: 'mod_jobs_famiglia_comp',
+            field: 'mod_jobs_famiglia_comp_spese'
+        }
+    ];
+
+    let income = [{
+        name: 'income',
+        label: 'Entrate',
+        sum: 0
+    }, {
+        name: 'outcome',
+        label: 'Uscite',
+        sum: 0
+    }];
+
+    // ENTRATE
+    income_fields.forEach(field => {
+
+        if (typeof field === 'string') {
+            income[0].sum += safeNumber(data[field]);
+        }
+
+        if (typeof field === 'object' && field.type === 'group') {
+            income[0].sum += sumByPrefix(data, field.prefix, field.field);
+        }
+
+    });
+
+    // USCITE
+    outcome_fields.forEach(field => {
+
+        if (typeof field === 'string') {
+            income[1].sum += safeNumber(data[field]);
+        }
+
+        if (typeof field === 'object' && field.type === 'group') {
+            income[1].sum += sumByPrefix(data, field.prefix, field.field);
+        }
+
+    });
+
+    return income;
+}
+
+function formatCurrency(value) {
+    const number = parseFloat(value);
+
+    return new Intl.NumberFormat('it-IT', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+        useGrouping: true
+    }).format(isNaN(number) ? 0 : number);
 }
 
 </script>
@@ -553,6 +680,99 @@ async function submit() {
             </form>
 
             <hr class="mt-10 mb-10">
+
+            <h2 class="text-3xl mb-2">
+                Riepilogo Entrate/Uscite
+            </h2>
+
+            <div class="row">
+
+                <div class="col">
+
+                    <Box class="border-green-400 text-green-800">
+
+                        <div class="text-center align-middle w-full">
+
+                            <span class="text-3xl font-bold">
+                                &euro; {{ formatCurrency(get_income_list(form.customers_mod_jobs_values)[0].sum * 12) }}
+                            </span>
+                            <br>
+                            entrate all'anno
+
+                            <hr class="mt-4 mb-4">
+
+                            <span class="text-2xl">
+
+                                &euro; {{ formatCurrency(get_income_list(form.customers_mod_jobs_values)[0].sum) }}
+                            </span>
+                            <br>
+                            al mese
+
+                        </div>
+
+                    </Box>
+
+                </div>
+
+                <div class="col">
+
+                    <Box class="border-red-400 text-red-800">
+
+                        <div class="text-center align-middle w-full">
+
+                            <span class="text-3xl font-bold">
+                                &euro; {{ formatCurrency(get_income_list(form.customers_mod_jobs_values)[1].sum * 12) }}
+                            </span>
+                            <br>
+                            uscite all'anno
+
+                            <hr class="mt-4 mb-4">
+
+                            <span class="text-2xl">
+
+                                &euro; {{ formatCurrency(get_income_list(form.customers_mod_jobs_values)[1].sum) }}
+                            </span>
+                            <br>
+                            al mese
+
+                        </div>
+
+                    </Box>
+
+                </div>
+                <div class="col">
+
+                    <Box class="border-blue-400 text-blue-800">
+
+                        <div class="text-center align-middle w-full">
+
+                            <span class="text-3xl font-bold">
+                                &euro; {{ formatCurrency((
+                                get_income_list(form.customers_mod_jobs_values)[0].sum -
+                                get_income_list(form.customers_mod_jobs_values)[1].sum
+                                ) * 12) }}
+                            </span>
+                            <br>
+                            saldo annuale
+
+                            <hr class="mt-4 mb-4">
+
+                            <span class="text-3xl font-bold">
+
+                                &euro; {{ formatCurrency(get_last_isee(form.customers_mod_jobs_values)) }}
+                            </span>
+                            <br>
+                            ultimo ISEE
+
+                        </div>
+
+                    </Box>
+
+                </div>
+
+            </div>
+
+            <hr class="mt-6 mb-10">
 
             <h2 class="text-3xl mb-2">
                 Ordini eseguiti
