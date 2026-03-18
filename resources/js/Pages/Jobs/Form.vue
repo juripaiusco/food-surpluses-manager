@@ -822,15 +822,6 @@ function formatCurrency(value) {
                             <br>
                             entrate all'anno
 
-<!--                            <hr class="mt-4 mb-4">
-
-                            <span class="text-2xl">
-
-                                &euro; {{ formatCurrency(get_income_list(form)[0].sum) }}
-                            </span>
-                            <br>
-                            al mese-->
-
                             <table class="table table-sm text-xs mt-4">
                                 <tbody>
                                 <tr v-for="field in incomeListFiltered" :key="field.id">
@@ -862,15 +853,6 @@ function formatCurrency(value) {
                             </span>
                             <br>
                             uscite all'anno
-
-<!--                            <hr class="mt-4 mb-4">
-
-                            <span class="text-2xl">
-
-                                &euro; {{ formatCurrency(get_income_list(form)[1].sum) }}
-                            </span>
-                            <br>
-                            al mese-->
 
                             <table class="table table-sm text-xs mt-4">
                                 <tbody>
