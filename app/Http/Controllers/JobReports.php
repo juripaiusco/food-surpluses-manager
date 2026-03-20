@@ -9,6 +9,20 @@ use Inertia\Inertia;
 
 class JobReports extends Controller
 {
+    private function isSafeQuery(string $query): bool
+    {
+        $forbidden = ['insert', 'update', 'delete', 'drop', 'truncate', 'alter', 'grant', 'create'];
+        $queryLower = strtolower($query);
+
+        foreach ($forbidden as $keyword) {
+            if (str_contains($queryLower, $keyword)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -26,49 +40,59 @@ class JobReports extends Controller
             $report = (clone $reports)->where('id', request()->rid)
                 ->first();
 
-            $customers = \App\Models\Customer::query()
-                ->leftJoin(
-                    'customers_mod_jobs',
-                    'customers.id',
-                    '=',
-                    'customers_mod_jobs.customer_id'
-                );
+            if (isset($report->query)) {
 
-            // Genero la query in base al filtro impostato dallo schema json
-            foreach (json_decode($report->schema, true)['filter'] as $q) {
+                if (!$this->isSafeQuery($report->query)) {
+                    abort(403, 'Query non consentita');
+                }
 
-                $customers = $customers->whereRaw(
-                    "JSON_UNQUOTE(JSON_EXTRACT(
+                $data = DB::select($report->query);
+
+            } else {
+
+                $customers = \App\Models\Customer::query()
+                    ->leftJoin(
+                        'customers_mod_jobs',
+                        'customers.id',
+                        '=',
+                        'customers_mod_jobs.customer_id'
+                    );
+
+                // Genero la query in base al filtro impostato dallo schema json
+                foreach (json_decode($report->schema, true)['filter'] as $q) {
+
+                    $customers = $customers->whereRaw(
+                        "JSON_UNQUOTE(JSON_EXTRACT(
                         customers_mod_jobs.values, '$." . $q['field'] . "'
                     )) " . $q['operator'] . " ?",
-                    ['%' . $q['value'] . '%']
-                );
+                        ['%' . $q['value'] . '%']
+                    );
 
-            }
+                }
 
-            $data = $customers->select([
-                'customers.*',
-                'customers_mod_jobs.values',
-            ]);
+                $data = $customers->select([
+                    'customers.*',
+                    'customers_mod_jobs.values',
+                ]);
 
 //            dd($data->toSql());
 
-            $data = $data->get();
-            $data = $data->map(function ($customer) {
+                $data = $data->get();
+                $data = $data->map(function ($customer) {
 
-                $values = is_array($customer->values)
-                    ? $customer->values
-                    : json_decode($customer->values ?? '{}', true);
+                    $values = is_array($customer->values)
+                        ? $customer->values
+                        : json_decode($customer->values ?? '{}', true);
 
-                unset($customer->values);
+                    unset($customer->values);
 
-                foreach ($values as $key => $value) {
-                    $customer->{$key} = $value;
-                }
+                    foreach ($values as $key => $value) {
+                        $customer->{$key} = $value;
+                    }
 
-                return $customer;
-            });
-
+                    return $customer;
+                });
+            }
         }
 
         $reports = $reports->get();

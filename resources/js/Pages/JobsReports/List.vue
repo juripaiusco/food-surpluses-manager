@@ -30,15 +30,19 @@ if (props.reportSchema?.table) {
 
     for(let i = 0; i < structureTable.length; i++) {
 
-        structureTable[i].class = 'text-left';
+        if (!structureTable[i].class) {
+            structureTable[i].class = 'text-left';
+        }
 
     }
 
-    structureTable[structureTable.length] = {
-        class: 'w-[1%]',
-        btnEdit: true,
-        route: 'jobs_listen.edit'
-    };
+    if (props.data[0]?.id) {
+        structureTable[structureTable.length] = {
+            class: 'w-[1%]',
+            btnEdit: true,
+            route: 'jobs_listen.edit'
+        };
+    }
 
 }
 
@@ -72,9 +76,9 @@ if (props.reportSchema?.table) {
                 </div>
                 <div class="w-1/4">
 
-                    <Search placeholder="Cerca..."
+                    <!-- <Search placeholder="Cerca..."
                             route-search="jobs_listen.index"
-                            :filters="filters" />
+                            :filters="filters" /> -->
 
                 </div>
 
@@ -92,7 +96,19 @@ if (props.reportSchema?.table) {
 
             <br><br>
 
-            <Table class="table-striped"
+            <div v-if="report.query !== null">
+
+                <Table class="table-striped"
+                       :data="{
+                        filters: filters,
+                        routeSearch: 'jobs_settings.reports.index',
+                        data: data,
+                        structure: structureTable,
+                    }" />
+
+            </div>
+
+            <Table v-if="report.query === null" class="table-striped"
                    :data="{
                         filters: filters,
                         routeSearch: 'jobs_settings.reports.index',
