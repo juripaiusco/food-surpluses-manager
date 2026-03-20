@@ -14,6 +14,7 @@ class JobSettings extends Model
         'type',
         'title',
         'description',
+        'query',
         'schema',
         'dynamic',
     ];

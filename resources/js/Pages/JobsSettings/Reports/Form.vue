@@ -6,6 +6,17 @@ import ApplicationHeader from "@/Components/ApplicationHeader.vue";
 import ApplicationContainer from "@/Components/ApplicationContainer.vue";
 import {Link} from "@inertiajs/vue3";
 import {useForm} from "@inertiajs/vue3";
+import {Codemirror} from "vue-codemirror";
+import { EditorView } from '@codemirror/view'
+import { sql } from '@codemirror/lang-sql'
+import { oneDark } from '@codemirror/theme-one-dark'
+
+const cmExtensions = [
+    sql(),
+    EditorView.theme({
+        ".cm-scroller": { overflow: "auto" }
+    })
+]
 
 const props = defineProps({
 
@@ -81,9 +92,22 @@ function schemaTableFieldAdd() {
 
                 <br>
 
-                <h2 class="text-3xl mb-2">Filtri</h2>
+                <h2 class="text-3xl mb-2">Query</h2>
 
-                <br>
+                <Codemirror
+                    :extensions="cmExtensions"
+                    v-model="form.query"
+                    id="query"
+                    :style="{
+                        width: '100%',
+                        border: '1px solid #dee2e6;',
+                        borderRadius: '4px'
+                    }"
+                />
+
+                <br><br>
+
+                <h2 class="text-3xl mb-2">Filtri</h2>
 
                 <label>Campo da filtrare</label>
 
