@@ -203,6 +203,13 @@ function schemaTableFieldEdit(index, direction) {
 
                 </div>
 
+                <h2 class="text-3xl mb-2">Ordinamento di default</h2>
+
+                <input v-model="form.schema.order"
+                       class="form-control">
+
+                <br>
+
                 <h2 class="text-3xl mb-2">Campi da mostrare</h2>
 
                 <br>

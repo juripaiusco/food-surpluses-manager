@@ -66,7 +66,12 @@ if (props.reportSchema?.table) {
 
                 <div class="w-3/4">
 
-                    <Link v-for="report in reports" :href="route('jobs_reports.index', report.id)"
+                    <Link v-for="report in reports"
+                          :href="route('jobs_reports.index', {
+                              id: report.id,
+                              orderby: JSON.parse(report.schema)?.order?.split(' ')[0],
+                              ordertype: JSON.parse(report.schema)?.order?.split(' ')[1]?.toLowerCase()
+                          })"
                           class="btn btn-outline-primary mr-4">
                         {{ report.title }}
                     </Link>
