@@ -101,7 +101,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/jobs-listen/update/{id}', [Job::class, 'update'])->name('jobs_listen.update');
     Route::get('/jobs-listen/destroy/{id}', [Job::class, 'destroy'])->name('jobs_listen.destroy');
 
-    Route::get('/jobs-reports', [JobReports::class, 'index'])->name('jobs_reports.index');
+    Route::get('/jobs-reports/{id?}', [JobReports::class, 'index'])->name('jobs_reports.index');
     Route::get('/jobs-reports/create', [JobReports::class, 'create'])->name('jobs_reports.create');
     Route::post('/jobs-reports/store', [JobReports::class, 'store'])->name('jobs_reports.store');
     Route::get('/jobs-reports/edit/{id}', [JobReports::class, 'edit'])->name('jobs_reports.edit');

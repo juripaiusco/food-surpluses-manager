@@ -66,9 +66,7 @@ if (props.reportSchema?.table) {
 
                 <div class="w-3/4">
 
-                    <Link v-for="report in reports" :href="route('jobs_reports.index', {
-                        'rid': report.id
-                    })"
+                    <Link v-for="report in reports" :href="route('jobs_reports.index', report.id)"
                           class="btn btn-outline-primary mr-4">
                         {{ report.title }}
                     </Link>
@@ -76,9 +74,9 @@ if (props.reportSchema?.table) {
                 </div>
                 <div class="w-1/4">
 
-                    <!-- <Search placeholder="Cerca..."
-                            route-search="jobs_listen.index"
-                            :filters="filters" /> -->
+                     <Search placeholder="Cerca..."
+                            :route-search="route('jobs_reports.index', report.id)"
+                            :filters="filters" />
 
                 </div>
 
@@ -104,10 +102,10 @@ if (props.reportSchema?.table) {
 
                 <Table class="table-striped"
                        :data="{
-                        filters: filters,
-                        routeSearch: 'jobs_settings.reports.index',
-                        data: data,
-                        structure: structureTable,
+                            filters: filters,
+                            routeSearch: route('jobs_reports.index', report.id),
+                            data: data,
+                            structure: structureTable,
                     }" />
 
             </div>
@@ -115,7 +113,7 @@ if (props.reportSchema?.table) {
             <Table v-if="report.query === null" class="table-striped"
                    :data="{
                         filters: filters,
-                        routeSearch: 'jobs_settings.reports.index',
+                        routeSearch: route('jobs_reports.index', report.id),
                         data: data,
                         structure: structureTable,
                     }"

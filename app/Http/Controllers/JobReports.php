@@ -26,7 +26,7 @@ class JobReports extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(string $id = null)
     {
         $data = [];
         $report = [];
@@ -34,19 +34,43 @@ class JobReports extends Controller
         $reports = JobSettings::query()
             ->where('type', 'report');
 
-        if (isset(request()->rid)) {
+        if ($id) {
 
             // Recupero lo schema json con il valore per generare la query corretta
-            $report = (clone $reports)->where('id', request()->rid)
+            $report = (clone $reports)->where('id', $id)
                 ->first();
 
+            // Recupero i campi della query per poter ricercare
+            foreach (json_decode($report->schema)->table as $d_field) {
+                $fields_search_array[] = $d_field->field;
+            }
+
+            // Se esiste la query manuale usala
             if (isset($report->query)) {
 
                 if (!$this->isSafeQuery($report->query)) {
                     abort(403, 'Query non consentita');
                 }
 
-                $data = DB::select($report->query);
+                $data = DB::query()->fromSub("({$report->query})", 'main_result');
+
+                // Filtro RICERCA
+                if (request('s')) {
+                    $data->where(function ($q) use ($fields_search_array) {
+
+                        foreach ($fields_search_array as $field) {
+                            $q->orWhere($field, 'like', '%' . request('s') . '%');
+                        }
+
+                    });
+                }
+
+                // Filtro ORDINAMENTO
+                if (request('orderby') && request('ordertype')) {
+                    $data->orderby(request('orderby'), strtoupper(request('ordertype')));
+                }
+
+                $data = $data->get();
 
             } else {
 
@@ -77,6 +101,22 @@ class JobReports extends Controller
 
 //            dd($data->toSql());
 
+                // Filtro RICERCA
+                if (request('s')) {
+                    $data->where(function ($q) use ($fields_search_array) {
+
+                        foreach ($fields_search_array as $field) {
+                            $q->orWhere($field, 'like', '%' . request('s') . '%');
+                        }
+
+                    });
+                }
+
+                // Filtro ORDINAMENTO
+                if (request('orderby') && request('ordertype')) {
+                    $data->orderby(request('orderby'), strtoupper(request('ordertype')));
+                }
+
                 $data = $data->get();
                 $data = $data->map(function ($customer) {
 
@@ -102,7 +142,7 @@ class JobReports extends Controller
             'report' => $report,
             'reportSchema' => isset($report->schema) ? json_decode($report->schema, true) : [],
             'reports' => $reports,
-            'filters' => request()->all(['number', 's', 'orderby', 'ordertype', 'filters'])
+            'filters' => request()->all(['s', 'orderby', 'ordertype'])
         ]);
     }
 
