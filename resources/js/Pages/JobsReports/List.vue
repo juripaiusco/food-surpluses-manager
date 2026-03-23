@@ -96,6 +96,10 @@ if (props.reportSchema?.table) {
 
             <br><br>
 
+            <span class="!text-green-500"></span>
+            <span class="!text-red-500"></span>
+            <span class="!text-blue-500"></span>
+
             <div v-if="report.query !== null">
 
                 <Table class="table-striped"
