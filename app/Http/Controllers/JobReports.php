@@ -6,6 +6,8 @@ use App\Models\JobSettings;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
+use App\Exports\ReportExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class JobReports extends Controller
 {
@@ -192,5 +194,20 @@ class JobReports extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function export(string $id)
+    {
+        $reports = JobSettings::query()
+            ->where('type', 'report');
+
+        $report = (clone $reports)->where('id', $id)
+            ->first();
+
+        $data = DB::query()->fromSub("({$report->query})", 'main_result');
+
+        $results = $data->get();
+
+        return Excel::download(new ReportExport($results), $report->title . '-' . date('YmdHis') . '.xlsx');
     }
 }

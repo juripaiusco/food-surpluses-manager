@@ -107,6 +107,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/jobs-reports/edit/{id}', [JobReports::class, 'edit'])->name('jobs_reports.edit');
     Route::post('/jobs-reports/update/{id}', [JobReports::class, 'update'])->name('jobs_reports.update');
     Route::get('/jobs-reports/destroy/{id}', [JobReports::class, 'destroy'])->name('jobs_reports.destroy');
+    Route::get('/jobs-reports/export/{id}', [JobReports::class, 'export'])->name('jobs_reports.export');
 
 
     Route::get('/jobs-settings/sections', [ModJobsSettings::class, 'indexSections'])
