@@ -25,16 +25,10 @@ class JobReports extends Controller
         return true;
     }
 
-    /**
-     * Display a listing of the resource.
-     */
-    public function index(string $id = null)
+    private function get_data(string $id = null, object $reports = null)
     {
         $data = [];
         $report = [];
-
-        $reports = JobSettings::query()
-            ->where('type', 'report');
 
         if ($id) {
 
@@ -132,8 +126,6 @@ class JobReports extends Controller
                     'customers_mod_jobs.values',
                 ]);
 
-//            dd($data->toSql());
-
                 // Filtro RICERCA
                 if (request('s')) {
                     $data->where(function ($q) use ($fields_search_array) {
@@ -168,12 +160,27 @@ class JobReports extends Controller
             }
         }
 
+        return (object) [
+            'data' => $data,
+            'report' => $report
+        ];
+    }
+    /**
+     * Display a listing of the resource.
+     */
+    public function index(string $id = null)
+    {
+        $reports = JobSettings::query()
+            ->where('type', 'report');
+
+        $result = $this->get_data($id, $reports);
+
         $reports = $reports->get();
 
         return Inertia::render('JobsReports/List', [
-            'data' => $data,
-            'report' => $report,
-            'reportSchema' => isset($report->schema) ? json_decode($report->schema, true) : [],
+            'data' => $result->data,
+            'report' => $result->report,
+            'reportSchema' => isset($result->report->schema) ? json_decode($result->report->schema, true) : [],
             'reports' => $reports,
             'filters' => request()->all(['s', 'orderby', 'ordertype'])
         ]);
@@ -232,13 +239,11 @@ class JobReports extends Controller
         $reports = JobSettings::query()
             ->where('type', 'report');
 
-        $report = (clone $reports)->where('id', $id)
-            ->first();
+        $results = $this->get_data($id, $reports);
 
-        $data = DB::query()->fromSub("({$report->query})", 'main_result');
-
-        $results = $data->get();
-
-        return Excel::download(new ReportExport($results), $report->title . '-' . date('YmdHis') . '.xlsx');
+        return Excel::download(
+            new ReportExport($results->data),
+            $results->report->title . '-' . date('YmdHis') . '.xlsx'
+        );
     }
 }

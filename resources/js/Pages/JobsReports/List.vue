@@ -46,12 +46,12 @@ if (props.reportSchema?.table) {
 const selectedReportId = ref(props.report?.id ?? '')
 const open = ref(false)
 
-function reportSelect(id) {
+function reportSelect(report) {
 
     router.get(route('jobs_reports.index', {
-        id: id,
-        orderby: '',
-        ordertype: ''
+        id: report.id,
+        orderby: JSON.parse(report.schema)?.order?.split(' ')[0],
+        ordertype: JSON.parse(report.schema)?.order?.split(' ')[1]?.toLowerCase()
     }))
 
 }
@@ -85,7 +85,7 @@ function reportSelect(id) {
                             <div
                                 v-for="r in reports"
                                 :key="r.id"
-                                @click="reportSelect(r.id)"
+                                @click="reportSelect(r)"
                                 class="p-2 hover:bg-gray-100 cursor-pointer"
                             >
                                 <div class="font-medium">{{ r.title }}</div>
@@ -115,7 +115,12 @@ function reportSelect(id) {
 
                     <a v-if="report.id"
                           class="btn btn-success"
-                          :href="route('jobs_reports.export', report.id)">
+                          :href="route('jobs_reports.export', {
+                              id: report.id,
+                              s: filters?.s,
+                              orderby: filters?.orderby,
+                              ordertype: filters?.ordertype
+                          })">
 
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
