@@ -131,7 +131,17 @@ class JobReports extends Controller
                     $data->where(function ($q) use ($fields_search_array) {
 
                         foreach ($fields_search_array as $field) {
-                            $q->orWhere($field, 'like', '%' . request('s') . '%');
+
+                            if (substr($field, 0, strlen('mod_jobs')) == 'mod_jobs') {
+
+                                $queryField = "JSON_UNQUOTE(JSON_EXTRACT(customers_mod_jobs.values, '$." . $field . "'))";
+
+                            } else {
+
+                                $queryField = $field;
+                            }
+
+                            $q->orWhereRaw($queryField . ' like \'%' . request('s') . '%\'');
                         }
 
                     });
@@ -258,8 +268,21 @@ class JobReports extends Controller
         $columns = array_column($schema, 'field');  // chiavi per ordinare
         $labels  = array_column($schema, 'label'); // intestazioni
 
-        $data = collect($results->data)->map(function ($row) use ($columns) {
+        /*$data = collect($results->data)->map(function ($row) use ($columns) {
             $row = (array) $row;
+            $ordered = [];
+            foreach ($columns as $col) {
+                $ordered[$col] = $row[$col] ?? null;
+            }
+            return $ordered;
+        });*/
+
+        $data = collect($results->data)->map(function ($row) use ($columns) {
+            // Normalizza sia array che oggetti Eloquent
+            $row = $row instanceof \Illuminate\Database\Eloquent\Model
+                ? $row->toArray()
+                : (array) $row;
+
             $ordered = [];
             foreach ($columns as $col) {
                 $ordered[$col] = $row[$col] ?? null;
