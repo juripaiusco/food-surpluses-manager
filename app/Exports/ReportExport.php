@@ -7,17 +7,18 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 
 class ReportExport implements FromCollection, WithHeadings
 {
-    public function __construct(protected $data) {}
+    public function __construct(
+        protected $data,
+        protected array $labels
+    ) {}
 
     public function collection()
     {
-        return collect($this->data)->map(fn($row) => (array) $row);
+        return collect($this->data);
     }
 
     public function headings(): array
     {
-        // Prende le chiavi del primo elemento come intestazioni
-        if ($this->data->isEmpty()) return [];
-        return array_keys((array) $this->data->first());
+        return $this->labels;
     }
 }

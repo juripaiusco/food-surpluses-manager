@@ -234,7 +234,7 @@ class JobReports extends Controller
         //
     }
 
-    public function export(string $id)
+    public function export_(string $id)
     {
         $reports = JobSettings::query()
             ->where('type', 'report');
@@ -243,6 +243,32 @@ class JobReports extends Controller
 
         return Excel::download(
             new ReportExport($results->data),
+            $results->report->title . '-' . date('YmdHis') . '.xlsx'
+        );
+    }
+
+    public function export(string $id)
+    {
+        $reports = JobSettings::query()
+            ->where('type', 'report');
+
+        $results = $this->get_data($id, $reports);
+
+        $schema = json_decode($results->report->schema, true)['table'];
+        $columns = array_column($schema, 'field');  // chiavi per ordinare
+        $labels  = array_column($schema, 'label'); // intestazioni
+
+        $data = collect($results->data)->map(function ($row) use ($columns) {
+            $row = (array) $row;
+            $ordered = [];
+            foreach ($columns as $col) {
+                $ordered[$col] = $row[$col] ?? null;
+            }
+            return $ordered;
+        });
+
+        return Excel::download(
+            new ReportExport($data, $labels),
             $results->report->title . '-' . date('YmdHis') . '.xlsx'
         );
     }
