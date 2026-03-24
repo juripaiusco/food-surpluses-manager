@@ -81,7 +81,7 @@ function reportSelect(id) {
                             {{ report.title || 'Seleziona il report' }}
                         </div>
 
-                        <div v-if="open" class="absolute bg-white border w-full mt-1 z-10">
+                        <div v-if="open" class="absolute bg-white border w-full mt-1 z-10 text-gray-800">
                             <div
                                 v-for="r in reports"
                                 :key="r.id"
@@ -92,6 +92,10 @@ function reportSelect(id) {
                                 <div class="text-sm text-gray-500">{{ r.description }}</div>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="mt-2 ml-2 text-sm">
+                        {{ report.description }}
                     </div>
 
                 </div>
@@ -124,10 +128,6 @@ function reportSelect(id) {
                 <div>
 
                     <small v-if="report.id">
-                        {{ report.description }}
-
-                        <br>
-
                         <strong>
                             Sono stati trovati {{ data?.length }} risultat{{ (data?.length > 1 || data?.length === 0) ? 'i' : 'o' }}
                         </strong>
