@@ -87,13 +87,44 @@ class JobReports extends Controller
                 // Genero la query in base al filtro impostato dallo schema json
                 foreach (json_decode($report->schema, true)['filter'] as $q) {
 
-                    $customers = $customers->whereRaw(
-                        "JSON_UNQUOTE(JSON_EXTRACT(
-                        customers_mod_jobs.values, '$." . $q['field'] . "'
-                    )) " . $q['operator'] . " ?",
-                        ['%' . $q['value'] . '%']
+                    if (substr($q['field'], 0, strlen('mod_jobs')) == 'mod_jobs') {
+
+                        $queryField = "JSON_UNQUOTE(JSON_EXTRACT(customers_mod_jobs.values, '$." . $q['field'] . "'))";
+
+                    } else {
+
+                        $queryField = $q['field'];
+                    }
+
+                    $queryCondition = array(
+                        $queryField . " " . $q['operator'] . " ?",
+                        $q['operator'] == 'like' ? '%' . $q['value'] . '%' : $q['value']
                     );
 
+                    if (isset($q['add_operator'])) {
+
+                        switch ($q['add_operator']) {
+                            case 'or':
+                                $customers = $customers->orWhereRaw(
+                                    $queryCondition[0],
+                                    $queryCondition[1]
+                                );
+                                break;
+
+                            default:
+                                $customers = $customers->whereRaw(
+                                    $queryCondition[0],
+                                    $queryCondition[1]
+                                );
+                        }
+
+                    } else {
+
+                        $customers = $customers->whereRaw(
+                            $queryCondition[0],
+                            $queryCondition[1]
+                        );
+                    }
                 }
 
                 $data = $customers->select([

@@ -56,6 +56,12 @@ function schemaTableFieldDel(index) {
 
 }
 
+function schemaTableFilterdDel(index) {
+
+    form.schema.filter.splice(index, 1);
+
+}
+
 function schemaTableFieldEdit(index, direction) {
 
     const newIndex = direction === 'up' ? index - 1 : index + 1;
@@ -129,13 +135,23 @@ function schemaTableFieldEdit(index, direction) {
 
                     <h2 class="text-3xl mb-2">Filtri</h2>
 
-                    <label>Campo da filtrare</label>
+                    <label>
+                        Puoi aggiungere condizioni usando AND e OR in sequenza.
+                        Non è possibile creare gruppi di condizioni con parentesi o logiche annidate.
+                    </label>
 
                     <div v-for="(schema, index) in form.schema.filter"
                          :key="index"
-                         class="mb-4">
+                         class="mt-2 mb-4">
 
                         <div class="row">
+                            <div class=""
+                                 :class="{
+                                    'col-1 text-xl uppercase text-center pt-[3px]' :
+                                    form.schema.filter[index].add_operator
+                                }">
+                                {{ form.schema.filter[index].add_operator }}
+                            </div>
                             <div class="col">
 
                                 <select class="form-select"
@@ -173,25 +189,32 @@ function schemaTableFieldEdit(index, direction) {
                                        v-model="form.schema.filter[index]['value']">
 
                             </div>
-                            <div class="col-1">
+                            <div class="col-2">
 
-                                <button type="button"
-                                        class="btn btn-primary w-full"
-                                        v-if="index >= (form.schema.filter.length - 1)"
-                                        @click="schemaFilterAdd('and')">
-                                    AND
-                                </button>
+                                <div class="inline-flex items-center h-full">
 
-                            </div>
+                                    <button v-if="index > 0"
+                                            type="button"
+                                            class="btn btn-danger btn-sm w-full h-full mr-2"
+                                            @click="schemaTableFilterdDel(index)">
+                                        -
+                                    </button>
 
-                            <div class="col-1">
+                                    <button v-if="index >= (form.schema.filter.length - 1)"
+                                            type="button"
+                                            class="btn btn-primary w-full mr-2"
+                                            @click="schemaFilterAdd('and')">
+                                        AND
+                                    </button>
 
-                                <button type="button"
-                                        class="btn btn-primary w-full"
-                                        v-if="index >= (form.schema.filter.length - 1)"
-                                        @click="schemaFilterAdd('or')">
-                                    OR
-                                </button>
+                                    <button v-if="index >= (form.schema.filter.length - 1)"
+                                            type="button"
+                                            class="btn btn-primary w-full mr-2"
+                                            @click="schemaFilterAdd('or')">
+                                        OR
+                                    </button>
+
+                                </div>
 
                             </div>
 
@@ -273,51 +296,37 @@ function schemaTableFieldEdit(index, direction) {
                         <div class="col-1">
 
                             <div v-if="index < 1"
-                                 class="mb-2 font-semibold text-gray-700 text-center">
-                                &nbsp;
+                                 class="h-[15px]">
                             </div>
 
-                            <div class="inline-flex !items-center">
+                            <div class="inline-flex items-center h-full">
 
-                                <div class="mr-1">
+                                <button type="button"
+                                        class="btn btn-danger btn-sm w-full mr-1"
+                                        @click="schemaTableFieldDel(index)">
+                                    -
+                                </button>
 
-                                    <button v-if="index > 0"
-                                            type="button"
-                                            class="btn btn-secondary btn-sm w-full"
-                                            @click="schemaTableFieldEdit(index, 'up')">
-                                        ▲
-                                    </button>
+                                <button v-if="index > 0"
+                                        type="button"
+                                        class="btn btn-secondary btn-sm w-full mr-1"
+                                        @click="schemaTableFieldEdit(index, 'up')">
+                                    ▲
+                                </button>
 
-                                </div>
+                                <button v-if="index < form.schema.table.length - 1"
+                                        type="button"
+                                        class="btn btn-secondary btn-sm w-full mr-1"
+                                        @click="schemaTableFieldEdit(index, 'down')">
+                                    ▼
+                                </button>
 
-                                <div class="mr-1">
-
-                                    <button v-if="index < form.schema.table.length - 1"
-                                            type="button"
-                                            class="btn btn-secondary btn-sm w-full"
-                                            @click="schemaTableFieldEdit(index, 'down')">
-                                        ▼
-                                    </button>
-
-                                </div>
-
-                                <div>
-
-                                    <button type="button"
-                                            class="btn btn-primary btn-sm w-full"
-                                            v-if="index >= (form.schema.table.length - 1)"
-                                            @click="schemaTableFieldAdd()">
-                                        +
-                                    </button>
-
-                                    <button type="button"
-                                            class="btn btn-danger btn-sm w-full"
-                                            v-else
-                                            @click="schemaTableFieldDel(index)">
-                                        -
-                                    </button>
-
-                                </div>
+                                <button type="button"
+                                        class="btn btn-primary btn-sm w-full mr-1"
+                                        v-if="index >= (form.schema.table.length - 1)"
+                                        @click="schemaTableFieldAdd()">
+                                    +
+                                </button>
 
                             </div>
 
