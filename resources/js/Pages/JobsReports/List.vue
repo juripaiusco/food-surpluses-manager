@@ -1,13 +1,10 @@
 <script setup>
-import {Head} from "@inertiajs/vue3";
+import {Head, router} from "@inertiajs/vue3";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import ApplicationHeader from "@/Components/ApplicationHeader.vue";
 import Table from "@/Components/Table/Table.vue";
 import Search from "@/Components/Search.vue";
 import ApplicationContainer from "@/Components/ApplicationContainer.vue";
-import {Link} from "@inertiajs/vue3";
-import ModalSimple from "@/Components/ModalSimple.vue";
-import Pagination from "@/Components/Pagination.vue";
 import {ref} from "vue";
 
 const props = defineProps({
@@ -46,6 +43,19 @@ if (props.reportSchema?.table) {
 
 }
 
+const selectedReportId = ref(props.report?.id ?? '')
+const open = ref(false)
+
+function reportSelect(id) {
+
+    router.get(route('jobs_reports.index', {
+        id: id,
+        orderby: '',
+        ordertype: ''
+    }))
+
+}
+
 </script>
 
 <template>
@@ -64,17 +74,25 @@ if (props.reportSchema?.table) {
 
             <div class="inline-flex w-full mb-6">
 
-                <div class="w-3/4">
+                <div class="w-3/4 mr-2">
 
-                    <Link v-for="report in reports"
-                          :href="route('jobs_reports.index', {
-                              id: report.id,
-                              orderby: JSON.parse(report.schema)?.order?.split(' ')[0],
-                              ordertype: JSON.parse(report.schema)?.order?.split(' ')[1]?.toLowerCase()
-                          })"
-                          class="btn btn-outline-primary mr-4">
-                        {{ report.title }}
-                    </Link>
+                    <div class="relative">
+                        <div @click="open = !open" class="form-select cursor-pointer">
+                            {{ report.title || 'Seleziona il report' }}
+                        </div>
+
+                        <div v-if="open" class="absolute bg-white border w-full mt-1 z-10">
+                            <div
+                                v-for="r in reports"
+                                :key="r.id"
+                                @click="reportSelect(r.id)"
+                                class="p-2 hover:bg-gray-100 cursor-pointer"
+                            >
+                                <div class="font-medium">{{ r.title }}</div>
+                                <div class="text-sm text-gray-500">{{ r.description }}</div>
+                            </div>
+                        </div>
+                    </div>
 
                 </div>
                 <div class="w-1/4">
