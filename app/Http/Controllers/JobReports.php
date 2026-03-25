@@ -121,10 +121,17 @@ class JobReports extends Controller
                     }
                 }
 
-                $data = $customers->select([
-                    'customers.*',
-                    'customers_mod_jobs.values',
-                ]);
+                $select_fields = [];
+                foreach ($fields_search_array as $field) {
+
+                    if (substr($field, 0, strlen('mod_jobs')) == 'mod_jobs') {
+                        $select_fields[] = DB::raw('JSON_UNQUOTE(JSON_EXTRACT(customers_mod_jobs.`values`, \'$.'. $field .'\')) AS '. $field);
+                    } else {
+                        $select_fields[] = DB::raw('customers.' . $field . ' AS ' . $field);
+                    }
+                }
+
+                $data = $customers->select($select_fields);
 
                 // Filtro RICERCA
                 if (request('s')) {
@@ -181,7 +188,8 @@ class JobReports extends Controller
     public function index(string $id = null)
     {
         $reports = JobSettings::query()
-            ->where('type', 'report');
+            ->where('type', 'report')
+            ->orderBy('title');
 
         $result = $this->get_data($id, $reports);
 
