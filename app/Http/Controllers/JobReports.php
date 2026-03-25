@@ -90,38 +90,45 @@ class JobReports extends Controller
                         $queryField = $q['field'];
                     }
 
-                    $queryCondition = array(
-                        $queryField . " " . $q['operator'] . " ?",
-                        $q['operator'] == 'like' ? '%' . $q['value'] . '%' : $q['value']
-                    );
+                    $value = $q['value'] ?? null;
+
+                    // Operatori senza binding (IS NULL, IS NOT NULL)
+                    $noBindingOperators = ['IS NULL', 'IS NOT NULL'];
+
+                    // Se il valore contiene () è una funzione SQL, usala come raw
+                    $isRawValue = $value && str_contains($value, '(');
+
+                    if (in_array(strtoupper($q['operator']), $noBindingOperators)) {
+                        $queryCondition = [$queryField . " " . $q['operator'], []];
+                    } elseif ($isRawValue) {
+                        $queryCondition = [$queryField . " " . $q['operator'] . " " . $value, []];
+                    } else {
+                        $queryCondition = [
+                            $queryField . " " . $q['operator'] . " ?",
+                            $q['operator'] == 'like' ? '%' . $value . '%' : $value
+                        ];
+                    }
 
                     if (isset($q['add_operator'])) {
 
                         switch ($q['add_operator']) {
                             case 'or':
-                                $customers = $customers->orWhereRaw(
-                                    $queryCondition[0],
-                                    $queryCondition[1]
-                                );
+                                $customers = $customers->orWhereRaw($queryCondition[0], $queryCondition[1]);
                                 break;
 
                             default:
-                                $customers = $customers->whereRaw(
-                                    $queryCondition[0],
-                                    $queryCondition[1]
-                                );
+                                $customers = $customers->whereRaw($queryCondition[0], $queryCondition[1]);
                         }
 
                     } else {
 
-                        $customers = $customers->whereRaw(
-                            $queryCondition[0],
-                            $queryCondition[1]
-                        );
+                        $customers = $customers->whereRaw($queryCondition[0], $queryCondition[1]);
                     }
                 }
 
                 $select_fields = [];
+
+                $select_fields[] = DB::raw('customers.id AS id');
                 foreach ($fields_search_array as $field) {
 
                     if (substr($field, 0, strlen('mod_jobs')) == 'mod_jobs') {
@@ -158,6 +165,17 @@ class JobReports extends Controller
                 if (request('orderby') && request('ordertype')) {
                     $data->orderby(request('orderby'), strtoupper(request('ordertype')));
                 }
+
+                // Mostra la query
+                /*$sql = $data->toSql();
+                $bindings = $data->getBindings();
+
+                $fullQuery = vsprintf(
+                    str_replace('?', '%s', $sql),
+                    array_map(fn($b) => is_null($b) ? 'NULL' : "'" . addslashes($b) . "'", $bindings)
+                );
+
+                dd($fullQuery);*/
 
                 $data = $data->get();
                 $data = $data->map(function ($customer) {

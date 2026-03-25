@@ -175,11 +175,14 @@ function schemaTableFieldEdit(index, direction) {
 
                                 <select class="form-select"
                                         v-model="form.schema.filter[index]['operator']">
-                                    <option>Seleziona operatore</option>
+                                    <option value="">Seleziona operatore</option>
                                     <option value="like">contiene</option>
                                     <option value="=">=</option>
+                                    <option value="!=">!=</option>
                                     <option value=">">></option>
                                     <option value="<"><</option>
+                                    <option value="is null">IS NULL</option>
+                                    <option value="is not null">IS NOT NULL</option>
                                 </select>
 
                             </div>
