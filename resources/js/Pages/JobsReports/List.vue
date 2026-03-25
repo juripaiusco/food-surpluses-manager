@@ -43,15 +43,16 @@ if (props.reportSchema?.table) {
 
 }
 
-const selectedReportId = ref(props.report?.id ?? '')
-const open = ref(false)
+const reportSelectOpen = ref(false)
 
 function reportSelect(report) {
 
+    const reportSelectedSchema = JSON.parse(report.schema);
+
     router.get(route('jobs_reports.index', {
         id: report.id,
-        orderby: JSON.parse(report.schema)?.order?.split(' ')[0],
-        ordertype: JSON.parse(report.schema)?.order?.split(' ')[1]?.toLowerCase()
+        orderby: reportSelectedSchema?.order?.split(' ')[0],
+        ordertype: reportSelectedSchema?.order?.split(' ')[1]?.toLowerCase()
     }))
 
 }
@@ -77,11 +78,11 @@ function reportSelect(report) {
                 <div class="w-3/4 mr-2">
 
                     <div class="relative">
-                        <div @click="open = !open" class="form-select cursor-pointer">
+                        <div @click="reportSelectOpen = !reportSelectOpen" class="form-select cursor-pointer">
                             {{ report.title || 'Seleziona il report' }}
                         </div>
 
-                        <div v-if="open" class="absolute bg-white border w-full mt-1 z-10 text-gray-800">
+                        <div v-if="reportSelectOpen" class="absolute bg-white border w-full mt-1 z-10 text-gray-800">
                             <div
                                 v-for="r in reports"
                                 :key="r.id"
