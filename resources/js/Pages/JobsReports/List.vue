@@ -77,6 +77,9 @@ function reportSelect(report) {
 
                 <div class="w-3/4 mr-2">
 
+                    <!-- Overlay trasparente dietro il select -->
+                    <div v-if="reportSelectOpen" class="fixed inset-0 z-0" @click="reportSelectOpen = false"></div>
+                    
                     <div class="relative">
                         <div @click="reportSelectOpen = !reportSelectOpen" class="form-select cursor-pointer">
                             {{ report.title || 'Seleziona il report' }}
