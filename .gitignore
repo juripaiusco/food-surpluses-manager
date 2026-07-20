@@ -39,3 +39,4 @@ yarn-error.log
 python/.docker_image_built
 python/.laravel-env
 python/excel*
+CLAUDE.md
