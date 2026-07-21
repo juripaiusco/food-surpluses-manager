@@ -4,7 +4,8 @@
         "dev": "vite",
         "build": "vite build",
         "build-schio": "dotenv -e .env-prod-schio vite build",
-        "build-thiene": "dotenv -e .env-prod-thiene vite build"
+        "build-thiene": "dotenv -e .env-prod-thiene vite build",
+        "build-bassano": "dotenv -e .env-prod-bassano vite build"
     },
     "devDependencies": {
         "@inertiajs/vue3": "^1.0.0",
