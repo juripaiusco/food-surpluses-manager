@@ -5,7 +5,8 @@ import ApplicationHeader from "@/Components/ApplicationHeader.vue";
 import Table from "@/Components/Table/Table.vue";
 import Search from "@/Components/Search.vue";
 import ApplicationContainer from "@/Components/ApplicationContainer.vue";
-import {ref} from "vue";
+import {ref, computed} from "vue";
+import {Combobox, ComboboxButton, ComboboxInput, ComboboxOption, ComboboxOptions} from "@headlessui/vue";
 
 const props = defineProps({
     data: Object,
@@ -43,7 +44,19 @@ if (props.reportSchema?.table) {
 
 }
 
-const reportSelectOpen = ref(false)
+const query = ref('')
+
+const filteredReports = computed(() => {
+
+    if (query.value === '') {
+        return props.reports;
+    }
+
+    const q = query.value.toLowerCase();
+
+    return props.reports.filter((r) => r.title?.toLowerCase().includes(q) || r.description?.toLowerCase().includes(q));
+
+})
 
 function reportSelect(report) {
 
@@ -77,26 +90,44 @@ function reportSelect(report) {
 
                 <div class="w-3/4 mr-2">
 
-                    <!-- Overlay trasparente dietro il select -->
-                    <div v-if="reportSelectOpen" class="fixed inset-0 z-0" @click="reportSelectOpen = false"></div>
-                    
-                    <div class="relative">
-                        <div @click="reportSelectOpen = !reportSelectOpen" class="form-select cursor-pointer">
-                            {{ report.title || 'Seleziona il report' }}
-                        </div>
+                    <Combobox :model-value="report" @update:model-value="reportSelect">
+                        <ComboboxButton as="div" class="relative w-full cursor-pointer">
 
-                        <div v-if="reportSelectOpen" class="absolute bg-white border w-full mt-1 z-10 text-gray-800">
-                            <div
-                                v-for="r in reports"
-                                :key="r.id"
-                                @click="reportSelect(r)"
-                                class="p-2 hover:bg-gray-100 cursor-pointer"
-                            >
-                                <div class="font-medium">{{ r.title }}</div>
-                                <div class="text-sm text-gray-500">{{ r.description }}</div>
-                            </div>
-                        </div>
-                    </div>
+                            <ComboboxInput
+                                class="form-control pr-8 cursor-pointer"
+                                :display-value="(r) => r?.title || ''"
+                                placeholder="Seleziona il report o cerca per titolo o descrizione..."
+                                autocomplete="off"
+                                @change="query = $event.target.value" />
+
+                            <span class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 text-gray-400">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                                </svg>
+                            </span>
+
+                            <ComboboxOptions class="absolute bg-white border w-full mt-1 z-10 text-gray-800 max-h-72 overflow-auto">
+
+                                <div v-if="filteredReports.length === 0" class="p-2 text-sm text-gray-500">
+                                    Nessun report trovato.
+                                </div>
+
+                                <ComboboxOption
+                                    v-for="r in filteredReports"
+                                    :key="r.id"
+                                    :value="r"
+                                    v-slot="{ active }"
+                                >
+                                    <div :class="['p-2 cursor-pointer', active ? 'bg-gray-100' : '']">
+                                        <div class="font-medium">{{ r.title }}</div>
+                                        <div class="text-sm text-gray-500">{{ r.description }}</div>
+                                    </div>
+                                </ComboboxOption>
+
+                            </ComboboxOptions>
+
+                        </ComboboxButton>
+                    </Combobox>
 
                     <div class="mt-2 ml-2 text-sm">
                         {{ report.description }}
@@ -107,7 +138,8 @@ function reportSelect(report) {
 
                      <Search placeholder="Cerca..."
                             :route-search="route('jobs_reports.index', report.id)"
-                            :filters="filters" />
+                            :filters="filters"
+                            :disabled="!report?.id" />
 
                 </div>
 

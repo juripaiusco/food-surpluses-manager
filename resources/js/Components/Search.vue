@@ -4,7 +4,11 @@ defineProps({
     placeholder: String,
     routeSearch: String,
     varSearch: String,
-    filters: Object
+    filters: Object,
+    disabled: {
+        type: Boolean,
+        default: false
+    }
 });
 
 </script>
@@ -13,8 +17,10 @@ defineProps({
 
     <input :name="varSearchName"
            :placeholder="placeholder"
+           :disabled="disabled"
            autocomplete="off"
            class="form-control"
+           :class="{'opacity-50 cursor-not-allowed': disabled}"
            v-model="params[varSearchName]"
            type="search" />
 
