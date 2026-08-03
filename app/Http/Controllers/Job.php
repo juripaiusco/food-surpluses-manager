@@ -423,14 +423,14 @@ class Job extends Controller
         unset($customers_array['updated_at']);
 
         $customers_array['number'] = \App\Models\Customer::nextSuggestedNumber();
-
         $customers_array['saveRedirect'] = Redirect::back()->getTargetUrl();
 
-        $job_settings = \App\Models\JobSettings::query()->orderBy('title')->get();
+        $job_settings = \App\Models\JobSettings::query()
+            ->where('type', 'section')
+            ->orderBy('title')
+            ->get();
         $customers_array['customers_mod_jobs_schema'] = $job_settings;
-        $customers_array['customers_mod_jobs_values'] = $this->extractNames(
-            json_decode($job_settings, true)
-        );
+        $customers_array['customers_mod_jobs_values'] = [];
 
         $data = json_decode(json_encode($customers_array), true);
 
