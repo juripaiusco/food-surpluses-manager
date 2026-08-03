@@ -422,6 +422,8 @@ class Job extends Controller
         unset($customers_array['created_at']);
         unset($customers_array['updated_at']);
 
+        $customers_array['number'] = \App\Models\Customer::nextSuggestedNumber();
+
         $customers_array['saveRedirect'] = Redirect::back()->getTargetUrl();
 
         $job_settings = \App\Models\JobSettings::query()->orderBy('title')->get();

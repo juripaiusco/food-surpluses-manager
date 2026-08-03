@@ -165,6 +165,8 @@ class Customer extends Controller
         unset($customers_array['created_at']);
         unset($customers_array['updated_at']);
 
+        $customers_array['number'] = \App\Models\Customer::nextSuggestedNumber();
+
         $customers_array['saveRedirect'] = Redirect::back()->getTargetUrl();
 
         $data = json_decode(json_encode($customers_array), true);

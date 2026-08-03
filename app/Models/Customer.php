@@ -23,4 +23,15 @@ class Customer extends Model
     {
         return $this->hasOne(CustomerModJob::class);
     }
+
+    public static function nextSuggestedNumber(): ?string
+    {
+        $last = self::orderBy('id', 'desc')->first();
+
+        if (!$last || !ctype_digit((string) $last->number)) {
+            return null;
+        }
+
+        return str_pad((string) ((int) $last->number + 1), strlen($last->number), '0', STR_PAD_LEFT);
+    }
 }
