@@ -399,7 +399,7 @@ function formatCurrency(value) {
 
         <ApplicationContainer>
 
-            <div v-if="error" class="alert alert-danger">
+            <div v-if="error" class="alert alert-danger text-center !text-lg !font-bold !p-4 !border-2 !border-red-600 !mb-6">
                 {{ error }}
             </div>
 
