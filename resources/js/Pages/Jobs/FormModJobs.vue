@@ -52,13 +52,53 @@ watch(
 )
 
 // Osserva i valori del form e corregge in automatico
+// immediate: true -> corregge anche eventuali "[]" già presenti nei dati caricati da server
 watch(
     () => props.form.customers_mod_jobs_values,
     (newVal) => {
         normalizeEmptyGroups(newVal);
     },
-    { deep: true }
+    { deep: true, immediate: true }
 );
+
+/**
+ * Rimuove il suffisso "_N" da un nome di gruppo dinamico per ottenere il nome base.
+ */
+function getBaseName(name) {
+    return name.replace(/_\d+$/, '');
+}
+
+/**
+ * Rinumera in sequenza (base, _1, _2, ...) le schede rimaste in dynamicSchemas[index]
+ * e sposta i relativi valori in form.customers_mod_jobs_values sulle nuove chiavi,
+ * eliminando le vecchie chiavi ormai orfane. Evita che una cancellazione lasci
+ * dati "appesi" a una chiave che non ha più uno schema associato.
+ */
+function renumberSchemas(index) {
+    const list = dynamicSchemas.value[index]
+    if (!list.length) return
+
+    const baseName = getBaseName(list[0].name)
+    const values = props.form.customers_mod_jobs_values
+    const oldNames = list.map(s => s.name)
+
+    list.forEach((s, i) => {
+        s.name = i === 0 ? baseName : `${baseName}_${i}`
+    })
+
+    // raccoglie prima i valori dalle vecchie chiavi (evita perdite in caso di sovrapposizione)
+    const moved = {}
+    oldNames.forEach((oldName, i) => {
+        if (Object.prototype.hasOwnProperty.call(values, oldName)) {
+            moved[list[i].name] = values[oldName]
+        }
+    })
+
+    oldNames.forEach(oldName => { delete values[oldName] })
+    Object.assign(values, moved)
+
+    props.form.customers_mod_jobs_schema[index].schema = JSON.stringify(list)
+}
 
 
 // inizializza un array vuoto per ogni tab
@@ -77,19 +117,27 @@ function addSchema(index, schemaJson) {
 
         // deep clone
         const newSchema = JSON.parse(JSON.stringify(schema))
-        const count = dynamicSchemas.value[index].length
+        const list = dynamicSchemas.value[index]
+
+        // usa il massimo suffisso "_N" già presente + 1, non la lunghezza dell'array
+        // (dopo una cancellazione la lunghezza non riflette gli indici già usati)
+        const baseName = getBaseName(schema.name)
+        const maxIndex = list.reduce((max, s) => {
+            const m = /_(\d+)$/.exec(s.name)
+            return m ? Math.max(max, parseInt(m[1], 10)) : max
+        }, 0)
 
         // rinomina il gruppo principale
-        newSchema.name = `${newSchema.name}_${count}`
+        newSchema.name = `${baseName}_${maxIndex + 1}`
 
         // aggiungi id univoco
         newSchema._id = uuidv4()
 
         // aggiungi al tab corrente
-        dynamicSchemas.value[index].push(newSchema)
+        list.push(newSchema)
 
         // aggiorna nel form principale
-        props.form.customers_mod_jobs_schema[index].schema = JSON.stringify(dynamicSchemas.value[index])
+        props.form.customers_mod_jobs_schema[index].schema = JSON.stringify(list)
 
         nextTick(() => resizeTextareas())
     } catch (err) {
@@ -103,7 +151,9 @@ function removeSchema(index, id) {
         const i = list.findIndex(s => s._id === id)
         if (i !== -1) list.splice(i, 1)
 
-        props.form.customers_mod_jobs_schema[index].schema = JSON.stringify(list)
+        // rinumera in sequenza e sposta i valori sulle chiavi corrette,
+        // così eliminare la riga base non lascia orfani i dati delle righe successive
+        renumberSchemas(index)
 
         nextTick(() => resizeTextareas());
     } catch (err) {
