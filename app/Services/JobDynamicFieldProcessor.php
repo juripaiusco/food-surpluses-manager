@@ -171,14 +171,21 @@ class JobDynamicFieldProcessor
         }
 
         // Univocità cross-cliente
-        $query = \App\Models\CustomerModJob::query();
+        $query = \App\Models\CustomerModJob::query()->with('customer:id,cod,number,name,surname');
         if ($customerId) {
             $query->where('customer_id', '!=', $customerId);
         }
 
-        $duplicate = $query->whereRaw("JSON_SEARCH(`values`, 'one', ?) IS NOT NULL", [$value])->exists();
-        if ($duplicate) {
-            return "Codice Fiscale già presente in un'altra anagrafica";
+        $duplicate = $query->whereRaw("JSON_SEARCH(`values`, 'one', ?) IS NOT NULL", [$value])->first();
+        if ($duplicate && $duplicate->customer) {
+            $c = $duplicate->customer;
+            return sprintf(
+                "Codice Fiscale già presente in un'altra anagrafica: %s - %s - %s %s",
+                $c->cod,
+                $c->number,
+                $c->name,
+                $c->surname
+            );
         }
 
         return false;
