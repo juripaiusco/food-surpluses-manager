@@ -90,7 +90,7 @@ function reportSelect(report) {
 
                 <div class="w-3/4 mr-2">
 
-                    <Combobox :model-value="report" @update:model-value="reportSelect">
+                    <Combobox :model-value="report" @update:model-value="reportSelect" by="id">
                         <ComboboxButton as="div" class="relative w-full cursor-pointer">
 
                             <ComboboxInput
@@ -116,11 +116,19 @@ function reportSelect(report) {
                                     v-for="r in filteredReports"
                                     :key="r.id"
                                     :value="r"
-                                    v-slot="{ active }"
+                                    v-slot="{ active, selected }"
                                 >
-                                    <div :class="['p-2 cursor-pointer', active ? 'bg-gray-100' : '']">
-                                        <div class="font-medium">{{ r.title }}</div>
-                                        <div class="text-sm text-gray-500">{{ r.description }}</div>
+                                    <div :class="[
+                                        'p-2 cursor-pointer flex items-center justify-between',
+                                        selected ? 'bg-blue-50 font-semibold text-blue-900' : (active ? 'bg-gray-100' : '')
+                                    ]">
+                                        <div>
+                                            <div class="font-medium">{{ r.title }}</div>
+                                            <div class="text-sm text-gray-500">{{ r.description }}</div>
+                                        </div>
+                                        <svg v-if="selected" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-4 text-blue-600 shrink-0 ml-2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                                        </svg>
                                     </div>
                                 </ComboboxOption>
 
