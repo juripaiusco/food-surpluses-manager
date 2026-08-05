@@ -454,8 +454,9 @@ class Job extends Controller
             'points_renew'  => ['required'],
         ]);
 
-        if (JobDynamicFieldProcessor::exe($request)) {
-            $request->session()->flash('flash.error', JobDynamicFieldProcessor::exe($request));
+        $jobError = JobDynamicFieldProcessor::exe($request);
+        if ($jobError) {
+            $request->session()->flash('flash.error', $jobError);
             return to_route('jobs_listen.create');
         }
 
@@ -711,8 +712,9 @@ class Job extends Controller
             'points_renew'  => ['required'],
         ]);
 
-        if (JobDynamicFieldProcessor::exe($request)) {
-            $request->session()->flash('flash.error', JobDynamicFieldProcessor::exe($request));
+        $jobError = JobDynamicFieldProcessor::exe($request, (int) $id);
+        if ($jobError) {
+            $request->session()->flash('flash.error', $jobError);
             return to_route('jobs_listen.edit', ['id' => $id]);
         }
 
