@@ -68,39 +68,6 @@ function getBaseName(name) {
     return name.replace(/_\d+$/, '');
 }
 
-/**
- * Rinumera in sequenza (base, _1, _2, ...) le schede rimaste in dynamicSchemas[index]
- * e sposta i relativi valori in form.customers_mod_jobs_values sulle nuove chiavi,
- * eliminando le vecchie chiavi ormai orfane. Evita che una cancellazione lasci
- * dati "appesi" a una chiave che non ha più uno schema associato.
- */
-function renumberSchemas(index) {
-    const list = dynamicSchemas.value[index]
-    if (!list.length) return
-
-    const baseName = getBaseName(list[0].name)
-    const values = props.form.customers_mod_jobs_values
-    const oldNames = list.map(s => s.name)
-
-    list.forEach((s, i) => {
-        s.name = i === 0 ? baseName : `${baseName}_${i}`
-    })
-
-    // raccoglie prima i valori dalle vecchie chiavi (evita perdite in caso di sovrapposizione)
-    const moved = {}
-    oldNames.forEach((oldName, i) => {
-        if (Object.prototype.hasOwnProperty.call(values, oldName)) {
-            moved[list[i].name] = values[oldName]
-        }
-    })
-
-    oldNames.forEach(oldName => { delete values[oldName] })
-    Object.assign(values, moved)
-
-    props.form.customers_mod_jobs_schema[index].schema = JSON.stringify(list)
-}
-
-
 // inizializza un array vuoto per ogni tab
 onMounted(() => {
     dynamicSchemas.value = props.form.customers_mod_jobs_schema.map(data => {
@@ -151,9 +118,15 @@ function removeSchema(index, id) {
         const i = list.findIndex(s => s._id === id)
         if (i !== -1) list.splice(i, 1)
 
-        // rinumera in sequenza e sposta i valori sulle chiavi corrette,
-        // così eliminare la riga base non lascia orfani i dati delle righe successive
-        renumberSchemas(index)
+        // NB: qui si tocca solo lo schema (cosa viene visualizzato), mai
+        // form.customers_mod_jobs_values direttamente: FormKit lega ogni nodo
+        // al proprio "name" una sola volta alla creazione e non lo rinomina né
+        // rilegge il valore a caldo, quindi qualunque tentativo di rinumerare
+        // qui le chiavi finisce per confondere i nodi ancora montati. La
+        // compattazione (base, _1, _2, ...) viene invece fatta lato server al
+        // salvataggio, usando lo schema qui sopra come fonte di verità di quali
+        // istanze esistono davvero — vedi Job::compactDynamicGroups().
+        props.form.customers_mod_jobs_schema[index].schema = JSON.stringify(list)
 
         nextTick(() => resizeTextareas());
     } catch (err) {

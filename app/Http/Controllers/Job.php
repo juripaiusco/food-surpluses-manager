@@ -462,7 +462,10 @@ class Job extends Controller
         $saveRedirect = $request['saveRedirect'];
 
         $customers_mod_jobs_schema = $request['customers_mod_jobs_schema'];
-        $customers_mod_jobs_values = $request['customers_mod_jobs_values'];
+        $customers_mod_jobs_values = $this->compactDynamicGroups(
+            $customers_mod_jobs_schema,
+            $request['customers_mod_jobs_values']
+        );
 
         unset($request['saveRedirect']);
         unset($request['customers_mod_jobs_schema']);
@@ -629,6 +632,69 @@ class Job extends Controller
         return $names;
     }
 
+    /**
+     * Compatta i valori delle sezioni dinamiche (es. componenti famiglia,
+     * attestazioni ISEE) in base allo schema inviato dal client, che è la
+     * fonte di verità di quali istanze esistono davvero in questo momento
+     * (aggiunte/rimosse dall'utente in FormModJobs.vue tramite addSchema()/
+     * removeSchema()). Lato client non è affidabile rinumerare direttamente
+     * i valori: FormKit lega ogni nodo al proprio "name" solo alla creazione
+     * e non lo ri-lega mai a caldo, quindi qualunque tentativo di
+     * rinominare/spostare le chiavi mentre i nodi sono ancora montati
+     * produce dati mescolati o persi. Qui invece è puro PHP su dati statici:
+     * per ogni sezione dinamica si prende, nell'ordine dichiarato dallo
+     * schema, il valore già presente sotto ciascun nome corrente, e lo si
+     * riassegna alle chiavi canoniche (base, _1, _2, ...) — qualunque altra
+     * chiave della stessa famiglia non più referenziata dallo schema
+     * (es. una riga appena eliminata) viene scartata.
+     */
+    private function compactDynamicGroups(array $customersModJobsSchema, ?array $values): array
+    {
+        if (!is_array($values)) {
+            return $values ?? [];
+        }
+
+        foreach ($customersModJobsSchema as $section) {
+            if (empty($section['dynamic'])) {
+                continue;
+            }
+
+            $schemaEntries = json_decode($section['schema'] ?? '', true);
+            if (!is_array($schemaEntries) || empty($schemaEntries)) {
+                continue;
+            }
+
+            $names = array_filter(array_column($schemaEntries, 'name'));
+            if (empty($names)) {
+                continue;
+            }
+
+            $baseName = preg_replace('/_\d+$/', '', $names[0]);
+
+            // valori "voluti", nell'ordine in cui lo schema li dichiara adesso
+            $wanted = [];
+            foreach ($names as $name) {
+                if (array_key_exists($name, $values)) {
+                    $wanted[] = $values[$name];
+                }
+            }
+
+            // rimuove tutte le chiavi esistenti di questa famiglia dinamica
+            foreach (array_keys($values) as $key) {
+                if ($key === $baseName || preg_match('/^' . preg_quote($baseName, '/') . '_\d+$/', $key)) {
+                    unset($values[$key]);
+                }
+            }
+
+            // le riassegna in sequenza: la prima diventa la chiave base, le altre _1, _2, ...
+            foreach ($wanted as $i => $value) {
+                $values[$i === 0 ? $baseName : "{$baseName}_{$i}"] = $value;
+            }
+        }
+
+        return $values;
+    }
+
 
     /**
      * Update the specified resource in storage.
@@ -667,7 +733,10 @@ class Job extends Controller
 
         $customer_mod_jobs->customer_id = $id;
         $customer_mod_jobs->schema = $request['customers_mod_jobs_schema'];
-        $customer_mod_jobs->values = $request['customers_mod_jobs_values'];
+        $customer_mod_jobs->values = $this->compactDynamicGroups(
+            $request['customers_mod_jobs_schema'],
+            $request['customers_mod_jobs_values']
+        );
         $customer_mod_jobs->save();
 
         unset($request['customers_mod_jobs_schema']);
