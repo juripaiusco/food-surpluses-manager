@@ -41,3 +41,4 @@ python/.laravel-env
 python/excel*
 CLAUDE.md
 .claude
+/database/data
