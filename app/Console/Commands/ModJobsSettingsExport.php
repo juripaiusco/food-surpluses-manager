@@ -12,7 +12,7 @@ class ModJobsSettingsExport extends Command
      *
      * @var string
      */
-    protected $signature = 'mod-jobs-settings:export {--id=* : ID delle righe da esportare (ripetibile). Omesso insieme a --all richiede almeno un id} {--all : Esporta tutte le righe} {--out=database/data/mod_jobs_settings.json : Path del file JSON di output}';
+    protected $signature = 'mod-jobs-settings:export {--id=* : ID delle righe da esportare (ripetibile). Omesso insieme a --all e --refresh richiede almeno un id} {--all : Esporta tutte le righe} {--refresh : Rilegge gli uuid già presenti nel file --out e ne aggiorna il contenuto con i dati correnti dal DB locale (utile dopo aver risincronizzato il DB locale da un dump di produzione, quando gli id locali cambiano)} {--out=database/data/mod_jobs_settings.json : Path del file JSON di output}';
 
     /**
      * The console command description.
@@ -28,21 +28,15 @@ class ModJobsSettingsExport extends Command
     {
         $ids = $this->option('id');
         $all = (bool) $this->option('all');
+        $refresh = (bool) $this->option('refresh');
 
-        if (!$all && empty($ids)) {
-            $this->error('Specificare almeno un --id=<n> oppure --all.');
+        if ($refresh && ($all || !empty($ids))) {
+            $this->error('--refresh non può essere combinato con --id o --all.');
             return self::FAILURE;
         }
 
-        $query = JobSettings::query()->orderBy('id');
-        if (!$all) {
-            $query->whereIn('id', $ids);
-        }
-
-        $rows = $query->get();
-
-        if ($rows->isEmpty()) {
-            $this->error('Nessuna riga trovata per i criteri indicati.');
+        if (!$all && !$refresh && empty($ids)) {
+            $this->error('Specificare almeno un --id=<n>, oppure --all, oppure --refresh.');
             return self::FAILURE;
         }
 
@@ -52,6 +46,30 @@ class ModJobsSettingsExport extends Command
             $existing = json_decode(file_get_contents($outPath), true) ?: [];
             $existing = collect($existing)->keyBy('uuid')->all();
         }
+
+        if ($refresh) {
+            if (empty($existing)) {
+                $this->error("Il file {$outPath} non esiste o è vuoto: niente da aggiornare con --refresh.");
+                return self::FAILURE;
+            }
+
+            $query = JobSettings::query()->whereIn('uuid', array_keys($existing))->orderBy('id');
+        } else {
+            $query = JobSettings::query()->orderBy('id');
+            if (!$all) {
+                $query->whereIn('id', $ids);
+            }
+        }
+
+        $rows = $query->get();
+
+        if ($rows->isEmpty()) {
+            $this->error('Nessuna riga trovata per i criteri indicati.');
+            return self::FAILURE;
+        }
+
+        $requestedUuids = $refresh ? array_keys($existing) : [];
+        $foundUuids = [];
 
         $tableRows = [];
         foreach ($rows as $row) {
@@ -70,6 +88,11 @@ class ModJobsSettingsExport extends Command
             ];
 
             $tableRows[] = [$row->id, $row->uuid, $row->type, $row->title];
+            $foundUuids[] = $row->uuid;
+        }
+
+        foreach (array_diff($requestedUuids, $foundUuids) as $missingUuid) {
+            $this->warn("uuid non trovato nel DB locale, voce lasciata invariata nel file: {$missingUuid}");
         }
 
         if (!is_dir(dirname($outPath))) {

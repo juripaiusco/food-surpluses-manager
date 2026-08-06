@@ -17,10 +17,11 @@ Ogni sede ha il proprio database, indipendente dalle altre. Il deploy porta solo
 ```bash
 php artisan mod-jobs-settings:export {--id=* : ID delle righe da esportare (ripetibile)} \
                                       {--all : Esporta tutte le righe} \
+                                      {--refresh : Aggiorna nel file le righe già tracciate, risolte per uuid} \
                                       {--out=database/data/mod_jobs_settings.json : Path del file JSON di output}
 ```
 
-Serve almeno uno tra `--id` e `--all`.
+Serve esattamente una modalità tra `--id`, `--all` e `--refresh` (non combinabili tra loro).
 
 ### Esempi
 
@@ -36,6 +37,9 @@ php artisan mod-jobs-settings:export --all
 
 # Output su un file diverso da quello di default
 php artisan mod-jobs-settings:export --id=38 --out=database/data/report-cf.json
+
+# Riaggiorna le righe già presenti nel file, senza conoscerne l'id locale
+php artisan mod-jobs-settings:export --refresh
 ```
 
 ### Comportamento
@@ -45,6 +49,16 @@ php artisan mod-jobs-settings:export --id=38 --out=database/data/report-cf.json
 - Se una riga non ha ancora `uuid` (es. righe create prima dell'introduzione di questa colonna), il comando lo genera e lo salva sulla riga stessa prima di esportarla — è il comando stesso a "battezzare" righe vecchie.
 - Se il file di output esiste già, le nuove righe vengono **unite** a quelle già presenti (merge per `uuid`), non sovrascritte: si può accumulare più export nello stesso file nel tempo.
 - Stampa una tabella riassuntiva (id locale, uuid, type, title) di quanto esportato.
+
+### `--refresh`: quando serve
+
+L'`id` di `mod_jobs_settings` è locale a ogni database (auto-increment). Se si riscarica un dump di produzione in locale (`db_get.sh`, fuori repo) per lavorarci sopra, la stessa riga può ritrovarsi con un `id` diverso da quello usato nell'ultimo `--id=<n>` — bisognerebbe rintracciarlo a mano ogni volta prima di ogni deploy.
+
+`--refresh` risolve il problema al contrario: legge gli `uuid` già presenti nel file `--out` (quindi le righe già tracciate/sincronizzate in passato), le ritrova nel DB locale per `uuid` — qualunque sia il loro `id` attuale — e ne riscrive il contenuto aggiornato nel file. Non serve passare nessun `--id`.
+
+Limiti:
+- Richiede che il file `--out` esista già e contenga almeno una riga (altrimenti errore: usare prima `--id` o `--all` per popolarlo).
+- Se un `uuid` tracciato nel file non viene trovato nel DB locale (es. riga cancellata in quell'ambiente, o dump che non la contiene), il comando stampa un warning e **lascia invariata** la voce esistente nel file — non la cancella automaticamente, per non rischiare di propagare una cancellazione non intenzionale. La gestione delle righe cancellate resta manuale.
 
 ### Dopo l'export
 
