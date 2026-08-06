@@ -70,6 +70,8 @@ class ModJobsSettings extends Controller
         unset($data_array['deleted_at']);
         unset($data_array['created_at']);
         unset($data_array['updated_at']);
+        unset($data_array['user_id']);
+        unset($data_array['uuid']);
 
         $data = json_decode(json_encode($data_array), true);
 
@@ -89,6 +91,7 @@ class ModJobsSettings extends Controller
         $data = new \App\Models\JobSettings();
 
         $data->fill($request->all());
+        $data->user_id = auth()->id();
 
         $data->save();
 
@@ -125,6 +128,7 @@ class ModJobsSettings extends Controller
         $data = \App\Models\JobSettings::find($id);
 
         $data->fill($request->all());
+        $data->user_id = auth()->id();
 
         $data->save();
 
@@ -242,6 +246,8 @@ class ModJobsSettings extends Controller
         unset($data_array['deleted_at']);
         unset($data_array['created_at']);
         unset($data_array['updated_at']);
+        unset($data_array['user_id']);
+        unset($data_array['uuid']);
 
         $data = json_decode(json_encode($data_array), true);
 
@@ -269,6 +275,7 @@ class ModJobsSettings extends Controller
         $request['schema'] = json_encode($request['schema']);
 
         $data->fill($request->all());
+        $data->user_id = auth()->id();
 
         $data->save();
 
@@ -294,6 +301,7 @@ class ModJobsSettings extends Controller
         $data = \App\Models\JobSettings::find($id);
 
         $data->fill($request->all());
+        $data->user_id = auth()->id();
 
         $data->save();
 

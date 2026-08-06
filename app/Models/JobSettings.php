@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class JobSettings extends Model
 {
@@ -17,5 +18,16 @@ class JobSettings extends Model
         'query',
         'schema',
         'dynamic',
+        'user_id',
+        'uuid',
     ];
+
+    protected static function booted(): void
+    {
+        static::saving(function (JobSettings $jobSettings) {
+            if (empty($jobSettings->uuid)) {
+                $jobSettings->uuid = (string) Str::uuid();
+            }
+        });
+    }
 }
