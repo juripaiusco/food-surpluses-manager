@@ -86,7 +86,20 @@ class JobDynamicFieldProcessor
      */
     public static function resolveFieldValue(array $groupPath, string $fieldName, Request $request)
     {
-        $value = $request->input('customers_mod_jobs_values');
+        return JobDynamicFieldProcessor::resolveFieldValueFromArray(
+            $groupPath,
+            $fieldName,
+            $request->input('customers_mod_jobs_values') ?? []
+        );
+    }
+
+    /**
+     * Come resolveFieldValue(), ma legge da un array di valori già in memoria
+     * (es. customers_mod_jobs.values persistiti) invece che dalla request.
+     */
+    public static function resolveFieldValueFromArray(array $groupPath, string $fieldName, array $values)
+    {
+        $value = $values;
 
         foreach ($groupPath as $group) {
             $value = is_array($value) ? ($value[$group] ?? null) : null;
@@ -166,6 +179,51 @@ class JobDynamicFieldProcessor
 
                 if ($siblingValue && strtoupper(trim($siblingValue)) === $value) {
                     return "Codice Fiscale duplicato nella stessa scheda";
+                }
+            }
+        }
+
+        // Univocità nella stessa scheda anche per le sezioni NON incluse nel
+        // modulo attualmente in uso (es. modifica da 'customers', che mostra
+        // solo la sezione Anagrafica, mentre il CF di un componente famiglia
+        // è stato inserito in precedenza da 'jobs_listen', che mostra anche
+        // la sezione Famiglia componenti): senza questo controllo il campo
+        // resterebbe invisibile al confronto "stessa submission" sopra,
+        // perché quel campo non fa parte dello schema postato da questo
+        // modulo — si confronta quindi col valore già persistito.
+        if ($customerId) {
+            $currentSectionIds = array_column($request->input('customers_mod_jobs_schema', []), 'id');
+
+            $otherSections = \App\Models\JobSettings::query()
+                ->where('type', 'section')
+                ->whereNotIn('id', $currentSectionIds)
+                ->get(['id', 'schema'])
+                ->map(fn ($s) => ['schema' => $s->schema])
+                ->all();
+
+            if (!empty($otherSections)) {
+                $persistedValues = optional(
+                    \App\Models\CustomerModJob::query()->where('customer_id', $customerId)->first()
+                )->values ?? [];
+
+                $otherFieldsWithFncPhp = JobDynamicFieldProcessor::search_field_with_FncPhp($otherSections);
+
+                foreach ($otherFieldsWithFncPhp as $otherSection) {
+                    foreach ($otherSection as $sibling) {
+                        if (($sibling['field']['fnc_php'] ?? null) !== 'validation_cf') {
+                            continue;
+                        }
+
+                        $siblingValue = JobDynamicFieldProcessor::resolveFieldValueFromArray(
+                            $sibling['groupPath'] ?? [],
+                            $sibling['field']['name'],
+                            $persistedValues
+                        );
+
+                        if ($siblingValue && strtoupper(trim($siblingValue)) === $value) {
+                            return "Codice Fiscale duplicato nella stessa scheda";
+                        }
+                    }
                 }
             }
         }
