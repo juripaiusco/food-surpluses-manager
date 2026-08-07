@@ -427,6 +427,7 @@ class Job extends Controller
 
         $job_settings = \App\Models\JobSettings::query()
             ->where('type', 'section')
+            ->where('json_modules->jobs_listen', true)
             ->orderBy('title')
             ->get();
         $customers_array['customers_mod_jobs_schema'] = $job_settings;
@@ -540,6 +541,7 @@ class Job extends Controller
 
         $job_settings = \App\Models\JobSettings::query()
             ->where('type', 'section')
+            ->where('json_modules->jobs_listen', true)
             ->orderBy('title')
             ->get();
         $mod_jobs_schema_model = json_decode(json_encode($job_settings), true);

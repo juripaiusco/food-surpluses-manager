@@ -79,7 +79,8 @@ class ModJobsSettings extends Controller
         $data['type'] = 'section';
 
         return Inertia::render('JobsSettings/Sections/Form', [
-            'data' => $data
+            'data' => $data,
+            'modules_array' => config('modules.list')
         ]);
     }
 
@@ -92,6 +93,7 @@ class ModJobsSettings extends Controller
 
         $data->fill($request->all());
         $data->user_id = auth()->id();
+        $data->json_modules = json_encode($request->input('modules'));
 
         $data->save();
 
@@ -111,10 +113,22 @@ class ModJobsSettings extends Controller
      */
     public function editSections(string $id)
     {
-        $data = \App\Models\JobSettings::find($id);
+        $query = \App\Models\JobSettings::query();
+        $query->select();
+
+        foreach (config('modules.list') as $k => $module) {
+
+            $query = $query->addSelect(
+                'json_modules->' . $k . ' AS mod_' . $k
+            );
+
+        }
+
+        $data = $query->find($id);
 
         return Inertia::render('JobsSettings/Sections/Form', [
-            'data' => $data
+            'data' => $data,
+            'modules_array' => config('modules.list')
         ]);
     }
 
@@ -129,6 +143,7 @@ class ModJobsSettings extends Controller
 
         $data->fill($request->all());
         $data->user_id = auth()->id();
+        $data->json_modules = json_encode($request->input('modules'));
 
         $data->save();
 

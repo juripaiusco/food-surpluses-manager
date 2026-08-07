@@ -12,12 +12,20 @@ import {FormKitSchema} from "@formkit/vue";
 const props = defineProps({
 
     data: Object,
+    modules_array: Object,
 
 });
 
 const dataForm = Object.fromEntries(Object.entries(props.data).map((v) => {
     return props.data ? v : '';
 }));
+
+dataForm.modules = Object.keys(props.modules_array).map((v) => {
+    return {[v]: props.data ? props.data['mod_' + v] : ''};
+}).reduce((json, value, key) => {
+    json[Object.keys(value)] = Object.values(value)[0] === 'true' ? true : false;
+    return json;
+}, {});
 
 const form = useForm(dataForm);
 
@@ -147,6 +155,27 @@ onBeforeUnmount(() => {
                            for="dynamic">
                         Sezione dinamica
                     </label>
+                </div>
+
+                <h2 class="text-3xl mb-2 mt-8">Moduli in cui è visibile</h2>
+
+                <div class="row">
+
+                    <div class="col col-lg-3 mb-2"
+                         v-for="(mod, k) in modules_array">
+
+                        <div class="form-check">
+                            <input type="checkbox"
+                                   class="form-check-input"
+                                   v-model="form.modules[k]"
+                                   :id="k"
+                                   :name="'modules[' + k + ']'" />
+                            <label class="form-check-label"
+                                   :for="k">{{ mod.title }}</label>
+                        </div>
+
+                    </div>
+
                 </div>
 
                 <br>
