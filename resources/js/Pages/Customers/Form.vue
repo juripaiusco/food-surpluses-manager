@@ -8,10 +8,13 @@ import {Link} from "@inertiajs/vue3";
 import {useForm} from "@inertiajs/vue3";
 import Table from "@/Components/Table/Table.vue";
 import {__} from "@/extComponents/Translations";
+import FormModJobs from "@/Components/FormModJobs.vue";
+import {useModJobsValidation} from "@/Composables/useModJobsValidation";
 
 const props = defineProps({
 
     data: Object,
+    error: String,
     saveRedirect: String,
 
 });
@@ -21,6 +24,8 @@ const dataForm = Object.fromEntries(Object.entries(props.data).map((v) => {
 }));
 
 const form = useForm(dataForm);
+
+useModJobsValidation(form);
 
 </script>
 
@@ -37,6 +42,10 @@ const form = useForm(dataForm);
         </template>
 
         <ApplicationContainer>
+
+            <div v-if="error" class="alert alert-danger text-center !text-lg !font-bold !p-4 !border-2 !border-red-600 !mb-6">
+                {{ error }}
+            </div>
 
             <h2 class="text-3xl mb-2">Dati Assistito</h2>
             <br>
@@ -247,6 +256,10 @@ const form = useForm(dataForm);
                             </div>
 
                         </div>
+
+                        <hr class="my-10">
+
+                        <FormModJobs :form="form" />
 
                         <!-- END - ANAGRAFICA -->
 

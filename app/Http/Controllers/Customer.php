@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CustomerModJob;
+use App\Services\CustomerModJobService;
+use App\Services\JobDynamicFieldProcessor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
@@ -169,6 +172,10 @@ class Customer extends Controller
 
         $customers_array['saveRedirect'] = Redirect::back()->getTargetUrl();
 
+        $job_settings = CustomerModJobService::sectionsForModule('customers');
+        $customers_array['customers_mod_jobs_schema'] = $job_settings;
+        $customers_array['customers_mod_jobs_values'] = [];
+
         $data = json_decode(json_encode($customers_array), true);
 
         return Inertia::render('Customers/Form', [
@@ -191,15 +198,36 @@ class Customer extends Controller
             'points_renew'  => ['required'],
         ]);
 
+        $jobError = JobDynamicFieldProcessor::exe($request);
+        if ($jobError) {
+            $request->session()->flash('flash.error', $jobError);
+            return to_route('customers.create');
+        }
+
         $saveRedirect = $request['saveRedirect'];
 
+        $customers_mod_jobs_schema = $request['customers_mod_jobs_schema'];
+        $customers_mod_jobs_values = CustomerModJobService::mergeModuleValues(
+            [],
+            $customers_mod_jobs_schema,
+            $request['customers_mod_jobs_values'] ?? []
+        );
+
         unset($request['saveRedirect']);
+        unset($request['customers_mod_jobs_schema']);
+        unset($request['customers_mod_jobs_values']);
 
         $customer = new \App\Models\Customer();
 
         $customer->fill($request->all());
 
         $customer->save();
+
+        $customer_mod_jobs = new CustomerModJob();
+        $customer_mod_jobs->customer_id = $customer->id;
+        $customer_mod_jobs->schema = $customers_mod_jobs_schema;
+        $customer_mod_jobs->values = $customers_mod_jobs_values;
+        $customer_mod_jobs->save();
 
         return Redirect::to($saveRedirect);
     }
@@ -232,8 +260,23 @@ class Customer extends Controller
 
         $data->saveRedirect = Redirect::back()->getTargetUrl();
 
+        $job_settings = CustomerModJobService::sectionsForModule('customers');
+        $mod_jobs_schema_model = json_decode(json_encode($job_settings), true);
+
+        $customer_mod_jobs = CustomerModJob::query()
+            ->where('customer_id', $id)
+            ->first();
+
+        $hydrated = CustomerModJobService::hydrateEdit(
+            $mod_jobs_schema_model,
+            optional($customer_mod_jobs)->values
+        );
+        $data->customers_mod_jobs_schema = $hydrated['schema'];
+        $data->customers_mod_jobs_values = $hydrated['values'];
+
         return Inertia::render('Customers/Form', [
             'data' => $data,
+            'error' => request()->session()->get('flash.error'),
         ]);
     }
 
@@ -252,12 +295,36 @@ class Customer extends Controller
             'points_renew'  => ['required'],
         ]);
 
+        $jobError = JobDynamicFieldProcessor::exe($request, (int) $id);
+        if ($jobError) {
+            $request->session()->flash('flash.error', $jobError);
+            return to_route('customers.edit', ['id' => $id]);
+        }
+
         $saveRedirect = $request['saveRedirect'];
+
+        $customer_mod_jobs = CustomerModJob::query()->where('customer_id', $id)->first();
+        $existingValues = optional($customer_mod_jobs)->values ?? [];
+
+        if ($customer_mod_jobs == null) {
+            $customer_mod_jobs = new CustomerModJob();
+        }
+
+        $customer_mod_jobs->customer_id = $id;
+        $customer_mod_jobs->schema = $request['customers_mod_jobs_schema'];
+        $customer_mod_jobs->values = CustomerModJobService::mergeModuleValues(
+            $existingValues,
+            $request['customers_mod_jobs_schema'],
+            $request['customers_mod_jobs_values'] ?? []
+        );
+        $customer_mod_jobs->save();
 
         unset($request['order']);
         unset($request['created_at']);
         unset($request['updated_at']);
         unset($request['saveRedirect']);
+        unset($request['customers_mod_jobs_schema']);
+        unset($request['customers_mod_jobs_values']);
 
         $customer = \App\Models\Customer::find($id);
 

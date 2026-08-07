@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CustomerModJob;
+use App\Services\CustomerModJobService;
 use App\Services\JobDynamicFieldProcessor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -425,11 +426,7 @@ class Job extends Controller
         $customers_array['number'] = \App\Models\Customer::nextSuggestedNumber();
         $customers_array['saveRedirect'] = Redirect::back()->getTargetUrl();
 
-        $job_settings = \App\Models\JobSettings::query()
-            ->where('type', 'section')
-            ->where('json_modules->jobs_listen', true)
-            ->orderBy('title')
-            ->get();
+        $job_settings = CustomerModJobService::sectionsForModule('jobs_listen');
         $customers_array['customers_mod_jobs_schema'] = $job_settings;
         $customers_array['customers_mod_jobs_values'] = [];
 
@@ -464,9 +461,10 @@ class Job extends Controller
         $saveRedirect = $request['saveRedirect'];
 
         $customers_mod_jobs_schema = $request['customers_mod_jobs_schema'];
-        $customers_mod_jobs_values = $this->compactDynamicGroups(
+        $customers_mod_jobs_values = CustomerModJobService::mergeModuleValues(
+            [],
             $customers_mod_jobs_schema,
-            $request['customers_mod_jobs_values']
+            $request['customers_mod_jobs_values'] ?? []
         );
 
         unset($request['saveRedirect']);
@@ -539,165 +537,25 @@ class Job extends Controller
             $data->saveRedirect = $request['saveRedirectURL'];
         }
 
-        $job_settings = \App\Models\JobSettings::query()
-            ->where('type', 'section')
-            ->where('json_modules->jobs_listen', true)
-            ->orderBy('title')
-            ->get();
+        $job_settings = CustomerModJobService::sectionsForModule('jobs_listen');
         $mod_jobs_schema_model = json_decode(json_encode($job_settings), true);
-        $data->customers_mod_jobs_schema = $mod_jobs_schema_model;
 
         $customer_mod_jobs = CustomerModJob::query()
             ->where('customer_id', $id)
             ->first();
-        $data->customers_mod_jobs_values = [];
-        if ($customer_mod_jobs != null) {
 
-            /*
-            $mod_jobs_schema_customer = json_decode($customer_mod_jobs->schema, true);
-
-            $arrayMergeSchema = [];
-            foreach ($mod_jobs_schema_model as $k => $d) {
-                $arrayMergeSchema[$k]['id'] = $d['id'];
-                $arrayMergeSchema[$k]['title'] = $d['title'];
-                $arrayMergeSchema[$k]['schema'] = json_encode(FormSchemaMerger::merge(
-                    json_decode($mod_jobs_schema_model[$k]['schema'], true),
-                    json_decode($mod_jobs_schema_customer[$k]['schema'], true)
-                ));
-                $arrayMergeSchema[$k]['dynamic'] = $d['dynamic'];
-                $arrayMergeSchema[$k]['created_at'] = $d['created_at'];
-                $arrayMergeSchema[$k]['updated_at'] = $d['updated_at'];
-            }
-
-            $data->customers_mod_jobs_schema = $arrayMergeSchema;
-            */
-
-            if ($customer_mod_jobs->values) {
-                $data->customers_mod_jobs_values = $customer_mod_jobs->values;
-                $customers_mod_jobs_schema = $data->customers_mod_jobs_schema;
-                foreach ($data->customers_mod_jobs_schema as $schema) {
-                    if ($schema['dynamic']) {
-
-                        // Recupero il nome dei gruppi delle sezioni dinamiche
-                        $schema_id = $schema['id'];
-                        $schema_dynamic_name = json_decode($schema['schema'], true)[0]['name'];
-
-                        // Conto quanti gruppi dinamici ci sono nei dati
-                        $c = 0;
-                        foreach (array_keys($data->customers_mod_jobs_values) as $key_name) {
-                            if (substr($key_name, 0, strlen($schema_dynamic_name)) === $schema_dynamic_name) {
-                                $c++;
-                            }
-                        }
-
-                        // Creo lo schema corretto in base al numero
-                        foreach ($customers_mod_jobs_schema as $k => $schema_to_edit) {
-                            if ($schema_to_edit['id'] == $schema_id) {
-                                $schema_array = json_decode($schema_to_edit['schema'], true);
-
-                                for ($i = 1; $i < $c; $i++) {
-                                    $schema_array[$i] = $schema_array[0];
-                                    $schema_array[$i]['name'] = $schema_array[0]['name'] . '_' . $i;
-                                    $schema_array[$i]['_id'] = uniqid();
-                                }
-
-                                $customers_mod_jobs_schema[$k]['schema'] = json_encode($schema_array);
-                            }
-                        }
-                    }
-                }
-
-                $data->customers_mod_jobs_schema = $customers_mod_jobs_schema;
-//                $data->customers_mod_jobs_schema = $customer_mod_jobs->schema;
-            } else {
-                $data->customers_mod_jobs_values = $this->extractNames(
-                    $data->customers_mod_jobs_schema
-                );
-            }
-        }
+        $hydrated = CustomerModJobService::hydrateEdit(
+            $mod_jobs_schema_model,
+            optional($customer_mod_jobs)->values
+        );
+        $data->customers_mod_jobs_schema = $hydrated['schema'];
+        $data->customers_mod_jobs_values = $hydrated['values'];
 
         return Inertia::render('Jobs/Form', [
             'data' => $data,
             'error' => request()->session()->get('flash.error')
         ]);
     }
-
-    public function extractNames(array $items): array {
-        $names = [];
-        foreach ($items as $item) {
-            if (isset($item['name'])) {
-                $names[$item['name']] = '';
-            }
-            if (isset($item['children']) && is_array($item['children'])) {
-                $names = array_merge($names, $this->extractNames($item['children']));
-            }
-        }
-        return $names;
-    }
-
-    /**
-     * Compatta i valori delle sezioni dinamiche (es. componenti famiglia,
-     * attestazioni ISEE) in base allo schema inviato dal client, che è la
-     * fonte di verità di quali istanze esistono davvero in questo momento
-     * (aggiunte/rimosse dall'utente in FormModJobs.vue tramite addSchema()/
-     * removeSchema()). Lato client non è affidabile rinumerare direttamente
-     * i valori: FormKit lega ogni nodo al proprio "name" solo alla creazione
-     * e non lo ri-lega mai a caldo, quindi qualunque tentativo di
-     * rinominare/spostare le chiavi mentre i nodi sono ancora montati
-     * produce dati mescolati o persi. Qui invece è puro PHP su dati statici:
-     * per ogni sezione dinamica si prende, nell'ordine dichiarato dallo
-     * schema, il valore già presente sotto ciascun nome corrente, e lo si
-     * riassegna alle chiavi canoniche (base, _1, _2, ...) — qualunque altra
-     * chiave della stessa famiglia non più referenziata dallo schema
-     * (es. una riga appena eliminata) viene scartata.
-     */
-    private function compactDynamicGroups(array $customersModJobsSchema, ?array $values): array
-    {
-        if (!is_array($values)) {
-            return $values ?? [];
-        }
-
-        foreach ($customersModJobsSchema as $section) {
-            if (empty($section['dynamic'])) {
-                continue;
-            }
-
-            $schemaEntries = json_decode($section['schema'] ?? '', true);
-            if (!is_array($schemaEntries) || empty($schemaEntries)) {
-                continue;
-            }
-
-            $names = array_filter(array_column($schemaEntries, 'name'));
-            if (empty($names)) {
-                continue;
-            }
-
-            $baseName = preg_replace('/_\d+$/', '', $names[0]);
-
-            // valori "voluti", nell'ordine in cui lo schema li dichiara adesso
-            $wanted = [];
-            foreach ($names as $name) {
-                if (array_key_exists($name, $values)) {
-                    $wanted[] = $values[$name];
-                }
-            }
-
-            // rimuove tutte le chiavi esistenti di questa famiglia dinamica
-            foreach (array_keys($values) as $key) {
-                if ($key === $baseName || preg_match('/^' . preg_quote($baseName, '/') . '_\d+$/', $key)) {
-                    unset($values[$key]);
-                }
-            }
-
-            // le riassegna in sequenza: la prima diventa la chiave base, le altre _1, _2, ...
-            foreach ($wanted as $i => $value) {
-                $values[$i === 0 ? $baseName : "{$baseName}_{$i}"] = $value;
-            }
-        }
-
-        return $values;
-    }
-
 
     /**
      * Update the specified resource in storage.
@@ -728,18 +586,18 @@ class Job extends Controller
         unset($request['saveRedirect']);*/
 
         $customer_mod_jobs = CustomerModJob::query()->where('customer_id', $id)->first();
+        $existingValues = optional($customer_mod_jobs)->values ?? [];
 
         if ($customer_mod_jobs == null) {
             $customer_mod_jobs = new CustomerModJob();
         }
 
-//        dd($request['customers_mod_jobs_values']);
-
         $customer_mod_jobs->customer_id = $id;
         $customer_mod_jobs->schema = $request['customers_mod_jobs_schema'];
-        $customer_mod_jobs->values = $this->compactDynamicGroups(
+        $customer_mod_jobs->values = CustomerModJobService::mergeModuleValues(
+            $existingValues,
             $request['customers_mod_jobs_schema'],
-            $request['customers_mod_jobs_values']
+            $request['customers_mod_jobs_values'] ?? []
         );
         $customer_mod_jobs->save();
 

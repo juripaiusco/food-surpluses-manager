@@ -7,7 +7,8 @@ import ApplicationContainer from "@/Components/ApplicationContainer.vue";
 import {useForm} from "@inertiajs/vue3";
 import Table from "@/Components/Table/Table.vue";
 import {__} from "@/extComponents/Translations";
-import FormModJobs from "@/Pages/Jobs/FormModJobs.vue";
+import FormModJobs from "@/Components/FormModJobs.vue";
+import {useModJobsValidation} from "@/Composables/useModJobsValidation";
 import {computed, ref, watch} from "vue";
 import {isArray} from "es-toolkit/compat";
 import ItemData from "@/PagesComponents/Dashboard/ItemData.vue";
@@ -29,82 +30,7 @@ const form = useForm(dataForm);
 
 let save_redirect = ref(true);
 
-watch(
-    () => form.customers_mod_jobs_values,
-    (newVal) => {
-        validateHasError()
-    },
-    { deep: true }
-);
-
-function markRequiredFields(nodeArray, values) {
-    if (!Array.isArray(nodeArray)) {
-        return false;
-    }
-
-    let sectionHasError = false;
-
-    nodeArray.forEach(node => {
-        if (node.validation && node.validation.includes('required')) {
-            const value = values[node.name];
-            const currentInputClass = node.classes?.input || '';
-            const errorClass = '!border !border-red-500';
-
-            if (
-                value === undefined ||
-                value === null ||
-                (typeof value === 'string' && value.trim() === '') ||
-                (Array.isArray(value) && value.length === 0)
-            ) {
-                sectionHasError = true;
-
-                node.classes = node.classes || {};
-                node.classes.input = `${currentInputClass} ${errorClass}`.trim();
-            } else {
-                node.classes = node.classes || {};
-                node.classes.input = currentInputClass.replace(errorClass, '').trim();
-            }
-        }
-
-        // Ricorsione sicura
-        if (Array.isArray(node.children)) {
-            if (markRequiredFields(node.children, values)) {
-                sectionHasError = true;
-            }
-        }
-    });
-
-    return sectionHasError;
-}
-
-async function validateHasError() {
-
-    let hasErrorGlobal = false;
-
-    form.customers_mod_jobs_schema.forEach(section => {
-        let schema = JSON.parse(section.schema);
-
-        // Controllo ricorsivo dei campi richiesti
-        const hasError = markRequiredFields(schema, form.customers_mod_jobs_values);
-
-        // Aggiorna titolo se ci sono errori
-        if (hasError) {
-            if (!section.title.includes('*')) {
-                section.title = `${section.title} *`;
-            }
-            section.error = hasError;
-            hasErrorGlobal = true;
-        } else {
-            section.title = section.title.replace(/\s\*$/, '');
-            section.error = '';
-        }
-
-        // Aggiorna lo schema nel form reattivo
-        section.schema = JSON.stringify(schema);
-    });
-
-    return hasErrorGlobal;
-}
+useModJobsValidation(form);
 
 async function submit() {
     // Verifico se sono stati compilati tutti i campi
