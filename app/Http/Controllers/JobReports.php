@@ -14,10 +14,9 @@ class JobReports extends Controller
     private function isSafeQuery(string $query): bool
     {
         $forbidden = ['insert', 'update', 'delete', 'drop', 'truncate', 'alter', 'grant', 'create'];
-        $queryLower = strtolower($query);
 
         foreach ($forbidden as $keyword) {
-            if (str_contains($queryLower, $keyword)) {
+            if (preg_match('/\b' . $keyword . '\b/i', $query)) {
                 return false;
             }
         }

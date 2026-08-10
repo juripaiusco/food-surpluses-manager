@@ -160,6 +160,10 @@ export default {
 
                 data = struct.fnc(d);
 
+            } else if (struct.format === 'currency' && data !== null && data !== undefined && data !== '') {
+
+                data = '€ ' + Number(data).toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
             }
 
             return data;
