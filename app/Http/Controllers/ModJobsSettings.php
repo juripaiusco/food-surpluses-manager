@@ -247,6 +247,14 @@ class ModJobsSettings extends Controller
         return $report_fields;
     }
 
+    private function drilldownReportsList()
+    {
+        return JobSettings::query()
+            ->where('type', 'report')
+            ->orderBy('title')
+            ->get(['id', 'title']);
+    }
+
     public function createReports()
     {
         // Creo un oggetto di dati vuoto
@@ -275,8 +283,14 @@ class ModJobsSettings extends Controller
             'field' => '',
             'label' => '',
         );
+        $data['schema']['drilldown'] = array(
+            'report_id' => null,
+            'field' => null,
+        );
         $data['type'] = 'report';
+        $data['visible'] = true;
         $data['report_fields'] = $this->fieldsReports();
+        $data['drilldown_reports'] = $this->drilldownReportsList();
 
         return Inertia::render('JobsSettings/Reports/Form', [
             'data' => $data
@@ -301,8 +315,14 @@ class ModJobsSettings extends Controller
     {
         $data = \App\Models\JobSettings::find($id);
 
-        $data['schema'] = json_decode($data['schema'], true);
+        $schema = json_decode($data['schema'], true) ?? [];
+        $schema['drilldown'] = $schema['drilldown'] ?? array(
+            'report_id' => null,
+            'field' => null,
+        );
+        $data['schema'] = $schema;
         $data['report_fields'] = $this->fieldsReports();
+        $data['drilldown_reports'] = $this->drilldownReportsList();
 
         return Inertia::render('JobsSettings/Reports/Form', [
             'data' => $data

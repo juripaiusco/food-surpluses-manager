@@ -154,7 +154,7 @@ class JobReports extends Controller
                                 $queryField = $field;
                             }
 
-                            $q->orWhereRaw($queryField . ' like \'%' . request('s') . '%\'');
+                            $q->orWhereRaw($queryField . ' like ?', ['%' . request('s') . '%']);
                         }
 
                     });
@@ -210,13 +210,15 @@ class JobReports extends Controller
 
         $result = $this->get_data($id, $reports);
 
-        $reports = $reports->get();
+        // Filtro "visibile in lista" solo per il picker: un report nascosto
+        // resta comunque raggiungibile direttamente via id (es. drill-down).
+        $reportsList = (clone $reports)->where('visible', true)->get();
 
         return Inertia::render('JobsReports/List', [
             'data' => $result->data,
             'report' => $result->report,
             'reportSchema' => isset($result->report->schema) ? json_decode($result->report->schema, true) : [],
-            'reports' => $reports,
+            'reports' => $reportsList,
             'filters' => request()->all(['s', 'orderby', 'ordertype'])
         ]);
     }

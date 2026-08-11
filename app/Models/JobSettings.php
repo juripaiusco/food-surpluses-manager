@@ -18,8 +18,13 @@ class JobSettings extends Model
         'query',
         'schema',
         'dynamic',
+        'visible',
         'user_id',
         'uuid',
+    ];
+
+    protected $casts = [
+        'visible' => 'boolean',
     ];
 
     protected static function booted(): void

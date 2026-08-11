@@ -114,6 +114,14 @@ function schemaTableFieldEdit(index, direction) {
                           class="form-control mb-4"
                           v-model="form.description"></textarea>
 
+                <div class="form-check mb-4">
+                    <input type="checkbox"
+                           id="visible"
+                           class="form-check-input"
+                           v-model="form.visible">
+                    <label for="visible" class="form-check-label">Visibile in lista</label>
+                </div>
+
                 <br>
 
                 <h2 class="text-3xl mb-2">Query</h2>
@@ -337,6 +345,57 @@ function schemaTableFieldEdit(index, direction) {
                     </div>
 
                 </div>
+
+                <br>
+
+                <h2 class="text-3xl mb-2">Drill-down</h2>
+
+                <label>
+                    Collega questo report a un report figlio: cliccando su una riga si aprirà il report
+                    figlio filtrato tramite ricerca (stesso comportamento del campo "Cerca...") sul valore
+                    del campo selezionato qui sotto.
+                </label>
+
+                <br><br>
+
+                <div class="row mt-2">
+                    <div class="col">
+
+                        <label class="form-label">Report figlio</label>
+
+                        <select class="form-select"
+                                v-model="form.schema.drilldown.report_id">
+                            <option :value="null">Nessuno</option>
+
+                            <template v-for="r in form.drilldown_reports" :key="r.id">
+                                <option v-if="r.id !== form.id"
+                                        :value="r.id">
+                                    {{ r.title }}
+                                </option>
+                            </template>
+
+                        </select>
+
+                    </div>
+                    <div class="col">
+
+                        <label class="form-label">Campo da passare come ricerca</label>
+
+                        <select class="form-select"
+                                v-model="form.schema.drilldown.field">
+                            <option :value="null">Seleziona campo</option>
+
+                            <option v-for="field in form.schema.table"
+                                    :value="field.field">
+                                {{ field.label }} ({{ field.field }})
+                            </option>
+
+                        </select>
+
+                    </div>
+                </div>
+
+                <br>
 
                 <div class="text-right mt-8">
 

@@ -42,7 +42,7 @@ defineProps({
 
                         <Link class="btn btn-sm"
                               v-if="struct.emit === undefined"
-                              :href="struct.route.includes('/') === true ? struct.route : route(struct.route, d.id)"
+                              :href="typeof struct.hrefFnc === 'function' ? struct.hrefFnc(d) : (struct.route.includes('/') === true ? struct.route : route(struct.route, d.id))"
                               :data="struct.filters ? struct.filters : data.filters"
                               :preserveState="data.preserveState">
 
