@@ -22,7 +22,7 @@ const props = defineProps({
 let modalShow = ref(props.modalShow);
 let modalData = ref(props.modalData);
 let modalConfirm = ref(props.modalConfirm);
-let structureTable = props.reportSchema.table;
+let structureTable = props.reportSchema?.table ? [...props.reportSchema.table] : [];
 
 if (props.reportSchema?.table) {
 
