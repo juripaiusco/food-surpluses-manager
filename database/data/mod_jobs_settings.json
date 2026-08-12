@@ -34,5 +34,23 @@
         "query": "SELECT\n    c.id                        AS id,\n    c.cod                       AS cod,\n    CAST(c.number AS UNSIGNED)  AS number,\n    c.surname                   AS cognome,\n    c.name                      AS nome,\n    MAX(o.date)                 AS ultima_spesa,\n    DATEDIFF(CURDATE(), MAX(o.date)) AS giorni\n\nFROM customers c\nLEFT JOIN orders o ON o.customer_id = c.id\nWHERE c.active = 1\nGROUP BY c.id, c.cod, c.number, c.surname, c.name\nORDER BY ultima_spesa ASC",
         "schema": "{\"filter\":[{\"field\":null,\"operator\":null,\"value\":null}],\"table\":[{\"field\":\"number\",\"label\":\"N. Assistito\"},{\"field\":\"cognome\",\"label\":\"Cognome\"},{\"field\":\"nome\",\"label\":\"Nome\"},{\"field\":\"ultima_spesa\",\"label\":\"Ultima spesa\",\"class\":\"text-center\"},{\"field\":\"giorni\",\"label\":\"Giorni dall'ultima spesa\",\"class\":\"text-center\"}],\"order\":\"ultima_spesa ASC\"}",
         "dynamic": null
+    },
+    {
+        "uuid": "39ab21fc-f802-4971-8701-0c0df9d9a271",
+        "type": "report",
+        "title": "⭐️ Elenco assistiti per comune",
+        "description": "Mostra il conteggio degli assistiti raggruppati per comune di presa in carico (o di residenza se non presente).",
+        "query": "SELECT\n    COALESCE(\n        NULLIF(JSON_UNQUOTE(JSON_EXTRACT(j.`values`, '$.mod_jobs_anagrafica_comune_presa_in_carico')), ''),\n        JSON_UNQUOTE(JSON_EXTRACT(j.`values`, '$.mod_jobs_anagrafica_domicilio_comune'))\n    ) AS comune,\n    COUNT(*) AS totale_assistiti\n\nFROM customers c\nINNER JOIN customers_mod_jobs j ON j.customer_id = c.id\n\nGROUP BY comune\nORDER BY comune",
+        "schema": "{\"filter\":[{\"field\":null,\"operator\":null,\"value\":null}],\"table\":[{\"field\":\"comune\",\"label\":\"Comune\"},{\"field\":\"totale_assistiti\",\"label\":\"Totale Assistiti\",\"class\":\"text-right\"}],\"order\":\"totale_assistiti DESC\",\"drilldown\":{\"report_id\":47,\"field\":\"comune\"}}",
+        "dynamic": null
+    },
+    {
+        "uuid": "37b5afc5-37e3-4e75-8b21-6605be34591d",
+        "type": "report",
+        "title": "⭐️ Assistiti per comune",
+        "description": "Elenco degli assistiti del comune selezionato nel report Elenco assistiti per comune (comune di presa in carico o di residenza).",
+        "query": "SELECT\n    c.id                        AS id,\n    c.cod                       AS cod,\n    CAST(c.number AS UNSIGNED)  AS number,\n    c.surname                   AS cognome,\n    c.name                      AS nome,\n    COALESCE(\n        NULLIF(JSON_UNQUOTE(JSON_EXTRACT(j.`values`, '$.mod_jobs_anagrafica_comune_presa_in_carico')), ''),\n        JSON_UNQUOTE(JSON_EXTRACT(j.`values`, '$.mod_jobs_anagrafica_domicilio_comune'))\n    ) AS comune\n\nFROM customers c\nINNER JOIN customers_mod_jobs j ON j.customer_id = c.id\n\nORDER BY cognome ASC, nome ASC",
+        "schema": "{\"filter\":[{\"field\":null,\"operator\":null,\"value\":null}],\"table\":[{\"field\":\"cod\",\"label\":\"Codice\"},{\"field\":\"number\",\"label\":\"N. Assistito\",\"class\":\"text-right\"},{\"field\":\"cognome\",\"label\":\"Cognome\"},{\"field\":\"nome\",\"label\":\"Nome\"},{\"field\":\"comune\",\"label\":\"Comune\"}],\"order\":\"cognome ASC, nome ASC\",\"drilldown\":{\"report_id\":null,\"field\":null}}",
+        "dynamic": null
     }
 ]
