@@ -76,13 +76,16 @@ class JobReports extends Controller
 
                 // Filtro RICERCA
                 if (request('s')) {
-                    $data->where(function ($q) use ($fields_search_array) {
+                    $words = preg_split('/\s+/', trim(request('s')), -1, PREG_SPLIT_NO_EMPTY);
+                    foreach ($words as $word) {
+                        $data->where(function ($q) use ($fields_search_array, $word) {
 
-                        foreach ($fields_search_array as $field) {
-                            $q->orWhere($field, 'like', '%' . request('s') . '%');
-                        }
+                            foreach ($fields_search_array as $field) {
+                                $q->orWhere($field, 'like', '%' . $word . '%');
+                            }
 
-                    });
+                        });
+                    }
                 }
 
                 // Filtro ORDINAMENTO
@@ -170,23 +173,26 @@ class JobReports extends Controller
 
                 // Filtro RICERCA
                 if (request('s')) {
-                    $data->where(function ($q) use ($fields_search_array) {
+                    $words = preg_split('/\s+/', trim(request('s')), -1, PREG_SPLIT_NO_EMPTY);
+                    foreach ($words as $word) {
+                        $data->where(function ($q) use ($fields_search_array, $word) {
 
-                        foreach ($fields_search_array as $field) {
+                            foreach ($fields_search_array as $field) {
 
-                            if (substr($field, 0, strlen('mod_jobs')) == 'mod_jobs') {
+                                if (substr($field, 0, strlen('mod_jobs')) == 'mod_jobs') {
 
-                                $queryField = "JSON_UNQUOTE(JSON_EXTRACT(customers_mod_jobs.values, '$." . $field . "'))";
+                                    $queryField = "JSON_UNQUOTE(JSON_EXTRACT(customers_mod_jobs.values, '$." . $field . "'))";
 
-                            } else {
+                                } else {
 
-                                $queryField = $field;
+                                    $queryField = $field;
+                                }
+
+                                $q->orWhereRaw($queryField . ' like ?', ['%' . $word . '%']);
                             }
 
-                            $q->orWhereRaw($queryField . ' like ?', ['%' . request('s') . '%']);
-                        }
-
-                    });
+                        });
+                    }
                 }
 
                 // Filtro ORDINAMENTO
