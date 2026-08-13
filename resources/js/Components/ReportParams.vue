@@ -17,9 +17,9 @@ defineProps({
 
 <template>
 
-    <div class="inline-flex gap-2">
+    <div class="flex gap-2">
 
-        <div v-for="p in paramsSchema" :key="p.name">
+        <div v-for="p in paramsSchema" :key="p.name" class="flex-1 min-w-0">
 
             <label class="text-xs block">{{ p.label }}</label>
 

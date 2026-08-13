@@ -162,18 +162,21 @@ function reportSelect(report) {
                     </div>
 
                 </div>
-                <div class="w-1/4 inline-flex gap-2">
-
-                    <ReportParams v-if="reportSchema?.params?.length"
-                                  :params-schema="reportSchema.params"
-                                  :route-search="route('jobs_reports.index', report.id)"
-                                  :filters="filters"
-                                  :disabled="!report?.id" />
+                <div class="w-1/4">
 
                      <Search placeholder="Cerca..."
                             :route-search="route('jobs_reports.index', report.id)"
                             :filters="filters"
                             :disabled="!report?.id" />
+
+                    <div v-if="reportSchema?.params?.length" class="mt-2">
+
+                        <ReportParams :params-schema="reportSchema.params"
+                                      :route-search="route('jobs_reports.index', report.id)"
+                                      :filters="filters"
+                                      :disabled="!report?.id" />
+
+                    </div>
 
                 </div>
 
