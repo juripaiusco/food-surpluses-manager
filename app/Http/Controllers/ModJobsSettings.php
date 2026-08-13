@@ -287,6 +287,7 @@ class ModJobsSettings extends Controller
             'report_id' => null,
             'field' => null,
         );
+        $data['schema']['params'] = [];
         $data['type'] = 'report';
         $data['visible'] = true;
         $data['report_fields'] = $this->fieldsReports();
@@ -320,6 +321,7 @@ class ModJobsSettings extends Controller
             'report_id' => null,
             'field' => null,
         );
+        $schema['params'] = $schema['params'] ?? [];
         $data['schema'] = $schema;
         $data['report_fields'] = $this->fieldsReports();
         $data['drilldown_reports'] = $this->drilldownReportsList();
@@ -334,6 +336,8 @@ class ModJobsSettings extends Controller
         $redirect = $request->input('redirect');
 
         $data = \App\Models\JobSettings::find($id);
+
+        $request['schema'] = json_encode($request['schema']);
 
         $data->fill($request->all());
         $data->user_id = auth()->id();

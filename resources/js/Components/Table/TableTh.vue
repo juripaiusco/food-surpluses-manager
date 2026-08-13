@@ -67,6 +67,7 @@ export default {
                 }
 
                 this.params.s = this.data.filters.s;
+                this.params.params = this.data.filters.params;
                 this.params.orderby = field;
 
             }

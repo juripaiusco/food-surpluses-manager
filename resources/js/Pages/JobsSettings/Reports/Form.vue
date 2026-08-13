@@ -62,6 +62,33 @@ function schemaTableFilterdDel(index) {
 
 }
 
+function schemaParamAdd() {
+
+    form.schema.params.push({
+        name: '',
+        label: '',
+        type: 'date'
+    });
+
+}
+
+function schemaParamDel(index) {
+
+    form.schema.params.splice(index, 1);
+
+}
+
+function schemaParamMove(index, direction) {
+
+    const newIndex = direction === 'up' ? index - 1 : index + 1;
+
+    if (newIndex < 0 || newIndex >= form.schema.params.length) return;
+
+    const item = form.schema.params.splice(index, 1)[0];
+    form.schema.params.splice(newIndex, 0, item);
+
+}
+
 function schemaTableFieldEdit(index, direction) {
 
     const newIndex = direction === 'up' ? index - 1 : index + 1;
@@ -136,6 +163,90 @@ function schemaTableFieldEdit(index, direction) {
                         borderRadius: '4px'
                     }"
                 />
+
+                <br><br>
+
+                <div v-if="form.query !== '' && form.query !== null">
+
+                    <h2 class="text-3xl mb-2">Parametri</h2>
+
+                    <label>
+                        Dichiara qui i parametri runtime, in ordine. Nella query usa un segnaposto <code>?</code>
+                        per ognuno, nello stesso ordine di dichiarazione (es. <code>COALESCE(?, ...)</code> se il
+                        parametro è opzionale).
+                    </label>
+
+                    <div v-for="(param, index) in form.schema.params"
+                         :key="index"
+                         class="row mt-2 mb-2">
+
+                        <div class="col">
+
+                            <input class="form-control"
+                                   placeholder="name (es. data_inizio)"
+                                   v-model="form.schema.params[index].name">
+
+                        </div>
+                        <div class="col">
+
+                            <input class="form-control"
+                                   placeholder="Label"
+                                   v-model="form.schema.params[index].label">
+
+                        </div>
+                        <div class="col-2">
+
+                            <select class="form-select"
+                                    v-model="form.schema.params[index].type">
+                                <option value="date">Data</option>
+                            </select>
+
+                        </div>
+                        <div class="col-2">
+
+                            <div class="inline-flex items-center h-full">
+
+                                <button type="button"
+                                        class="btn btn-danger btn-sm w-full mr-1"
+                                        @click="schemaParamDel(index)">
+                                    -
+                                </button>
+
+                                <button v-if="index > 0"
+                                        type="button"
+                                        class="btn btn-secondary btn-sm w-full mr-1"
+                                        @click="schemaParamMove(index, 'up')">
+                                    ▲
+                                </button>
+
+                                <button v-if="index < form.schema.params.length - 1"
+                                        type="button"
+                                        class="btn btn-secondary btn-sm w-full mr-1"
+                                        @click="schemaParamMove(index, 'down')">
+                                    ▼
+                                </button>
+
+                                <button v-if="index >= (form.schema.params.length - 1)"
+                                        type="button"
+                                        class="btn btn-primary btn-sm w-full mr-1"
+                                        @click="schemaParamAdd()">
+                                    +
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <button v-if="form.schema.params.length === 0"
+                            type="button"
+                            class="btn btn-primary btn-sm"
+                            @click="schemaParamAdd()">
+                        + Aggiungi parametro
+                    </button>
+
+                </div>
 
                 <br><br>
 

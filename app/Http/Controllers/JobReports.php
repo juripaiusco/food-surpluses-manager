@@ -24,6 +24,25 @@ class JobReports extends Controller
         return true;
     }
 
+    private function resolveParamBindings(array $paramsSchema): array
+    {
+        $typeRules = [
+            'date' => 'date',
+        ];
+
+        $rules = [];
+        foreach ($paramsSchema as $p) {
+            $rules['params.' . $p['name']] = ['nullable', $typeRules[$p['type']] ?? 'string'];
+        }
+
+        request()->validate($rules);
+
+        return array_map(
+            fn ($p) => request()->input('params.' . $p['name']),
+            $paramsSchema
+        );
+    }
+
     private function get_data(string $id = null, object $reports = null)
     {
         $data = [];
@@ -47,7 +66,13 @@ class JobReports extends Controller
                     abort(403, 'Query non consentita');
                 }
 
+                $paramsSchema = json_decode($report->schema, true)['params'] ?? [];
+
                 $data = DB::query()->fromSub("({$report->query})", 'main_result');
+
+                if ($paramsSchema) {
+                    $data->addBinding($this->resolveParamBindings($paramsSchema), 'from');
+                }
 
                 // Filtro RICERCA
                 if (request('s')) {
@@ -65,7 +90,11 @@ class JobReports extends Controller
                     $data->orderby(request('orderby'), strtoupper(request('ordertype')));
                 }
 
-                $data = $data->get();
+                try {
+                    $data = $data->get();
+                } catch (\Illuminate\Database\QueryException $e) {
+                    abort(500, 'Errore nella query del report: verifica che il numero di "?" nella query corrisponda ai Parametri dichiarati.');
+                }
 
             } else {
 
@@ -219,7 +248,10 @@ class JobReports extends Controller
             'report' => $result->report,
             'reportSchema' => isset($result->report->schema) ? json_decode($result->report->schema, true) : [],
             'reports' => $reportsList,
-            'filters' => request()->all(['s', 'orderby', 'ordertype'])
+            'filters' => array_merge(
+                request()->all(['s', 'orderby', 'ordertype']),
+                ['params' => request('params', [])]
+            )
         ]);
     }
 

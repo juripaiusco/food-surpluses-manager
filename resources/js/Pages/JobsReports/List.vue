@@ -4,6 +4,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import ApplicationHeader from "@/Components/ApplicationHeader.vue";
 import Table from "@/Components/Table/Table.vue";
 import Search from "@/Components/Search.vue";
+import ReportParams from "@/Components/ReportParams.vue";
 import ApplicationContainer from "@/Components/ApplicationContainer.vue";
 import {ref, computed} from "vue";
 import {Combobox, ComboboxButton, ComboboxInput, ComboboxOption, ComboboxOptions} from "@headlessui/vue";
@@ -76,10 +77,15 @@ function reportSelect(report) {
 
     const reportSelectedSchema = JSON.parse(report.schema);
 
+    // schema.order può contenere più colonne (es. "cognome ASC, nome ASC"):
+    // qui serve solo la prima coppia campo/direzione, l'ORDER BY completo
+    // resta gestito lato query per il report raw.
+    const [firstField, firstDir] = (reportSelectedSchema?.order || '').split(',')[0].trim().split(' ');
+
     router.get(route('jobs_reports.index', {
         id: report.id,
-        orderby: reportSelectedSchema?.order?.split(' ')[0],
-        ordertype: reportSelectedSchema?.order?.split(' ')[1]?.toLowerCase()
+        orderby: firstField,
+        ordertype: firstDir?.toLowerCase()
     }))
 
 }
@@ -156,7 +162,13 @@ function reportSelect(report) {
                     </div>
 
                 </div>
-                <div class="w-1/4">
+                <div class="w-1/4 inline-flex gap-2">
+
+                    <ReportParams v-if="reportSchema?.params?.length"
+                                  :params-schema="reportSchema.params"
+                                  :route-search="route('jobs_reports.index', report.id)"
+                                  :filters="filters"
+                                  :disabled="!report?.id" />
 
                      <Search placeholder="Cerca..."
                             :route-search="route('jobs_reports.index', report.id)"
@@ -177,7 +189,8 @@ function reportSelect(report) {
                               id: report.id,
                               s: filters?.s,
                               orderby: filters?.orderby,
-                              ordertype: filters?.ordertype
+                              ordertype: filters?.ordertype,
+                              params: filters?.params
                           })">
 
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">

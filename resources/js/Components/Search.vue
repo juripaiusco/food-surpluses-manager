@@ -50,6 +50,10 @@ export default {
                     params.ordertype = this.filters.ordertype;
                 }
 
+                if (this.filters.params) {
+                    params.params = this.filters.params;
+                }
+
                 Object.keys(params).forEach(k => {
                     if (params[k] === '') {
                         delete params[k];
