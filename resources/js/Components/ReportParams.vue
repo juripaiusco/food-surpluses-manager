@@ -26,7 +26,7 @@ defineProps({
             <input :type="p.type === 'date' ? 'date' : 'text'"
                    :disabled="disabled"
                    class="form-control"
-                   v-model="params.params[p.name]" />
+                   v-model="paramValues[p.name]" />
 
         </div>
 
@@ -45,22 +45,25 @@ export default {
         });
 
         return {
-            params: {
-                s: this.filters.s,
-                orderby: this.filters.orderby,
-                ordertype: this.filters.ordertype,
-                params: initial,
-            }
+            paramValues: initial,
         }
     },
     watch: {
-        params: {
+        paramValues: {
             handler() {
 
-                let params = this.params;
+                // s/orderby/ordertype letti dal prop filters "al volo" (non da una
+                // copia locale) così restano aggiornati anche se cambiati da un
+                // altro componente (Search, ordinamento colonna) dopo il mount.
+                let params = {
+                    s: this.filters.s,
+                    orderby: this.filters.orderby,
+                    ordertype: this.filters.ordertype,
+                    params: { ...this.paramValues },
+                };
 
                 Object.keys(params).forEach(k => {
-                    if (params[k] === '' || params[k] === null) {
+                    if (params[k] === '' || params[k] === null || params[k] === undefined) {
                         delete params[k];
                     }
                 })
