@@ -84,10 +84,43 @@ class ModJobsSettingsImport extends Command
         $this->table(['azione', 'uuid', 'type', 'title'], $rows);
         $this->info("Da creare: {$created}, da aggiornare: {$updated}.");
 
-        if (!$apply) {
+        if ($apply) {
+            $this->fixDrilldownReportIds();
+        } else {
             $this->comment('Nessuna modifica salvata (dry-run). Rilanciare con --apply per applicare.');
         }
 
         return self::SUCCESS;
+    }
+
+    /**
+     * Dopo l'upsert, gli id locali dei report possono differire da quelli
+     * usati nella sede di origine del file esportato. Per ogni report con un
+     * drilldown, ricostruisce l'id numerico corretto a partire dall'uuid del
+     * report target (stabile fra sedi), salvato in schema.drilldown.report_uuid
+     * da mod-jobs-settings:export.
+     */
+    private function fixDrilldownReportIds(): void
+    {
+        $idByUuid = JobSettings::query()->pluck('id', 'uuid');
+
+        JobSettings::query()->where('type', 'report')->get()->each(function (JobSettings $row) use ($idByUuid) {
+            $schema = json_decode($row->schema ?? '', true);
+            $targetUuid = $schema['drilldown']['report_uuid'] ?? null;
+
+            if (!$targetUuid || !isset($idByUuid[$targetUuid])) {
+                return;
+            }
+
+            $localId = $idByUuid[$targetUuid];
+            if (($schema['drilldown']['report_id'] ?? null) == $localId) {
+                return;
+            }
+
+            $schema['drilldown']['report_id'] = $localId;
+            $row->schema = json_encode($schema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+            $row->saveQuietly();
+            $this->line("  ↳ drilldown aggiornato: {$row->title} → report_id={$localId} (uuid={$targetUuid})");
+        });
     }
 }

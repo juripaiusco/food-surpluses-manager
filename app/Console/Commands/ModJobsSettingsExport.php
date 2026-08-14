@@ -83,7 +83,7 @@ class ModJobsSettingsExport extends Command
                 'title' => $row->title,
                 'description' => $row->description,
                 'query' => $row->query,
-                'schema' => $row->schema,
+                'schema' => $this->annotateDrilldownUuid($row->schema),
                 'dynamic' => $row->dynamic,
             ];
 
@@ -109,5 +109,24 @@ class ModJobsSettingsExport extends Command
         $this->comment('Ricordati di committare il file e lanciare mod-jobs-settings:import --apply nelle altre sedi.');
 
         return self::SUCCESS;
+    }
+
+    /**
+     * Se lo schema è di un report con un drilldown verso un altro report,
+     * annota l'uuid del report target accanto al suo id numerico locale, così
+     * che mod-jobs-settings:import possa ricostruire l'id corretto sulla sede
+     * di destinazione (dove gli id locali non coincidono con questa sede).
+     */
+    private function annotateDrilldownUuid(?string $schemaJson): ?string
+    {
+        $schema = json_decode($schemaJson ?? '', true);
+        if (!is_array($schema) || empty($schema['drilldown']['report_id'])) {
+            return $schemaJson;
+        }
+
+        $target = JobSettings::query()->find($schema['drilldown']['report_id']);
+        $schema['drilldown']['report_uuid'] = $target->uuid ?? null;
+
+        return json_encode($schema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
     }
 }
