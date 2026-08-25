@@ -132,6 +132,31 @@ class JobDynamicFieldProcessor
     }
 
     /**
+     * Risolve "Nome Cognome" della persona a cui appartiene un campo CF, per
+     * riferirlo nel messaggio di errore. Campo assistito (groupPath vuoto):
+     * nome/cognome sono le colonne customers.name/surname, inviate come
+     * campi piatti nella stessa request. Campo componente famiglia
+     * (dentro un gruppo dinamico): nome/cognome sono campi fratelli con lo
+     * stesso prefisso del campo CF (mod_jobs_famiglia_comp_cf → _nome/_cognome).
+     */
+    public static function resolvePersonLabel(array $groupPath, string $fieldName, Request $request): ?string
+    {
+        $base = preg_replace('/_cf$/', '', $fieldName);
+
+        if (!empty($groupPath)) {
+            $nome = JobDynamicFieldProcessor::resolveFieldValue($groupPath, $base . '_nome', $request);
+            $cognome = JobDynamicFieldProcessor::resolveFieldValue($groupPath, $base . '_cognome', $request);
+        } else {
+            $nome = $request->input('name');
+            $cognome = $request->input('surname');
+        }
+
+        $label = trim(($nome ?? '') . ' ' . ($cognome ?? ''));
+
+        return $label !== '' ? $label : null;
+    }
+
+    /**
      * @param $field
      * @param Request $request
      * @param int|null $customerId
@@ -155,7 +180,8 @@ class JobDynamicFieldProcessor
 
         $cf = new CodiceFiscale();
         if (!$cf->validaCodiceFiscale($value)) {
-            return "Codice Fiscale non valido";
+            $label = JobDynamicFieldProcessor::resolvePersonLabel($groupPath, $fieldName, $request);
+            return $label ? "Codice Fiscale non valido: {$label}" : "Codice Fiscale non valido";
         }
 
         // Univocità nella stessa submission
