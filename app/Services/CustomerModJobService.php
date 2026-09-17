@@ -140,10 +140,13 @@ class CustomerModJobService
 
             $dynamicName = $schemaArray[0]['name'];
 
-            // Conto quanti gruppi dinamici ci sono nei dati
+            // Conto quanti gruppi dinamici ci sono nei dati (match esatto
+            // base/base_N, non prefisso di stringa: altrimenti chiavi non
+            // correlate che condividono il prefisso, es. campi flat legacy
+            // dello stesso gruppo, vengono contate come istanze fantasma).
             $c = 0;
             foreach (array_keys($values) as $keyName) {
-                if (substr($keyName, 0, strlen($dynamicName)) === $dynamicName) {
+                if ($keyName === $dynamicName || preg_match('/^' . preg_quote($dynamicName, '/') . '_\d+$/', $keyName)) {
                     $c++;
                 }
             }
@@ -185,10 +188,40 @@ class CustomerModJobService
             ];
         }
 
+        $expandedSchema = self::expandDynamicSchemaForValues($moduleSchema, $persistedValues);
+
         return [
-            'schema' => self::expandDynamicSchemaForValues($moduleSchema, $persistedValues),
-            'values' => $persistedValues,
+            'schema' => $expandedSchema,
+            'values' => self::sanitizeDynamicGroupValues($expandedSchema, $persistedValues),
         ];
+    }
+
+    /**
+     * Forza a [] qualunque valore non-array delle istanze di sezioni
+     * dinamiche (es. null residuo da dati legacy): i nodi FormKit 'group'
+     * lato client richiedono un valore oggetto/array, altrimenti l'hydrate
+     * lancia eccezione e l'intero form non monta.
+     */
+    private static function sanitizeDynamicGroupValues(array $moduleSchema, array $values): array
+    {
+        foreach ($moduleSchema as $section) {
+            if (empty($section['dynamic'])) {
+                continue;
+            }
+
+            $schemaEntries = json_decode($section['schema'] ?? '', true);
+            if (!is_array($schemaEntries)) {
+                continue;
+            }
+
+            foreach (array_column($schemaEntries, 'name') as $name) {
+                if (!is_array($values[$name] ?? null)) {
+                    $values[$name] = [];
+                }
+            }
+        }
+
+        return $values;
     }
 
     /**

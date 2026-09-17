@@ -80,9 +80,13 @@ function get_last_isee(data) {
     let iseeArray = [];
 
     Object.keys(data.customers_mod_jobs_values).forEach(key => {
-        if (key === prefix || key.startsWith(prefix + '_')) {
-            let scadenza = data.customers_mod_jobs_values[key]['mod_jobs_isee_data_scadenza'];
-            let isee = data.customers_mod_jobs_values[key]['mod_jobs_isee_isee'];
+        if (key === prefix || new RegExp('^' + prefix + '_\\d+$').test(key)) {
+            const obj = data.customers_mod_jobs_values[key];
+
+            if (!obj || typeof obj !== 'object') return;
+
+            let scadenza = obj['mod_jobs_isee_data_scadenza'];
+            let isee = obj['mod_jobs_isee_isee'];
 
             if (scadenza) {
                 iseeArray.push({ scadenza, isee });
