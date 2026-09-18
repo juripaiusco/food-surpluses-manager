@@ -41,7 +41,7 @@
         "title": "⭐️ Elenco assistiti raggruppati per comune",
         "description": "Mostra il conteggio degli assistiti raggruppati per comune di presa in carico (o di residenza se non presente).",
         "query": "SELECT\n    COALESCE(\n        NULLIF(JSON_UNQUOTE(JSON_EXTRACT(j.`values`, '$.mod_jobs_anagrafica_comune_presa_in_carico')), ''),\n        JSON_UNQUOTE(JSON_EXTRACT(j.`values`, '$.mod_jobs_anagrafica_domicilio_comune'))\n    ) AS comune,\n    COUNT(*) AS totale_assistiti\n\nFROM customers c\nINNER JOIN customers_mod_jobs j ON j.customer_id = c.id\n\nGROUP BY comune\nORDER BY comune",
-        "schema": "{\"filter\":[{\"field\":null,\"operator\":null,\"value\":null}],\"table\":[{\"field\":\"comune\",\"label\":\"Comune\"},{\"field\":\"totale_assistiti\",\"label\":\"Totale Assistiti\",\"class\":\"text-right\"}],\"order\":\"totale_assistiti DESC\",\"drilldown\":{\"report_id\":44,\"field\":\"comune\",\"report_uuid\":\"37b5afc5-37e3-4e75-8b21-6605be34591d\"},\"params\":[]}",
+        "schema": "{\"filter\":[{\"field\":null,\"operator\":null,\"value\":null}],\"table\":[{\"field\":\"comune\",\"label\":\"Comune\"},{\"field\":\"totale_assistiti\",\"label\":\"Totale Assistiti\",\"class\":\"text-right\"}],\"order\":\"totale_assistiti DESC\",\"drilldown\":{\"report_id\":39,\"field\":\"comune\",\"report_uuid\":\"37b5afc5-37e3-4e75-8b21-6605be34591d\"},\"params\":[]}",
         "dynamic": null
     },
     {
